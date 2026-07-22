@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
+import { redirigir } from "@/lib/redirect";
 import { crearSesion } from "@/lib/session";
 
 const loginSchema = z.object({
@@ -10,11 +10,8 @@ const loginSchema = z.object({
   password: z.string().min(1).max(128),
 });
 
-function redirigirConError(request: Request, error: string) {
-  return NextResponse.redirect(
-    new URL(`/iniciar-sesion?error=${encodeURIComponent(error)}`, request.url),
-    303
-  );
+function redirigirConError(error: string) {
+  return redirigir(`/iniciar-sesion?error=${encodeURIComponent(error)}`);
 }
 
 export async function POST(request: Request) {
@@ -26,7 +23,7 @@ export async function POST(request: Request) {
     });
 
     if (!resultado.success) {
-      return redirigirConError(request, "datos-invalidos");
+      return redirigirConError("datos-invalidos");
     }
 
     const usuario = await prisma.usuario.findUnique({
@@ -38,13 +35,13 @@ export async function POST(request: Request) {
       !usuario ||
       !(await bcrypt.compare(resultado.data.password, usuario.passwordHash))
     ) {
-      return redirigirConError(request, "credenciales-invalidas");
+      return redirigirConError("credenciales-invalidas");
     }
 
     await crearSesion({ usuarioId: usuario.id, correo: usuario.correo });
-    return NextResponse.redirect(new URL("/panel", request.url), 303);
+    return redirigir("/panel");
   } catch (error) {
     console.error("No se pudo iniciar sesión.", error);
-    return redirigirConError(request, "servidor");
+    return redirigirConError("servidor");
   }
 }

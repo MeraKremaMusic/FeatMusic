@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
 import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
+import { redirigir } from "@/lib/redirect";
 
 const registroSchema = z.object({
   nombre: z.string().trim().min(2).max(100),
@@ -19,11 +19,8 @@ const registroSchema = z.object({
   aceptaTerminos: z.literal("on"),
 });
 
-function redirigirConError(request: Request, error: string) {
-  return NextResponse.redirect(
-    new URL(`/registro?error=${encodeURIComponent(error)}`, request.url),
-    303
-  );
+function redirigirConError(error: string) {
+  return redirigir(`/registro?error=${encodeURIComponent(error)}`);
 }
 
 export async function POST(request: Request) {
@@ -49,7 +46,6 @@ export async function POST(request: Request) {
         (issue) => issue.path[0] === "generos"
       );
       return redirigirConError(
-        request,
         faltaGenero ? "selecciona-genero" : "datos-invalidos"
       );
     }
@@ -61,7 +57,7 @@ export async function POST(request: Request) {
     });
 
     if (usuarioExistente) {
-      return redirigirConError(request, "correo-existente");
+      return redirigirConError("correo-existente");
     }
 
     const passwordHash = await bcrypt.hash(
@@ -84,19 +80,16 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.redirect(
-      new URL("/registro/exito", request.url),
-      303
-    );
+    return redirigir("/registro/exito");
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      return redirigirConError(request, "correo-existente");
+      return redirigirConError("correo-existente");
     }
 
     console.error("No se pudo registrar el usuario.", error);
-    return redirigirConError(request, "servidor");
+    return redirigirConError("servidor");
   }
 }

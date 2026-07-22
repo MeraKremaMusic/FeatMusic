@@ -1,8 +1,7 @@
-import { NextResponse } from "next/server";
-
+import { redirigir } from "@/lib/redirect";
 import { eliminarSesion } from "@/lib/session";
 
-export async function POST(request: Request) {
+export async function POST() {
   await eliminarSesion();
-  return NextResponse.redirect(new URL("/", request.url), 303);
+  return redirigir("/");
 }
