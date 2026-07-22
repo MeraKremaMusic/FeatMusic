@@ -4,9 +4,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <h1 className="text-2xl font-bold tracking-tight">
+        <Link href="/" className="text-2xl font-bold tracking-tight">
           Feat<span className="text-violet-500">Music</span>
-        </h1>
+        </Link>
 
         <nav className="flex items-center gap-4">
           <Link
@@ -30,11 +30,13 @@ export default function Home() {
           La comunidad donde nacen nuevas colaboraciones
         </p>
 
-        <h2 className="max-w-4xl text-5xl font-bold leading-tight tracking-tight md:text-7xl">
+        <h1 className="max-w-4xl text-5xl font-bold leading-tight tracking-tight md:text-7xl">
           Conecta con artistas.
           <br />
-          <span className="text-violet-500">Crea música sin límites.</span>
-        </h2>
+          <span className="text-violet-500">
+            Crea música sin límites.
+          </span>
+        </h1>
 
         <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-400">
           Encuentra cantantes, productores, compositores, músicos e ingenieros
@@ -60,7 +62,8 @@ export default function Home() {
 
       <section className="mx-auto grid max-w-7xl gap-5 px-6 pb-20 md:grid-cols-3">
         <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-7">
-          <h3 className="text-xl font-semibold">Encuentra talento</h3>
+          <h2 className="text-xl font-semibold">Encuentra talento</h2>
+
           <p className="mt-3 text-zinc-400">
             Descubre artistas según género musical, país, experiencia y
             habilidades.
@@ -68,7 +71,8 @@ export default function Home() {
         </article>
 
         <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-7">
-          <h3 className="text-xl font-semibold">Publica oportunidades</h3>
+          <h2 className="text-xl font-semibold">Publica oportunidades</h2>
+
           <p className="mt-3 text-zinc-400">
             Busca voces, productores, músicos o colaboradores para tus
             próximos lanzamientos.
@@ -76,7 +80,8 @@ export default function Home() {
         </article>
 
         <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-7">
-          <h3 className="text-xl font-semibold">Crea conexiones reales</h3>
+          <h2 className="text-xl font-semibold">Crea conexiones reales</h2>
+
           <p className="mt-3 text-zinc-400">
             Construye relaciones profesionales y desarrolla proyectos con
             artistas de todo el mundo.

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { registrarUsuario } from "./actions";
+
 
 const generos = [
   "Reguetón",
@@ -37,7 +37,11 @@ export default function RegistroPage() {
             realmente compatibles contigo.
           </p>
 
-          <form action={registrarUsuario} className="mt-10 space-y-8">
+          <form
+  action="/api/registro"
+  method="post"
+  className="mt-10 space-y-8"
+>
             <div className="grid gap-5 md:grid-cols-2">
               <Campo
                 label="Nombre real"
