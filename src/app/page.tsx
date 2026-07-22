@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
@@ -7,13 +9,19 @@ export default function Home() {
         </h1>
 
         <nav className="flex items-center gap-4">
-          <button className="text-sm text-zinc-300 transition hover:text-white">
+          <Link
+            href="/iniciar-sesion"
+            className="text-sm text-zinc-300 transition hover:text-white"
+          >
             Iniciar sesión
-          </button>
+          </Link>
 
-          <button className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition hover:bg-zinc-200">
+          <Link
+            href="/registro"
+            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition hover:bg-zinc-200"
+          >
             Crear cuenta
-          </button>
+          </Link>
         </nav>
       </header>
 
@@ -34,13 +42,19 @@ export default function Home() {
         </p>
 
         <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-          <button className="rounded-full bg-violet-600 px-8 py-4 font-semibold transition hover:bg-violet-500">
+          <Link
+            href="/registro"
+            className="rounded-full bg-violet-600 px-8 py-4 font-semibold transition hover:bg-violet-500"
+          >
             Crear mi perfil
-          </button>
+          </Link>
 
-          <button className="rounded-full border border-zinc-700 px-8 py-4 font-semibold transition hover:border-zinc-500 hover:bg-zinc-900">
+          <Link
+            href="/artistas"
+            className="rounded-full border border-zinc-700 px-8 py-4 font-semibold transition hover:border-zinc-500 hover:bg-zinc-900"
+          >
             Explorar artistas
-          </button>
+          </Link>
         </div>
       </section>
 
