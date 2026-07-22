@@ -1,20 +1,30 @@
 import bcrypt from "bcryptjs";
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
 
 const registroSchema = z.object({
-  nombre: z.string().trim().min(2),
-  nombreArtistico: z.string().trim().min(2),
+  nombre: z.string().trim().min(2).max(100),
+  nombreArtistico: z.string().trim().min(2).max(100),
   correo: z.string().trim().email().toLowerCase(),
-  password: z.string().min(8),
-  pais: z.string().trim().min(2),
-  ciudad: z.string().trim().min(2),
-  idiomaPrincipal: z.string().trim().min(2),
-  rolPrincipal: z.string().trim().min(2),
-  tipoColaboracion: z.string().trim().min(2),
+  password: z.string().min(8).max(128),
+  pais: z.string().trim().min(2).max(100),
+  ciudad: z.string().trim().min(2).max(100),
+  idiomaPrincipal: z.string().trim().min(2).max(50),
+  rolPrincipal: z.string().trim().min(2).max(80),
+  generos: z.array(z.string().trim().min(1).max(50)).min(1).max(20),
+  tipoColaboracion: z.string().trim().min(2).max(100),
+  aceptaTerminos: z.literal("on"),
 });
+
+function redirigirConError(request: Request, error: string) {
+  return NextResponse.redirect(
+    new URL(`/registro?error=${encodeURIComponent(error)}`, request.url),
+    303
+  );
+}
 
 export async function POST(request: Request) {
   try {
@@ -29,25 +39,18 @@ export async function POST(request: Request) {
       ciudad: formData.get("ciudad"),
       idiomaPrincipal: formData.get("idiomaPrincipal"),
       rolPrincipal: formData.get("rolPrincipal"),
+      generos: formData.getAll("generos"),
       tipoColaboracion: formData.get("tipoColaboracion"),
+      aceptaTerminos: formData.get("aceptaTerminos"),
     });
 
     if (!resultado.success) {
-      return NextResponse.redirect(
-        new URL("/registro?error=datos-invalidos", request.url),
-        303
+      const faltaGenero = resultado.error.issues.some(
+        (issue) => issue.path[0] === "generos"
       );
-    }
-
-    const generos = formData
-      .getAll("generos")
-      .map(String)
-      .filter(Boolean);
-
-    if (generos.length === 0) {
-      return NextResponse.redirect(
-        new URL("/registro?error=selecciona-genero", request.url),
-        303
+      return redirigirConError(
+        request,
+        faltaGenero ? "selecciona-genero" : "datos-invalidos"
       );
     }
 
@@ -58,10 +61,7 @@ export async function POST(request: Request) {
     });
 
     if (usuarioExistente) {
-      return NextResponse.redirect(
-        new URL("/registro?error=correo-existente", request.url),
-        303
-      );
+      return redirigirConError(request, "correo-existente");
     }
 
     const passwordHash = await bcrypt.hash(
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
         ciudad: resultado.data.ciudad,
         idiomaPrincipal: resultado.data.idiomaPrincipal,
         rolPrincipal: resultado.data.rolPrincipal,
-        generos,
+        generos: resultado.data.generos,
         tipoColaboracion: resultado.data.tipoColaboracion,
       },
     });
@@ -89,11 +89,14 @@ export async function POST(request: Request) {
       303
     );
   } catch (error) {
-    console.error("Error registrando usuario:", error);
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return redirigirConError(request, "correo-existente");
+    }
 
-    return NextResponse.redirect(
-      new URL("/registro?error=servidor", request.url),
-      303
-    );
+    console.error("No se pudo registrar el usuario.", error);
+    return redirigirConError(request, "servidor");
   }
 }

@@ -57,6 +57,15 @@ export default async function PanelPage() {
             </p>
           </article>
         </div>
+
+        <form action="/api/cerrar-sesion" method="post" className="mt-8">
+          <button
+            type="submit"
+            className="rounded-full border border-zinc-700 px-6 py-3 font-semibold transition hover:border-zinc-500 hover:bg-zinc-900"
+          >
+            Cerrar sesión
+          </button>
+        </form>
       </section>
     </main>
   );

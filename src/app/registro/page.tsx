@@ -17,7 +17,21 @@ const generos = [
   "Otro",
 ];
 
-export default function RegistroPage() {
+const mensajesDeError: Record<string, string> = {
+  "datos-invalidos": "Revisa todos los campos y asegúrate de que la contraseña tenga al menos 8 caracteres.",
+  "selecciona-genero": "Selecciona al menos un género musical.",
+  "correo-existente": "Ya existe una cuenta registrada con ese correo.",
+  servidor: "No pudimos crear tu cuenta en este momento. Inténtalo nuevamente.",
+};
+
+export default async function RegistroPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+  const mensaje = error ? mensajesDeError[error] : undefined;
+
   return (
     <main className="min-h-screen bg-black px-6 py-12 text-white">
       <section className="mx-auto max-w-3xl">
@@ -37,11 +51,13 @@ export default function RegistroPage() {
             realmente compatibles contigo.
           </p>
 
-          <form
-  action="/api/registro"
-  method="post"
-  className="mt-10 space-y-8"
->
+          {mensaje && (
+            <p role="alert" className="mt-6 rounded-xl border border-red-900 bg-red-950/50 p-4 text-sm text-red-200">
+              {mensaje}
+            </p>
+          )}
+
+          <form action="/api/registro" method="post" className="mt-10 space-y-8">
             <div className="grid gap-5 md:grid-cols-2">
               <Campo
                 label="Nombre real"
@@ -136,6 +152,7 @@ export default function RegistroPage() {
             <label className="flex items-start gap-3 text-sm text-zinc-400">
               <input
                 type="checkbox"
+                name="aceptaTerminos"
                 required
                 className="mt-1 accent-violet-600"
               />

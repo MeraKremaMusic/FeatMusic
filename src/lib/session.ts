@@ -57,5 +57,11 @@ export async function obtenerSesion() {
 
 export async function eliminarSesion() {
   const cookieStore = await cookies();
-  cookieStore.delete("featmusic_session");
+  cookieStore.set("featmusic_session", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
 }

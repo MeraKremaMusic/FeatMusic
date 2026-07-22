@@ -1,8 +1,19 @@
 import Link from "next/link";
 
-import { iniciarSesion } from "./actions";
+const mensajesDeError: Record<string, string> = {
+  "datos-invalidos": "Revisa el correo y la contraseña e inténtalo de nuevo.",
+  "credenciales-invalidas": "El correo o la contraseña son incorrectos.",
+  servidor: "No pudimos iniciar sesión en este momento. Inténtalo nuevamente.",
+};
 
-export default function IniciarSesionPage() {
+export default async function IniciarSesionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+  const mensaje = error ? mensajesDeError[error] : undefined;
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
       <section className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-950 p-8">
@@ -20,7 +31,13 @@ export default function IniciarSesionPage() {
           Accede a tu perfil y continúa creando conexiones.
         </p>
 
-        <form action={iniciarSesion} className="mt-8 space-y-5">
+        {mensaje && (
+          <p role="alert" className="mt-6 rounded-xl border border-red-900 bg-red-950/50 p-4 text-sm text-red-200">
+            {mensaje}
+          </p>
+        )}
+
+        <form action="/api/iniciar-sesion" method="post" className="mt-8 space-y-5">
           <label className="block">
             <span className="mb-2 block text-sm font-medium">
               Correo electrónico
