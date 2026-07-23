@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 
 import {
   homeCopy,
@@ -377,10 +377,29 @@ export default function Home() {
   const globalTrackRef = useRef<HTMLDivElement>(null);
   const communityTrackRef = useRef<HTMLDivElement>(null);
   const plansTrackRef = useRef<HTMLDivElement>(null);
+  const demoPagesRef = useRef<HTMLDivElement>(null);
   const copy = homeCopy[locale];
   const activeLanguage =
     languageOptions.find((option) => option.code === locale) ??
     languageOptions[0];
+
+  useEffect(() => {
+    if (
+      window.sessionStorage.getItem("featmusic-return-to-home") !== "true"
+    ) {
+      return;
+    }
+
+    window.sessionStorage.removeItem("featmusic-return-to-home");
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+    });
+
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, []);
 
   useEffect(() => {
     const savedLocale = window.localStorage.getItem("featmusic-language");
@@ -419,6 +438,24 @@ export default function Home() {
     setLocale(nextLocale);
     window.localStorage.setItem("featmusic-language", nextLocale);
     languageMenuRef.current?.removeAttribute("open");
+  };
+
+  const refreshFromLogo = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    window.sessionStorage.setItem("featmusic-return-to-home", "true");
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    window.location.assign("/");
   };
 
   const syncCardCarousel = (
@@ -505,6 +542,82 @@ export default function Home() {
     });
     setActivePlanIndex(index);
   };
+
+  useEffect(() => {
+    const track = demoPagesRef.current;
+    if (!track) return;
+
+    const mobileViewport = window.matchMedia("(max-width: 767px)");
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+    let isVisible = false;
+    let lastInteractionAt = 0;
+    let autoSlideTimer: number | undefined;
+
+    const stopAutoSlide = () => {
+      window.clearInterval(autoSlideTimer);
+      autoSlideTimer = undefined;
+    };
+
+    const startAutoSlide = () => {
+      stopAutoSlide();
+
+      if (
+        !isVisible ||
+        !mobileViewport.matches ||
+        reducedMotion.matches
+      ) {
+        return;
+      }
+
+      autoSlideTimer = window.setInterval(() => {
+        if (Date.now() - lastInteractionAt < 5000) return;
+
+        const pages = track.querySelectorAll<HTMLElement>(
+          ".mobile-demo-page",
+        );
+        if (pages.length < 2 || track.clientWidth === 0) return;
+
+        const currentPage = Math.round(
+          track.scrollLeft / track.clientWidth,
+        );
+        const nextPage = currentPage >= pages.length - 1 ? 0 : currentPage + 1;
+
+        track.scrollTo({
+          left: nextPage * track.clientWidth,
+          behavior: "smooth",
+        });
+      }, 5000);
+    };
+
+    const noteManualInteraction = () => {
+      lastInteractionAt = Date.now();
+    };
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.4;
+        startAutoSlide();
+      },
+      { threshold: [0, 0.4] },
+    );
+
+    visibilityObserver.observe(track);
+    track.addEventListener("pointerdown", noteManualInteraction, {
+      passive: true,
+    });
+    mobileViewport.addEventListener("change", startAutoSlide);
+    reducedMotion.addEventListener("change", startAutoSlide);
+
+    return () => {
+      stopAutoSlide();
+      visibilityObserver.disconnect();
+      track.removeEventListener("pointerdown", noteManualInteraction);
+      mobileViewport.removeEventListener("change", startAutoSlide);
+      reducedMotion.removeEventListener("change", startAutoSlide);
+    };
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -616,7 +729,11 @@ export default function Home() {
     <main className="min-h-screen bg-black text-white">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-6 sm:py-4">
-          <Link href="/" className="text-xl font-bold tracking-tight sm:text-[1.35rem]">
+          <Link
+            href="/"
+            onClick={refreshFromLogo}
+            className="text-xl font-bold tracking-tight sm:text-[1.35rem]"
+          >
             Feat<span className="text-violet-400">Music</span>
           </Link>
 
@@ -724,7 +841,7 @@ export default function Home() {
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-30 bg-[url('/images/featmusic-hero-studio.webp')] bg-cover bg-[position:62%_center] sm:bg-center"
+          className="absolute inset-0 -z-30 bg-[url('/images/featmusic-hero-urban-v2.webp')] bg-cover bg-[position:72%_center] sm:bg-center"
         />
         <div
           aria-hidden="true"
@@ -740,7 +857,7 @@ export default function Home() {
             {copy.hero.badge}
           </p>
 
-          <h1 className="max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight drop-shadow-2xl sm:text-5xl md:text-7xl">
+          <h1 className="max-w-5xl text-4xl font-bold leading-[1.08] tracking-tight drop-shadow-2xl sm:text-5xl md:text-7xl">
             <span className="hero-title-enter block">{copy.hero.titleOne}</span>
             <span className="hero-title-enter hero-title-enter-delay block">
               <span className="animated-gradient-text bg-gradient-to-r from-violet-300 via-violet-400 to-fuchsia-300 bg-clip-text text-transparent">
@@ -873,7 +990,10 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="mobile-demo-pages grid xl:grid-cols-[1.08fr_0.92fr]">
+              <div
+                ref={demoPagesRef}
+                className="mobile-demo-pages grid xl:grid-cols-[1.08fr_0.92fr]"
+              >
                 <div className="mobile-demo-page mobile-demo-idea p-5 sm:p-7 xl:p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
