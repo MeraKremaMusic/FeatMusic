@@ -770,6 +770,15 @@ export default function Home() {
           </div>
         </div>
 
+        <div
+          className="hero-scroll-hint pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
+          aria-hidden="true"
+        >
+          <span>{copy.hero.scrollHint}</span>
+          <span className="hero-scroll-track">
+            <span className="hero-scroll-indicator" />
+          </span>
+        </div>
       </section>
 
       <section

@@ -77,6 +77,26 @@ body {
   }
 }
 
+@keyframes scroll-hint-travel {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.2rem);
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
 @keyframes reveal-up {
   from {
     opacity: 0;
@@ -197,6 +217,45 @@ body {
 
 .marquee-track:hover {
   animation-play-state: paused;
+}
+
+.hero-scroll-hint {
+  z-index: 2;
+  color: rgba(244, 244, 245, 0.72);
+}
+
+.hero-scroll-hint > span:first-child {
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 0.9rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.hero-scroll-track {
+  position: relative;
+  display: block;
+  width: 1.35rem;
+  height: 2.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  width: 0.22rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: #c4b5fd;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.7);
+  transform: translateX(-50%);
+  animation: scroll-hint-travel 1.8s ease-in-out infinite;
 }
 
 .marquee-group {
@@ -860,8 +919,9 @@ body {
   }
 
   .mobile-plans-carousel {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     align-items: stretch;
+    height: clamp(22rem, calc(100dvh - 18rem), 29rem);
     min-height: 0;
     margin-top: 1.25rem;
     margin-right: -1rem;
@@ -1353,6 +1413,7 @@ body {
   .mobile-hero-content {
     padding-top: 4.75rem;
     padding-bottom: 0.75rem;
+    transform: translateY(-1.8rem);
   }
 
   .mobile-process-carousel > article,
@@ -1427,7 +1488,7 @@ body {
   }
 
   #planes .mobile-plan-card {
-    min-height: 20rem;
+    min-height: 18.5rem;
     padding: 1.25rem;
     color: #f5f0e4;
     background: #17140e;
@@ -1623,6 +1684,7 @@ body {
   .hero-title-enter,
   .hero-body-enter,
   .hero-actions-enter,
+  .hero-scroll-indicator,
   .animated-gradient-text,
   .marquee-track,
   .reveal-on-scroll,

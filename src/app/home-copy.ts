@@ -34,6 +34,7 @@ export const homeCopy = {
         "Publica un coro, una letra, una melodía o un instrumental sin terminar. Recibe propuestas y elige con quién completar tu canción.",
       primaryAction: "Crear mi perfil gratis",
       secondaryAction: "Explorar artistas",
+      scrollHint: "Desliza para descubrir más",
     },
     genres: {
       label: "Géneros musicales de la comunidad",
@@ -355,6 +356,7 @@ export const homeCopy = {
         "Share an unfinished hook, lyric, melody or instrumental. Receive proposals and choose who you want to finish your song with.",
       primaryAction: "Create my free profile",
       secondaryAction: "Explore artists",
+      scrollHint: "Scroll to discover more",
     },
     genres: {
       label: "Music genres in the community",
@@ -676,6 +678,7 @@ export const homeCopy = {
         "Publique um refrão, uma letra, uma melodia ou um instrumental inacabado. Receba propostas e escolha com quem terminar sua música.",
       primaryAction: "Criar meu perfil grátis",
       secondaryAction: "Explorar artistas",
+      scrollHint: "Deslize para descobrir mais",
     },
     genres: {
       label: "Gêneros musicais da comunidade",
