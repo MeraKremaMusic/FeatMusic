@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { obtenerSesion } from "@/lib/session";
+import ProteccionHistorial from "./ProteccionHistorial";
 
 const mensajesDeError: Record<string, string> = {
   "datos-invalidos": "Revisa el correo y la contraseña e inténtalo de nuevo.",
@@ -21,6 +22,9 @@ export default async function IniciarSesionPage({
   const mensaje = error ? mensajesDeError[error] : undefined;
 
   return (
+  <>
+    <ProteccionHistorial />
+
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
       <section className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-950 p-8">
         <Link href="/" className="text-sm text-zinc-400 hover:text-white">
@@ -98,7 +102,8 @@ export default async function IniciarSesionPage({
             Regístrate
           </Link>
         </p>
-      </section>
+            </section>
     </main>
-  );
+  </>
+);
 }
