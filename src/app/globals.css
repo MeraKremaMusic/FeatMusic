@@ -281,6 +281,83 @@ body {
   background: linear-gradient(145deg, rgba(14, 165, 233, 0.26), rgba(30, 64, 175, 0.14));
 }
 
+.process-step-card {
+  min-height: 17.25rem;
+  color: #f4faff;
+  background: #07111f;
+  border-color: #1d4664;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 22px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: none;
+}
+
+.process-step-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(56, 189, 248, 0.92),
+    transparent
+  );
+}
+
+.process-step-card:hover {
+  border-color: #30759f;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 26px 70px rgba(0, 0, 0, 0.36);
+}
+
+.process-step-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #173a55;
+}
+
+.process-step-header .visual-icon {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #75d6ff;
+  background: #0b2034;
+  border-color: #285f82;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.process-step-header h3 {
+  font-size: 1.1rem;
+  font-weight: 650;
+  line-height: 1.35rem;
+  color: #f7fcff;
+}
+
+.process-step-index {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.18em;
+  color: #4ba3cf;
+}
+
+.process-step-copy {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding: 1.2rem 0 0.2rem;
+}
+
+.process-step-copy p {
+  font-size: 0.9rem;
+  line-height: 1.55rem;
+  color: #a9becc;
+}
+
 .visual-icon-rose {
   color: rgb(253 164 175);
   background: linear-gradient(145deg, rgba(244, 63, 94, 0.25), rgba(157, 23, 77, 0.13));
@@ -289,6 +366,171 @@ body {
 .visual-icon-emerald {
   color: rgb(110 231 183);
   background: linear-gradient(145deg, rgba(16, 185, 129, 0.25), rgba(6, 95, 70, 0.14));
+}
+
+.community-role-card {
+  min-height: 14.5rem;
+  color: #effbf5;
+  background: #07130f;
+  border-color: #1f4d3e;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 22px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: none;
+}
+
+.community-role-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(52, 211, 153, 0.92),
+    transparent
+  );
+}
+
+.community-role-card:hover {
+  border-color: #337a63;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 26px 70px rgba(0, 0, 0, 0.36);
+}
+
+.community-role-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #173c31;
+}
+
+.community-role-header .visual-icon {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #67d9ad;
+  background: #0c211a;
+  border-color: #245c49;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.community-role-header h3 {
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.35rem;
+  color: #f7fffb;
+}
+
+.community-role-index {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.18em;
+  color: #4d9d7e;
+}
+
+.community-role-copy {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding: 1.2rem 0 0.25rem;
+}
+
+.community-role-copy p {
+  font-size: 0.9rem;
+  line-height: 1.55rem;
+  color: #aabdb4;
+}
+
+.global-feature-card,
+.global-network-card {
+  color: #fff4f7;
+  background: #160c12;
+  border-color: #5a2539;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 20px 54px rgba(0, 0, 0, 0.26);
+  backdrop-filter: none;
+}
+
+.global-feature-card::before,
+.global-network-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(251, 113, 133, 0.92),
+    transparent
+  );
+}
+
+.global-feature-card:hover,
+.global-network-card:hover {
+  border-color: #8e3c59;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 64px rgba(0, 0, 0, 0.34);
+}
+
+.global-feature-header {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #4a2031;
+}
+
+.global-feature-header .visual-icon,
+.global-network-card .visual-icon {
+  flex: 0 0 auto;
+  width: 2.65rem;
+  height: 2.65rem;
+  color: #fb8fa3;
+  background: #2a111b;
+  border-color: #713047;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.global-feature-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.3rem;
+  color: #fff9fb;
+}
+
+.global-feature-index {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.18em;
+  color: #c35d7a;
+}
+
+.global-feature-copy {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding-top: 0.75rem;
+}
+
+.global-feature-copy p {
+  font-size: 0.86rem;
+  line-height: 1.4rem;
+  color: #c7aab3;
+}
+
+.global-network-card .visual-icon + div {
+  min-width: 0;
+}
+
+.global-network-card p:last-child {
+  color: #c7aab3;
 }
 
 .visual-icon-amber {
@@ -339,6 +581,100 @@ body {
 
 .faq-carousel-track::-webkit-scrollbar {
   display: none;
+}
+
+.faq-answer-card,
+.faq-clarity-card {
+  color: #f7f7ff;
+  background: #0b0b1c;
+  border-color: #34366c;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 22px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: none;
+}
+
+.faq-answer-card::before,
+.faq-clarity-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(129, 140, 248, 0.95),
+    transparent
+  );
+}
+
+.faq-answer-content {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.faq-answer-header,
+.faq-clarity-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #2c2e5c;
+}
+
+.faq-question-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.16em;
+  color: #a5b4fc;
+  text-transform: uppercase;
+}
+
+.faq-question-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1rem;
+  letter-spacing: 0.12em;
+  color: #65699f;
+}
+
+.faq-answer-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1.1rem;
+}
+
+.faq-answer-copy h3 {
+  max-width: 48rem;
+  font-size: 1.5rem;
+  font-weight: 650;
+  line-height: 1.85rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.faq-answer-copy p {
+  max-width: 48rem;
+  margin-top: 0.8rem;
+  font-size: 1rem;
+  line-height: 1.7rem;
+  color: #b7b9d1;
+}
+
+.faq-clarity-card .visual-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #aeb8ff;
+  background: #151633;
+  border-color: #404582;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.faq-clarity-bars {
+  padding: 0 0.1rem;
 }
 
 .demo-wave-bar {
@@ -472,29 +808,43 @@ body {
   }
 
   .mobile-process-carousel > article {
-    min-height: 13rem;
+    min-height: 15.5rem;
+    padding: 1.2rem;
   }
 
-  .mobile-process-carousel h3 {
-    margin-top: 0.85rem;
-    font-size: 1.18rem;
+  .mobile-process-carousel .process-step-header h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.3rem;
   }
 
-  .mobile-process-carousel article p {
-    margin-top: 0.5rem;
+  .mobile-process-carousel .process-step-copy {
+    padding-top: 1.05rem;
+  }
+
+  .mobile-process-carousel .process-step-copy p {
+    margin: 0;
     font-size: 0.86rem;
     line-height: 1.35rem;
   }
 
   .mobile-community-carousel > article {
-    min-height: 14.5rem;
+    min-height: 15.5rem;
+    padding: 1.2rem;
   }
 
-  .mobile-community-carousel h3 {
-    font-size: 1.25rem;
+  .mobile-community-carousel .community-role-header h3 {
+    margin: 0;
+    font-size: 1.18rem;
+    line-height: 1.35rem;
   }
 
-  .mobile-community-carousel article p {
+  .mobile-community-carousel .community-role-copy {
+    padding-top: 1.1rem;
+  }
+
+  .mobile-community-carousel .community-role-copy p {
+    margin: 0;
     font-size: 0.86rem;
     line-height: 1.35rem;
   }
@@ -618,6 +968,22 @@ body {
     line-height: 0.85;
     letter-spacing: -0.075em;
     color: #d1a53a;
+  }
+
+  .mobile-plan-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mobile-plan-period {
+    margin-top: 0.45rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1rem;
+    letter-spacing: 0.14em;
+    color: #9f947c;
+    text-transform: uppercase;
   }
 
   .mobile-plan-main h3 {
@@ -845,14 +1211,21 @@ body {
 
   .mobile-global-cards > article {
     min-height: 9.75rem;
+    padding: 1.15rem;
   }
 
-  .mobile-global-cards h3 {
-    font-size: 1.05rem;
+  .mobile-global-cards .global-feature-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.25rem;
   }
 
-  .mobile-global-cards article p {
-    margin-top: 0.4rem;
+  .mobile-global-cards .global-feature-copy {
+    padding-top: 0.7rem;
+  }
+
+  .mobile-global-cards .global-feature-copy p {
+    margin: 0;
     font-size: 0.8rem;
     line-height: 1.2rem;
   }
@@ -872,16 +1245,20 @@ body {
   .faq-carousel-track > article {
     min-height: 13.75rem;
     padding: 1rem;
-    border-radius: 1.35rem;
+    border-radius: 0;
   }
 
-  .faq-carousel-track h3 {
-    margin-top: 1rem;
+  .faq-carousel-track .faq-answer-copy {
+    padding-top: 0.85rem;
+  }
+
+  .faq-carousel-track .faq-answer-copy h3 {
+    margin: 0;
     font-size: 1.2rem;
     line-height: 1.5rem;
   }
 
-  .faq-carousel-track h3 + p {
+  .faq-carousel-track .faq-answer-copy p {
     margin-top: 0.65rem;
     font-size: 0.86rem;
     line-height: 1.35rem;
@@ -1089,12 +1466,28 @@ body {
     text-align: center;
   }
 
+  #planes .mobile-plan-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   #planes .mobile-plan-number {
     font-size: 3.25rem;
     font-weight: 800;
     line-height: 0.9;
     letter-spacing: -0.06em;
     color: #d1a53a;
+  }
+
+  #planes .mobile-plan-period {
+    margin-top: 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 0.9rem;
+    letter-spacing: 0.13em;
+    color: #9f947c;
+    text-transform: uppercase;
   }
 
   #planes .mobile-plan-main h3 {

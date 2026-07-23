@@ -191,8 +191,8 @@ const connectionIcons: GraphicIconName[] = [
   "users",
 ];
 const communityIcons: GraphicIconName[] = ["microphone", "disc", "pen"];
-const planIcons: GraphicIconName[] = ["gift", "crown", "percent"];
-const planHighlights = ["03", "10+", "0%"] as const;
+const planIcons: GraphicIconName[] = ["gift", "crown", "spark"];
+const planHighlights = ["$0", "$5", "$10"] as const;
 const demoWaveform = [
   18, 32, 44, 24, 52, 68, 38, 74, 48, 30, 58, 82, 46, 66, 34, 24, 54, 72,
   40, 62, 86, 48, 32, 58, 76, 42, 68, 36, 22, 52, 70, 44, 60, 28, 46, 20,
@@ -261,32 +261,26 @@ function FaqCarousel({
       <div
         ref={trackRef}
         onScroll={syncActiveSlide}
-        className="faq-carousel-track flex snap-x snap-mandatory overflow-x-auto scroll-smooth rounded-[2rem]"
+        className="faq-carousel-track flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
       >
         {items.map((item, indice) => (
           <article
             key={item.question}
-            className="relative min-h-64 w-full shrink-0 snap-start overflow-hidden rounded-[2rem] border border-indigo-100/15 bg-black/30 p-7 backdrop-blur-md sm:min-h-72 sm:p-10 xl:min-h-56 xl:p-7"
+            className="faq-answer-card relative min-h-64 w-full shrink-0 snap-start overflow-hidden border p-7 sm:min-h-72 sm:p-10 xl:min-h-56 xl:p-7"
           >
-            <div
-              aria-hidden="true"
-              className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-indigo-500/15 blur-3xl"
-            />
-            <div className="relative">
-              <div className="flex items-center justify-between gap-4">
-                <span className="rounded-full border border-indigo-300/20 bg-indigo-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-indigo-300">
+            <div className="faq-answer-content relative">
+              <div className="faq-answer-header flex items-center justify-between gap-4">
+                <span className="faq-question-label">
                   {labels.question} {String(indice + 1).padStart(2, "0")}
                 </span>
-                <span className="text-xs font-semibold text-indigo-100/35">
+                <span className="faq-question-count">
                   {String(indice + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
                 </span>
               </div>
-              <h3 className="mt-7 max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-3xl xl:mt-5 xl:text-2xl">
-                {item.question}
-              </h3>
-              <p className="mt-5 max-w-3xl text-base leading-7 text-indigo-100/70 sm:text-lg sm:leading-8 xl:mt-3 xl:text-base xl:leading-7">
-                {item.answer}
-              </p>
+              <div className="faq-answer-copy">
+                <h3>{item.question}</h3>
+                <p>{item.answer}</p>
+              </div>
             </div>
           </article>
         ))}
@@ -966,18 +960,20 @@ export default function Home() {
             {copy.process.steps.map((step, index) => (
               <article
                 key={step.title}
-                className="dynamic-card reveal-on-scroll group rounded-3xl border border-sky-200/15 bg-slate-950/55 p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-sky-300/35"
+                className="process-step-card dynamic-card reveal-on-scroll group relative flex flex-col overflow-hidden border p-6 transition duration-500 hover:-translate-y-1"
               >
-                <div className="flex items-center justify-between">
+                <div className="process-step-header flex items-center gap-3">
                   <span className="visual-icon visual-icon-sky visual-icon-compact">
                     <GraphicIcon name={processIcons[index]} />
                   </span>
-                  <span className="text-sm font-bold tracking-[0.2em] text-sky-300/70">
+                  <h3>{step.title}</h3>
+                  <span className="process-step-index" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
-                <h3 className="mt-6 text-2xl font-semibold">{step.title}</h3>
-                <p className="mt-3 leading-7 text-slate-300">{step.body}</p>
+                <div className="process-step-copy">
+                  <p>{step.body}</p>
+                </div>
               </article>
             ))}
           </div>
@@ -1025,7 +1021,7 @@ export default function Home() {
                 {copy.global.routeCaption}
               </p>
             </div>
-            <div className="mobile-global-network mt-3 flex max-w-lg items-center gap-3 rounded-2xl border border-rose-100/15 bg-black/25 p-3 backdrop-blur-sm">
+            <div className="global-network-card mobile-global-network relative mt-3 flex max-w-lg items-center gap-3 overflow-hidden border p-3">
               <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0 xl:h-10 xl:w-10">
                 <GraphicIcon name="users" />
               </span>
@@ -1044,14 +1040,19 @@ export default function Home() {
             {copy.global.cards.map((card, index) => (
               <article
                 key={card.title}
-                className="dynamic-card group flex items-start gap-4 rounded-3xl border border-rose-100/15 bg-black/25 p-5 text-rose-50 backdrop-blur-sm transition hover:-translate-y-1 hover:border-rose-300/45 hover:bg-black/35 sm:p-6 xl:p-4"
+                className="global-feature-card dynamic-card group relative flex flex-col overflow-hidden border p-5 text-rose-50 transition duration-500 hover:-translate-y-1 sm:p-6 xl:p-4"
               >
-                <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0 transition group-hover:scale-105">
-                  <GraphicIcon name={connectionIcons[index]} />
-                </span>
-                <div>
-                  <h3 className="text-xl font-semibold xl:text-lg">{card.title}</h3>
-                  <p className="mt-2 leading-7 text-rose-100/60 xl:text-sm xl:leading-6">{card.body}</p>
+                <div className="global-feature-header flex items-center gap-3">
+                  <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0">
+                    <GraphicIcon name={connectionIcons[index]} />
+                  </span>
+                  <h3>{card.title}</h3>
+                  <span className="global-feature-index" aria-hidden="true">
+                    0{index + 1}
+                  </span>
+                </div>
+                <div className="global-feature-copy">
+                  <p>{card.body}</p>
                 </div>
               </article>
             ))}
@@ -1090,16 +1091,20 @@ export default function Home() {
             {copy.community.cards.map((card, index) => (
               <article
                 key={card.title}
-                className="dynamic-card reveal-on-scroll group rounded-3xl border border-emerald-100/15 bg-black/25 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-emerald-300/45"
+                className="community-role-card dynamic-card reveal-on-scroll group relative flex flex-col overflow-hidden border p-5 transition duration-500 hover:-translate-y-1"
               >
-                <div className="flex items-start justify-between">
+                <div className="community-role-header flex items-center gap-3">
                   <span className="visual-icon visual-icon-emerald visual-icon-compact">
                     <GraphicIcon name={communityIcons[index]} />
                   </span>
-                  <span className="h-12 w-12 rounded-full border border-emerald-300/15 bg-[radial-gradient(circle,rgba(52,211,153,0.28),transparent_68%)] transition duration-500 group-hover:scale-125 xl:h-10 xl:w-10" />
+                  <h3>{card.title}</h3>
+                  <span className="community-role-index" aria-hidden="true">
+                    0{index + 1}
+                  </span>
                 </div>
-                <h3 className="mt-4 text-2xl font-semibold xl:text-xl">{card.title}</h3>
-                <p className="mt-3 leading-7 text-emerald-50/65 xl:text-sm xl:leading-6">{card.body}</p>
+                <div className="community-role-copy">
+                  <p>{card.body}</p>
+                </div>
               </article>
             ))}
           </div>
@@ -1164,9 +1169,14 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="mobile-plan-main hidden">
-                  <span className="mobile-plan-number">
-                    {planHighlights[index]}
-                  </span>
+                  <div className="mobile-plan-price">
+                    <span className="mobile-plan-number">
+                      {planHighlights[index]}
+                    </span>
+                    <span className="mobile-plan-period">
+                      {copy.plans.billingPeriod}
+                    </span>
+                  </div>
                   <h3>{card.title}</h3>
                   <p>{card.body}</p>
                 </div>
@@ -1237,8 +1247,8 @@ export default function Home() {
                 {copy.faq.title}
               </h2>
             </div>
-            <div className="mobile-faq-decoration reveal-on-scroll-right w-full max-w-sm rounded-3xl border border-indigo-100/15 bg-black/20 p-5 backdrop-blur-sm xl:p-4">
-              <div className="flex items-center gap-3 text-indigo-200">
+            <div className="faq-clarity-card mobile-faq-decoration reveal-on-scroll-right relative w-full max-w-sm overflow-hidden border p-5 xl:p-4">
+              <div className="faq-clarity-header flex items-center gap-3 text-indigo-200">
                 <span className="visual-icon visual-icon-indigo visual-icon-compact">
                   <GraphicIcon name="chat" />
                 </span>
@@ -1252,7 +1262,7 @@ export default function Home() {
                 </div>
               </div>
               <div
-                className="mt-4 flex items-end gap-1.5 xl:mt-3"
+                className="faq-clarity-bars mt-4 flex items-end gap-1.5 xl:mt-3"
                 aria-hidden="true"
               >
                 {[12, 22, 16, 30, 19, 38, 26, 15, 33, 21, 27, 13].map(

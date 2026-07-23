@@ -217,11 +217,12 @@ export const homeCopy = {
     },
     plans: {
       eyebrow: "Planes claros",
-      title: "Empieza con 3 ideas. Amplía cuando necesites más.",
+      title: "Elige el espacio que necesita tu música.",
+      billingPeriod: "USD al mes",
       cards: [
         {
           label: "Plan gratuito",
-          title: "3 ideas publicadas",
+          title: "3 espacios",
           body:
             "Mantén hasta 3 ideas activas y recibe un máximo de 3 propuestas en cada una.",
           features: [
@@ -231,25 +232,25 @@ export const homeCopy = {
           ],
         },
         {
-          label: "Con suscripción",
-          title: "Más de 10 espacios",
+          label: "Plan Creator",
+          title: "10 espacios",
           body:
-            "Publica más de 10 ideas y recibe hasta 10 propuestas diferentes en cada una.",
+            "Publica hasta 10 ideas y recibe un máximo de 10 propuestas diferentes en cada una.",
           features: [
-            "Más de 10 ideas activas",
+            "Hasta 10 ideas activas",
             "Hasta 10 propuestas por idea",
-            "Más espacio para crear",
+            "Sin comisión por colaborar",
           ],
         },
         {
-          label: "0 % de comisión",
-          title: "Tu colaboración es tuya",
+          label: "Plan Pro",
+          title: "20 espacios",
           body:
-            "FeatMusic no cobrará comisión cuando aceptes una propuesta y completes una colaboración.",
+            "Amplía tu catálogo, destaca tu perfil y participa incluso cuando una idea ya alcanzó su límite normal.",
           features: [
-            "0% de comisión",
-            "FeatMusic no toma porcentaje",
-            "Tus acuerdos siguen siendo tuyos",
+            "Hasta 20 ideas activas",
+            "Perfil destacado como artista",
+            "Propuestas extra aunque se alcance el límite",
           ],
         },
       ],
@@ -294,7 +295,7 @@ export const homeCopy = {
         {
           question: "¿Qué cambia con la suscripción?",
           answer:
-            "La suscripción amplía el perfil a más de 10 espacios para ideas y permite recibir hasta 10 propuestas en cada una.",
+            "Creator cuesta $5 USD al mes e incluye 10 espacios y hasta 10 propuestas por idea. Pro cuesta $10 USD al mes e incluye 20 espacios, perfil destacado y propuestas extra incluso cuando una idea alcanzó su límite normal.",
         },
         {
           question: "¿Puedo buscar artistas de otra ciudad o país?",
@@ -537,11 +538,12 @@ export const homeCopy = {
     },
     plans: {
       eyebrow: "Clear plans",
-      title: "Start with 3 ideas. Expand when you need more.",
+      title: "Choose the space your music needs.",
+      billingPeriod: "USD per month",
       cards: [
         {
           label: "Free plan",
-          title: "3 published ideas",
+          title: "3 spaces",
           body:
             "Keep up to 3 active ideas and receive a maximum of 3 proposals on each one.",
           features: [
@@ -551,25 +553,25 @@ export const homeCopy = {
           ],
         },
         {
-          label: "With a subscription",
-          title: "More than 10 spaces",
+          label: "Creator plan",
+          title: "10 spaces",
           body:
-            "Publish more than 10 ideas and receive up to 10 different proposals on each one.",
+            "Publish up to 10 ideas and receive a maximum of 10 different proposals on each one.",
           features: [
-            "More than 10 active ideas",
+            "Up to 10 active ideas",
             "Up to 10 proposals per idea",
-            "More room to create",
+            "No collaboration commission",
           ],
         },
         {
-          label: "0% commission",
-          title: "Your collaboration is yours",
+          label: "Pro plan",
+          title: "20 spaces",
           body:
-            "FeatMusic will not charge a commission when you accept a proposal and complete a collaboration.",
+            "Expand your catalog, highlight your profile and participate even when an idea has reached its normal limit.",
           features: [
-            "0% commission",
-            "FeatMusic takes no percentage",
-            "Your agreements remain yours",
+            "Up to 20 active ideas",
+            "Highlighted artist profile",
+            "Extra proposals beyond the normal limit",
           ],
         },
       ],
@@ -614,7 +616,7 @@ export const homeCopy = {
         {
           question: "What changes with a subscription?",
           answer:
-            "A subscription expands your profile to more than 10 idea spaces and allows up to 10 proposals on each one.",
+            "Creator costs $5 USD per month and includes 10 spaces with up to 10 proposals per idea. Pro costs $10 USD per month and includes 20 spaces, a highlighted profile and extra proposals even when an idea has reached its normal limit.",
         },
         {
           question: "Can I find artists in another city or country?",
@@ -857,11 +859,12 @@ export const homeCopy = {
     },
     plans: {
       eyebrow: "Planos claros",
-      title: "Comece com 3 ideias. Expanda quando precisar.",
+      title: "Escolha o espaço que sua música precisa.",
+      billingPeriod: "USD por mês",
       cards: [
         {
           label: "Plano grátis",
-          title: "3 ideias publicadas",
+          title: "3 espaços",
           body:
             "Mantenha até 3 ideias ativas e receba no máximo 3 propostas em cada uma.",
           features: [
@@ -871,25 +874,25 @@ export const homeCopy = {
           ],
         },
         {
-          label: "Com assinatura",
-          title: "Mais de 10 espaços",
+          label: "Plano Creator",
+          title: "10 espaços",
           body:
-            "Publique mais de 10 ideias e receba até 10 propostas diferentes em cada uma.",
+            "Publique até 10 ideias e receba no máximo 10 propostas diferentes em cada uma.",
           features: [
-            "Mais de 10 ideias ativas",
+            "Até 10 ideias ativas",
             "Até 10 propostas por ideia",
-            "Mais espaço para criar",
+            "Sem comissão nas colaborações",
           ],
         },
         {
-          label: "0% de comissão",
-          title: "Sua colaboração é sua",
+          label: "Plano Pro",
+          title: "20 espaços",
           body:
-            "A FeatMusic não cobrará comissão quando você aceitar uma proposta e concluir uma colaboração.",
+            "Amplie seu catálogo, destaque seu perfil e participe mesmo quando uma ideia atingir o limite normal.",
           features: [
-            "0% de comissão",
-            "A FeatMusic não recebe porcentagem",
-            "Seus acordos continuam sendo seus",
+            "Até 20 ideias ativas",
+            "Perfil de artista em destaque",
+            "Propostas extras além do limite normal",
           ],
         },
       ],
@@ -934,7 +937,7 @@ export const homeCopy = {
         {
           question: "O que muda com a assinatura?",
           answer:
-            "A assinatura amplia o perfil para mais de 10 espaços de ideias e permite receber até 10 propostas em cada uma.",
+            "O Creator custa US$ 5 por mês e inclui 10 espaços e até 10 propostas por ideia. O Pro custa US$ 10 por mês e inclui 20 espaços, perfil em destaque e propostas extras mesmo quando uma ideia atinge o limite normal.",
         },
         {
           question: "Posso buscar artistas de outra cidade ou país?",
