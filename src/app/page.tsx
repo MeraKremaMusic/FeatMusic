@@ -333,11 +333,49 @@ function FaqCarousel({
   );
 }
 
+function MobileCarouselPagination({
+  labels,
+  activeIndex,
+  onSelect,
+  ariaLabel,
+  tone,
+}: {
+  labels: readonly string[];
+  activeIndex: number;
+  onSelect: (index: number) => void;
+  ariaLabel: string;
+  tone: "sky" | "rose" | "emerald";
+}) {
+  return (
+    <div
+      className={`mobile-section-pagination mobile-section-pagination-${tone} hidden`}
+      aria-label={ariaLabel}
+    >
+      {labels.map((label, index) => (
+        <button
+          key={label}
+          type="button"
+          aria-label={label}
+          aria-current={activeIndex === index ? "true" : undefined}
+          onClick={() => onSelect(index)}
+          className={activeIndex === index ? "is-active" : undefined}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("es");
   const [demoPlaying, setDemoPlaying] = useState(false);
+  const [activeProcessIndex, setActiveProcessIndex] = useState(0);
+  const [activeGlobalIndex, setActiveGlobalIndex] = useState(0);
+  const [activeCommunityIndex, setActiveCommunityIndex] = useState(0);
   const [activePlanIndex, setActivePlanIndex] = useState(0);
   const languageMenuRef = useRef<HTMLDetailsElement>(null);
+  const processTrackRef = useRef<HTMLDivElement>(null);
+  const globalTrackRef = useRef<HTMLDivElement>(null);
+  const communityTrackRef = useRef<HTMLDivElement>(null);
   const plansTrackRef = useRef<HTMLDivElement>(null);
   const copy = homeCopy[locale];
   const activeLanguage =
@@ -381,6 +419,51 @@ export default function Home() {
     setLocale(nextLocale);
     window.localStorage.setItem("featmusic-language", nextLocale);
     languageMenuRef.current?.removeAttribute("open");
+  };
+
+  const syncCardCarousel = (
+    track: HTMLDivElement | null,
+    setActiveIndex: (index: number) => void,
+  ) => {
+    if (!track) return;
+
+    const cards = Array.from(
+      track.querySelectorAll<HTMLElement>("[data-carousel-card]"),
+    );
+    if (cards.length === 0) return;
+
+    const viewportCenter = track.scrollLeft + track.clientWidth / 2;
+    const closestIndex = cards.reduce((closest, card, index) => {
+      const closestCard = cards[closest];
+      const closestDistance = Math.abs(
+        closestCard.offsetLeft +
+          closestCard.offsetWidth / 2 -
+          viewportCenter,
+      );
+      const cardDistance = Math.abs(
+        card.offsetLeft + card.offsetWidth / 2 - viewportCenter,
+      );
+      return cardDistance < closestDistance ? index : closest;
+    }, 0);
+
+    setActiveIndex(closestIndex);
+  };
+
+  const showCardCarouselItem = (
+    track: HTMLDivElement | null,
+    index: number,
+    setActiveIndex: (index: number) => void,
+  ) => {
+    const card = track?.querySelectorAll<HTMLElement>(
+      "[data-carousel-card]",
+    )[index];
+    if (!track || !card) return;
+
+    track.scrollTo({
+      left: card.offsetLeft - track.offsetLeft,
+      behavior: "smooth",
+    });
+    setActiveIndex(index);
   };
 
   const syncActivePlan = () => {
@@ -956,10 +1039,17 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mobile-card-carousel mobile-process-carousel steps-grid relative mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div
+            ref={processTrackRef}
+            onScroll={() =>
+              syncCardCarousel(processTrackRef.current, setActiveProcessIndex)
+            }
+            className="mobile-card-carousel mobile-process-carousel steps-grid relative mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4"
+          >
             {copy.process.steps.map((step, index) => (
               <article
                 key={step.title}
+                data-carousel-card
                 className="process-step-card dynamic-card reveal-on-scroll group relative flex flex-col overflow-hidden border p-6 transition duration-500 hover:-translate-y-1"
               >
                 <div className="process-step-header flex items-center gap-3">
@@ -977,6 +1067,19 @@ export default function Home() {
               </article>
             ))}
           </div>
+          <MobileCarouselPagination
+            labels={copy.process.steps.map((step) => step.title)}
+            activeIndex={activeProcessIndex}
+            onSelect={(index) =>
+              showCardCarouselItem(
+                processTrackRef.current,
+                index,
+                setActiveProcessIndex,
+              )
+            }
+            ariaLabel={copy.process.eyebrow}
+            tone="sky"
+          />
         </div>
       </section>
 
@@ -1036,10 +1139,17 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mobile-card-carousel mobile-global-cards reveal-on-scroll-right grid gap-3">
+          <div
+            ref={globalTrackRef}
+            onScroll={() =>
+              syncCardCarousel(globalTrackRef.current, setActiveGlobalIndex)
+            }
+            className="mobile-card-carousel mobile-global-cards reveal-on-scroll-right grid gap-3"
+          >
             {copy.global.cards.map((card, index) => (
               <article
                 key={card.title}
+                data-carousel-card
                 className="global-feature-card dynamic-card group relative flex flex-col overflow-hidden border p-5 text-rose-50 transition duration-500 hover:-translate-y-1 sm:p-6 xl:p-4"
               >
                 <div className="global-feature-header flex items-center gap-3">
@@ -1057,6 +1167,19 @@ export default function Home() {
               </article>
             ))}
           </div>
+          <MobileCarouselPagination
+            labels={copy.global.cards.map((card) => card.title)}
+            activeIndex={activeGlobalIndex}
+            onSelect={(index) =>
+              showCardCarouselItem(
+                globalTrackRef.current,
+                index,
+                setActiveGlobalIndex,
+              )
+            }
+            ariaLabel={copy.global.eyebrow}
+            tone="rose"
+          />
         </div>
       </section>
 
@@ -1087,10 +1210,20 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mobile-card-carousel mobile-community-carousel mt-6 grid gap-5 md:grid-cols-3">
+          <div
+            ref={communityTrackRef}
+            onScroll={() =>
+              syncCardCarousel(
+                communityTrackRef.current,
+                setActiveCommunityIndex,
+              )
+            }
+            className="mobile-card-carousel mobile-community-carousel mt-6 grid gap-5 md:grid-cols-3"
+          >
             {copy.community.cards.map((card, index) => (
               <article
                 key={card.title}
+                data-carousel-card
                 className="community-role-card dynamic-card reveal-on-scroll group relative flex flex-col overflow-hidden border p-5 transition duration-500 hover:-translate-y-1"
               >
                 <div className="community-role-header flex items-center gap-3">
@@ -1108,6 +1241,19 @@ export default function Home() {
               </article>
             ))}
           </div>
+          <MobileCarouselPagination
+            labels={copy.community.cards.map((card) => card.title)}
+            activeIndex={activeCommunityIndex}
+            onSelect={(index) =>
+              showCardCarouselItem(
+                communityTrackRef.current,
+                index,
+                setActiveCommunityIndex,
+              )
+            }
+            ariaLabel={copy.community.eyebrow}
+            tone="emerald"
+          />
         </div>
       </section>
 

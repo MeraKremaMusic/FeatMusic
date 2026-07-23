@@ -1042,7 +1042,8 @@ body {
     display: none;
   }
 
-  .mobile-plan-pagination {
+  .mobile-plan-pagination,
+  .mobile-section-pagination {
     display: flex;
     flex: none;
     align-items: center;
@@ -1052,7 +1053,26 @@ body {
     margin-top: 0.35rem;
   }
 
-  .mobile-plan-pagination button {
+  .mobile-section-pagination {
+    --pagination-accent: #7dd3fc;
+    --pagination-muted: rgba(186, 230, 253, 0.2);
+    --pagination-glow: rgba(56, 189, 248, 0.34);
+  }
+
+  .mobile-section-pagination-rose {
+    --pagination-accent: #fb7185;
+    --pagination-muted: rgba(253, 164, 175, 0.2);
+    --pagination-glow: rgba(244, 63, 94, 0.34);
+  }
+
+  .mobile-section-pagination-emerald {
+    --pagination-accent: #34d399;
+    --pagination-muted: rgba(110, 231, 183, 0.2);
+    --pagination-glow: rgba(16, 185, 129, 0.34);
+  }
+
+  .mobile-plan-pagination button,
+  .mobile-section-pagination button {
     position: relative;
     width: 2.25rem;
     height: 1.75rem;
@@ -1065,7 +1085,8 @@ body {
       box-shadow 280ms ease;
   }
 
-  .mobile-plan-pagination button::after {
+  .mobile-plan-pagination button::after,
+  .mobile-section-pagination button::after {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1081,14 +1102,28 @@ body {
       box-shadow 280ms ease;
   }
 
-  .mobile-plan-pagination button.is-active {
+  .mobile-section-pagination button::after {
+    background: var(--pagination-muted);
+  }
+
+  .mobile-plan-pagination button.is-active,
+  .mobile-section-pagination button.is-active {
     width: 3.25rem;
   }
 
-  .mobile-plan-pagination button.is-active::after {
+  .mobile-plan-pagination button.is-active::after,
+  .mobile-section-pagination button.is-active::after {
     width: 2.8rem;
+  }
+
+  .mobile-plan-pagination button.is-active::after {
     background: #c99728;
     box-shadow: 0 0 18px rgba(201, 151, 40, 0.34);
+  }
+
+  .mobile-section-pagination button.is-active::after {
+    background: var(--pagination-accent);
+    box-shadow: 0 0 18px var(--pagination-glow);
   }
 
   .mobile-demo-layout {
