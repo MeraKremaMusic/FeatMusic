@@ -1,9 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
+
+import {
+  homeCopy,
+  languageOptions,
+  type Locale,
+} from "./home-copy";
 
 type GraphicIconName =
   | "search"
@@ -24,7 +29,10 @@ type GraphicIconName =
   | "note"
   | "headphones"
   | "disc"
-  | "globe";
+  | "globe"
+  | "play"
+  | "pause"
+  | "download";
 
 function GraphicIcon({
   name,
@@ -140,6 +148,19 @@ function GraphicIcon({
         <path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18" />
       </>
     ),
+    play: <path d="m9 7 8 5-8 5V7Z" />,
+    pause: (
+      <>
+        <path d="M9 7v10" />
+        <path d="M15 7v10" />
+      </>
+    ),
+    download: (
+      <>
+        <path d="M12 3v12m0 0 5-5m-5 5-5-5" />
+        <path d="M5 20h14" />
+      </>
+    ),
   };
 
   return (
@@ -158,151 +179,213 @@ function GraphicIcon({
   );
 }
 
-const conexionesGlobales = [
-  {
-    titulo: "Busca por ubicación",
-    descripcion:
-      "Encuentra cantantes, beatmakers y compositores por país o ciudad, desde tu escena local hasta cualquier lugar del mundo.",
-    icono: "globe",
-  },
-  {
-    titulo: "Escucha antes de participar",
-    descripcion:
-      "Entra a cada perfil, conoce sus ideas y escucha las propuestas que comparte con la comunidad.",
-    icono: "headphones",
-  },
-  {
-    titulo: "Sigue su perfil",
-    descripcion:
-      "Sigue a los artistas que te interesan y construye una red creativa alrededor de tu sonido.",
-    icono: "users",
-  },
-] satisfies {
-  titulo: string;
-  descripcion: string;
-  icono: GraphicIconName;
-}[];
-
-const pasosColaboracion = [
-  {
-    numero: "01",
-    titulo: "Sube tu idea",
-    descripcion: "Publica el audio de un coro, intro, verso, melodía, maqueta o instrumental sin terminar.",
-    icono: "waveform",
-  },
-  {
-    numero: "02",
-    titulo: "Explica qué falta",
-    descripcion: "Indica si buscas una voz, una letra, una melodía, un beat u otra parte para completar la canción.",
-    icono: "pen",
-  },
-  {
-    numero: "03",
-    titulo: "Recibe propuestas",
-    descripcion: "Otros artistas descargan tu idea y te envían una voz, un beat, una letra o una melodía como propuesta.",
-    icono: "users",
-  },
-  {
-    numero: "04",
-    titulo: "Elige y conversa",
-    descripcion: "Escucha cada propuesta. Al aceptar una, se abrirá un chat privado para continuar.",
-    icono: "chat",
-  },
-] satisfies {
-  numero: string;
-  titulo: string;
-  descripcion: string;
-  icono: GraphicIconName;
-}[];
-
-const generosEnMovimiento = [
-  "Reguetón",
-  "Trap",
-  "Rap",
-  "Pop",
-  "R&B",
-  "Afrobeats",
-  "Electrónica",
-  "Rock",
-  "Salsa",
-  "Bachata",
-  "Regional mexicano",
+const processIcons: GraphicIconName[] = [
+  "waveform",
+  "pen",
+  "users",
+  "chat",
+];
+const connectionIcons: GraphicIconName[] = [
+  "globe",
+  "headphones",
+  "users",
+];
+const communityIcons: GraphicIconName[] = ["microphone", "disc", "pen"];
+const planIcons: GraphicIconName[] = ["gift", "crown", "percent"];
+const demoWaveform = [
+  18, 32, 44, 24, 52, 68, 38, 74, 48, 30, 58, 82, 46, 66, 34, 24, 54, 72,
+  40, 62, 86, 48, 32, 58, 76, 42, 68, 36, 22, 52, 70, 44, 60, 28, 46, 20,
+];
+const proposalWaveforms = [
+  [12, 22, 15, 28, 18, 31, 20, 14, 26, 17, 23, 12],
+  [18, 11, 25, 16, 30, 20, 14, 27, 19, 32, 16, 21],
+  [10, 19, 27, 13, 24, 32, 18, 22, 15, 29, 20, 12],
 ];
 
-const tiposDeColaboracion = [
-  {
-    titulo: "Cantantes",
-    descripcion:
-      "Publica coros, versos, intros o maquetas incompletas. Busca otra voz, envía propuestas y elige con quién terminar la canción.",
-    icono: "microphone",
-  },
-  {
-    titulo: "Beatmakers",
-    descripcion:
-      "Sube instrumentales, descubre cantantes de distintas ciudades y encuentra voces que quieran crear una canción sobre tus beats.",
-    icono: "disc",
-  },
-  {
-    titulo: "Compositores",
-    descripcion:
-      "Publica letras, melodías o maquetas de referencia. Encuentra cantantes que las interpreten y beatmakers que desarrollen la producción.",
-    icono: "pen",
-  },
-] satisfies {
-  titulo: string;
-  descripcion: string;
-  icono: GraphicIconName;
-}[];
+function isLocale(value: string | null): value is Locale {
+  return languageOptions.some((option) => option.code === value);
+}
 
-const preguntasFrecuentes = [
-  {
-    pregunta: "¿Qué tipo de idea puedo publicar?",
-    respuesta:
-      "Puedes subir un coro, intro, verso, letra, melodía, maqueta, instrumental o cualquier fragmento que todavía necesite otra parte.",
-  },
-  {
-    pregunta: "¿Cómo funciona una propuesta?",
-    respuesta:
-      "Una persona escucha tu idea, descarga el material y envía una voz, un beat, una letra o una melodía para que puedas evaluarla.",
-  },
-  {
-    pregunta: "¿Cómo participa un compositor?",
-    respuesta:
-      "Puede publicar una letra, melodía o maqueta con audio de referencia, buscar quién la interprete o produzca y también proponer composiciones para ideas de otros perfiles.",
-  },
-  {
-    pregunta: "¿Qué ocurre cuando acepto una propuesta?",
-    respuesta:
-      "La propuesta queda seleccionada y se abre un chat privado entre ambos para organizar la colaboración y terminar la canción.",
-  },
-  {
-    pregunta: "¿Qué incluye el plan gratuito?",
-    respuesta:
-      "El plan gratuito permite mantener hasta 3 ideas publicadas y recibir hasta 3 propuestas en cada idea.",
-  },
-  {
-    pregunta: "¿Qué cambia con la suscripción?",
-    respuesta:
-      "La suscripción amplía el perfil a más de 10 espacios para ideas y permite recibir hasta 10 propuestas en cada una.",
-  },
-  {
-    pregunta: "¿Puedo buscar artistas de otra ciudad o país?",
-    respuesta:
-      "Sí. Podrás descubrir cantantes, beatmakers y compositores por ubicación, escuchar sus perfiles y participar en ideas publicadas desde cualquier parte del mundo.",
-  },
-  {
-    pregunta: "¿Puedo seguir a otros artistas?",
-    respuesta:
-      "Sí. Cada cantante, beatmaker y compositor tendrá un perfil que podrás seguir para mantenerlo dentro de tu red creativa.",
-  },
-  {
-    pregunta: "¿FeatMusic cobrará comisión por las colaboraciones?",
-    respuesta:
-      "No. FeatMusic no cobrará comisión por las colaboraciones que se completen dentro de la comunidad.",
-  },
-];
+type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+function FaqCarousel({
+  items,
+  labels,
+}: {
+  items: readonly FaqItem[];
+  labels: {
+    question: string;
+    previous: string;
+    next: string;
+    showQuestion: string;
+    navigation: string;
+  };
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const showSlide = (index: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const nextIndex = Math.max(
+      0,
+      Math.min(index, items.length - 1),
+    );
+
+    track.scrollTo({
+      left: nextIndex * track.clientWidth,
+      behavior: "smooth",
+    });
+    setActiveIndex(nextIndex);
+  };
+
+  const syncActiveSlide = () => {
+    const track = trackRef.current;
+    if (!track || track.clientWidth === 0) return;
+
+    setActiveIndex(
+      Math.min(
+        items.length - 1,
+        Math.round(track.scrollLeft / track.clientWidth),
+      ),
+    );
+  };
+
+  return (
+    <div className="reveal-on-scroll mt-10 xl:mt-6" data-faq-carousel>
+      <div
+        ref={trackRef}
+        onScroll={syncActiveSlide}
+        className="faq-carousel-track flex snap-x snap-mandatory overflow-x-auto scroll-smooth rounded-[2rem]"
+      >
+        {items.map((item, indice) => (
+          <article
+            key={item.question}
+            className="relative min-h-64 w-full shrink-0 snap-start overflow-hidden rounded-[2rem] border border-indigo-100/15 bg-black/30 p-7 backdrop-blur-md sm:min-h-72 sm:p-10 xl:min-h-56 xl:p-7"
+          >
+            <div
+              aria-hidden="true"
+              className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-indigo-500/15 blur-3xl"
+            />
+            <div className="relative">
+              <div className="flex items-center justify-between gap-4">
+                <span className="rounded-full border border-indigo-300/20 bg-indigo-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-indigo-300">
+                  {labels.question} {String(indice + 1).padStart(2, "0")}
+                </span>
+                <span className="text-xs font-semibold text-indigo-100/35">
+                  {String(indice + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+                </span>
+              </div>
+              <h3 className="mt-7 max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-3xl xl:mt-5 xl:text-2xl">
+                {item.question}
+              </h3>
+              <p className="mt-5 max-w-3xl text-base leading-7 text-indigo-100/70 sm:text-lg sm:leading-8 xl:mt-3 xl:text-base xl:leading-7">
+                {item.answer}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center justify-center gap-2 sm:justify-start" aria-label={labels.navigation}>
+          {items.map((item, indice) => (
+            <button
+              key={item.question}
+              type="button"
+              aria-label={`${labels.showQuestion} ${indice + 1}`}
+              aria-current={activeIndex === indice ? "true" : undefined}
+              onClick={() => showSlide(indice)}
+              className={`h-2 rounded-full transition-all ${
+                activeIndex === indice
+                  ? "w-8 bg-indigo-300"
+                  : "w-2 bg-indigo-100/20 hover:bg-indigo-100/40"
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="flex items-center justify-center gap-3 sm:justify-end">
+          <button
+            type="button"
+            aria-label={labels.previous}
+            disabled={activeIndex === 0}
+            onClick={() => showSlide(activeIndex - 1)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-indigo-100/15 bg-black/25 text-indigo-100 transition hover:border-indigo-300/40 hover:bg-indigo-400/10 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
+              <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label={labels.next}
+            disabled={activeIndex === items.length - 1}
+            onClick={() => showSlide(activeIndex + 1)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-indigo-100/15 bg-black/25 text-indigo-100 transition hover:border-indigo-300/40 hover:bg-indigo-400/10 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
+              <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
+  const [locale, setLocale] = useState<Locale>("es");
+  const [demoPlaying, setDemoPlaying] = useState(false);
+  const languageMenuRef = useRef<HTMLDetailsElement>(null);
+  const copy = homeCopy[locale];
+  const activeLanguage =
+    languageOptions.find((option) => option.code === locale) ??
+    languageOptions[0];
+
+  useEffect(() => {
+    const savedLocale = window.localStorage.getItem("featmusic-language");
+    let detectedLocale: Locale = "es";
+
+    if (isLocale(savedLocale)) {
+      detectedLocale = savedLocale;
+    } else {
+      const browserLanguage = window.navigator.language.toLowerCase();
+      if (browserLanguage.startsWith("pt")) {
+        detectedLocale = "pt-BR";
+      } else if (browserLanguage.startsWith("en")) {
+        detectedLocale = "en";
+      }
+    }
+
+    if (detectedLocale === "es") return;
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      setLocale(detectedLocale);
+    });
+
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.title = copy.meta.title;
+
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", copy.meta.description);
+  }, [copy.meta.description, copy.meta.title, locale]);
+
+  const changeLanguage = (nextLocale: Locale) => {
+    setLocale(nextLocale);
+    window.localStorage.setItem("featmusic-language", nextLocale);
+    languageMenuRef.current?.removeAttribute("open");
+  };
+
   useEffect(() => {
     const root = document.documentElement;
     const titles = document.querySelectorAll<HTMLElement>(
@@ -334,9 +417,191 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    const desktopPointer = window.matchMedia(
+      "(min-width: 1280px) and (pointer: fine)",
+    );
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+    let wheelIntent = 0;
+    let navigationLocked = false;
+    let unlockTimer: number | undefined;
+
+    const navigateByWheel = (event: WheelEvent) => {
+      if (
+        !desktopPointer.matches ||
+        reducedMotion.matches ||
+        event.ctrlKey ||
+        Math.abs(event.deltaY) < 2
+      ) {
+        return;
+      }
+
+      const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-home-section]"),
+      );
+      if (sections.length === 0) return;
+
+      const headerHeight =
+        document.querySelector<HTMLElement>("header")?.offsetHeight ?? 0;
+      const referenceY = window.scrollY + headerHeight;
+      const currentIndex = sections.reduce(
+        (closestIndex, section, index) => {
+          const currentDistance = Math.abs(
+            sections[closestIndex].offsetTop - referenceY,
+          );
+          const nextDistance = Math.abs(section.offsetTop - referenceY);
+          return nextDistance < currentDistance ? index : closestIndex;
+        },
+        0,
+      );
+
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = currentIndex + direction;
+
+      if (nextIndex < 0 || nextIndex >= sections.length) {
+        return;
+      }
+
+      event.preventDefault();
+      if (navigationLocked) return;
+
+      wheelIntent += event.deltaY;
+      if (Math.abs(wheelIntent) < 18) return;
+
+      navigationLocked = true;
+      wheelIntent = 0;
+
+      window.scrollTo({
+        top: Math.max(0, sections[nextIndex].offsetTop - headerHeight),
+        behavior: "smooth",
+      });
+
+      window.clearTimeout(unlockTimer);
+      unlockTimer = window.setTimeout(() => {
+        navigationLocked = false;
+      }, 900);
+    };
+
+    window.addEventListener("wheel", navigateByWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener("wheel", navigateByWheel);
+      window.clearTimeout(unlockTimer);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white">
-      <section className="relative isolate min-h-[760px] overflow-hidden border-b border-white/10">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-6 sm:py-4">
+          <Link href="/" className="text-xl font-bold tracking-tight sm:text-[1.35rem]">
+            Feat<span className="text-violet-400">Music</span>
+          </Link>
+
+          <nav
+            className="flex items-center gap-3 sm:gap-4"
+            aria-label={copy.header.navigation}
+          >
+            <div className="hidden items-center gap-6 lg:flex">
+              <a
+                href="#como-funciona"
+                className="text-sm font-medium text-zinc-400 transition hover:text-white"
+              >
+                {copy.header.howItWorks}
+              </a>
+              <a
+                href="#comunidad"
+                className="text-sm font-medium text-zinc-400 transition hover:text-white"
+              >
+                {copy.header.community}
+              </a>
+              <a
+                href="#planes"
+                className="text-sm font-medium text-zinc-400 transition hover:text-white"
+              >
+                {copy.header.plans}
+              </a>
+            </div>
+
+            <details ref={languageMenuRef} className="group relative">
+              <summary
+                aria-label={`${copy.header.language}: ${activeLanguage.label}`}
+                title={copy.header.language}
+                className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-white/15 bg-black/25 px-3 py-2 text-xs font-semibold text-zinc-100 backdrop-blur-md transition hover:border-violet-300/40 hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 [&::-webkit-details-marker]:hidden"
+              >
+                <GraphicIcon
+                  name="globe"
+                  className="h-4 w-4 text-violet-300"
+                />
+                <span>{activeLanguage.shortLabel}</span>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  className="h-3.5 w-3.5 fill-none stroke-current text-zinc-400 transition group-open:rotate-180"
+                  strokeWidth="1.8"
+                >
+                  <path
+                    d="m6 8 4 4 4-4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </summary>
+
+              <div className="absolute right-0 top-[calc(100%+0.65rem)] z-50 w-48 overflow-hidden rounded-2xl border border-white/15 bg-[#0b0712]/95 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl">
+                <p className="px-3 pb-2 pt-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                  {copy.header.language}
+                </p>
+                {languageOptions.map((option) => {
+                  const isActive = option.code === locale;
+
+                  return (
+                    <button
+                      key={option.code}
+                      type="button"
+                      aria-label={`${copy.header.selectedLanguage}: ${option.label}`}
+                      aria-pressed={isActive}
+                      onClick={() => changeLanguage(option.code)}
+                      className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition ${
+                        isActive
+                          ? "bg-violet-500/15 text-violet-200"
+                          : "text-zinc-300 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="w-10 text-xs font-bold text-zinc-500">
+                          {option.shortLabel}
+                        </span>
+                        <span>{option.label}</span>
+                      </span>
+                      {isActive ? (
+                        <GraphicIcon
+                          name="check"
+                          className="h-4 w-4 text-violet-300"
+                        />
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            </details>
+
+            <Link
+              href="/iniciar-sesion"
+              className="text-sm font-medium text-zinc-200 transition hover:text-white"
+            >
+              {copy.header.login}
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      <section
+        data-home-section
+        className="home-scroll-section relative isolate min-h-[100svh] overflow-hidden border-b border-white/10"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-30 bg-[url('/images/featmusic-hero-studio.webp')] bg-cover bg-[position:62%_center] sm:bg-center"
@@ -350,40 +615,22 @@ export default function Home() {
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.48)_0%,rgba(0,0,0,0.32)_55%,#000_100%)]"
         />
 
-        <header className="border-b border-white/10 bg-black/10 backdrop-blur-sm">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-6 sm:py-6">
-            <Link href="/" className="text-2xl font-bold tracking-tight">
-              Feat<span className="text-violet-400">Music</span>
-            </Link>
-
-            <nav className="flex items-center gap-3 sm:gap-4">
-              <Link
-                href="/iniciar-sesion"
-                className="text-sm font-medium text-zinc-200 transition hover:text-white"
-              >
-                Iniciar sesión
-              </Link>
-            </nav>
-          </div>
-        </header>
-
-        <div className="mx-auto flex min-h-[670px] max-w-7xl flex-col items-center justify-center px-5 pb-28 pt-16 text-center sm:px-6 md:-translate-y-10 xl:-translate-y-12">
+        <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col items-center justify-center px-5 pb-16 pt-28 text-center sm:px-6 sm:pt-24 md:-translate-y-1">
           <p className="hero-badge-enter mb-6 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-xs font-medium uppercase tracking-[0.14em] text-zinc-200 shadow-2xl backdrop-blur-md sm:text-sm">
-            Donde una idea encuentra la parte que le falta
+            {copy.hero.badge}
           </p>
 
           <h1 className="max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight drop-shadow-2xl sm:text-5xl md:text-7xl">
-            <span className="hero-title-enter block">Conecta con artistas.</span>
+            <span className="hero-title-enter block">{copy.hero.titleOne}</span>
             <span className="hero-title-enter hero-title-enter-delay block">
               <span className="animated-gradient-text bg-gradient-to-r from-violet-300 via-violet-400 to-fuchsia-300 bg-clip-text text-transparent">
-                Crea música sin límites.
+                {copy.hero.titleTwo}
               </span>
             </span>
           </h1>
 
           <p className="hero-body-enter mt-7 max-w-2xl text-base leading-7 text-zinc-200 drop-shadow-lg sm:text-lg sm:leading-8">
-            Publica un coro, una letra, una melodía o un instrumental sin
-            terminar. Recibe propuestas y elige con quién completar tu canción.
+            {copy.hero.body}
           </p>
 
           <div className="hero-actions-enter mt-10 flex w-full max-w-sm flex-col gap-4 sm:w-auto sm:max-w-none sm:flex-row">
@@ -391,14 +638,14 @@ export default function Home() {
               href="/registro"
               className="rounded-full bg-violet-600 px-8 py-4 font-semibold shadow-[0_12px_40px_rgba(124,58,237,0.35)] transition hover:-translate-y-0.5 hover:bg-violet-500"
             >
-              Crear mi perfil gratis
+              {copy.hero.primaryAction}
             </Link>
 
             <Link
               href="/artistas"
               className="rounded-full border border-white/25 bg-black/35 px-8 py-4 font-semibold backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/50 hover:bg-black/55"
             >
-              Explorar artistas
+              {copy.hero.secondaryAction}
             </Link>
           </div>
         </div>
@@ -406,7 +653,7 @@ export default function Home() {
       </section>
 
       <section
-        aria-label="Géneros musicales de la comunidad"
+        aria-label={copy.genres.label}
         className="overflow-hidden border-b border-white/10 bg-black py-5"
       >
         <div className="marquee-track">
@@ -416,7 +663,7 @@ export default function Home() {
               aria-hidden={grupo === 1}
               className="marquee-group"
             >
-              {generosEnMovimiento.map((genero) => (
+              {copy.genres.items.map((genero) => (
                 <span key={`${grupo}-${genero}`} className="marquee-item">
                   <span className="text-violet-400">✦</span>
                   {genero}
@@ -427,7 +674,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="descubrir" className="relative isolate flex min-h-[65vh] scroll-mt-6 items-center overflow-hidden border-b border-violet-300/10 bg-[#140323]">
+      <section
+        id="descubrir"
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-violet-300/10 bg-[#140323]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_22%,rgba(168,85,247,0.36),transparent_32%),radial-gradient(circle_at_84%_74%,rgba(99,102,241,0.3),transparent_34%),linear-gradient(135deg,#1d0634_0%,#10021d_48%,#21063a_100%)]"
@@ -437,100 +688,215 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-24">
-          <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-            <div className="reveal-on-scroll max-w-2xl">
+        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
+          <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
+            <div className="reveal-on-scroll max-w-xl">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-300">
-                Colaboraciones que sí encajan
+                {copy.demo.eyebrow}
               </p>
-              <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-                Publica lo que tienes. Encuentra lo que le falta.
+              <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
+                {copy.demo.title}
               </h2>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-violet-100/70">
-                Cada audio puede convertirse en una invitación abierta para que
-                otro artista aporte justo la parte que tu canción necesita.
+              <p className="mt-5 max-w-xl text-lg leading-8 text-violet-100/70 lg:text-base lg:leading-7">
+                {copy.demo.body}
               </p>
+
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                {copy.demo.benefits.map((benefit, index) => (
+                  <span
+                    key={benefit}
+                    className="inline-flex items-center gap-2 rounded-full border border-violet-200/15 bg-black/25 px-4 py-2 text-sm text-violet-100/80"
+                  >
+                    <GraphicIcon
+                      name={index === 0 ? "check" : "chat"}
+                      className="h-4 w-4 text-violet-300"
+                    />
+                    {benefit}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/registro"
+                  className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-violet-950 transition hover:-translate-y-0.5 hover:bg-violet-100"
+                >
+                  {copy.demo.primaryAction}
+                </Link>
+                <Link
+                  href="/artistas"
+                  className="rounded-full border border-violet-200/20 bg-black/20 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-violet-200/45"
+                >
+                  {copy.demo.secondaryAction}
+                </Link>
+              </div>
             </div>
 
-            <figure className="studio-visual reveal-on-scroll-right relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-violet-200/20 bg-black/40 shadow-[0_30px_90px_rgba(76,29,149,0.38)]">
-              <Image
-                src="/images/featmusic-collaboration-studio.webp"
-                alt="Cantantes y beatmaker colaborando en un estudio de grabación"
-                fill
-                priority={false}
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(8,2,18,0.9),transparent_58%)]" />
-              <figcaption className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 p-5 sm:p-7">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200/75">
-                    Una idea, distintas posibilidades
-                  </p>
-                  <p className="mt-1 text-lg font-semibold text-white">
-                    Voces y beats que encuentran cómo conectarse
-                  </p>
+            <div className="product-demo-shell reveal-on-scroll-right overflow-hidden rounded-[2rem] border border-violet-200/20 bg-[#09060f]/90 shadow-[0_32px_100px_rgba(76,29,149,0.45)] backdrop-blur-xl">
+              <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.035] px-5 py-4 sm:px-6 xl:py-3">
+                <div className="flex items-center gap-2" aria-hidden="true">
+                  <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-amber-300/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
                 </div>
-                <div className="flex -space-x-2" aria-label="Roles en la sesión">
-                  {[
-                    ["C", "Cantante"],
-                    ["B", "Beatmaker"],
-                    ["CO", "Compositor"],
-                  ].map(([inicial, rol]) => (
-                    <span
-                      key={rol}
-                      title={rol}
-                      className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1b0b2c] bg-gradient-to-br from-violet-400 to-fuchsia-600 text-xs font-bold shadow-lg"
-                    >
-                      {inicial}
+                <span className="rounded-full border border-violet-200/15 bg-violet-500/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-violet-200">
+                  {copy.demo.previewLabel}
+                </span>
+              </div>
+
+              <div className="grid xl:grid-cols-[1.08fr_0.92fr]">
+                <div className="p-5 sm:p-7 xl:p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-700 text-sm font-bold shadow-lg xl:h-10 xl:w-10">
+                        LR
+                      </span>
+                      <div>
+                        <p className="font-semibold text-white">{copy.demo.artistName}</p>
+                        <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400">
+                          <GraphicIcon name="globe" className="h-3.5 w-3.5 text-violet-300" />
+                          {copy.demo.location}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-emerald-300">
+                      {copy.demo.openIdea}
                     </span>
-                  ))}
+                  </div>
+
+                  <div className="mt-7 xl:mt-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-300/75">
+                      {copy.demo.ideaLabel}
+                    </p>
+                    <h3 className="mt-2 text-2xl font-semibold xl:text-xl">{copy.demo.ideaTitle}</h3>
+                    <p className="mt-3 text-sm leading-6 text-zinc-400">
+                      {copy.demo.ideaBody}
+                    </p>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-2 xl:mt-4">
+                    {copy.demo.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div
+                    className={`mt-7 rounded-2xl border border-white/10 bg-black/35 p-4 xl:mt-5 xl:p-3 ${
+                      demoPlaying ? "demo-audio-playing" : ""
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        aria-label={demoPlaying ? copy.demo.pause : copy.demo.play}
+                        aria-pressed={demoPlaying}
+                        onClick={() => setDemoPlaying((playing) => !playing)}
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white shadow-[0_8px_28px_rgba(124,58,237,0.45)] transition hover:scale-105 hover:bg-violet-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 xl:h-10 xl:w-10"
+                      >
+                        <GraphicIcon
+                          name={demoPlaying ? "pause" : "play"}
+                          className="h-5 w-5"
+                        />
+                      </button>
+                      <div className="flex h-16 min-w-0 flex-1 items-center gap-[3px] xl:h-12" aria-hidden="true">
+                        {demoWaveform.map((height, index) => (
+                          <span
+                            key={`${height}-${index}`}
+                            className="demo-wave-bar min-w-[2px] flex-1 rounded-full bg-gradient-to-t from-violet-700 to-fuchsia-300"
+                            style={{
+                              height: `${height}%`,
+                              animationDelay: `${index * 42}ms`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-xs font-medium text-zinc-500">{copy.demo.duration}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-violet-200/10 bg-violet-500/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between xl:mt-4 xl:p-3">
+                    <div>
+                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-violet-300/70">
+                        {copy.demo.seekingLabel}
+                      </p>
+                      <p className="mt-1 font-semibold">{copy.demo.seekingValue}</p>
+                    </div>
+                    <span className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-zinc-300">
+                      <GraphicIcon name="download" className="h-4 w-4" />
+                      {copy.demo.download}
+                    </span>
+                  </div>
                 </div>
-              </figcaption>
-            </figure>
-          </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <article className="dynamic-card reveal-on-scroll rounded-3xl border border-white/15 bg-black/25 p-7 shadow-2xl backdrop-blur-md transition hover:-translate-y-1 hover:border-violet-300/50 hover:bg-black/35">
-              <span className="visual-icon visual-icon-violet">
-                <GraphicIcon name="waveform" />
-              </span>
-              <h3 className="text-xl font-semibold">Sube una idea</h3>
+                <div className="border-t border-white/10 bg-black/25 p-5 sm:p-7 xl:border-l xl:border-t-0 xl:p-4">
+                  <p className="font-semibold text-white">{copy.demo.proposalsTitle}</p>
+                  <p className="mt-1 text-xs leading-5 text-zinc-500">
+                    {copy.demo.proposalsCaption}
+                  </p>
 
-              <p className="mt-3 text-violet-100/70">
-                Publica el audio, la letra o la melodía que ya tienes y
-                especifica qué parte necesitas para completarla.
-              </p>
-            </article>
+                  <div className="mt-5 space-y-3 xl:mt-4 xl:space-y-2">
+                    {copy.demo.proposals.map((proposal, index) => (
+                      <article
+                        key={proposal.name}
+                        className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-violet-300/25 hover:bg-violet-500/[0.06] xl:p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-violet-200/15 bg-violet-500/15 text-xs font-bold text-violet-200">
+                            {proposal.initial}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-white">{proposal.name}</p>
+                            <p className="truncate text-xs text-zinc-500">{proposal.location}</p>
+                          </div>
+                          <span
+                            aria-hidden="true"
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 text-violet-200"
+                          >
+                            <GraphicIcon name="play" className="h-4 w-4" />
+                          </span>
+                        </div>
+                        <div className="mt-3 flex h-8 items-center gap-1 xl:hidden" aria-hidden="true">
+                          {proposalWaveforms[index].map((height, barIndex) => (
+                            <span
+                              key={`${height}-${barIndex}`}
+                              className="flex-1 rounded-full bg-violet-300/30 transition group-hover:bg-violet-300/55"
+                              style={{ height: `${height}px` }}
+                            />
+                          ))}
+                        </div>
+                        <p className="mt-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-violet-300/55 xl:mt-1">
+                          {proposal.style}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
 
-            <article className="dynamic-card reveal-on-scroll rounded-3xl border border-white/15 bg-black/25 p-7 shadow-2xl backdrop-blur-md transition hover:-translate-y-1 hover:border-violet-300/50 hover:bg-black/35">
-              <span className="visual-icon visual-icon-violet">
-                <GraphicIcon name="users" />
-              </span>
-              <h3 className="text-xl font-semibold">Recibe propuestas</h3>
-
-              <p className="mt-3 text-violet-100/70">
-                Otros perfiles escuchan y descargan tu idea para enviarte una
-                voz, un beat, una letra o una melodía.
-              </p>
-            </article>
-
-            <article className="dynamic-card reveal-on-scroll rounded-3xl border border-white/15 bg-black/25 p-7 shadow-2xl backdrop-blur-md transition hover:-translate-y-1 hover:border-violet-300/50 hover:bg-black/35">
-              <span className="visual-icon visual-icon-violet">
-                <GraphicIcon name="check" />
-              </span>
-              <h3 className="text-xl font-semibold">Tú tomas la decisión</h3>
-
-              <p className="mt-3 text-violet-100/70">
-                Acepta o rechaza cada propuesta. Cuando aceptes una, se abrirá
-                un chat privado con esa persona.
-              </p>
-            </article>
+                  <div className="mt-5 rounded-2xl border border-emerald-300/15 bg-emerald-400/[0.06] p-4 xl:mt-4 xl:p-3">
+                    <div className="flex gap-3">
+                      <GraphicIcon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                      <div>
+                        <p className="text-sm font-semibold text-emerald-100">{copy.demo.decisionTitle}</p>
+                        <p className="mt-1 text-xs leading-5 text-emerald-100/55">{copy.demo.decisionBody}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="relative isolate flex min-h-[72vh] items-center overflow-hidden border-b border-sky-300/10 bg-[#06111f]">
+      <section
+        id="como-funciona"
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-sky-300/10 bg-[#06111f]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_75%_25%,rgba(14,165,233,0.22),transparent_30%),radial-gradient(circle_at_15%_80%,rgba(99,102,241,0.26),transparent_34%),linear-gradient(145deg,#07182a,#080c1d_60%,#111338)]"
@@ -540,43 +906,45 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:radial-gradient(rgba(186,230,253,0.7)_1px,transparent_1px)] [background-size:28px_28px]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-24">
+        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-10">
           <div className="reveal-on-scroll mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-300">
-              Cómo funciona
+              {copy.process.eyebrow}
             </p>
             <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              De una idea incompleta a una colaboración real.
+              {copy.process.title}
             </h2>
             <p className="mt-5 text-lg text-slate-300">
-              Tú decides qué parte falta, quién puede proponerla y qué versión
-              quieres llevar hasta el final.
+              {copy.process.body}
             </p>
           </div>
 
-          <div className="steps-grid relative mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {pasosColaboracion.map(({ numero, titulo, descripcion, icono }) => (
+          <div className="steps-grid relative mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {copy.process.steps.map((step, index) => (
               <article
-                key={numero}
-                className="dynamic-card reveal-on-scroll group rounded-3xl border border-sky-200/15 bg-slate-950/55 p-8 backdrop-blur-sm transition hover:-translate-y-1 hover:border-sky-300/35"
+                key={step.title}
+                className="dynamic-card reveal-on-scroll group rounded-3xl border border-sky-200/15 bg-slate-950/55 p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-sky-300/35"
               >
                 <div className="flex items-center justify-between">
                   <span className="visual-icon visual-icon-sky visual-icon-compact">
-                    <GraphicIcon name={icono} />
+                    <GraphicIcon name={processIcons[index]} />
                   </span>
                   <span className="text-sm font-bold tracking-[0.2em] text-sky-300/70">
-                    {numero}
+                    {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
-                <h3 className="mt-8 text-2xl font-semibold">{titulo}</h3>
-                <p className="mt-3 leading-7 text-slate-300">{descripcion}</p>
+                <h3 className="mt-6 text-2xl font-semibold">{step.title}</h3>
+                <p className="mt-3 leading-7 text-slate-300">{step.body}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="relative isolate flex min-h-[72vh] items-center overflow-hidden border-b border-rose-200/10 bg-[#190b16]">
+      <section
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-rose-200/10 bg-[#190b16]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_12%_18%,rgba(244,63,94,0.2),transparent_30%),radial-gradient(circle_at_88%_75%,rgba(168,85,247,0.24),transparent_32%),linear-gradient(120deg,#210d1a,#120914_55%,#24102f)]"
@@ -586,62 +954,60 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(125deg,transparent_0%,transparent_48%,rgba(255,255,255,0.16)_49%,transparent_50%,transparent_100%)] [background-size:64px_64px]"
         />
 
-        <div className="mx-auto grid w-full max-w-7xl gap-14 px-6 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-5">
           <div className="reveal-on-scroll-left">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">
-              Talento sin fronteras
+              {copy.global.eyebrow}
             </p>
-            <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Encuentra artistas en cualquier parte del mundo.
+            <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
+              {copy.global.title}
             </h2>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-rose-100/70">
-              Puedes estar en Cali y descubrir en Tijuana una voz, un beatmaker
-              o un compositor que encaje con la canción que tienes en mente.
+            <p className="mt-5 max-w-xl text-lg leading-8 text-rose-100/70 lg:text-base lg:leading-7">
+              {copy.global.body}
             </p>
-            <div className="mt-9 max-w-lg rounded-2xl border border-rose-100/15 bg-black/25 p-5 backdrop-blur-sm">
-              <div className="flex items-center gap-3 sm:gap-4">
-                <span className="rounded-full border border-rose-200/15 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-100 sm:px-4 sm:text-sm">
-                  Cali, Colombia
+            <div className="mt-6 max-w-lg rounded-2xl border border-rose-100/15 bg-black/25 p-4 backdrop-blur-sm">
+              <div className="flex items-center gap-3">
+                <span className="rounded-full border border-rose-200/15 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 sm:text-sm">
+                  {copy.global.origin}
                 </span>
                 <span className="h-px flex-1 bg-gradient-to-r from-rose-400 via-fuchsia-300 to-violet-400" />
                 <GraphicIcon name="globe" className="h-5 w-5 shrink-0 text-fuchsia-300" />
                 <span className="h-px flex-1 bg-gradient-to-r from-violet-400 via-fuchsia-300 to-rose-400" />
-                <span className="rounded-full border border-rose-200/15 bg-violet-500/10 px-3 py-2 text-xs font-semibold text-rose-100 sm:px-4 sm:text-sm">
-                  Tijuana, México
+                <span className="rounded-full border border-rose-200/15 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 sm:text-sm">
+                  {copy.global.destination}
                 </span>
               </div>
-              <p className="mt-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-rose-200/60">
-                Tu próxima colaboración puede estar en otra ciudad
+              <p className="mt-3 text-center text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-rose-200/60">
+                {copy.global.routeCaption}
               </p>
             </div>
-            <div className="mt-5 flex max-w-lg items-center gap-4 rounded-2xl border border-rose-100/15 bg-black/25 p-4 backdrop-blur-sm">
-              <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0">
+            <div className="mt-3 flex max-w-lg items-center gap-3 rounded-2xl border border-rose-100/15 bg-black/25 p-3 backdrop-blur-sm">
+              <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0 xl:h-10 xl:w-10">
                 <GraphicIcon name="users" />
               </span>
               <div>
-                <p className="font-semibold text-white">Una red que crece contigo</p>
+                <p className="font-semibold text-white">
+                  {copy.global.networkTitle}
+                </p>
                 <p className="mt-1 text-sm leading-6 text-rose-100/60">
-                  Sigue perfiles y conserva cerca a quienes quieras escuchar o
-                  invitar a futuras ideas.
+                  {copy.global.networkBody}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="reveal-on-scroll-right grid gap-4">
-            {conexionesGlobales.map((conexion) => (
+          <div className="reveal-on-scroll-right grid gap-3">
+            {copy.global.cards.map((card, index) => (
               <article
-                key={conexion.titulo}
-                className="dynamic-card group flex items-start gap-5 rounded-3xl border border-rose-100/15 bg-black/25 p-6 text-rose-50 backdrop-blur-sm transition hover:-translate-y-1 hover:border-rose-300/45 hover:bg-black/35 sm:p-7"
+                key={card.title}
+                className="dynamic-card group flex items-start gap-4 rounded-3xl border border-rose-100/15 bg-black/25 p-5 text-rose-50 backdrop-blur-sm transition hover:-translate-y-1 hover:border-rose-300/45 hover:bg-black/35 sm:p-6 xl:p-4"
               >
                 <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0 transition group-hover:scale-105">
-                  <GraphicIcon name={conexion.icono} />
+                  <GraphicIcon name={connectionIcons[index]} />
                 </span>
                 <div>
-                  <h3 className="text-xl font-semibold">{conexion.titulo}</h3>
-                  <p className="mt-2 leading-7 text-rose-100/60">
-                    {conexion.descripcion}
-                  </p>
+                  <h3 className="text-xl font-semibold xl:text-lg">{card.title}</h3>
+                  <p className="mt-2 leading-7 text-rose-100/60 xl:text-sm xl:leading-6">{card.body}</p>
                 </div>
               </article>
             ))}
@@ -649,7 +1015,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative isolate flex min-h-[70vh] items-center overflow-hidden border-b border-emerald-200/10 bg-[#061916]">
+      <section
+        id="comunidad"
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-emerald-200/10 bg-[#061916]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.22),transparent_34%),radial-gradient(circle_at_85%_85%,rgba(6,182,212,0.2),transparent_30%),linear-gradient(145deg,#071d18,#061310_55%,#09201f)]"
@@ -659,43 +1029,44 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:repeating-radial-gradient(circle_at_15%_110%,transparent_0,transparent_44px,rgba(167,243,208,0.18)_45px,transparent_46px)]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-24">
+        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-5">
           <div className="reveal-on-scroll max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
-              Tres formas de crear
+              {copy.community.eyebrow}
             </p>
-            <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Una comunidad para cantantes, beatmakers y compositores.
+            <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
+              {copy.community.title}
             </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/65">
-              Aquí el centro es la canción: una voz, un beat o una composición
-              pueden convertirse en el comienzo de una colaboración.
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-emerald-50/65 lg:text-base lg:leading-7">
+              {copy.community.body}
             </p>
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {tiposDeColaboracion.map((tipo) => (
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {copy.community.cards.map((card, index) => (
               <article
-                key={tipo.titulo}
-                className="dynamic-card reveal-on-scroll group rounded-3xl border border-emerald-100/15 bg-black/25 p-8 backdrop-blur-sm transition hover:-translate-y-1 hover:border-emerald-300/45"
+                key={card.title}
+                className="dynamic-card reveal-on-scroll group rounded-3xl border border-emerald-100/15 bg-black/25 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-emerald-300/45"
               >
                 <div className="flex items-start justify-between">
                   <span className="visual-icon visual-icon-emerald visual-icon-compact">
-                    <GraphicIcon name={tipo.icono} />
+                    <GraphicIcon name={communityIcons[index]} />
                   </span>
-                  <span className="h-12 w-12 rounded-full border border-emerald-300/15 bg-[radial-gradient(circle,rgba(52,211,153,0.28),transparent_68%)] transition duration-500 group-hover:scale-125" />
+                  <span className="h-12 w-12 rounded-full border border-emerald-300/15 bg-[radial-gradient(circle,rgba(52,211,153,0.28),transparent_68%)] transition duration-500 group-hover:scale-125 xl:h-10 xl:w-10" />
                 </div>
-                <h3 className="mt-8 text-2xl font-semibold">{tipo.titulo}</h3>
-                <p className="mt-3 leading-7 text-emerald-50/65">
-                  {tipo.descripcion}
-                </p>
+                <h3 className="mt-4 text-2xl font-semibold xl:text-xl">{card.title}</h3>
+                <p className="mt-3 leading-7 text-emerald-50/65 xl:text-sm xl:leading-6">{card.body}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="relative isolate flex min-h-[70vh] items-center overflow-hidden border-b border-amber-200/10 bg-[#171006]">
+      <section
+        id="planes"
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-amber-200/10 bg-[#171006]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(245,158,11,0.22),transparent_30%),radial-gradient(circle_at_88%_80%,rgba(168,85,247,0.2),transparent_32%),linear-gradient(145deg,#1d1307,#100c08_55%,#24152d)]"
@@ -705,74 +1076,65 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(30deg,rgba(253,230,138,0.15)_12%,transparent_12.5%,transparent_87%,rgba(253,230,138,0.15)_87.5%)] [background-size:72px_42px]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-24">
+        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
           <div className="reveal-on-scroll mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">
-              Planes claros
+              {copy.plans.eyebrow}
             </p>
-            <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Empieza con 3 ideas. Amplía cuando necesites más.
+            <h2 className="section-title-reveal mt-3 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
+              {copy.plans.title}
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <article className="dynamic-card reveal-on-scroll rounded-3xl border border-amber-100/15 bg-black/30 p-8 backdrop-blur-sm">
-              <span className="visual-icon visual-icon-amber">
-                <GraphicIcon name="gift" />
-              </span>
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-300">
-                Plan gratuito
-              </p>
-              <h3 className="mt-5 text-2xl font-semibold">
-                3 ideas publicadas
-              </h3>
-              <p className="mt-3 leading-7 text-amber-50/65">
-                Mantén hasta 3 ideas activas y recibe un máximo de 3 propuestas
-                de audio en cada una.
-              </p>
-            </article>
-
-            <article className="dynamic-card reveal-on-scroll reveal-delay-1 rounded-3xl border border-amber-100/15 bg-black/30 p-8 backdrop-blur-sm">
-              <span className="visual-icon visual-icon-amber">
-                <GraphicIcon name="crown" />
-              </span>
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-300">
-                Con suscripción
-              </p>
-              <h3 className="mt-5 text-2xl font-semibold">
-                Más de 10 espacios
-              </h3>
-              <p className="mt-3 leading-7 text-amber-50/65">
-                Publica más de 10 ideas y recibe hasta 10 propuestas diferentes
-                en cada una.
-              </p>
-            </article>
-
-            <article className="dynamic-card reveal-on-scroll reveal-delay-2 rounded-3xl border border-amber-100/15 bg-black/30 p-8 backdrop-blur-sm">
-              <span className="visual-icon visual-icon-amber">
-                <GraphicIcon name="percent" />
-              </span>
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-300">
-                0 % de comisión
-              </p>
-              <h3 className="mt-5 text-2xl font-semibold">
-                Tu colaboración es tuya
-              </h3>
-              <p className="mt-3 leading-7 text-amber-50/65">
-                FeatMusic no cobrará comisión cuando aceptes una propuesta y
-                completes una colaboración.
-              </p>
-            </article>
-          </div>
-
-          <div className="mx-auto mt-10 flex w-fit items-center gap-3 rounded-full border border-amber-100/15 bg-black/20 px-5 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-amber-100/65 backdrop-blur-sm">
-            <GraphicIcon name="globe" className="h-5 w-5 text-amber-300" />
-            <span>Español · English · Português do Brasil</span>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {copy.plans.cards.map((card, index) => (
+              <article
+                key={card.title}
+                className={`dynamic-card reveal-on-scroll group relative flex min-h-60 flex-col overflow-hidden rounded-3xl border p-6 backdrop-blur-sm transition duration-500 hover:-translate-y-2 ${
+                  index === 0
+                    ? "border-amber-200/20 bg-[linear-gradient(145deg,rgba(36,24,5,0.9),rgba(10,8,5,0.82))] hover:border-amber-300/45"
+                    : index === 1
+                      ? "reveal-delay-1 border-amber-300/35 bg-[linear-gradient(145deg,rgba(52,31,5,0.94),rgba(17,10,8,0.88))] shadow-[0_22px_70px_rgba(245,158,11,0.13)] hover:border-amber-200/65"
+                      : "reveal-delay-2 border-fuchsia-200/20 bg-[linear-gradient(145deg,rgba(22,12,20,0.9),rgba(30,15,40,0.84))] hover:border-fuchsia-300/45"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`absolute -right-10 -top-12 h-36 w-36 rounded-full blur-3xl transition duration-500 group-hover:scale-125 ${
+                    index === 2 ? "bg-fuchsia-500/15" : "bg-amber-400/15"
+                  }`}
+                />
+                <div className="relative flex items-center gap-4">
+                  <span className="visual-icon visual-icon-amber visual-icon-compact shrink-0">
+                    <GraphicIcon name={planIcons[index]} />
+                  </span>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+                    {card.label}
+                  </p>
+                </div>
+                <div className="relative mt-auto pt-7">
+                  <h3 className="text-2xl font-semibold">{card.title}</h3>
+                  <p className="mt-3 leading-7 text-amber-50/65">
+                    {card.body}
+                  </p>
+                </div>
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent ${
+                    index === 2 ? "via-fuchsia-300/55" : "via-amber-300/55"
+                  } to-transparent opacity-0 transition duration-500 group-hover:opacity-100`}
+                />
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="relative isolate overflow-hidden border-b border-indigo-200/10 bg-[#0b0b20]">
+      <section
+        id="preguntas"
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-indigo-200/10 bg-[#0b0b20]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_25%,rgba(99,102,241,0.22),transparent_30%),radial-gradient(circle_at_90%_80%,rgba(139,92,246,0.2),transparent_30%),linear-gradient(150deg,#0e0e2d,#090916_58%,#151034)]"
@@ -782,25 +1144,34 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-15 [background-image:linear-gradient(rgba(199,210,254,0.15)_1px,transparent_1px)] [background-size:100%_36px]"
         />
 
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 py-24 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="reveal-on-scroll-left">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">
-              Preguntas frecuentes
-            </p>
-            <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Lo esencial antes de comenzar.
-            </h2>
-            <div className="mt-10 rounded-3xl border border-indigo-100/15 bg-black/20 p-6 backdrop-blur-sm">
+        <div className="mx-auto w-full max-w-7xl px-6 py-14 lg:py-5">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="reveal-on-scroll-left max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">
+                {copy.faq.eyebrow}
+              </p>
+              <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
+                {copy.faq.title}
+              </h2>
+            </div>
+            <div className="reveal-on-scroll-right w-full max-w-sm rounded-3xl border border-indigo-100/15 bg-black/20 p-5 backdrop-blur-sm xl:p-4">
               <div className="flex items-center gap-3 text-indigo-200">
                 <span className="visual-icon visual-icon-indigo visual-icon-compact">
                   <GraphicIcon name="chat" />
                 </span>
                 <div>
-                  <p className="font-semibold text-white">Respuestas claras</p>
-                  <p className="text-sm text-indigo-100/55">Sin letra pequeña</p>
+                  <p className="font-semibold text-white">
+                    {copy.faq.clarityTitle}
+                  </p>
+                  <p className="text-sm text-indigo-100/55">
+                    {copy.faq.clarityBody}
+                  </p>
                 </div>
               </div>
-              <div className="mt-6 flex items-end gap-1.5" aria-hidden="true">
+              <div
+                className="mt-4 flex items-end gap-1.5 xl:mt-3"
+                aria-hidden="true"
+              >
                 {[12, 22, 16, 30, 19, 38, 26, 15, 33, 21, 27, 13].map(
                   (altura, indice) => (
                     <span
@@ -814,25 +1185,24 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            {preguntasFrecuentes.map((item) => (
-              <details
-                key={item.pregunta}
-                className="dynamic-card reveal-on-scroll group rounded-2xl border border-indigo-100/15 bg-black/25 p-6 backdrop-blur-sm open:border-indigo-300/35"
-              >
-                <summary className="cursor-pointer list-none pr-8 text-lg font-semibold marker:hidden">
-                  {item.pregunta}
-                </summary>
-                <p className="mt-4 max-w-2xl leading-7 text-indigo-100/65">
-                  {item.respuesta}
-                </p>
-              </details>
-            ))}
-          </div>
+          <FaqCarousel
+            key={locale}
+            items={copy.faq.items}
+            labels={{
+              question: copy.faq.questionLabel,
+              previous: copy.faq.previous,
+              next: copy.faq.next,
+              showQuestion: copy.faq.showQuestion,
+              navigation: copy.faq.navigation,
+            }}
+          />
         </div>
       </section>
 
-      <section className="relative isolate overflow-hidden bg-[#23053d] px-6 py-28 text-center">
+      <section
+        data-home-section
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden bg-[#23053d] px-6 py-20 text-center"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_50%_120%,rgba(236,72,153,0.38),transparent_40%),radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.4),transparent_38%),linear-gradient(135deg,#260746,#160229_55%,#310953)]"
@@ -842,7 +1212,7 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-25 [background-image:radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:34px_34px]"
         />
 
-        <div className="reveal-on-scroll mx-auto max-w-3xl">
+        <div className="reveal-on-scroll mx-auto w-full max-w-3xl">
           <div className="mb-8 flex items-center justify-center -space-x-3" aria-hidden="true">
             {[
               ["microphone", "from-violet-400 to-fuchsia-600"],
@@ -859,34 +1229,49 @@ export default function Home() {
             ))}
           </div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-200">
-            Tu próxima canción
+            {copy.cta.eyebrow}
           </p>
           <h2 className="section-title-reveal mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
             <span className="animated-gradient-text block bg-gradient-to-r from-white via-violet-100 to-fuchsia-200 bg-clip-text text-transparent">
-              Puede avanzar con una propuesta.
+              {copy.cta.title}
             </span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-violet-100/75">
-            Sube la parte que ya tienes, cuenta qué necesita y deja que otros
-            artistas te muestren cómo la continuarían.
+            {copy.cta.body}
           </p>
           <Link
             href="/registro"
             className="mt-10 inline-flex rounded-full bg-white px-8 py-4 font-semibold text-violet-950 shadow-2xl transition hover:-translate-y-0.5 hover:bg-violet-100"
           >
-            Crear mi perfil gratis
+            {copy.cta.action}
           </Link>
         </div>
       </section>
 
-      <footer className="border-t border-white/10 bg-black px-6 py-8 text-zinc-400">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/" className="text-xl font-bold tracking-tight text-white">
-            Feat<span className="text-violet-400">Music</span>
-          </Link>
-          <p className="text-sm">
-            Una comunidad para crear música en colaboración.
-          </p>
+      <footer className="border-t border-white/10 bg-black px-6 py-10 text-zinc-400">
+        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <Link href="/" className="text-xl font-bold tracking-tight text-white">
+              Feat<span className="text-violet-400">Music</span>
+            </Link>
+            <p className="mt-3 max-w-md text-sm leading-6">{copy.footer.tagline}</p>
+          </div>
+
+          <nav
+            aria-label={copy.footer.navigation}
+            className="flex flex-wrap gap-x-5 gap-y-3 text-sm"
+          >
+            <a href="#como-funciona" className="transition hover:text-white">{copy.footer.howItWorks}</a>
+            <a href="#comunidad" className="transition hover:text-white">{copy.footer.community}</a>
+            <a href="#planes" className="transition hover:text-white">{copy.footer.plans}</a>
+            <a href="#preguntas" className="transition hover:text-white">{copy.footer.faq}</a>
+            <Link href="/artistas" className="transition hover:text-white">{copy.footer.explore}</Link>
+          </nav>
+        </div>
+
+        <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-6 text-xs text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} FeatMusic</p>
+          <p>{copy.footer.rights}</p>
         </div>
       </footer>
     </main>

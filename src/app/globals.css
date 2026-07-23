@@ -19,6 +19,22 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.home-scroll-section {
+  scroll-margin-top: 4.25rem;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+@media (min-width: 1280px) and (pointer: fine) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -316,6 +332,38 @@ body {
   animation: icon-float 3.2s ease-in-out infinite;
 }
 
+.faq-carousel-track {
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+}
+
+.faq-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.demo-wave-bar {
+  transform-origin: center;
+  transition:
+    height 280ms ease,
+    opacity 280ms ease;
+}
+
+.demo-audio-playing .demo-wave-bar {
+  animation: demo-wave-pulse 860ms ease-in-out infinite alternate;
+}
+
+@keyframes demo-wave-pulse {
+  from {
+    transform: scaleY(0.48);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
 .scroll-animations-ready .section-title-reveal {
   opacity: 0;
   transform: translateY(34px);
@@ -360,6 +408,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .hero-badge-enter,
   .hero-title-enter,
   .hero-body-enter,
@@ -372,6 +424,7 @@ body {
   .section-title-reveal,
   .waveform-bar,
   .faq-wave-bar,
+  .demo-wave-bar,
   .cta-icon-float {
     opacity: 1 !important;
     animation: none !important;
