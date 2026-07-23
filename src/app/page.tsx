@@ -192,6 +192,7 @@ const connectionIcons: GraphicIconName[] = [
 ];
 const communityIcons: GraphicIconName[] = ["microphone", "disc", "pen"];
 const planIcons: GraphicIconName[] = ["gift", "crown", "percent"];
+const planHighlights = ["03", "10+", "0%"] as const;
 const demoWaveform = [
   18, 32, 44, 24, 52, 68, 38, 74, 48, 30, 58, 82, 46, 66, 34, 24, 54, 72,
   40, 62, 86, 48, 32, 58, 76, 42, 68, 36, 22, 52, 70, 44, 60, 28, 46, 20,
@@ -341,7 +342,9 @@ function FaqCarousel({
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("es");
   const [demoPlaying, setDemoPlaying] = useState(false);
+  const [activePlanIndex, setActivePlanIndex] = useState(0);
   const languageMenuRef = useRef<HTMLDetailsElement>(null);
+  const plansTrackRef = useRef<HTMLDivElement>(null);
   const copy = homeCopy[locale];
   const activeLanguage =
     languageOptions.find((option) => option.code === locale) ??
@@ -384,6 +387,46 @@ export default function Home() {
     setLocale(nextLocale);
     window.localStorage.setItem("featmusic-language", nextLocale);
     languageMenuRef.current?.removeAttribute("open");
+  };
+
+  const syncActivePlan = () => {
+    const track = plansTrackRef.current;
+    if (!track) return;
+
+    const cards = Array.from(
+      track.querySelectorAll<HTMLElement>("[data-plan-card]"),
+    );
+    if (cards.length === 0) return;
+
+    const viewportCenter = track.scrollLeft + track.clientWidth / 2;
+    const closestIndex = cards.reduce((closest, card, index) => {
+      const closestCard = cards[closest];
+      const closestDistance = Math.abs(
+        closestCard.offsetLeft +
+          closestCard.offsetWidth / 2 -
+          viewportCenter,
+      );
+      const cardDistance = Math.abs(
+        card.offsetLeft + card.offsetWidth / 2 - viewportCenter,
+      );
+      return cardDistance < closestDistance ? index : closest;
+    }, 0);
+
+    setActivePlanIndex(closestIndex);
+  };
+
+  const showPlan = (index: number) => {
+    const track = plansTrackRef.current;
+    const card = track?.querySelectorAll<HTMLElement>("[data-plan-card]")[index];
+    if (!track || !card) return;
+
+    track.scrollTo({
+      left:
+        card.offsetLeft -
+        (track.clientWidth - card.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+    setActivePlanIndex(index);
   };
 
   useEffect(() => {
@@ -1077,7 +1120,7 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(30deg,rgba(253,230,138,0.15)_12%,transparent_12.5%,transparent_87%,rgba(253,230,138,0.15)_87.5%)] [background-size:72px_42px]"
         />
 
-        <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
+        <div className="mobile-plans-content mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
           <div className="mobile-section-heading reveal-on-scroll mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">
               {copy.plans.eyebrow}
@@ -1087,11 +1130,18 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="mobile-card-carousel mobile-plans-carousel mt-8 grid gap-5 md:grid-cols-3">
+          <div
+            ref={plansTrackRef}
+            onScroll={syncActivePlan}
+            className="mobile-card-carousel mobile-plans-carousel mt-8 grid gap-5 md:grid-cols-3"
+          >
             {copy.plans.cards.map((card, index) => (
               <article
                 key={card.title}
-                className={`dynamic-card reveal-on-scroll group relative flex min-h-60 flex-col overflow-hidden rounded-3xl border p-6 backdrop-blur-sm transition duration-500 hover:-translate-y-2 ${
+                data-plan-card
+                className={`mobile-plan-card dynamic-card reveal-on-scroll group relative flex min-h-60 flex-col overflow-hidden rounded-3xl border p-6 backdrop-blur-sm transition duration-500 hover:-translate-y-2 ${
+                  activePlanIndex === index ? "is-active" : ""
+                } ${
                   index === 0
                     ? "border-amber-200/20 bg-[linear-gradient(145deg,rgba(36,24,5,0.9),rgba(10,8,5,0.82))] hover:border-amber-300/45"
                     : index === 1
@@ -1113,7 +1163,24 @@ export default function Home() {
                     {card.label}
                   </p>
                 </div>
-                <div className="relative mt-auto pt-7">
+                <div className="mobile-plan-main hidden">
+                  <span className="mobile-plan-number">
+                    {planHighlights[index]}
+                  </span>
+                  <h3>{card.title}</h3>
+                  <p>{card.body}</p>
+                </div>
+                <ul className="mobile-plan-features hidden">
+                  {card.features.map((feature) => (
+                    <li key={feature}>
+                      <span aria-hidden="true">
+                        <GraphicIcon name="check" />
+                      </span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mobile-plan-desktop-copy relative mt-auto pt-7">
                   <h3 className="text-2xl font-semibold">{card.title}</h3>
                   <p className="mt-3 leading-7 text-amber-50/65">
                     {card.body}
@@ -1126,6 +1193,21 @@ export default function Home() {
                   } to-transparent opacity-0 transition duration-500 group-hover:opacity-100`}
                 />
               </article>
+            ))}
+          </div>
+          <div
+            className="mobile-plan-pagination hidden"
+            aria-label={copy.plans.eyebrow}
+          >
+            {copy.plans.cards.map((card, index) => (
+              <button
+                key={card.label}
+                type="button"
+                aria-label={card.label}
+                aria-current={activePlanIndex === index ? "true" : undefined}
+                onClick={() => showPlan(index)}
+                className={activePlanIndex === index ? "is-active" : undefined}
+              />
             ))}
           </div>
         </div>

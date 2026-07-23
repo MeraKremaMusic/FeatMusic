@@ -224,18 +224,33 @@ export const homeCopy = {
           title: "3 ideas publicadas",
           body:
             "Mantén hasta 3 ideas activas y recibe un máximo de 3 propuestas en cada una.",
+          features: [
+            "Hasta 3 ideas activas",
+            "3 propuestas por cada idea",
+            "Sin comisión por colaborar",
+          ],
         },
         {
           label: "Con suscripción",
           title: "Más de 10 espacios",
           body:
             "Publica más de 10 ideas y recibe hasta 10 propuestas diferentes en cada una.",
+          features: [
+            "Más de 10 ideas activas",
+            "Hasta 10 propuestas por idea",
+            "Más espacio para crear",
+          ],
         },
         {
           label: "0 % de comisión",
           title: "Tu colaboración es tuya",
           body:
             "FeatMusic no cobrará comisión cuando aceptes una propuesta y completes una colaboración.",
+          features: [
+            "0% de comisión",
+            "FeatMusic no toma porcentaje",
+            "Tus acuerdos siguen siendo tuyos",
+          ],
         },
       ],
       languages: "Español · English · Português do Brasil",
@@ -529,18 +544,33 @@ export const homeCopy = {
           title: "3 published ideas",
           body:
             "Keep up to 3 active ideas and receive a maximum of 3 proposals on each one.",
+          features: [
+            "Up to 3 active ideas",
+            "3 proposals for each idea",
+            "No collaboration commission",
+          ],
         },
         {
           label: "With a subscription",
           title: "More than 10 spaces",
           body:
             "Publish more than 10 ideas and receive up to 10 different proposals on each one.",
+          features: [
+            "More than 10 active ideas",
+            "Up to 10 proposals per idea",
+            "More room to create",
+          ],
         },
         {
           label: "0% commission",
           title: "Your collaboration is yours",
           body:
             "FeatMusic will not charge a commission when you accept a proposal and complete a collaboration.",
+          features: [
+            "0% commission",
+            "FeatMusic takes no percentage",
+            "Your agreements remain yours",
+          ],
         },
       ],
       languages: "Español · English · Português do Brasil",
@@ -834,18 +864,33 @@ export const homeCopy = {
           title: "3 ideias publicadas",
           body:
             "Mantenha até 3 ideias ativas e receba no máximo 3 propostas em cada uma.",
+          features: [
+            "Até 3 ideias ativas",
+            "3 propostas por ideia",
+            "Sem comissão nas colaborações",
+          ],
         },
         {
           label: "Com assinatura",
           title: "Mais de 10 espaços",
           body:
             "Publique mais de 10 ideias e receba até 10 propostas diferentes em cada uma.",
+          features: [
+            "Mais de 10 ideias ativas",
+            "Até 10 propostas por ideia",
+            "Mais espaço para criar",
+          ],
         },
         {
           label: "0% de comissão",
           title: "Sua colaboração é sua",
           body:
             "A FeatMusic não cobrará comissão quando você aceitar uma proposta e concluir uma colaboração.",
+          features: [
+            "0% de comissão",
+            "A FeatMusic não recebe porcentagem",
+            "Seus acordos continuam sendo seus",
+          ],
         },
       ],
       languages: "Español · English · Português do Brasil",
