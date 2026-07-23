@@ -375,6 +375,367 @@ body {
     forwards;
 }
 
+@media (max-width: 767px) {
+  html {
+    scroll-padding-top: 0;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+  }
+
+  .home-scroll-section {
+    height: calc(100svh - 4.25rem);
+    min-height: calc(100svh - 4.25rem);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .home-scroll-section:first-of-type {
+    height: 100svh;
+    min-height: 100svh;
+    scroll-margin-top: 0;
+  }
+
+  .home-footer {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .mobile-hero-content {
+    padding-top: 5.75rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .mobile-section-content {
+    max-height: 100%;
+    padding: 1.25rem 1rem;
+    overflow: hidden;
+  }
+
+  .mobile-section-heading > p:first-child,
+  .mobile-demo-intro > p:first-child,
+  .mobile-global-intro > p:first-child,
+  .mobile-faq-heading > div:first-child > p:first-child {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+  }
+
+  .mobile-section-heading h2,
+  .mobile-demo-intro h2,
+  .mobile-global-intro h2,
+  .mobile-faq-heading h2 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.65rem, 7.5vw, 2rem);
+    line-height: 1.05;
+  }
+
+  .mobile-section-heading > p:last-child,
+  .mobile-global-intro > p:nth-of-type(2) {
+    margin-top: 0.7rem;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-card-carousel {
+    display: flex;
+    gap: 0.75rem;
+    padding-right: 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-card-carousel::-webkit-scrollbar,
+  .mobile-demo-pages::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-card-carousel > article {
+    flex: 0 0 calc(100% - 1.75rem);
+    min-height: 0;
+    padding: 1.1rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .mobile-process-carousel,
+  .mobile-community-carousel,
+  .mobile-plans-carousel {
+    margin-top: 1rem;
+  }
+
+  .mobile-process-carousel > article {
+    min-height: 13rem;
+  }
+
+  .mobile-process-carousel h3 {
+    margin-top: 0.85rem;
+    font-size: 1.18rem;
+  }
+
+  .mobile-process-carousel article p {
+    margin-top: 0.5rem;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-community-carousel > article,
+  .mobile-plans-carousel > article {
+    min-height: 14.5rem;
+  }
+
+  .mobile-community-carousel h3,
+  .mobile-plans-carousel h3 {
+    font-size: 1.25rem;
+  }
+
+  .mobile-community-carousel article p,
+  .mobile-plans-carousel article p {
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-plans-carousel article > div:last-of-type {
+    padding-top: 1.25rem;
+  }
+
+  .mobile-demo-layout {
+    display: block;
+  }
+
+  .mobile-demo-intro > p:nth-of-type(2),
+  .mobile-demo-extras {
+    display: none;
+  }
+
+  .mobile-product-demo {
+    margin-top: 1rem;
+    border-radius: 1.35rem;
+  }
+
+  .mobile-product-demo > div:first-child {
+    padding: 0.7rem 1rem;
+  }
+
+  .mobile-demo-pages {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-demo-page {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    padding: 1rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .mobile-demo-idea > * + * {
+    margin-top: 0.7rem;
+  }
+
+  .mobile-demo-idea h3 {
+    margin-top: 0.25rem;
+    font-size: 1.2rem;
+  }
+
+  .mobile-demo-idea h3 + p {
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    line-height: 1.15rem;
+  }
+
+  .mobile-demo-idea .demo-wave-bar {
+    min-width: 1px;
+  }
+
+  .mobile-demo-idea > div:nth-last-child(2) {
+    padding: 0.75rem;
+  }
+
+  .mobile-demo-idea > div:last-child {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem;
+  }
+
+  .mobile-demo-idea > div:last-child > span {
+    padding-inline: 0.75rem;
+  }
+
+  .mobile-demo-proposals {
+    border-top: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-demo-proposals > p:nth-child(2),
+  .mobile-proposal-waveform {
+    display: none;
+  }
+
+  .mobile-demo-proposals > div {
+    margin-top: 0.7rem;
+  }
+
+  .mobile-demo-proposals article {
+    padding: 0.65rem;
+  }
+
+  .mobile-demo-proposals article + article {
+    margin-top: 0.5rem;
+  }
+
+  .mobile-demo-proposals article p:last-child {
+    margin-top: 0.25rem;
+  }
+
+  .mobile-global-layout {
+    display: block;
+  }
+
+  .mobile-global-route {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .mobile-global-route > p {
+    display: none;
+  }
+
+  .mobile-global-network {
+    display: none;
+  }
+
+  .mobile-global-cards {
+    margin-top: 0.75rem;
+  }
+
+  .mobile-global-cards > article {
+    min-height: 9.75rem;
+  }
+
+  .mobile-global-cards h3 {
+    font-size: 1.05rem;
+  }
+
+  .mobile-global-cards article p {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+  }
+
+  .mobile-faq-decoration {
+    display: none;
+  }
+
+  .mobile-faq-heading {
+    gap: 0;
+  }
+
+  [data-faq-carousel] {
+    margin-top: 1rem;
+  }
+
+  .faq-carousel-track > article {
+    min-height: 13.75rem;
+    padding: 1rem;
+    border-radius: 1.35rem;
+  }
+
+  .faq-carousel-track h3 {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+  }
+
+  .faq-carousel-track h3 + p {
+    margin-top: 0.65rem;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  [data-faq-carousel] > div:last-child {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+  }
+
+  [data-faq-carousel] > div:last-child > div {
+    justify-content: flex-start;
+  }
+
+  [data-faq-carousel] > div:last-child > div:last-child {
+    gap: 0.5rem;
+  }
+
+  [data-faq-carousel] > div:last-child > div:last-child button[aria-label] {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .mobile-cta-content > div:first-child {
+    margin-bottom: 1.25rem;
+  }
+
+  .mobile-cta-content h2 {
+    margin-top: 1rem;
+    font-size: 2.15rem;
+    line-height: 1.05;
+  }
+
+  .mobile-cta-content h2 + p {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.45rem;
+  }
+
+  .mobile-cta-content > a {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 740px) {
+  .mobile-section-content {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .mobile-hero-content {
+    padding-top: 4.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .mobile-process-carousel > article,
+  .mobile-community-carousel > article,
+  .mobile-plans-carousel > article {
+    min-height: 12.25rem;
+  }
+
+  .mobile-section-heading > p:last-child,
+  .mobile-global-intro > p:nth-of-type(2) {
+    display: none;
+  }
+
+  .mobile-demo-idea h3 + p,
+  .mobile-global-route {
+    display: none;
+  }
+}
+
 @supports (animation-timeline: view()) {
   .reveal-on-scroll {
     animation: reveal-up linear both;

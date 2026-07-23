@@ -615,8 +615,8 @@ export default function Home() {
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.48)_0%,rgba(0,0,0,0.32)_55%,#000_100%)]"
         />
 
-        <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col items-center justify-center px-5 pb-16 pt-28 text-center sm:px-6 sm:pt-24 md:-translate-y-1">
-          <p className="hero-badge-enter mb-6 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-xs font-medium uppercase tracking-[0.14em] text-zinc-200 shadow-2xl backdrop-blur-md sm:text-sm">
+        <div className="mobile-hero-content mx-auto flex min-h-[100svh] max-w-7xl flex-col items-center justify-center px-5 pb-16 pt-28 text-center sm:px-6 sm:pt-24 md:-translate-y-1">
+          <p className="hero-badge-enter mb-4 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-xs font-medium uppercase tracking-[0.14em] text-zinc-200 shadow-2xl backdrop-blur-md sm:mb-6 sm:text-sm">
             {copy.hero.badge}
           </p>
 
@@ -629,11 +629,11 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="hero-body-enter mt-7 max-w-2xl text-base leading-7 text-zinc-200 drop-shadow-lg sm:text-lg sm:leading-8">
+          <p className="hero-body-enter mt-5 max-w-2xl text-base leading-7 text-zinc-200 drop-shadow-lg sm:mt-7 sm:text-lg sm:leading-8">
             {copy.hero.body}
           </p>
 
-          <div className="hero-actions-enter mt-10 flex w-full max-w-sm flex-col gap-4 sm:w-auto sm:max-w-none sm:flex-row">
+          <div className="hero-actions-enter mt-6 flex w-full max-w-sm flex-col gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row sm:gap-4">
             <Link
               href="/registro"
               className="rounded-full bg-violet-600 px-8 py-4 font-semibold shadow-[0_12px_40px_rgba(124,58,237,0.35)] transition hover:-translate-y-0.5 hover:bg-violet-500"
@@ -688,9 +688,9 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
-          <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
-            <div className="reveal-on-scroll max-w-xl">
+        <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
+          <div className="mobile-demo-layout grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
+            <div className="mobile-demo-intro reveal-on-scroll max-w-xl">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-300">
                 {copy.demo.eyebrow}
               </p>
@@ -701,7 +701,7 @@ export default function Home() {
                 {copy.demo.body}
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-2.5">
+              <div className="mobile-demo-extras mt-6 flex flex-wrap gap-2.5">
                 {copy.demo.benefits.map((benefit, index) => (
                   <span
                     key={benefit}
@@ -716,7 +716,7 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mobile-demo-extras mt-6 flex flex-wrap gap-3">
                 <Link
                   href="/registro"
                   className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-violet-950 transition hover:-translate-y-0.5 hover:bg-violet-100"
@@ -732,7 +732,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="product-demo-shell reveal-on-scroll-right overflow-hidden rounded-[2rem] border border-violet-200/20 bg-[#09060f]/90 shadow-[0_32px_100px_rgba(76,29,149,0.45)] backdrop-blur-xl">
+            <div className="mobile-product-demo product-demo-shell reveal-on-scroll-right overflow-hidden rounded-[2rem] border border-violet-200/20 bg-[#09060f]/90 shadow-[0_32px_100px_rgba(76,29,149,0.45)] backdrop-blur-xl">
               <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.035] px-5 py-4 sm:px-6 xl:py-3">
                 <div className="flex items-center gap-2" aria-hidden="true">
                   <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
@@ -744,8 +744,8 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="grid xl:grid-cols-[1.08fr_0.92fr]">
-                <div className="p-5 sm:p-7 xl:p-4">
+              <div className="mobile-demo-pages grid xl:grid-cols-[1.08fr_0.92fr]">
+                <div className="mobile-demo-page mobile-demo-idea p-5 sm:p-7 xl:p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-700 text-sm font-bold shadow-lg xl:h-10 xl:w-10">
@@ -833,7 +833,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="border-t border-white/10 bg-black/25 p-5 sm:p-7 xl:border-l xl:border-t-0 xl:p-4">
+                <div className="mobile-demo-page mobile-demo-proposals border-t border-white/10 bg-black/25 p-5 sm:p-7 xl:border-l xl:border-t-0 xl:p-4">
                   <p className="font-semibold text-white">{copy.demo.proposalsTitle}</p>
                   <p className="mt-1 text-xs leading-5 text-zinc-500">
                     {copy.demo.proposalsCaption}
@@ -860,7 +860,7 @@ export default function Home() {
                             <GraphicIcon name="play" className="h-4 w-4" />
                           </span>
                         </div>
-                        <div className="mt-3 flex h-8 items-center gap-1 xl:hidden" aria-hidden="true">
+                        <div className="mobile-proposal-waveform mt-3 flex h-8 items-center gap-1 xl:hidden" aria-hidden="true">
                           {proposalWaveforms[index].map((height, barIndex) => (
                             <span
                               key={`${height}-${barIndex}`}
@@ -906,8 +906,8 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:radial-gradient(rgba(186,230,253,0.7)_1px,transparent_1px)] [background-size:28px_28px]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-10">
-          <div className="reveal-on-scroll mx-auto max-w-3xl text-center">
+        <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-10">
+          <div className="mobile-section-heading reveal-on-scroll mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-300">
               {copy.process.eyebrow}
             </p>
@@ -919,7 +919,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="steps-grid relative mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mobile-card-carousel mobile-process-carousel steps-grid relative mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {copy.process.steps.map((step, index) => (
               <article
                 key={step.title}
@@ -942,6 +942,7 @@ export default function Home() {
       </section>
 
       <section
+        id="global"
         data-home-section
         className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-rose-200/10 bg-[#190b16]"
       >
@@ -954,8 +955,8 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(125deg,transparent_0%,transparent_48%,rgba(255,255,255,0.16)_49%,transparent_50%,transparent_100%)] [background-size:64px_64px]"
         />
 
-        <div className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-5">
-          <div className="reveal-on-scroll-left">
+        <div className="mobile-section-content mobile-global-layout mx-auto grid w-full max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-5">
+          <div className="mobile-global-intro reveal-on-scroll-left">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">
               {copy.global.eyebrow}
             </p>
@@ -965,7 +966,7 @@ export default function Home() {
             <p className="mt-5 max-w-xl text-lg leading-8 text-rose-100/70 lg:text-base lg:leading-7">
               {copy.global.body}
             </p>
-            <div className="mt-6 max-w-lg rounded-2xl border border-rose-100/15 bg-black/25 p-4 backdrop-blur-sm">
+            <div className="mobile-global-route mt-6 max-w-lg rounded-2xl border border-rose-100/15 bg-black/25 p-4 backdrop-blur-sm">
               <div className="flex items-center gap-3">
                 <span className="rounded-full border border-rose-200/15 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 sm:text-sm">
                   {copy.global.origin}
@@ -981,7 +982,7 @@ export default function Home() {
                 {copy.global.routeCaption}
               </p>
             </div>
-            <div className="mt-3 flex max-w-lg items-center gap-3 rounded-2xl border border-rose-100/15 bg-black/25 p-3 backdrop-blur-sm">
+            <div className="mobile-global-network mt-3 flex max-w-lg items-center gap-3 rounded-2xl border border-rose-100/15 bg-black/25 p-3 backdrop-blur-sm">
               <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0 xl:h-10 xl:w-10">
                 <GraphicIcon name="users" />
               </span>
@@ -996,7 +997,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="reveal-on-scroll-right grid gap-3">
+          <div className="mobile-card-carousel mobile-global-cards reveal-on-scroll-right grid gap-3">
             {copy.global.cards.map((card, index) => (
               <article
                 key={card.title}
@@ -1029,8 +1030,8 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:repeating-radial-gradient(circle_at_15%_110%,transparent_0,transparent_44px,rgba(167,243,208,0.18)_45px,transparent_46px)]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-5">
-          <div className="reveal-on-scroll max-w-3xl">
+        <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-5">
+          <div className="mobile-section-heading reveal-on-scroll max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
               {copy.community.eyebrow}
             </p>
@@ -1042,7 +1043,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
+          <div className="mobile-card-carousel mobile-community-carousel mt-6 grid gap-5 md:grid-cols-3">
             {copy.community.cards.map((card, index) => (
               <article
                 key={card.title}
@@ -1076,8 +1077,8 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(30deg,rgba(253,230,138,0.15)_12%,transparent_12.5%,transparent_87%,rgba(253,230,138,0.15)_87.5%)] [background-size:72px_42px]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
-          <div className="reveal-on-scroll mx-auto max-w-3xl text-center">
+        <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
+          <div className="mobile-section-heading reveal-on-scroll mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">
               {copy.plans.eyebrow}
             </p>
@@ -1086,7 +1087,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <div className="mobile-card-carousel mobile-plans-carousel mt-8 grid gap-5 md:grid-cols-3">
             {copy.plans.cards.map((card, index) => (
               <article
                 key={card.title}
@@ -1144,8 +1145,8 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-15 [background-image:linear-gradient(rgba(199,210,254,0.15)_1px,transparent_1px)] [background-size:100%_36px]"
         />
 
-        <div className="mx-auto w-full max-w-7xl px-6 py-14 lg:py-5">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-14 lg:py-5">
+          <div className="mobile-faq-heading flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="reveal-on-scroll-left max-w-2xl">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">
                 {copy.faq.eyebrow}
@@ -1154,7 +1155,7 @@ export default function Home() {
                 {copy.faq.title}
               </h2>
             </div>
-            <div className="reveal-on-scroll-right w-full max-w-sm rounded-3xl border border-indigo-100/15 bg-black/20 p-5 backdrop-blur-sm xl:p-4">
+            <div className="mobile-faq-decoration reveal-on-scroll-right w-full max-w-sm rounded-3xl border border-indigo-100/15 bg-black/20 p-5 backdrop-blur-sm xl:p-4">
               <div className="flex items-center gap-3 text-indigo-200">
                 <span className="visual-icon visual-icon-indigo visual-icon-compact">
                   <GraphicIcon name="chat" />
@@ -1200,6 +1201,7 @@ export default function Home() {
       </section>
 
       <section
+        id="empezar"
         data-home-section
         className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden bg-[#23053d] px-6 py-20 text-center"
       >
@@ -1212,7 +1214,7 @@ export default function Home() {
           className="absolute inset-0 -z-10 opacity-25 [background-image:radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:34px_34px]"
         />
 
-        <div className="reveal-on-scroll mx-auto w-full max-w-3xl">
+        <div className="mobile-cta-content reveal-on-scroll mx-auto w-full max-w-3xl">
           <div className="mb-8 flex items-center justify-center -space-x-3" aria-hidden="true">
             {[
               ["microphone", "from-violet-400 to-fuchsia-600"],
@@ -1248,7 +1250,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 bg-black px-6 py-10 text-zinc-400">
+      <footer className="home-footer border-t border-white/10 bg-black px-6 py-10 text-zinc-400">
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <Link href="/" className="text-xl font-bold tracking-tight text-white">
