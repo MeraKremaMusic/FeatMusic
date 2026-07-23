@@ -30,6 +30,7 @@ function redirigirConError(error: string) {
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
+
     const resultado = registroSchema.safeParse({
       correo: formData.get("correo"),
       password: formData.get("password"),
@@ -42,14 +43,21 @@ export async function POST(request: Request) {
       const contrasenasDistintas = resultado.error.issues.some(
         (issue) => issue.path[0] === "repetirPassword",
       );
+
       return redirigirConError(
-        contrasenasDistintas ? "contrasenas-no-coinciden" : "datos-invalidos",
+        contrasenasDistintas
+          ? "contrasenas-no-coinciden"
+          : "datos-invalidos",
       );
     }
 
     const usuarioExistente = await prisma.usuario.findUnique({
-      where: { correo: resultado.data.correo },
-      select: { id: true },
+      where: {
+        correo: resultado.data.correo,
+      },
+      select: {
+        id: true,
+      },
     });
 
     if (usuarioExistente) {
@@ -57,24 +65,32 @@ export async function POST(request: Request) {
     }
 
     const pendienteActual = await prisma.registroPendiente.findUnique({
-      where: { correo: resultado.data.correo },
+      where: {
+        correo: resultado.data.correo,
+      },
     });
 
     if (pendienteActual) {
-      const espera = segundosHastaReenvio(pendienteActual.ultimoEnvioEn);
+      const espera = segundosHastaReenvio(
+        pendienteActual.ultimoEnvioEn,
+      );
+
       if (espera > 0) {
         return redirigirConError(`espera-reenvio-${espera}`);
       }
     }
 
     const codigo = crearCodigoVerificacion();
+
     const [passwordHash, codigoHash] = await Promise.all([
       bcrypt.hash(resultado.data.password, 12),
       bcrypt.hash(codigo, 10),
     ]);
 
     await prisma.registroPendiente.upsert({
-      where: { correo: resultado.data.correo },
+      where: {
+        correo: resultado.data.correo,
+      },
       create: {
         correo: resultado.data.correo,
         passwordHash,
@@ -101,14 +117,22 @@ export async function POST(request: Request) {
     });
 
     return redirigir(
-      `/verificar-correo?correo=${encodeURIComponent(resultado.data.correo)}&enviado=1`,
+      `/verificar-correo?correo=${encodeURIComponent(
+        resultado.data.correo,
+      )}&enviado=1`,
     );
   } catch (error) {
     console.error("No se pudo iniciar el registro.", error);
-    return redirigirConError(
-      error instanceof Error && error.message === "SMTP_NO_CONFIGURADO"
-        ? "correo-no-enviado"
-        : "servidor",
-    );
+
+    const mensaje =
+      error instanceof Error
+        ? error.message
+        : "ERROR_DESCONOCIDO";
+
+    if (mensaje.startsWith("SMTP_NO_CONFIGURADO")) {
+      return redirigirConError("correo-no-enviado");
+    }
+
+    return redirigirConError("servidor");
   }
 }
