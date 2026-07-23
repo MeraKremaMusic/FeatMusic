@@ -405,16 +405,18 @@ export default async function PanelPage() {
         <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
 
         <div
+          id="panel-carrusel"
           className="
             relative mx-auto flex w-full max-w-[1460px] snap-x snap-mandatory
-            gap-3 overflow-x-auto overscroll-x-contain px-3 py-3
-            scroll-smooth touch-pan-x
+            items-center gap-4 overflow-x-auto overscroll-x-contain
+            px-4 pb-3 pt-4 scroll-smooth touch-pan-x
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
             lg:grid lg:h-full lg:grid-cols-[0.84fr_1.08fr_1.08fr]
-            lg:items-stretch lg:overflow-visible lg:snap-none lg:px-4
+            lg:items-stretch lg:gap-3 lg:overflow-visible lg:snap-none
+            lg:px-4 lg:py-3
           "
         >
-          <section className="min-h-0 w-full shrink-0 snap-center overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25 lg:min-w-0 lg:shrink">
+          <section id="panel-card-1" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
             <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
               <Icono tipo="perfil" className="h-3 w-3 text-violet-400" />
               <span className="text-violet-400">1</span>
@@ -506,7 +508,7 @@ export default async function PanelPage() {
             </div>
           </section>
 
-          <section className="min-h-0 w-full shrink-0 snap-center overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25 lg:min-w-0 lg:shrink">
+          <section id="panel-card-2" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
                 <Icono tipo="idea" className="h-3 w-3 text-violet-400" />
@@ -593,7 +595,7 @@ export default async function PanelPage() {
             </button>
           </section>
 
-          <section className="min-h-0 w-full shrink-0 snap-center overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25 lg:min-w-0 lg:shrink">
+          <section id="panel-card-3" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
             <div className="flex flex-wrap items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
               <Icono tipo="propuestas" className="h-3 w-3 text-violet-400" />
               <span className="text-violet-400">3</span>
@@ -693,6 +695,27 @@ export default async function PanelPage() {
               <Icono tipo="flecha" className="h-3 w-3" />
             </button>
           </section>
+        </div>
+
+        <div
+          className="relative z-10 flex items-center justify-center gap-2 pb-4 lg:hidden"
+          aria-label="Navegación entre secciones del panel"
+        >
+          <a
+            href="#panel-card-1"
+            aria-label="Ir al perfil del artista"
+            className="h-2 w-5 rounded-full bg-violet-400 shadow-sm shadow-violet-500/50 transition hover:bg-violet-300"
+          />
+          <a
+            href="#panel-card-2"
+            aria-label="Ir a ideas musicales"
+            className="h-2 w-2 rounded-full bg-white/25 transition hover:bg-white/50"
+          />
+          <a
+            href="#panel-card-3"
+            aria-label="Ir a propuestas"
+            className="h-2 w-2 rounded-full bg-white/25 transition hover:bg-white/50"
+          />
         </div>
       </div>
     </main>
