@@ -404,8 +404,17 @@ export default async function PanelPage() {
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
 
-        <div className="relative mx-auto grid max-w-[1460px] gap-3 px-3 py-3 lg:h-full lg:grid-cols-[0.84fr_1.08fr_1.08fr] lg:items-stretch lg:px-4">
-          <section className="min-h-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25">
+        <div
+          className="
+            relative mx-auto flex w-full max-w-[1460px] snap-x snap-mandatory
+            gap-3 overflow-x-auto overscroll-x-contain px-3 py-3
+            scroll-smooth touch-pan-x
+            [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+            lg:grid lg:h-full lg:grid-cols-[0.84fr_1.08fr_1.08fr]
+            lg:items-stretch lg:overflow-visible lg:snap-none lg:px-4
+          "
+        >
+          <section className="min-h-0 w-full shrink-0 snap-center overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25 lg:min-w-0 lg:shrink">
             <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
               <Icono tipo="perfil" className="h-3 w-3 text-violet-400" />
               <span className="text-violet-400">1</span>
@@ -497,7 +506,7 @@ export default async function PanelPage() {
             </div>
           </section>
 
-          <section className="min-h-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25">
+          <section className="min-h-0 w-full shrink-0 snap-center overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25 lg:min-w-0 lg:shrink">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
                 <Icono tipo="idea" className="h-3 w-3 text-violet-400" />
@@ -584,7 +593,7 @@ export default async function PanelPage() {
             </button>
           </section>
 
-          <section className="min-h-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25">
+          <section className="min-h-0 w-full shrink-0 snap-center overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25 lg:min-w-0 lg:shrink">
             <div className="flex flex-wrap items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
               <Icono tipo="propuestas" className="h-3 w-3 text-violet-400" />
               <span className="text-violet-400">3</span>
