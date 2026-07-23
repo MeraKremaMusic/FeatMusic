@@ -1113,7 +1113,7 @@ export default function Home() {
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(245,158,11,0.22),transparent_30%),radial-gradient(circle_at_88%_80%,rgba(168,85,247,0.2),transparent_32%),linear-gradient(145deg,#1d1307,#100c08_55%,#24152d)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(245,158,11,0.22),transparent_30%),radial-gradient(circle_at_88%_80%,rgba(202,138,4,0.16),transparent_32%),linear-gradient(145deg,#1d1307,#100c08_55%,#211807)]"
         />
         <div
           aria-hidden="true"
