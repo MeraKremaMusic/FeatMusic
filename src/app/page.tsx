@@ -158,41 +158,54 @@ function GraphicIcon({
   );
 }
 
-const profesionales = [
-  { nombre: "Cantantes", icono: "microphone" },
-  { nombre: "Raperos", icono: "waveform" },
-  { nombre: "Productores", icono: "sliders" },
-  { nombre: "Beatmakers", icono: "disc" },
-  { nombre: "Compositores", icono: "pen" },
-  { nombre: "Músicos", icono: "note" },
-  { nombre: "Ingenieros de mezcla", icono: "headphones" },
-  { nombre: "Ingenieros de mastering", icono: "waveform" },
-  { nombre: "DJs", icono: "disc" },
-] satisfies { nombre: string; icono: GraphicIconName }[];
+const conexionesGlobales = [
+  {
+    titulo: "Busca por ubicación",
+    descripcion:
+      "Encuentra cantantes, beatmakers y compositores por país o ciudad, desde tu escena local hasta cualquier lugar del mundo.",
+    icono: "globe",
+  },
+  {
+    titulo: "Escucha antes de participar",
+    descripcion:
+      "Entra a cada perfil, conoce sus ideas y escucha las propuestas que comparte con la comunidad.",
+    icono: "headphones",
+  },
+  {
+    titulo: "Sigue su perfil",
+    descripcion:
+      "Sigue a los artistas que te interesan y construye una red creativa alrededor de tu sonido.",
+    icono: "users",
+  },
+] satisfies {
+  titulo: string;
+  descripcion: string;
+  icono: GraphicIconName;
+}[];
 
 const pasosColaboracion = [
   {
     numero: "01",
-    titulo: "Crea tu perfil",
-    descripcion: "Cuenta quién eres, qué haces y con qué géneros te identificas.",
-    icono: "profile",
+    titulo: "Sube tu idea",
+    descripcion: "Publica el audio de un coro, intro, verso, melodía, maqueta o instrumental sin terminar.",
+    icono: "waveform",
   },
   {
     numero: "02",
-    titulo: "Encuentra compatibilidad",
-    descripcion: "Descubre personas por rol, ubicación, idioma y estilo musical.",
-    icono: "search",
+    titulo: "Explica qué falta",
+    descripcion: "Indica si buscas una voz, una letra, una melodía, un beat u otra parte para completar la canción.",
+    icono: "pen",
   },
   {
     numero: "03",
-    titulo: "Confirma el proyecto",
-    descripcion: "Ambas personas aceptan la colaboración antes de avanzar.",
-    icono: "check",
+    titulo: "Recibe propuestas",
+    descripcion: "Otros artistas descargan tu idea y te envían una voz, un beat, una letra o una melodía como propuesta.",
+    icono: "users",
   },
   {
     numero: "04",
-    titulo: "Abre el chat privado",
-    descripcion: "Coordinen la idea, el proceso y los siguientes pasos en un espacio propio.",
+    titulo: "Elige y conversa",
+    descripcion: "Escucha cada propuesta. Al aceptar una, se abrirá un chat privado para continuar.",
     icono: "chat",
   },
 ] satisfies {
@@ -218,22 +231,22 @@ const generosEnMovimiento = [
 
 const tiposDeColaboracion = [
   {
-    titulo: "Intercambio creativo",
+    titulo: "Cantantes",
     descripcion:
-      "Une habilidades con otros artistas y construyan una canción o proyecto en conjunto.",
-    icono: "spark",
+      "Publica coros, versos, intros o maquetas incompletas. Busca otra voz, envía propuestas y elige con quién terminar la canción.",
+    icono: "microphone",
   },
   {
-    titulo: "Trabajos pagos",
+    titulo: "Beatmakers",
     descripcion:
-      "Encuentra profesionales para producción, voces, instrumentos, mezcla o mastering.",
-    icono: "briefcase",
+      "Sube instrumentales, descubre cantantes de distintas ciudades y encuentra voces que quieran crear una canción sobre tus beats.",
+    icono: "disc",
   },
   {
-    titulo: "Ambas opciones",
+    titulo: "Compositores",
     descripcion:
-      "Mantén tu perfil abierto a oportunidades creativas y propuestas profesionales.",
-    icono: "layers",
+      "Publica letras, melodías o maquetas de referencia. Encuentra cantantes que las interpreten y beatmakers que desarrollen la producción.",
+    icono: "pen",
   },
 ] satisfies {
   titulo: string;
@@ -243,24 +256,49 @@ const tiposDeColaboracion = [
 
 const preguntasFrecuentes = [
   {
-    pregunta: "¿FeatMusic será gratis?",
+    pregunta: "¿Qué tipo de idea puedo publicar?",
     respuesta:
-      "Sí. Podrás crear tu perfil y comenzar a buscar colaboradores gratis. También habrá una suscripción con funciones adicionales.",
+      "Puedes subir un coro, intro, verso, letra, melodía, maqueta, instrumental o cualquier fragmento que todavía necesite otra parte.",
+  },
+  {
+    pregunta: "¿Cómo funciona una propuesta?",
+    respuesta:
+      "Una persona escucha tu idea, descarga el material y envía una voz, un beat, una letra o una melodía para que puedas evaluarla.",
+  },
+  {
+    pregunta: "¿Cómo participa un compositor?",
+    respuesta:
+      "Puede publicar una letra, melodía o maqueta con audio de referencia, buscar quién la interprete o produzca y también proponer composiciones para ideas de otros perfiles.",
+  },
+  {
+    pregunta: "¿Qué ocurre cuando acepto una propuesta?",
+    respuesta:
+      "La propuesta queda seleccionada y se abre un chat privado entre ambos para organizar la colaboración y terminar la canción.",
+  },
+  {
+    pregunta: "¿Qué incluye el plan gratuito?",
+    respuesta:
+      "El plan gratuito permite mantener hasta 3 ideas publicadas y recibir hasta 3 propuestas en cada idea.",
+  },
+  {
+    pregunta: "¿Qué cambia con la suscripción?",
+    respuesta:
+      "La suscripción amplía el perfil a más de 10 espacios para ideas y permite recibir hasta 10 propuestas en cada una.",
+  },
+  {
+    pregunta: "¿Puedo buscar artistas de otra ciudad o país?",
+    respuesta:
+      "Sí. Podrás descubrir cantantes, beatmakers y compositores por ubicación, escuchar sus perfiles y participar en ideas publicadas desde cualquier parte del mundo.",
+  },
+  {
+    pregunta: "¿Puedo seguir a otros artistas?",
+    respuesta:
+      "Sí. Cada cantante, beatmaker y compositor tendrá un perfil que podrás seguir para mantenerlo dentro de tu red creativa.",
   },
   {
     pregunta: "¿FeatMusic cobrará comisión por las colaboraciones?",
     respuesta:
       "No. FeatMusic no cobrará comisión por las colaboraciones que se completen dentro de la comunidad.",
-  },
-  {
-    pregunta: "¿Cómo podré hablar con mi colaborador?",
-    respuesta:
-      "Cuando ambas personas confirmen la colaboración, se abrirá un chat privado para organizar el proyecto.",
-  },
-  {
-    pregunta: "¿En qué idiomas estará disponible?",
-    respuesta:
-      "FeatMusic estará pensada para comunidades que hablan español, inglés y portugués de Brasil.",
   },
 ];
 
@@ -331,7 +369,7 @@ export default function Home() {
 
         <div className="mx-auto flex min-h-[670px] max-w-7xl flex-col items-center justify-center px-5 pb-28 pt-16 text-center sm:px-6 md:-translate-y-10 xl:-translate-y-12">
           <p className="hero-badge-enter mb-6 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-xs font-medium uppercase tracking-[0.14em] text-zinc-200 shadow-2xl backdrop-blur-md sm:text-sm">
-            La comunidad donde nacen nuevas colaboraciones
+            Donde una idea encuentra la parte que le falta
           </p>
 
           <h1 className="max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight drop-shadow-2xl sm:text-5xl md:text-7xl">
@@ -344,8 +382,8 @@ export default function Home() {
           </h1>
 
           <p className="hero-body-enter mt-7 max-w-2xl text-base leading-7 text-zinc-200 drop-shadow-lg sm:text-lg sm:leading-8">
-            Encuentra colaboradores que compartan tu visión: cantantes,
-            productores, compositores, músicos e ingenieros de sonido.
+            Publica un coro, una letra, una melodía o un instrumental sin
+            terminar. Recibe propuestas y elige con quién completar tu canción.
           </p>
 
           <div className="hero-actions-enter mt-10 flex w-full max-w-sm flex-col gap-4 sm:w-auto sm:max-w-none sm:flex-row">
@@ -406,18 +444,18 @@ export default function Home() {
                 Colaboraciones que sí encajan
               </p>
               <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-                Un espacio creado para encontrar a las personas correctas.
+                Publica lo que tienes. Encuentra lo que le falta.
               </h2>
               <p className="mt-6 max-w-xl text-lg leading-8 text-violet-100/70">
-                Tu próxima canción puede comenzar con una voz, una idea o una
-                conversación entre personas que todavía no se conocen.
+                Cada audio puede convertirse en una invitación abierta para que
+                otro artista aporte justo la parte que tu canción necesita.
               </p>
             </div>
 
             <figure className="studio-visual reveal-on-scroll-right relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-violet-200/20 bg-black/40 shadow-[0_30px_90px_rgba(76,29,149,0.38)]">
               <Image
                 src="/images/featmusic-collaboration-studio.webp"
-                alt="Cantante, productor y músico colaborando en un estudio de grabación"
+                alt="Cantantes y beatmaker colaborando en un estudio de grabación"
                 fill
                 priority={false}
                 sizes="(max-width: 1024px) 100vw, 58vw"
@@ -427,17 +465,17 @@ export default function Home() {
               <figcaption className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 p-5 sm:p-7">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200/75">
-                    Una sesión, distintas fortalezas
+                    Una idea, distintas posibilidades
                   </p>
                   <p className="mt-1 text-lg font-semibold text-white">
-                    Ideas que crecen cuando se comparten
+                    Voces y beats que encuentran cómo conectarse
                   </p>
                 </div>
                 <div className="flex -space-x-2" aria-label="Roles en la sesión">
                   {[
-                    ["V", "Vocalista"],
-                    ["P", "Productor"],
-                    ["M", "Músico"],
+                    ["C", "Cantante"],
+                    ["B", "Beatmaker"],
+                    ["CO", "Compositor"],
                   ].map(([inicial, rol]) => (
                     <span
                       key={rol}
@@ -455,13 +493,25 @@ export default function Home() {
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             <article className="dynamic-card reveal-on-scroll rounded-3xl border border-white/15 bg-black/25 p-7 shadow-2xl backdrop-blur-md transition hover:-translate-y-1 hover:border-violet-300/50 hover:bg-black/35">
               <span className="visual-icon visual-icon-violet">
-                <GraphicIcon name="search" />
+                <GraphicIcon name="waveform" />
               </span>
-              <h3 className="text-xl font-semibold">Encuentra colaboradores</h3>
+              <h3 className="text-xl font-semibold">Sube una idea</h3>
 
               <p className="mt-3 text-violet-100/70">
-                Descubre perfiles compatibles según rol, género musical,
-                ubicación e idioma.
+                Publica el audio, la letra o la melodía que ya tienes y
+                especifica qué parte necesitas para completarla.
+              </p>
+            </article>
+
+            <article className="dynamic-card reveal-on-scroll rounded-3xl border border-white/15 bg-black/25 p-7 shadow-2xl backdrop-blur-md transition hover:-translate-y-1 hover:border-violet-300/50 hover:bg-black/35">
+              <span className="visual-icon visual-icon-violet">
+                <GraphicIcon name="users" />
+              </span>
+              <h3 className="text-xl font-semibold">Recibe propuestas</h3>
+
+              <p className="mt-3 text-violet-100/70">
+                Otros perfiles escuchan y descargan tu idea para enviarte una
+                voz, un beat, una letra o una melodía.
               </p>
             </article>
 
@@ -469,23 +519,11 @@ export default function Home() {
               <span className="visual-icon visual-icon-violet">
                 <GraphicIcon name="check" />
               </span>
-              <h3 className="text-xl font-semibold">Confirma la colaboración</h3>
+              <h3 className="text-xl font-semibold">Tú tomas la decisión</h3>
 
               <p className="mt-3 text-violet-100/70">
-                Cuando exista interés de ambas partes, confirmen que quieren
-                trabajar en el proyecto.
-              </p>
-            </article>
-
-            <article className="dynamic-card reveal-on-scroll rounded-3xl border border-white/15 bg-black/25 p-7 shadow-2xl backdrop-blur-md transition hover:-translate-y-1 hover:border-violet-300/50 hover:bg-black/35">
-              <span className="visual-icon visual-icon-violet">
-                <GraphicIcon name="chat" />
-              </span>
-              <h3 className="text-xl font-semibold">Conversa en privado</h3>
-
-              <p className="mt-3 text-violet-100/70">
-                Al confirmar la colaboración se abrirá un chat privado para
-                organizar todos los detalles.
+                Acepta o rechaza cada propuesta. Cuando aceptes una, se abrirá
+                un chat privado con esa persona.
               </p>
             </article>
           </div>
@@ -508,11 +546,11 @@ export default function Home() {
               Cómo funciona
             </p>
             <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              De tu perfil a una nueva colaboración.
+              De una idea incompleta a una colaboración real.
             </h2>
             <p className="mt-5 text-lg text-slate-300">
-              Presenta tu talento, define lo que buscas y descubre personas que
-              compartan tu dirección musical.
+              Tú decides qué parte falta, quién puede proponerla y qué versión
+              quieres llevar hasta el final.
             </p>
           </div>
 
@@ -551,50 +589,61 @@ export default function Home() {
         <div className="mx-auto grid w-full max-w-7xl gap-14 px-6 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div className="reveal-on-scroll-left">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">
-              Una comunidad, muchos talentos
+              Talento sin fronteras
             </p>
             <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Encuentra a la persona que tu proyecto necesita.
+              Encuentra artistas en cualquier parte del mundo.
             </h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-rose-100/70">
-              Desde una primera idea hasta la versión final, cada etapa puede
-              mejorar cuando trabajas con alguien que entiende tu sonido.
+              Puedes estar en Cali y descubrir en Tijuana una voz, un beatmaker
+              o un compositor que encaje con la canción que tienes en mente.
             </p>
-            <div className="mt-9 flex max-w-md items-center gap-4 rounded-2xl border border-rose-100/15 bg-black/25 p-4 backdrop-blur-sm">
+            <div className="mt-9 max-w-lg rounded-2xl border border-rose-100/15 bg-black/25 p-5 backdrop-blur-sm">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="rounded-full border border-rose-200/15 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-100 sm:px-4 sm:text-sm">
+                  Cali, Colombia
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-rose-400 via-fuchsia-300 to-violet-400" />
+                <GraphicIcon name="globe" className="h-5 w-5 shrink-0 text-fuchsia-300" />
+                <span className="h-px flex-1 bg-gradient-to-r from-violet-400 via-fuchsia-300 to-rose-400" />
+                <span className="rounded-full border border-rose-200/15 bg-violet-500/10 px-3 py-2 text-xs font-semibold text-rose-100 sm:px-4 sm:text-sm">
+                  Tijuana, México
+                </span>
+              </div>
+              <p className="mt-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-rose-200/60">
+                Tu próxima colaboración puede estar en otra ciudad
+              </p>
+            </div>
+            <div className="mt-5 flex max-w-lg items-center gap-4 rounded-2xl border border-rose-100/15 bg-black/25 p-4 backdrop-blur-sm">
               <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0">
-                <GraphicIcon name="waveform" />
+                <GraphicIcon name="users" />
               </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex h-8 items-center gap-1" aria-hidden="true">
-                  {[10, 20, 14, 27, 18, 32, 12, 24, 16, 29, 19, 11].map(
-                    (altura, indice) => (
-                      <span
-                        key={`${altura}-${indice}`}
-                        className="waveform-bar flex-1 rounded-full bg-gradient-to-t from-rose-500 to-fuchsia-300"
-                        style={{ height: `${altura}px` }}
-                      />
-                    ),
-                  )}
-                </div>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-rose-200/65">
-                  Cada talento suma una nueva capa
+              <div>
+                <p className="font-semibold text-white">Una red que crece contigo</p>
+                <p className="mt-1 text-sm leading-6 text-rose-100/60">
+                  Sigue perfiles y conserva cerca a quienes quieras escuchar o
+                  invitar a futuras ideas.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="reveal-on-scroll-right grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {profesionales.map((profesional) => (
-              <div
-                key={profesional.nombre}
-                className="dynamic-card group flex min-h-28 flex-col justify-between rounded-2xl border border-rose-100/15 bg-black/25 p-5 font-semibold text-rose-50 backdrop-blur-sm transition hover:-translate-y-1 hover:border-rose-300/45 hover:bg-black/35"
+          <div className="reveal-on-scroll-right grid gap-4">
+            {conexionesGlobales.map((conexion) => (
+              <article
+                key={conexion.titulo}
+                className="dynamic-card group flex items-start gap-5 rounded-3xl border border-rose-100/15 bg-black/25 p-6 text-rose-50 backdrop-blur-sm transition hover:-translate-y-1 hover:border-rose-300/45 hover:bg-black/35 sm:p-7"
               >
-                <GraphicIcon
-                  name={profesional.icono}
-                  className="h-6 w-6 text-rose-300 transition group-hover:scale-110 group-hover:text-fuchsia-200"
-                />
-                <span className="mt-5">{profesional.nombre}</span>
-              </div>
+                <span className="visual-icon visual-icon-rose visual-icon-compact shrink-0 transition group-hover:scale-105">
+                  <GraphicIcon name={conexion.icono} />
+                </span>
+                <div>
+                  <h3 className="text-xl font-semibold">{conexion.titulo}</h3>
+                  <p className="mt-2 leading-7 text-rose-100/60">
+                    {conexion.descripcion}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -613,11 +662,15 @@ export default function Home() {
         <div className="mx-auto w-full max-w-7xl px-6 py-24">
           <div className="reveal-on-scroll max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
-              Tú eliges la dinámica
+              Tres formas de crear
             </p>
             <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Colabora de la manera que mejor funcione para ti.
+              Una comunidad para cantantes, beatmakers y compositores.
             </h2>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/65">
+              Aquí el centro es la canción: una voz, un beat o una composición
+              pueden convertirse en el comienzo de una colaboración.
+            </p>
           </div>
 
           <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -655,10 +708,10 @@ export default function Home() {
         <div className="mx-auto w-full max-w-7xl px-6 py-24">
           <div className="reveal-on-scroll mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">
-              Un modelo claro
+              Planes claros
             </p>
             <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              Gratis para comenzar. Sin comisiones por crear juntos.
+              Empieza con 3 ideas. Amplía cuando necesites más.
             </h2>
           </div>
 
@@ -668,14 +721,14 @@ export default function Home() {
                 <GraphicIcon name="gift" />
               </span>
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-300">
-                Acceso gratuito
+                Plan gratuito
               </p>
               <h3 className="mt-5 text-2xl font-semibold">
-                Empieza sin pagar
+                3 ideas publicadas
               </h3>
               <p className="mt-3 leading-7 text-amber-50/65">
-                Crea tu perfil y comienza a buscar personas con quienes hacer
-                música.
+                Mantén hasta 3 ideas activas y recibe un máximo de 3 propuestas
+                de audio en cada una.
               </p>
             </article>
 
@@ -684,14 +737,14 @@ export default function Home() {
                 <GraphicIcon name="crown" />
               </span>
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-300">
-                Suscripción opcional
+                Con suscripción
               </p>
               <h3 className="mt-5 text-2xl font-semibold">
-                Más posibilidades
+                Más de 10 espacios
               </h3>
               <p className="mt-3 leading-7 text-amber-50/65">
-                Quienes quieran ampliar su experiencia podrán acceder a
-                funciones adicionales.
+                Publica más de 10 ideas y recibe hasta 10 propuestas diferentes
+                en cada una.
               </p>
             </article>
 
@@ -706,8 +759,8 @@ export default function Home() {
                 Tu colaboración es tuya
               </h3>
               <p className="mt-3 leading-7 text-amber-50/65">
-                FeatMusic no cobrará comisión por las colaboraciones que
-                completes.
+                FeatMusic no cobrará comisión cuando aceptes una propuesta y
+                completes una colaboración.
               </p>
             </article>
           </div>
@@ -806,16 +859,16 @@ export default function Home() {
             ))}
           </div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-200">
-            Tu próxima colaboración
+            Tu próxima canción
           </p>
           <h2 className="section-title-reveal mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
             <span className="animated-gradient-text block bg-gradient-to-r from-white via-violet-100 to-fuchsia-200 bg-clip-text text-transparent">
-              Puede empezar con un perfil.
+              Puede avanzar con una propuesta.
             </span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-violet-100/75">
-            Muestra lo que haces, define lo que buscas y abre la puerta a nuevas
-            ideas, sonidos y oportunidades.
+            Sube la parte que ya tienes, cuenta qué necesita y deja que otros
+            artistas te muestren cómo la continuarían.
           </p>
           <Link
             href="/registro"

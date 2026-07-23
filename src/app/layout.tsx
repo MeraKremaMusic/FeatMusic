@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FeatMusic | Conecta y crea música",
+  title: "FeatMusic | Publica ideas y crea colaboraciones",
   description:
-    "Conecta con artistas, productores y profesionales de la música para crear nuevas colaboraciones.",
+    "Publica ideas musicales, descubre cantantes, beatmakers y compositores de cualquier ciudad y crea una red de colaboradores alrededor del mundo.",
 };
 
 export default function RootLayout({
