@@ -1,7 +1,311 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+function formatearRol(rol: string) {
+  const roles: Record<string, string> = {
+    CANTANTE: "Cantante",
+    COMPOSITOR: "Compositor",
+    BEATMAKER: "Beatmaker",
+  };
+
+  return roles[rol] ?? rol;
+}
+
+function obtenerGeneros(generos: unknown): string[] {
+  if (!Array.isArray(generos)) {
+    return [];
+  }
+
+  return generos.filter(
+    (genero): genero is string => typeof genero === "string",
+  );
+}
+
+function obtenerIniciales(nombre: string) {
+  return nombre
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((palabra) => palabra.charAt(0).toUpperCase())
+    .join("");
+}
+
+function crearUsuario(nombre: string) {
+  return (
+    nombre
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "") || "artista"
+  );
+}
+
+type IconoTipo =
+  | "inicio"
+  | "comunidad"
+  | "planes"
+  | "campana"
+  | "perfil"
+  | "idea"
+  | "propuestas"
+  | "ubicacion"
+  | "mundo"
+  | "musica"
+  | "mas"
+  | "play"
+  | "aceptar"
+  | "rechazar"
+  | "salir"
+  | "flecha";
+
+function Icono({
+  tipo,
+  className = "h-3 w-3",
+}: {
+  tipo: IconoTipo;
+  className?: string;
+}) {
+  const props = {
+    "aria-hidden": true,
+    viewBox: "0 0 24 24",
+    className,
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  switch (tipo) {
+    case "inicio":
+      return (
+        <svg {...props}>
+          <path d="M3 10.5 12 3l9 7.5" />
+          <path d="M5.5 9.5V21h13V9.5" />
+          <path d="M9.5 21v-6h5v6" />
+        </svg>
+      );
+
+    case "comunidad":
+      return (
+        <svg {...props}>
+          <circle cx="9" cy="8" r="3" />
+          <circle cx="17" cy="10" r="2.5" />
+          <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+          <path d="M14.5 16.5a4.5 4.5 0 0 1 6 3.5" />
+        </svg>
+      );
+
+    case "planes":
+      return (
+        <svg {...props}>
+          <path d="m3 8 4 3 5-7 5 7 4-3-2 11H5L3 8Z" />
+          <path d="M5 19h14" />
+        </svg>
+      );
+
+    case "campana":
+      return (
+        <svg {...props}>
+          <path d="M18 9a6 6 0 0 0-12 0c0 6-3 7-3 8h18c0-1-3-2-3-8Z" />
+          <path d="M10 21h4" />
+        </svg>
+      );
+
+    case "perfil":
+      return (
+        <svg {...props}>
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
+        </svg>
+      );
+
+    case "idea":
+      return (
+        <svg {...props}>
+          <path d="M9 18h6" />
+          <path d="M10 22h4" />
+          <path d="M8.5 15.5A7 7 0 1 1 15.5 15.5c-.9.7-1.5 1.5-1.5 2.5h-4c0-1-.6-1.8-1.5-2.5Z" />
+        </svg>
+      );
+
+    case "propuestas":
+      return (
+        <svg {...props}>
+          <circle cx="8" cy="8" r="3" />
+          <circle cx="16.5" cy="9.5" r="2.5" />
+          <path d="M2.5 20a5.5 5.5 0 0 1 11 0" />
+          <path d="M13.5 17a4.5 4.5 0 0 1 8 3" />
+        </svg>
+      );
+
+    case "ubicacion":
+      return (
+        <svg {...props}>
+          <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+          <circle cx="12" cy="10" r="2.5" />
+        </svg>
+      );
+
+    case "mundo":
+      return (
+        <svg {...props}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18" />
+          <path d="M12 3a15 15 0 0 1 0 18" />
+          <path d="M12 3a15 15 0 0 0 0 18" />
+        </svg>
+      );
+
+    case "musica":
+      return (
+        <svg {...props}>
+          <path d="M9 18V5l10-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="16" cy="16" r="3" />
+        </svg>
+      );
+
+    case "mas":
+      return (
+        <svg {...props}>
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      );
+
+    case "play":
+      return (
+        <svg {...props} fill="currentColor" stroke="none">
+          <path d="m9 7 8 5-8 5V7Z" />
+        </svg>
+      );
+
+    case "aceptar":
+      return (
+        <svg {...props}>
+          <path d="m5 12 4 4L19 6" />
+        </svg>
+      );
+
+    case "rechazar":
+      return (
+        <svg {...props}>
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      );
+
+    case "salir":
+      return (
+        <svg {...props}>
+          <path d="M10 17l5-5-5-5" />
+          <path d="M15 12H3" />
+          <path d="M13 4h7v16h-7" />
+        </svg>
+      );
+
+    default:
+      return (
+        <svg {...props}>
+          <path d="M5 12h14" />
+          <path d="m13 6 6 6-6 6" />
+        </svg>
+      );
+  }
+}
+
+const alturasOnda = [
+  7, 14, 9, 19, 12, 24, 16, 30, 22, 15, 27, 18, 33, 20, 12, 25, 17, 29,
+  14, 21, 10, 18, 8, 15,
+];
+
+function Onda({
+  activa = false,
+}: {
+  activa?: boolean;
+}) {
+  return (
+    <div className="flex h-6 min-w-0 flex-1 items-center gap-[2px] overflow-hidden">
+      {alturasOnda.map((altura, indice) => (
+        <span
+          key={`${altura}-${indice}`}
+          className={`w-[2px] shrink-0 rounded-full ${
+            activa ? "bg-violet-400" : "bg-zinc-600"
+          }`}
+          style={{ height: `${Math.max(4, Math.round(altura * 0.65))}px` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+const ideasDemo = [
+  {
+    id: 1,
+    titulo: "Luces de Medianoche",
+    genero: "Pop alternativo",
+    bpm: "96 BPM",
+    tonalidad: "Em",
+    descripcion: "Idea sobre noches en la ciudad, deseos y nuevos comienzos.",
+    duracion: "0:28",
+    imagen:
+      "bg-[radial-gradient(circle_at_70%_30%,#fb7185_0%,transparent_22%),linear-gradient(160deg,#312e81_0%,#7c3aed_46%,#111827_100%)]",
+  },
+  {
+    id: 2,
+    titulo: "Mar sin Ruido",
+    genero: "R&B",
+    bpm: "82 BPM",
+    tonalidad: "Am",
+    descripcion: "Una balada íntima sobre soltar, aceptar y seguir adelante.",
+    duracion: "0:26",
+    imagen:
+      "bg-[radial-gradient(circle_at_50%_40%,#22d3ee_0%,transparent_24%),linear-gradient(160deg,#0f172a_0%,#1d4ed8_52%,#111827_100%)]",
+  },
+  {
+    id: 3,
+    titulo: "Órbitas",
+    genero: "Electrónica",
+    bpm: "120 BPM",
+    tonalidad: "Dm",
+    descripcion: "Texturas electrónicas y voces etéreas para la pista de baile.",
+    duracion: "0:24",
+    imagen:
+      "bg-[radial-gradient(circle_at_58%_28%,#c4b5fd_0%,transparent_18%),linear-gradient(160deg,#111827_0%,#312e81_48%,#020617_100%)]",
+  },
+];
+
+const propuestasDemo = [
+  {
+    nombre: "Neo Wave",
+    rol: "Productor",
+    iniciales: "NW",
+    mensaje: "Me vibra mucho la atmósfera. Puedo trabajar el beat y la estructura.",
+    duracion: "0:18",
+    color: "from-amber-500 to-orange-700",
+  },
+  {
+    nombre: "Silvia Neón",
+    rol: "Cantante",
+    iniciales: "SN",
+    mensaje: "Tengo una idea de melodía para el estribillo que puede encajar perfecto.",
+    duracion: "0:22",
+    color: "from-cyan-500 to-blue-700",
+  },
+  {
+    nombre: "Dh-man",
+    rol: "Beatmaker",
+    iniciales: "DH",
+    mensaje: "Puedo aportar una versión más oscura y bailable. ¿Te late?",
+    duracion: "0:27",
+    color: "from-violet-500 to-fuchsia-700",
+  },
+];
 
 export default async function PanelPage() {
   const sesion = await obtenerSesion();
@@ -11,9 +315,7 @@ export default async function PanelPage() {
   }
 
   const usuario = await prisma.usuario.findUnique({
-    where: {
-      id: sesion.usuarioId,
-    },
+    where: { id: sesion.usuarioId },
   });
 
   if (!usuario) {
@@ -24,53 +326,366 @@ export default async function PanelPage() {
     redirect("/completar-perfil");
   }
 
+  const nombreArtistico =
+    usuario.nombreArtistico?.trim() ||
+    usuario.nombre?.trim() ||
+    "Artista";
+
+  const iniciales = obtenerIniciales(nombreArtistico);
+  const usuarioPublico = crearUsuario(nombreArtistico);
+  const generos = obtenerGeneros(usuario.generos);
+  const rol = formatearRol(usuario.rolPrincipal);
+
+  const ubicacion =
+    [usuario.ciudad, usuario.pais].filter(Boolean).join(", ") ||
+    "Ubicación sin completar";
+
   return (
-    <main className="min-h-screen bg-black px-6 py-12 text-white">
-      <section className="mx-auto max-w-5xl">
-        <p className="text-sm font-semibold text-violet-400">
-          Panel de artista
-        </p>
+    <main className="min-h-screen bg-[#09070d] text-white lg:h-screen lg:overflow-hidden">
+      <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
+          <Link href="/panel" className="text-lg font-black tracking-tight">
+            Feat<span className="text-violet-400">Music</span>
+          </Link>
 
-        <h1 className="mt-3 text-4xl font-bold">
-          Hola, {usuario.nombreArtistico ?? "artista"}
-        </h1>
+          <nav className="hidden h-full items-center gap-5 md:flex">
+            <Link
+              href="/panel"
+              className="relative flex h-full items-center gap-2 px-2 text-xs font-semibold text-white"
+            >
+              <Icono tipo="inicio" className="h-3 w-3" />
+              Inicio
+              <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-violet-400" />
+            </Link>
 
-        <p className="mt-3 text-zinc-400">
-          Tu cuenta está activa. Desde aquí construiremos tu perfil profesional.
-        </p>
+            <Link
+              href="/artistas"
+              className="flex h-full items-center gap-2 px-2 text-xs text-zinc-400 transition hover:text-white"
+            >
+              <Icono tipo="comunidad" className="h-3 w-3" />
+              Comunidad
+            </Link>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-            <p className="text-sm text-zinc-500">Rol principal</p>
-            <p className="mt-2 text-xl font-semibold">
-              {usuario.rolPrincipal}
-            </p>
-          </article>
+            <Link
+              href="/planes"
+              className="flex h-full items-center gap-2 px-2 text-xs text-zinc-400 transition hover:text-white"
+            >
+              <Icono tipo="planes" className="h-3 w-3" />
+              Planes
+            </Link>
+          </nav>
 
-          <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-            <p className="text-sm text-zinc-500">Ubicación</p>
-            <p className="mt-2 text-xl font-semibold">
-              {usuario.ciudad ?? "Tu ciudad"}, {usuario.pais ?? "Tu país"}
-            </p>
-          </article>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label="Notificaciones"
+              className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-zinc-300 transition hover:bg-white/[0.07] hover:text-white"
+            >
+              <Icono tipo="campana" className="h-3 w-3" />
+              <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-500 px-1 text-[9px] font-black">
+                3
+              </span>
+            </button>
 
-          <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-            <p className="text-sm text-zinc-500">Colaboración</p>
-            <p className="mt-2 text-xl font-semibold">
-              {usuario.tipoColaboracion ?? "Por definir"}
-            </p>
-          </article>
+            <form action="/api/cerrar-sesion" method="post">
+              <button
+                type="submit"
+                className="flex items-center gap-2 rounded-lg border border-red-400/50 px-3 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"
+              >
+                <Icono tipo="salir" className="h-3 w-3" />
+                Cerrar sesión
+              </button>
+            </form>
+          </div>
         </div>
+      </header>
 
-        <form action="/api/cerrar-sesion" method="post" className="mt-8">
-          <button
-            type="submit"
-            className="rounded-full border border-zinc-700 px-6 py-3 font-semibold transition hover:border-zinc-500 hover:bg-zinc-900"
-          >
-            Cerrar sesión
-          </button>
-        </form>
-      </section>
+      <div className="relative lg:h-[calc(100vh-48px)] lg:overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
+
+        <div className="relative mx-auto grid max-w-[1460px] gap-3 px-3 py-3 lg:h-full lg:grid-cols-[0.84fr_1.08fr_1.08fr] lg:items-stretch lg:px-4">
+          <section className="min-h-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25">
+            <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
+              <Icono tipo="perfil" className="h-3 w-3 text-violet-400" />
+              <span className="text-violet-400">1</span>
+              Perfil del artista
+            </div>
+
+            <div className="mt-3 flex items-center gap-3">
+              <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-violet-400/40 bg-gradient-to-br from-violet-700 to-fuchsia-500 text-2xl font-black shadow-xl shadow-violet-950/40">
+                {iniciales}
+                <span className="absolute bottom-1 right-0.5 h-3 w-3 rounded-full border-2 border-[#0d0913] bg-emerald-400" />
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h1 className="truncate text-lg font-black">
+                    {nombreArtistico}
+                  </h1>
+                  {usuario.correoVerificado && (
+                    <span className="flex h-3 w-3 items-center justify-center rounded-full bg-violet-500 text-[10px] font-black">
+                      ✓
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-0.5 text-[9px] text-zinc-400">
+                  @{usuarioPublico}
+                </p>
+
+                <p className="mt-1 text-xs text-zinc-300">{rol}</p>
+
+                <div className="mt-2 flex flex-wrap gap-1">
+                  <span className="rounded-lg border border-violet-400/30 bg-violet-500/10 px-2.5 py-1 text-[10px] text-violet-200">
+                    {rol}
+                  </span>
+                  <span className="rounded-lg border border-red-400/30 bg-red-500/5 px-2.5 py-1 text-[10px] text-red-200">
+                    Colaborador
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="my-3 h-px bg-white/10" />
+
+            <p className="text-[9px] leading-4 text-zinc-300">
+              Artista en FeatMusic buscando nuevas colaboraciones.
+            </p>
+
+            <div className="my-3 h-px bg-white/10" />
+
+            <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+              Géneros
+            </p>
+
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {(generos.length > 0
+                ? generos.slice(0, 4)
+                : ["Urbano", "Pop", "R&B"]
+              ).map((genero) => (
+                <span
+                  key={genero}
+                  className="rounded-lg border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] text-violet-200"
+                >
+                  {genero}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-2 space-y-1.5 text-[10px] text-zinc-300">
+              <div className="flex items-center gap-3">
+                <Icono tipo="ubicacion" className="h-3 w-3 text-violet-400" />
+                {ubicacion}
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Icono tipo="mundo" className="h-3 w-3 text-violet-400" />
+                {usuario.pais || "País sin completar"}
+              </div>
+            </div>
+
+            <div className="my-3 h-px bg-white/10" />
+
+            <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+              Última conexión
+            </p>
+
+            <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              En línea ahora
+            </div>
+          </section>
+
+          <section className="min-h-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
+                <Icono tipo="idea" className="h-3 w-3 text-violet-400" />
+                <span className="text-violet-400">2</span>
+                Ideas musicales
+              </div>
+
+              <button
+                type="button"
+                className="flex items-center gap-2 rounded-lg border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20"
+              >
+                <Icono tipo="mas" className="h-3 w-3" />
+                Nueva idea
+              </button>
+            </div>
+
+            <p className="mt-2 text-[10px] text-zinc-400">
+              Selecciona una idea para ver sus propuestas.
+            </p>
+
+            <div className="mt-1.5 space-y-1">
+              {ideasDemo.map((idea, indice) => {
+                const seleccionada = indice === 0;
+
+                return (
+                  <button
+                    key={idea.id}
+                    type="button"
+                    className={`w-full rounded-lg border p-2 text-left transition ${
+                      seleccionada
+                        ? "border-violet-400/80 bg-violet-500/[0.06] shadow-lg shadow-violet-950/30"
+                        : "border-white/10 bg-white/[0.025] hover:border-white/20"
+                    }`}
+                  >
+                    <div className="flex gap-3">
+                      <div
+                        className={`h-16 w-16 shrink-0 rounded-lg ${idea.imagen}`}
+                      />
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <h3 className="text-xs font-bold">
+                              {idea.titulo}
+                            </h3>
+                            <p className="mt-0.5 text-[9px] text-zinc-400">
+                              {idea.genero} · {idea.bpm} · {idea.tonalidad}
+                            </p>
+                          </div>
+
+                          {seleccionada && (
+                            <span className="rounded-full bg-violet-500 px-2 py-0.5 text-[8px] font-black uppercase">
+                              Seleccionada
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="mt-1 line-clamp-2 text-[9px] leading-4 text-zinc-400">
+                          {idea.descripcion}
+                        </p>
+
+                        <div className="mt-1.5 flex items-center gap-1.5">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/20 text-white">
+                            <Icono tipo="play" className="h-3 w-3" />
+                          </span>
+                          <Onda activa={seleccionada} />
+                          <span className="text-[10px] text-zinc-500">
+                            {idea.duracion}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className="mt-0.5 flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[10px] font-bold text-violet-300 transition hover:bg-violet-500/10"
+            >
+              Ver todas las ideas
+              <Icono tipo="flecha" className="h-3 w-3" />
+            </button>
+          </section>
+
+          <section className="min-h-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0d0913]/95 p-3 shadow-xl shadow-black/25">
+            <div className="flex flex-wrap items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
+              <Icono tipo="propuestas" className="h-3 w-3 text-violet-400" />
+              <span className="text-violet-400">3</span>
+              Propuestas para:
+              <span className="normal-case tracking-normal text-violet-300">
+                Luces de Medianoche
+              </span>
+            </div>
+
+            <p className="mt-2 text-[10px] text-zinc-400">
+              Propuestas de la idea seleccionada.
+            </p>
+
+            <div className="mt-1.5 space-y-1">
+              {propuestasDemo.map((propuesta, indice) => (
+                <article
+                  key={propuesta.nombre}
+                  className="rounded-lg border border-white/10 bg-white/[0.025] p-2"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-start gap-2.5">
+                      <div
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${propuesta.color} text-[10px] font-black`}
+                      >
+                        {propuesta.iniciales}
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <h3 className="truncate text-[11px] font-bold">
+                            {propuesta.nombre}
+                          </h3>
+                          <span className="flex h-3 w-3 items-center justify-center rounded-full bg-violet-500 text-[7px] font-black">
+                            ✓
+                          </span>
+                        </div>
+
+                        <span className="mt-0.5 inline-flex items-center gap-1 rounded-md border border-violet-400/20 bg-violet-500/5 px-1.5 py-0.5 text-[8px] text-zinc-300">
+                          <Icono tipo="musica" className="h-2.5 w-2.5" />
+                          {propuesta.rol}
+                        </span>
+                      </div>
+
+                      <span className="shrink-0 text-[8px] font-semibold text-amber-400">
+                        • Pendiente
+                      </span>
+                    </div>
+
+                    <p className="ml-[42px] mt-0.5 line-clamp-1 text-[8px] leading-3.5 text-zinc-400">
+                      {propuesta.mensaje}
+                    </p>
+
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        aria-label={`Reproducir propuesta de ${propuesta.nombre}`}
+                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:bg-white/10"
+                      >
+                        <Icono tipo="play" className="h-2.5 w-2.5" />
+                      </button>
+
+                      <Onda activa={indice === 1} />
+
+                      <span className="shrink-0 text-[8px] text-zinc-500">
+                        {propuesta.duracion}
+                      </span>
+
+                      <div className="ml-1 flex shrink-0 items-center gap-1">
+                        <button
+                          type="button"
+                          className="flex h-5 items-center justify-center gap-1 border border-emerald-400/45 bg-emerald-500/[0.04] px-1.5 text-[7px] font-semibold uppercase tracking-[0.06em] text-emerald-300 transition hover:border-emerald-300 hover:bg-emerald-500/10"
+                        >
+                          <Icono tipo="aceptar" className="h-2.5 w-2.5" />
+                          Aceptar
+                        </button>
+
+                        <button
+                          type="button"
+                          className="flex h-5 items-center justify-center gap-1 border border-red-400/45 bg-red-500/[0.04] px-1.5 text-[7px] font-semibold uppercase tracking-[0.06em] text-red-300 transition hover:border-red-300 hover:bg-red-500/10"
+                        >
+                          <Icono tipo="rechazar" className="h-2.5 w-2.5" />
+                          Rechazar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="mt-0.5 flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[10px] font-bold text-violet-300 transition hover:bg-violet-500/10"
+            >
+              <Icono tipo="propuestas" className="h-3 w-3" />
+              Ver todas las propuestas
+              <Icono tipo="flecha" className="h-3 w-3" />
+            </button>
+          </section>
+        </div>
+      </div>
     </main>
   );
 }
