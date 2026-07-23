@@ -55,16 +55,6 @@ body {
   }
 }
 
-@keyframes scroll-cue {
-  0%,
-  100% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, 7px);
-  }
-}
-
 @keyframes marquee-move {
   to {
     transform: translateX(-50%);
@@ -81,6 +71,17 @@ body {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
+  }
+}
+
+@keyframes card-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -103,6 +104,43 @@ body {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes section-title-enter {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+    filter: blur(9px);
+    letter-spacing: 0.015em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    letter-spacing: normal;
+  }
+}
+
+@keyframes waveform-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes icon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(2deg);
   }
 }
 
@@ -133,10 +171,6 @@ body {
 .animated-gradient-text {
   background-size: 200% auto;
   animation: gradient-drift 5s linear infinite;
-}
-
-.scroll-cue {
-  animation: scroll-cue 1.8s ease-in-out infinite;
 }
 
 .marquee-track {
@@ -194,11 +228,114 @@ body {
   transform: rotate(18deg) translateX(750%);
 }
 
+.studio-visual img {
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.2s ease;
+}
+
+.studio-visual:hover img {
+  transform: scale(1.035);
+  filter: saturate(1.08) contrast(1.03);
+}
+
+.visual-icon {
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.visual-icon-compact {
+  margin-bottom: 0;
+}
+
+.visual-icon-violet {
+  color: rgb(216 180 254);
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.28), rgba(88, 28, 135, 0.16));
+}
+
+.visual-icon-sky {
+  color: rgb(125 211 252);
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.26), rgba(30, 64, 175, 0.14));
+}
+
+.visual-icon-rose {
+  color: rgb(253 164 175);
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.25), rgba(157, 23, 77, 0.13));
+}
+
+.visual-icon-emerald {
+  color: rgb(110 231 183);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.25), rgba(6, 95, 70, 0.14));
+}
+
+.visual-icon-amber {
+  color: rgb(252 211 77);
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.25), rgba(146, 64, 14, 0.14));
+}
+
+.visual-icon-indigo {
+  color: rgb(165 180 252);
+  background: linear-gradient(145deg, rgba(99, 102, 241, 0.28), rgba(67, 56, 202, 0.14));
+}
+
+.steps-grid::before {
+  position: absolute;
+  top: 3.45rem;
+  right: 8%;
+  left: 8%;
+  z-index: -1;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.4), transparent);
+}
+
+.waveform-bar,
+.faq-wave-bar {
+  transform-origin: bottom;
+  animation: waveform-pulse 1.8s ease-in-out infinite;
+}
+
+.waveform-bar:nth-child(2n),
+.faq-wave-bar:nth-child(2n) {
+  animation-delay: -0.55s;
+}
+
+.waveform-bar:nth-child(3n),
+.faq-wave-bar:nth-child(3n) {
+  animation-delay: -1.05s;
+}
+
+.cta-icon-float {
+  animation: icon-float 3.2s ease-in-out infinite;
+}
+
+.scroll-animations-ready .section-title-reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  filter: blur(9px);
+}
+
+.scroll-animations-ready .section-title-reveal.is-visible {
+  animation: section-title-enter 900ms cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
+}
+
 @supports (animation-timeline: view()) {
   .reveal-on-scroll {
     animation: reveal-up linear both;
     animation-timeline: view();
     animation-range: entry 5% cover 32%;
+  }
+
+  .dynamic-card.reveal-on-scroll {
+    animation-name: card-reveal-up;
   }
 
   .reveal-delay-1 {
@@ -228,11 +365,14 @@ body {
   .hero-body-enter,
   .hero-actions-enter,
   .animated-gradient-text,
-  .scroll-cue,
   .marquee-track,
   .reveal-on-scroll,
   .reveal-on-scroll-left,
-  .reveal-on-scroll-right {
+  .reveal-on-scroll-right,
+  .section-title-reveal,
+  .waveform-bar,
+  .faq-wave-bar,
+  .cta-icon-float {
     opacity: 1 !important;
     animation: none !important;
     transform: none !important;
