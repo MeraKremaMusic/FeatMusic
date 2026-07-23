@@ -24,3 +24,222 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes badge-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gradient-drift {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes scroll-cue {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 7px);
+  }
+}
+
+@keyframes marquee-move {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.98);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-55px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(55px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero-badge-enter {
+  opacity: 0;
+  animation: badge-enter 600ms 80ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-title-enter,
+.hero-body-enter,
+.hero-actions-enter {
+  opacity: 0;
+  animation: hero-enter 850ms 180ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-title-enter-delay {
+  animation-delay: 330ms;
+}
+
+.hero-body-enter {
+  animation-delay: 520ms;
+}
+
+.hero-actions-enter {
+  animation-delay: 680ms;
+}
+
+.animated-gradient-text {
+  background-size: 200% auto;
+  animation: gradient-drift 5s linear infinite;
+}
+
+.scroll-cue {
+  animation: scroll-cue 1.8s ease-in-out infinite;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-move 34s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgb(212 212 216);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dynamic-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.dynamic-card::after {
+  position: absolute;
+  inset: -60% auto -60% -45%;
+  width: 28%;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  transform: rotate(18deg) translateX(-280%);
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dynamic-card:hover::after {
+  transform: rotate(18deg) translateX(750%);
+}
+
+@supports (animation-timeline: view()) {
+  .reveal-on-scroll {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 32%;
+  }
+
+  .reveal-delay-1 {
+    animation-range: entry 10% cover 37%;
+  }
+
+  .reveal-delay-2 {
+    animation-range: entry 15% cover 42%;
+  }
+
+  .reveal-on-scroll-left {
+    animation: reveal-left linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 34%;
+  }
+
+  .reveal-on-scroll-right {
+    animation: reveal-right linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 34%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-badge-enter,
+  .hero-title-enter,
+  .hero-body-enter,
+  .hero-actions-enter,
+  .animated-gradient-text,
+  .scroll-cue,
+  .marquee-track,
+  .reveal-on-scroll,
+  .reveal-on-scroll-left,
+  .reveal-on-scroll-right {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .dynamic-card::after {
+    display: none;
+  }
+}
