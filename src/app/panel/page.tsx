@@ -20,6 +20,10 @@ export default async function PanelPage() {
     redirect("/iniciar-sesion");
   }
 
+  if (!usuario.perfilCompleto) {
+    redirect("/completar-perfil");
+  }
+
   return (
     <main className="min-h-screen bg-black px-6 py-12 text-white">
       <section className="mx-auto max-w-5xl">
@@ -28,7 +32,7 @@ export default async function PanelPage() {
         </p>
 
         <h1 className="mt-3 text-4xl font-bold">
-          Hola, {usuario.nombreArtistico}
+          Hola, {usuario.nombreArtistico ?? "artista"}
         </h1>
 
         <p className="mt-3 text-zinc-400">
@@ -46,14 +50,14 @@ export default async function PanelPage() {
           <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
             <p className="text-sm text-zinc-500">Ubicación</p>
             <p className="mt-2 text-xl font-semibold">
-              {usuario.ciudad}, {usuario.pais}
+              {usuario.ciudad ?? "Tu ciudad"}, {usuario.pais ?? "Tu país"}
             </p>
           </article>
 
           <article className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
             <p className="text-sm text-zinc-500">Colaboración</p>
             <p className="mt-2 text-xl font-semibold">
-              {usuario.tipoColaboracion}
+              {usuario.tipoColaboracion ?? "Por definir"}
             </p>
           </article>
         </div>

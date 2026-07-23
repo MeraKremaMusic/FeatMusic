@@ -13,21 +13,53 @@ datasource db {
 }
 
 model Usuario {
-  id              Int      @id @default(autoincrement())
-  nombre          String
-  nombreArtistico String   @map("nombre_artistico")
-  correo          String   @unique
-  passwordHash    String   @map("password_hash")
+  id              Int     @id @default(autoincrement())
+  nombre          String?
+  nombreArtistico String? @map("nombre_artistico")
+  correo          String  @unique
+  passwordHash    String  @map("password_hash")
 
-  pais            String
-  ciudad          String
-  idiomaPrincipal String   @map("idioma_principal")
-  rolPrincipal    String   @map("rol_principal")
-  generos         Json
-  tipoColaboracion String  @map("tipo_colaboracion")
+  pais             String?
+  ciudad           String?
+  idiomaPrincipal  String?   @map("idioma_principal")
+  rolPrincipal     String    @map("rol_principal")
+  generos          Json?
+  tipoColaboracion String?   @map("tipo_colaboracion")
+  correoVerificado Boolean   @default(true) @map("correo_verificado")
+  perfilCompleto   Boolean   @default(false) @map("perfil_completo")
+  aceptoTerminosEn DateTime? @map("acepto_terminos_en")
 
-  creadoEn        DateTime @default(now()) @map("creado_en")
-  actualizadoEn   DateTime @updatedAt @map("actualizado_en")
+  creadoEn      DateTime @default(now()) @map("creado_en")
+  actualizadoEn DateTime @updatedAt @map("actualizado_en")
 
   @@map("usuarios")
+}
+
+model RegistroPendiente {
+  id               Int      @id @default(autoincrement())
+  correo           String   @unique
+  passwordHash     String   @map("password_hash")
+  rolPrincipal     String   @map("rol_principal")
+  codigoHash       String   @map("codigo_hash")
+  codigoExpiraEn   DateTime @map("codigo_expira_en")
+  intentosCodigo   Int      @default(0) @map("intentos_codigo")
+  ultimoEnvioEn    DateTime @default(now()) @map("ultimo_envio_en")
+  aceptoTerminosEn DateTime @map("acepto_terminos_en")
+  creadoEn         DateTime @default(now()) @map("creado_en")
+  actualizadoEn    DateTime @updatedAt @map("actualizado_en")
+
+  @@map("registros_pendientes")
+}
+
+model RecuperacionPassword {
+  id             Int      @id @default(autoincrement())
+  correo         String   @unique
+  codigoHash     String   @map("codigo_hash")
+  codigoExpiraEn DateTime @map("codigo_expira_en")
+  intentosCodigo Int      @default(0) @map("intentos_codigo")
+  ultimoEnvioEn  DateTime @default(now()) @map("ultimo_envio_en")
+  creadoEn       DateTime @default(now()) @map("creado_en")
+  actualizadoEn  DateTime @updatedAt @map("actualizado_en")
+
+  @@map("recuperaciones_password")
 }

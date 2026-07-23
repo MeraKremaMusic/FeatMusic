@@ -1,23 +1,27 @@
 import bcrypt from "bcryptjs";
-import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
+import {
+  crearCodigoVerificacion,
+  fechaExpiracionCodigo,
+  segundosHastaReenvio,
+} from "@/lib/codigos";
+import { enviarCodigoPorCorreo } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 import { redirigir } from "@/lib/redirect";
 
-const registroSchema = z.object({
-  nombre: z.string().trim().min(2).max(100),
-  nombreArtistico: z.string().trim().min(2).max(100),
-  correo: z.string().trim().email().toLowerCase(),
-  password: z.string().min(8).max(128),
-  pais: z.string().trim().min(2).max(100),
-  ciudad: z.string().trim().min(2).max(100),
-  idiomaPrincipal: z.string().trim().min(2).max(50),
-  rolPrincipal: z.string().trim().min(2).max(80),
-  generos: z.array(z.string().trim().min(1).max(50)).min(1).max(20),
-  tipoColaboracion: z.string().trim().min(2).max(100),
-  aceptaTerminos: z.literal("on"),
-});
+const registroSchema = z
+  .object({
+    correo: z.string().trim().email().toLowerCase(),
+    password: z.string().min(8).max(128),
+    repetirPassword: z.string().min(8).max(128),
+    rolPrincipal: z.enum(["CANTANTE", "COMPOSITOR", "BEATMAKER"]),
+    aceptaTerminos: z.literal("on"),
+  })
+  .refine((datos) => datos.password === datos.repetirPassword, {
+    message: "Las contraseñas no coinciden.",
+    path: ["repetirPassword"],
+  });
 
 function redirigirConError(error: string) {
   return redirigir(`/registro?error=${encodeURIComponent(error)}`);
@@ -26,70 +30,85 @@ function redirigirConError(error: string) {
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-
     const resultado = registroSchema.safeParse({
-      nombre: formData.get("nombre"),
-      nombreArtistico: formData.get("nombreArtistico"),
       correo: formData.get("correo"),
       password: formData.get("password"),
-      pais: formData.get("pais"),
-      ciudad: formData.get("ciudad"),
-      idiomaPrincipal: formData.get("idiomaPrincipal"),
+      repetirPassword: formData.get("repetirPassword"),
       rolPrincipal: formData.get("rolPrincipal"),
-      generos: formData.getAll("generos"),
-      tipoColaboracion: formData.get("tipoColaboracion"),
       aceptaTerminos: formData.get("aceptaTerminos"),
     });
 
     if (!resultado.success) {
-      const faltaGenero = resultado.error.issues.some(
-        (issue) => issue.path[0] === "generos"
+      const contrasenasDistintas = resultado.error.issues.some(
+        (issue) => issue.path[0] === "repetirPassword",
       );
       return redirigirConError(
-        faltaGenero ? "selecciona-genero" : "datos-invalidos"
+        contrasenasDistintas ? "contrasenas-no-coinciden" : "datos-invalidos",
       );
     }
 
     const usuarioExistente = await prisma.usuario.findUnique({
-      where: {
-        correo: resultado.data.correo,
-      },
+      where: { correo: resultado.data.correo },
+      select: { id: true },
     });
 
     if (usuarioExistente) {
       return redirigirConError("correo-existente");
     }
 
-    const passwordHash = await bcrypt.hash(
-      resultado.data.password,
-      12
-    );
+    const pendienteActual = await prisma.registroPendiente.findUnique({
+      where: { correo: resultado.data.correo },
+    });
 
-    await prisma.usuario.create({
-      data: {
-        nombre: resultado.data.nombre,
-        nombreArtistico: resultado.data.nombreArtistico,
+    if (pendienteActual) {
+      const espera = segundosHastaReenvio(pendienteActual.ultimoEnvioEn);
+      if (espera > 0) {
+        return redirigirConError(`espera-reenvio-${espera}`);
+      }
+    }
+
+    const codigo = crearCodigoVerificacion();
+    const [passwordHash, codigoHash] = await Promise.all([
+      bcrypt.hash(resultado.data.password, 12),
+      bcrypt.hash(codigo, 10),
+    ]);
+
+    await prisma.registroPendiente.upsert({
+      where: { correo: resultado.data.correo },
+      create: {
         correo: resultado.data.correo,
         passwordHash,
-        pais: resultado.data.pais,
-        ciudad: resultado.data.ciudad,
-        idiomaPrincipal: resultado.data.idiomaPrincipal,
         rolPrincipal: resultado.data.rolPrincipal,
-        generos: resultado.data.generos,
-        tipoColaboracion: resultado.data.tipoColaboracion,
+        codigoHash,
+        codigoExpiraEn: fechaExpiracionCodigo(),
+        aceptoTerminosEn: new Date(),
+      },
+      update: {
+        passwordHash,
+        rolPrincipal: resultado.data.rolPrincipal,
+        codigoHash,
+        codigoExpiraEn: fechaExpiracionCodigo(),
+        intentosCodigo: 0,
+        ultimoEnvioEn: new Date(),
+        aceptoTerminosEn: new Date(),
       },
     });
 
-    return redirigir("/registro/exito");
-  } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
-      return redirigirConError("correo-existente");
-    }
+    await enviarCodigoPorCorreo({
+      correo: resultado.data.correo,
+      codigo,
+      tipo: "verificacion",
+    });
 
-    console.error("No se pudo registrar el usuario.", error);
-    return redirigirConError("servidor");
+    return redirigir(
+      `/verificar-correo?correo=${encodeURIComponent(resultado.data.correo)}&enviado=1`,
+    );
+  } catch (error) {
+    console.error("No se pudo iniciar el registro.", error);
+    return redirigirConError(
+      error instanceof Error && error.message === "SMTP_NO_CONFIGURADO"
+        ? "correo-no-enviado"
+        : "servidor",
+    );
   }
 }

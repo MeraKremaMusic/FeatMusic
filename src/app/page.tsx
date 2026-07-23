@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { preload } from "react-dom";
 import type { MouseEvent, ReactNode } from "react";
 
 import {
@@ -207,6 +208,79 @@ function isLocale(value: string | null): value is Locale {
   return languageOptions.some((option) => option.code === value);
 }
 
+function useHorizontalCarousel(
+  itemSelector: string,
+  centerSelectedItem = false,
+) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const syncFrameRef = useRef<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const syncActiveItem = () => {
+    if (syncFrameRef.current !== null) return;
+
+    syncFrameRef.current = window.requestAnimationFrame(() => {
+      const track = trackRef.current;
+      syncFrameRef.current = null;
+      if (!track) return;
+
+      const items = Array.from(
+        track.querySelectorAll<HTMLElement>(itemSelector),
+      );
+      if (items.length === 0) return;
+
+      const viewportCenter = track.scrollLeft + track.clientWidth / 2;
+      const closestIndex = items.reduce((closest, item, index) => {
+        const closestItem = items[closest];
+        const closestDistance = Math.abs(
+          closestItem.offsetLeft +
+            closestItem.offsetWidth / 2 -
+            viewportCenter,
+        );
+        const itemDistance = Math.abs(
+          item.offsetLeft + item.offsetWidth / 2 - viewportCenter,
+        );
+
+        return itemDistance < closestDistance ? index : closest;
+      }, 0);
+
+      setActiveIndex((currentIndex) =>
+        currentIndex === closestIndex ? currentIndex : closestIndex,
+      );
+    });
+  };
+
+  const showItem = (index: number) => {
+    const track = trackRef.current;
+    const item = track?.querySelectorAll<HTMLElement>(itemSelector)[index];
+    if (!track || !item) return;
+
+    track.scrollTo({
+      left: centerSelectedItem
+        ? item.offsetLeft - (track.clientWidth - item.offsetWidth) / 2
+        : item.offsetLeft - track.offsetLeft,
+      behavior: "smooth",
+    });
+    setActiveIndex(index);
+  };
+
+  useEffect(
+    () => () => {
+      if (syncFrameRef.current !== null) {
+        window.cancelAnimationFrame(syncFrameRef.current);
+      }
+    },
+    [],
+  );
+
+  return {
+    activeIndex,
+    showItem,
+    syncActiveItem,
+    trackRef,
+  };
+}
+
 type FaqItem = {
   question: string;
   answer: string;
@@ -226,6 +300,7 @@ function FaqCarousel({
   };
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const syncFrameRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const showSlide = (index: number) => {
@@ -245,16 +320,32 @@ function FaqCarousel({
   };
 
   const syncActiveSlide = () => {
-    const track = trackRef.current;
-    if (!track || track.clientWidth === 0) return;
+    if (syncFrameRef.current !== null) return;
 
-    setActiveIndex(
-      Math.min(
+    syncFrameRef.current = window.requestAnimationFrame(() => {
+      const track = trackRef.current;
+      syncFrameRef.current = null;
+      if (!track || track.clientWidth === 0) return;
+
+      const nextIndex = Math.min(
         items.length - 1,
         Math.round(track.scrollLeft / track.clientWidth),
-      ),
-    );
+      );
+
+      setActiveIndex((currentIndex) =>
+        currentIndex === nextIndex ? currentIndex : nextIndex,
+      );
+    });
   };
+
+  useEffect(
+    () => () => {
+      if (syncFrameRef.current !== null) {
+        window.cancelAnimationFrame(syncFrameRef.current);
+      }
+    },
+    [],
+  );
 
   return (
     <div className="reveal-on-scroll mt-10 xl:mt-6" data-faq-carousel>
@@ -366,18 +457,40 @@ function MobileCarouselPagination({
 }
 
 export default function Home() {
+  preload("/images/featmusic-hero-urban-v2.webp", {
+    as: "image",
+    fetchPriority: "high",
+    type: "image/webp",
+  });
+
   const [locale, setLocale] = useState<Locale>("es");
   const [demoPlaying, setDemoPlaying] = useState(false);
-  const [activeProcessIndex, setActiveProcessIndex] = useState(0);
-  const [activeGlobalIndex, setActiveGlobalIndex] = useState(0);
-  const [activeCommunityIndex, setActiveCommunityIndex] = useState(0);
-  const [activePlanIndex, setActivePlanIndex] = useState(0);
   const languageMenuRef = useRef<HTMLDetailsElement>(null);
-  const processTrackRef = useRef<HTMLDivElement>(null);
-  const globalTrackRef = useRef<HTMLDivElement>(null);
-  const communityTrackRef = useRef<HTMLDivElement>(null);
-  const plansTrackRef = useRef<HTMLDivElement>(null);
   const demoPagesRef = useRef<HTMLDivElement>(null);
+  const {
+    activeIndex: activeProcessIndex,
+    showItem: showProcessItem,
+    syncActiveItem: syncActiveProcess,
+    trackRef: processTrackRef,
+  } = useHorizontalCarousel("[data-carousel-card]");
+  const {
+    activeIndex: activeGlobalIndex,
+    showItem: showGlobalItem,
+    syncActiveItem: syncActiveGlobal,
+    trackRef: globalTrackRef,
+  } = useHorizontalCarousel("[data-carousel-card]");
+  const {
+    activeIndex: activeCommunityIndex,
+    showItem: showCommunityItem,
+    syncActiveItem: syncActiveCommunity,
+    trackRef: communityTrackRef,
+  } = useHorizontalCarousel("[data-carousel-card]");
+  const {
+    activeIndex: activePlanIndex,
+    showItem: showPlan,
+    syncActiveItem: syncActivePlan,
+    trackRef: plansTrackRef,
+  } = useHorizontalCarousel("[data-plan-card]", true);
   const copy = homeCopy[locale];
   const activeLanguage =
     languageOptions.find((option) => option.code === locale) ??
@@ -458,91 +571,6 @@ export default function Home() {
     window.location.assign("/");
   };
 
-  const syncCardCarousel = (
-    track: HTMLDivElement | null,
-    setActiveIndex: (index: number) => void,
-  ) => {
-    if (!track) return;
-
-    const cards = Array.from(
-      track.querySelectorAll<HTMLElement>("[data-carousel-card]"),
-    );
-    if (cards.length === 0) return;
-
-    const viewportCenter = track.scrollLeft + track.clientWidth / 2;
-    const closestIndex = cards.reduce((closest, card, index) => {
-      const closestCard = cards[closest];
-      const closestDistance = Math.abs(
-        closestCard.offsetLeft +
-          closestCard.offsetWidth / 2 -
-          viewportCenter,
-      );
-      const cardDistance = Math.abs(
-        card.offsetLeft + card.offsetWidth / 2 - viewportCenter,
-      );
-      return cardDistance < closestDistance ? index : closest;
-    }, 0);
-
-    setActiveIndex(closestIndex);
-  };
-
-  const showCardCarouselItem = (
-    track: HTMLDivElement | null,
-    index: number,
-    setActiveIndex: (index: number) => void,
-  ) => {
-    const card = track?.querySelectorAll<HTMLElement>(
-      "[data-carousel-card]",
-    )[index];
-    if (!track || !card) return;
-
-    track.scrollTo({
-      left: card.offsetLeft - track.offsetLeft,
-      behavior: "smooth",
-    });
-    setActiveIndex(index);
-  };
-
-  const syncActivePlan = () => {
-    const track = plansTrackRef.current;
-    if (!track) return;
-
-    const cards = Array.from(
-      track.querySelectorAll<HTMLElement>("[data-plan-card]"),
-    );
-    if (cards.length === 0) return;
-
-    const viewportCenter = track.scrollLeft + track.clientWidth / 2;
-    const closestIndex = cards.reduce((closest, card, index) => {
-      const closestCard = cards[closest];
-      const closestDistance = Math.abs(
-        closestCard.offsetLeft +
-          closestCard.offsetWidth / 2 -
-          viewportCenter,
-      );
-      const cardDistance = Math.abs(
-        card.offsetLeft + card.offsetWidth / 2 - viewportCenter,
-      );
-      return cardDistance < closestDistance ? index : closest;
-    }, 0);
-
-    setActivePlanIndex(closestIndex);
-  };
-
-  const showPlan = (index: number) => {
-    const track = plansTrackRef.current;
-    const card = track?.querySelectorAll<HTMLElement>("[data-plan-card]")[index];
-    if (!track || !card) return;
-
-    track.scrollTo({
-      left:
-        card.offsetLeft -
-        (track.clientWidth - card.offsetWidth) / 2,
-      behavior: "smooth",
-    });
-    setActivePlanIndex(index);
-  };
-
   useEffect(() => {
     const track = demoPagesRef.current;
     if (!track) return;
@@ -566,7 +594,8 @@ export default function Home() {
       if (
         !isVisible ||
         !mobileViewport.matches ||
-        reducedMotion.matches
+        reducedMotion.matches ||
+        document.visibilityState !== "visible"
       ) {
         return;
       }
@@ -593,6 +622,7 @@ export default function Home() {
 
     const noteManualInteraction = () => {
       lastInteractionAt = Date.now();
+      startAutoSlide();
     };
 
     const visibilityObserver = new IntersectionObserver(
@@ -609,6 +639,7 @@ export default function Home() {
     });
     mobileViewport.addEventListener("change", startAutoSlide);
     reducedMotion.addEventListener("change", startAutoSlide);
+    document.addEventListener("visibilitychange", startAutoSlide);
 
     return () => {
       stopAutoSlide();
@@ -616,6 +647,7 @@ export default function Home() {
       track.removeEventListener("pointerdown", noteManualInteraction);
       mobileViewport.removeEventListener("change", startAutoSlide);
       reducedMotion.removeEventListener("change", startAutoSlide);
+      document.removeEventListener("visibilitychange", startAutoSlide);
     };
   }, []);
 
@@ -657,6 +689,10 @@ export default function Home() {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     );
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-home-section]"),
+    );
+    const header = document.querySelector<HTMLElement>("header");
     let wheelIntent = 0;
     let navigationLocked = false;
     let unlockTimer: number | undefined;
@@ -671,13 +707,9 @@ export default function Home() {
         return;
       }
 
-      const sections = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-home-section]"),
-      );
       if (sections.length === 0) return;
 
-      const headerHeight =
-        document.querySelector<HTMLElement>("header")?.offsetHeight ?? 0;
+      const headerHeight = header?.offsetHeight ?? 0;
       const referenceY = window.scrollY + headerHeight;
       const currentIndex = sections.reduce(
         (closestIndex, section, index) => {
@@ -1170,9 +1202,7 @@ export default function Home() {
 
           <div
             ref={processTrackRef}
-            onScroll={() =>
-              syncCardCarousel(processTrackRef.current, setActiveProcessIndex)
-            }
+            onScroll={syncActiveProcess}
             className="mobile-card-carousel mobile-process-carousel steps-grid relative mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4"
           >
             {copy.process.steps.map((step, index) => (
@@ -1199,13 +1229,7 @@ export default function Home() {
           <MobileCarouselPagination
             labels={copy.process.steps.map((step) => step.title)}
             activeIndex={activeProcessIndex}
-            onSelect={(index) =>
-              showCardCarouselItem(
-                processTrackRef.current,
-                index,
-                setActiveProcessIndex,
-              )
-            }
+            onSelect={showProcessItem}
             ariaLabel={copy.process.eyebrow}
             tone="sky"
           />
@@ -1270,9 +1294,7 @@ export default function Home() {
 
           <div
             ref={globalTrackRef}
-            onScroll={() =>
-              syncCardCarousel(globalTrackRef.current, setActiveGlobalIndex)
-            }
+            onScroll={syncActiveGlobal}
             className="mobile-card-carousel mobile-global-cards reveal-on-scroll-right grid gap-3"
           >
             {copy.global.cards.map((card, index) => (
@@ -1299,13 +1321,7 @@ export default function Home() {
           <MobileCarouselPagination
             labels={copy.global.cards.map((card) => card.title)}
             activeIndex={activeGlobalIndex}
-            onSelect={(index) =>
-              showCardCarouselItem(
-                globalTrackRef.current,
-                index,
-                setActiveGlobalIndex,
-              )
-            }
+            onSelect={showGlobalItem}
             ariaLabel={copy.global.eyebrow}
             tone="rose"
           />
@@ -1341,12 +1357,7 @@ export default function Home() {
 
           <div
             ref={communityTrackRef}
-            onScroll={() =>
-              syncCardCarousel(
-                communityTrackRef.current,
-                setActiveCommunityIndex,
-              )
-            }
+            onScroll={syncActiveCommunity}
             className="mobile-card-carousel mobile-community-carousel mt-6 grid gap-5 md:grid-cols-3"
           >
             {copy.community.cards.map((card, index) => (
@@ -1373,13 +1384,7 @@ export default function Home() {
           <MobileCarouselPagination
             labels={copy.community.cards.map((card) => card.title)}
             activeIndex={activeCommunityIndex}
-            onSelect={(index) =>
-              showCardCarouselItem(
-                communityTrackRef.current,
-                index,
-                setActiveCommunityIndex,
-              )
-            }
+            onSelect={showCommunityItem}
             ariaLabel={copy.community.eyebrow}
             tone="emerald"
           />

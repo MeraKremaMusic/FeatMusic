@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { obtenerSesion } from "@/lib/session";
 
 const mensajesDeError: Record<string, string> = {
   "datos-invalidos": "Revisa el correo y la contraseña e inténtalo de nuevo.",
@@ -9,9 +12,12 @@ const mensajesDeError: Record<string, string> = {
 export default async function IniciarSesionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; exito?: string }>;
 }) {
-  const { error } = await searchParams;
+  const sesion = await obtenerSesion();
+  if (sesion) redirect("/panel");
+
+  const { error, exito } = await searchParams;
   const mensaje = error ? mensajesDeError[error] : undefined;
 
   return (
@@ -36,6 +42,12 @@ export default async function IniciarSesionPage({
             {mensaje}
           </p>
         )}
+
+        {exito === "password-restablecida" ? (
+          <p className="mt-6 rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-4 text-sm text-emerald-200">
+            Tu contraseña fue actualizada. Ya puedes iniciar sesión.
+          </p>
+        ) : null}
 
         <form action="/api/iniciar-sesion" method="post" className="mt-8 space-y-5">
           <label className="block">
@@ -73,6 +85,12 @@ export default async function IniciarSesionPage({
             Entrar
           </button>
         </form>
+
+        <p className="mt-5 text-right text-sm">
+          <Link href="/recuperar-contrasena" className="text-violet-400 hover:text-violet-300">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </p>
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           ¿Todavía no tienes cuenta?{" "}
