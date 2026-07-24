@@ -414,6 +414,7 @@ export default async function PanelPage() {
               instagramUrl={usuario.instagramUrl}
 
               distribuidoraPreferida={usuario.distribuidoraPreferida}
+              softwarePreferido={usuario.softwarePreferido}
               rol={rol}
               tipoColaboracion={tipoColaboracion}
               generos={generos}

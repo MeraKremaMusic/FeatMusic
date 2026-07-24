@@ -12,6 +12,7 @@ type PerfilActualizado = {
   youtubeUrl: string | null;
   instagramUrl: string | null;
   distribuidoraPreferida: string | null;
+  softwarePreferido: string | null;
 };
 
 type PerfilArtistaCardProps = PerfilActualizado & {
@@ -41,6 +42,23 @@ const DISTRIBUIDORAS = [
   "Symphonic",
   "Believe",
   "Ninguna",
+] as const;
+
+const SOFTWARES_MUSICA = [
+  "FL Studio",
+  "Ableton Live",
+  "Logic Pro",
+  "Pro Tools",
+  "Cubase",
+  "Studio One",
+  "REAPER",
+  "Reason",
+  "Bitwig Studio",
+  "GarageBand",
+  "Cakewalk",
+  "Adobe Audition",
+  "LMMS",
+  "Ninguno",
 ] as const;
 
 function obtenerIniciales(nombre: string) {
@@ -81,6 +99,18 @@ function obtenerSeleccionDistribuidora(valor: string | null) {
   }
 
   return { seleccion: "Otra", otra: valor };
+}
+
+function obtenerSeleccionSoftware(valor: string | null) {
+  if (!valor) {
+    return { seleccion: "", otro: "" };
+  }
+
+  if (SOFTWARES_MUSICA.includes(valor as (typeof SOFTWARES_MUSICA)[number])) {
+    return { seleccion: valor, otro: "" };
+  }
+
+  return { seleccion: "Otro", otro: valor };
 }
 
 function IconoPlataforma({ plataforma }: { plataforma: "spotify" | "youtube" | "instagram" }) {
@@ -140,6 +170,7 @@ export default function PerfilArtistaCard({
   youtubeUrl: youtubeInicial,
   instagramUrl: instagramInicial,
   distribuidoraPreferida: distribuidoraInicial,
+  softwarePreferido: softwareInicial,
   rol,
   tipoColaboracion,
   generos,
@@ -157,6 +188,7 @@ export default function PerfilArtistaCard({
     youtubeUrl: youtubeInicial,
     instagramUrl: instagramInicial,
     distribuidoraPreferida: distribuidoraInicial,
+    softwarePreferido: softwareInicial,
   });
   const [modalAbierto, setModalAbierto] = useState(false);
   const [nombreArtistico, setNombreArtistico] = useState(nombreInicial);
@@ -171,6 +203,13 @@ export default function PerfilArtistaCard({
   );
   const [otraDistribuidora, setOtraDistribuidora] = useState(
     distribuidoraInicialNormalizada.otra,
+  );
+  const softwareInicialNormalizado = obtenerSeleccionSoftware(softwareInicial);
+  const [softwareSeleccionado, setSoftwareSeleccionado] = useState(
+    softwareInicialNormalizado.seleccion,
+  );
+  const [otroSoftware, setOtroSoftware] = useState(
+    softwareInicialNormalizado.otro,
   );
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(fotoInicial);
@@ -216,6 +255,7 @@ export default function PerfilArtistaCard({
     const distribuidora = obtenerSeleccionDistribuidora(
       perfil.distribuidoraPreferida,
     );
+    const software = obtenerSeleccionSoftware(perfil.softwarePreferido);
 
     setNombreArtistico(perfil.nombreArtistico ?? "");
     setNombreUsuario(perfil.nombreUsuario ?? usuarioInicial);
@@ -225,6 +265,8 @@ export default function PerfilArtistaCard({
     setInstagramUrl(perfil.instagramUrl ?? "");
     setDistribuidoraSeleccionada(distribuidora.seleccion);
     setOtraDistribuidora(distribuidora.otra);
+    setSoftwareSeleccionado(software.seleccion);
+    setOtroSoftware(software.otro);
     setArchivo(null);
     setVistaPrevia(perfil.fotoPerfil);
     setError("");
@@ -290,6 +332,10 @@ export default function PerfilArtistaCard({
       distribuidoraSeleccionada === "Otra"
         ? otraDistribuidora.trim()
         : distribuidoraSeleccionada.trim();
+    const softwareLimpio =
+      softwareSeleccionado === "Otro"
+        ? otroSoftware.trim()
+        : softwareSeleccionado.trim();
 
     if (nombreLimpio.length < 2) {
       setError("El nombre artístico debe tener al menos 2 caracteres.");
@@ -331,6 +377,11 @@ export default function PerfilArtistaCard({
       return;
     }
 
+    if (softwareLimpio.length > 120) {
+      setError("El software preferido no puede superar 120 caracteres.");
+      return;
+    }
+
     const formData = new FormData();
     formData.set("nombreArtistico", nombreLimpio);
     formData.set("nombreUsuario", usuarioLimpio);
@@ -339,6 +390,7 @@ export default function PerfilArtistaCard({
     formData.set("youtubeUrl", youtubeLimpio);
     formData.set("instagramUrl", instagramLimpio);
     formData.set("distribuidoraPreferida", distribuidoraLimpia);
+    formData.set("softwarePreferido", softwareLimpio);
 
     if (archivo) {
       formData.set("fotoPerfil", archivo);
@@ -375,6 +427,12 @@ export default function PerfilArtistaCard({
       );
       setDistribuidoraSeleccionada(distribuidoraActualizada.seleccion);
       setOtraDistribuidora(distribuidoraActualizada.otra);
+
+      const softwareActualizado = obtenerSeleccionSoftware(
+        data.usuario.softwarePreferido,
+      );
+      setSoftwareSeleccionado(softwareActualizado.seleccion);
+      setOtroSoftware(softwareActualizado.otro);
       setVistaPrevia(data.usuario.fotoPerfil);
       setArchivo(null);
 
@@ -535,13 +593,24 @@ export default function PerfilArtistaCard({
             </p>
           )}
 
-          <div className="mt-3 flex items-center justify-between rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5">
-            <span className="text-[10px] text-zinc-500">
-              Distribuidora preferida
-            </span>
-            <span className="max-w-[55%] truncate text-right text-[10px] font-semibold text-zinc-200">
-              {perfil.distribuidoraPreferida || "Sin especificar"}
-            </span>
+          <div className="mt-3 space-y-1.5">
+            <div className="flex items-center justify-between rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5">
+              <span className="text-[10px] text-zinc-500">
+                Distribuidora preferida
+              </span>
+              <span className="max-w-[55%] truncate text-right text-[10px] font-semibold text-zinc-200">
+                {perfil.distribuidoraPreferida || "Sin especificar"}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5">
+              <span className="text-[10px] text-zinc-500">
+                Software preferido
+              </span>
+              <span className="max-w-[55%] truncate text-right text-[10px] font-semibold text-zinc-200">
+                {perfil.softwarePreferido || "Sin especificar"}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -567,7 +636,7 @@ export default function PerfilArtistaCard({
                   Editar perfil
                 </h2>
                 <p className="mt-1 text-sm text-zinc-400">
-                  Actualiza tu identidad, plataformas y distribuidora musical.
+                  Actualiza tu identidad, plataformas, distribuidora y software musical.
                 </p>
               </div>
 
@@ -758,6 +827,42 @@ export default function PerfilArtistaCard({
                       maxLength={120}
                       disabled={guardando}
                       placeholder="Nombre de la distribuidora"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                    />
+                  </label>
+                )}
+
+                <label className="mt-5 block">
+                  <span className="text-sm font-semibold text-zinc-200">
+                    Software musical preferido
+                  </span>
+                  <select
+                    value={softwareSeleccionado}
+                    onChange={(event) => setSoftwareSeleccionado(event.target.value)}
+                    disabled={guardando}
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                  >
+                    <option value="">Sin especificar</option>
+                    {SOFTWARES_MUSICA.map((software) => (
+                      <option key={software} value={software}>
+                        {software}
+                      </option>
+                    ))}
+                    <option value="Otro">Otro</option>
+                  </select>
+                </label>
+
+                {softwareSeleccionado === "Otro" && (
+                  <label className="mt-3 block">
+                    <span className="text-xs text-zinc-400">
+                      Escribe el software
+                    </span>
+                    <input
+                      value={otroSoftware}
+                      onChange={(event) => setOtroSoftware(event.target.value)}
+                      maxLength={120}
+                      disabled={guardando}
+                      placeholder="Nombre del software musical"
                       className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
                     />
                   </label>

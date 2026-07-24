@@ -57,6 +57,10 @@ const perfilSchema = z.object({
     .string()
     .trim()
     .max(120, "La distribuidora no puede superar 120 caracteres."),
+  softwarePreferido: z
+    .string()
+    .trim()
+    .max(120, "El software preferido no puede superar 120 caracteres."),
 });
 
 function respuestaError(mensaje: string, status: number) {
@@ -85,6 +89,7 @@ export async function PATCH(request: Request) {
       youtubeUrl: formData.get("youtubeUrl") ?? "",
       instagramUrl: formData.get("instagramUrl") ?? "",
       distribuidoraPreferida: formData.get("distribuidoraPreferida") ?? "",
+      softwarePreferido: formData.get("softwarePreferido") ?? "",
     });
 
     if (!resultado.success) {
@@ -123,6 +128,7 @@ export async function PATCH(request: Request) {
         instagramUrl: resultado.data.instagramUrl || null,
         distribuidoraPreferida:
           resultado.data.distribuidoraPreferida || null,
+        softwarePreferido: resultado.data.softwarePreferido || null,
         ...(fotoPerfil ? { fotoPerfil } : {}),
       },
       select: {
@@ -134,6 +140,7 @@ export async function PATCH(request: Request) {
         youtubeUrl: true,
         instagramUrl: true,
         distribuidoraPreferida: true,
+        softwarePreferido: true,
       },
     });
 

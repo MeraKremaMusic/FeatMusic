@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,32 +11,30 @@ datasource db {
 }
 
 model Usuario {
-  id                     Int     @id @default(autoincrement())
+  id                     Int       @id @default(autoincrement())
   nombre                 String?
-  nombreArtistico        String? @map("nombre_artistico")
-  nombreUsuario          String? @unique @map("nombre_usuario")
-  fotoPerfil             String? @map("foto_perfil") @db.VarChar(500)
-  biografia              String? @db.VarChar(300)
-  spotifyUrl             String? @map("spotify_url") @db.VarChar(500)
-  youtubeUrl             String? @map("youtube_url") @db.VarChar(500)
-  instagramUrl           String? @map("instagram_url") @db.VarChar(500)
-  distribuidoraPreferida String? @map("distribuidora_preferida") @db.VarChar(120)
-
-  correo       String @unique
-  passwordHash String @map("password_hash")
-
-  pais             String?
-  ciudad           String?
-  idiomaPrincipal  String?   @map("idioma_principal")
-  rolPrincipal     String    @map("rol_principal")
-  generos          Json?
-  tipoColaboracion String?   @map("tipo_colaboracion")
-  correoVerificado Boolean   @default(true) @map("correo_verificado")
-  perfilCompleto   Boolean   @default(false) @map("perfil_completo")
-  aceptoTerminosEn DateTime? @map("acepto_terminos_en")
-
-  creadoEn      DateTime @default(now()) @map("creado_en")
-  actualizadoEn DateTime @updatedAt @map("actualizado_en")
+  nombreArtistico        String?   @map("nombre_artistico")
+  nombreUsuario          String?   @unique @map("nombre_usuario")
+  fotoPerfil             String?   @map("foto_perfil") @db.VarChar(500)
+  biografia              String?   @db.VarChar(300)
+  spotifyUrl             String?   @map("spotify_url") @db.VarChar(500)
+  youtubeUrl             String?   @map("youtube_url") @db.VarChar(500)
+  instagramUrl           String?   @map("instagram_url") @db.VarChar(500)
+  distribuidoraPreferida String?   @map("distribuidora_preferida") @db.VarChar(120)
+  softwarePreferido      String?   @map("software_preferido") @db.VarChar(120)
+  correo                 String    @unique
+  passwordHash           String    @map("password_hash")
+  pais                   String?
+  ciudad                 String?
+  idiomaPrincipal        String?   @map("idioma_principal")
+  rolPrincipal           String    @map("rol_principal")
+  generos                Json?
+  tipoColaboracion       String?   @map("tipo_colaboracion")
+  correoVerificado       Boolean   @default(true) @map("correo_verificado")
+  perfilCompleto         Boolean   @default(false) @map("perfil_completo")
+  aceptoTerminosEn       DateTime? @map("acepto_terminos_en")
+  creadoEn               DateTime  @default(now()) @map("creado_en")
+  actualizadoEn          DateTime  @updatedAt @map("actualizado_en")
 
   @@map("usuarios")
 }
