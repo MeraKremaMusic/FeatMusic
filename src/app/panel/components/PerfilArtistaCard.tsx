@@ -410,20 +410,24 @@ export default function PerfilArtistaCard({
                 iniciales
               )}
 
-              {correoVerificado && (
-                <span
-                  title="Cuenta verificada"
-                  className="absolute bottom-1 right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#0d0913] bg-violet-500 text-[8px] font-black text-white"
-                >
-                  ✓
-                </span>
-              )}
             </div>
 
             <div className="min-w-0 pt-1">
-              <h2 className="truncate text-lg font-black tracking-tight text-white">
-                {nombreVisible}
-              </h2>
+              <div className="flex min-w-0 items-center gap-1.5">
+                <h2 className="min-w-0 truncate text-lg font-black tracking-tight text-white">
+                  {nombreVisible}
+                </h2>
+
+                {correoVerificado && (
+                  <span
+                    title="Cuenta verificada"
+                    aria-label="Cuenta verificada"
+                    className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-violet-500 text-[8px] font-black text-white"
+                  >
+                    ✓
+                  </span>
+                )}
+              </div>
               <p className="mt-0.5 truncate text-[11px] text-violet-300">
                 @{usuarioVisible}
               </p>
