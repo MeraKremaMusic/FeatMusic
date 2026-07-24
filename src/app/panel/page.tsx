@@ -231,57 +231,6 @@ function Icono({
   }
 }
 
-const alturasOnda = [
-  7, 14, 9, 19, 12, 24, 16, 30, 22, 15, 27, 18, 33, 20, 12, 25, 17, 29,
-  14, 21, 10, 18, 8, 15,
-];
-
-function Onda({
-  activa = false,
-}: {
-  activa?: boolean;
-}) {
-  return (
-    <div className="flex h-6 min-w-0 flex-1 items-center gap-[2px] overflow-hidden">
-      {alturasOnda.map((altura, indice) => (
-        <span
-          key={`${altura}-${indice}`}
-          className={`w-[2px] shrink-0 rounded-full ${
-            activa ? "bg-violet-400" : "bg-zinc-600"
-          }`}
-          style={{ height: `${Math.max(4, Math.round(altura * 0.65))}px` }}
-        />
-      ))}
-    </div>
-  );
-}
-
-const propuestasDemo = [
-  {
-    nombre: "Neo Wave",
-    rol: "Productor",
-    iniciales: "NW",
-    mensaje: "Me vibra mucho la atmósfera. Puedo trabajar el beat y la estructura.",
-    duracion: "0:18",
-    color: "from-amber-500 to-orange-700",
-  },
-  {
-    nombre: "Silvia Neón",
-    rol: "Cantante",
-    iniciales: "SN",
-    mensaje: "Tengo una idea de melodía para el estribillo que puede encajar perfecto.",
-    duracion: "0:22",
-    color: "from-cyan-500 to-blue-700",
-  },
-  {
-    nombre: "Dh-man",
-    rol: "Beatmaker",
-    iniciales: "DH",
-    mensaje: "Puedo aportar una versión más oscura y bailable. ¿Te late?",
-    duracion: "0:27",
-    color: "from-violet-500 to-fuchsia-700",
-  },
-];
 
 export default async function PanelPage() {
   const sesion = await obtenerSesion();
@@ -402,105 +351,21 @@ export default async function PanelPage() {
             </button>
           </section>
 
-          <section id="panel-card-3" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
-            <div className="flex flex-wrap items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
-              <Icono tipo="propuestas" className="h-3 w-3 text-violet-400" />
-              <span className="text-violet-400">3</span>
-              Propuestas para:
-              <span className="normal-case tracking-normal text-violet-300">
-                Luces de Medianoche
-              </span>
+          <section
+            id="panel-card-3"
+            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3"
+          >
+            <div className="flex flex-1 items-center justify-center">
+              <div className="flex max-w-xs flex-col items-center text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-violet-300">
+                  <Icono tipo="propuestas" className="h-5 w-5" />
+                </div>
+
+                <p className="mt-4 text-sm font-semibold text-zinc-200">
+                  No has recibido ninguna propuesta
+                </p>
+              </div>
             </div>
-
-            <p className="mt-2 text-[10px] text-zinc-400">
-              Propuestas de la idea seleccionada.
-            </p>
-
-            <div className="mt-1.5 space-y-1">
-              {propuestasDemo.map((propuesta, indice) => (
-                <article
-                  key={propuesta.nombre}
-                  className="rounded-lg border border-white/10 bg-white/[0.025] p-2"
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-start gap-2.5">
-                      <div
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${propuesta.color} text-[10px] font-black`}
-                      >
-                        {propuesta.iniciales}
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
-                          <h3 className="truncate text-[11px] font-bold">
-                            {propuesta.nombre}
-                          </h3>
-                          <span className="flex h-3 w-3 items-center justify-center rounded-full bg-violet-500 text-[7px] font-black">
-                            ✓
-                          </span>
-                        </div>
-
-                        <span className="mt-0.5 inline-flex items-center gap-1 rounded-md border border-violet-400/20 bg-violet-500/5 px-1.5 py-0.5 text-[8px] text-zinc-300">
-                          <Icono tipo="musica" className="h-2.5 w-2.5" />
-                          {propuesta.rol}
-                        </span>
-                      </div>
-
-                      <span className="shrink-0 text-[8px] font-semibold text-amber-400">
-                        • Pendiente
-                      </span>
-                    </div>
-
-                    <p className="ml-[42px] mt-0.5 line-clamp-1 text-[8px] leading-3.5 text-zinc-400">
-                      {propuesta.mensaje}
-                    </p>
-
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        aria-label={`Reproducir propuesta de ${propuesta.nombre}`}
-                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:bg-white/10"
-                      >
-                        <Icono tipo="play" className="h-2.5 w-2.5" />
-                      </button>
-
-                      <Onda activa={indice === 1} />
-
-                      <span className="shrink-0 text-[8px] text-zinc-500">
-                        {propuesta.duracion}
-                      </span>
-
-                      <div className="ml-1 flex shrink-0 items-center gap-1">
-                        <button
-                          type="button"
-                          className="flex h-5 items-center justify-center gap-1 border border-emerald-400/45 bg-emerald-500/[0.04] px-1.5 text-[7px] font-semibold uppercase tracking-[0.06em] text-emerald-300 transition hover:border-emerald-300 hover:bg-emerald-500/10"
-                        >
-                          <Icono tipo="aceptar" className="h-2.5 w-2.5" />
-                          Aceptar
-                        </button>
-
-                        <button
-                          type="button"
-                          className="flex h-5 items-center justify-center gap-1 border border-red-400/45 bg-red-500/[0.04] px-1.5 text-[7px] font-semibold uppercase tracking-[0.06em] text-red-300 transition hover:border-red-300 hover:bg-red-500/10"
-                        >
-                          <Icono tipo="rechazar" className="h-2.5 w-2.5" />
-                          Rechazar
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              className="mt-0.5 flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[10px] font-bold text-violet-300 transition hover:bg-violet-500/10"
-            >
-              <Icono tipo="propuestas" className="h-3 w-3" />
-              Ver todas las propuestas
-              <Icono tipo="flecha" className="h-3 w-3" />
-            </button>
           </section>
         </div>
 
