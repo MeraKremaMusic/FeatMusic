@@ -1,14 +1,79 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import MenuMovilPanel from "../panel/components/MenuMovilPanel";
 
+export type ArtistaExplorar = {
+  id: number;
+  nombreArtistico: string;
+  nombreUsuario: string;
+  fotoPerfil: string | null;
+  ciudad: string;
+  pais: string;
+  rol: string;
+  generos: string[];
+  ideasActivas: number;
+  ideasRecientes: Array<{
+    id: number;
+    titulo: string;
+  }>;
+  creadoEn: string;
+};
+
+export type EstadisticasExplorar = {
+  artistas: number;
+  ideas: number;
+  propuestas: number;
+};
+
+export type OpcionesFiltros = {
+  paises: string[];
+  ciudades: string[];
+  generos: string[];
+  roles: string[];
+};
+
 type ArtistasClientProps = {
   sesionActiva: boolean;
+  artistasIniciales: ArtistaExplorar[];
+  estadisticas: EstadisticasExplorar;
+  opciones: OpcionesFiltros;
+  errorCarga: boolean;
 };
+
+const ARTISTAS_POR_PAGINA = 12;
+
+function normalizar(texto: string) {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es")
+    .trim();
+}
+
+function formatearRol(rol: string) {
+  const roles: Record<string, string> = {
+    CANTANTE: "Cantante",
+    COMPOSITOR: "Compositor",
+    BEATMAKER: "Beatmaker",
+  };
+
+  return roles[rol] ?? rol;
+}
+
+function iniciales(nombre: string) {
+  return (
+    nombre
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((parte) => parte[0]?.toUpperCase())
+      .join("") || "FM"
+  );
+}
 
 function IconoSalir({ className = "h-3 w-3" }: { className?: string }) {
   return (
@@ -29,7 +94,7 @@ function IconoSalir({ className = "h-3 w-3" }: { className?: string }) {
   );
 }
 
-function IconoArtistas({ className = "h-8 w-8" }: { className?: string }) {
+function IconoBuscar({ className = "h-4 w-4" }: { className?: string }) {
   return (
     <svg
       aria-hidden="true"
@@ -37,7 +102,25 @@ function IconoArtistas({ className = "h-8 w-8" }: { className?: string }) {
       className={className}
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.7}
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}
+
+function IconoUsuarios({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -49,10 +132,74 @@ function IconoArtistas({ className = "h-8 w-8" }: { className?: string }) {
   );
 }
 
+function IconoIdea({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 18h6" />
+      <path d="M10 22h4" />
+      <path d="M8.5 15.5A7 7 0 1 1 15.5 15.5c-.9.7-1.5 1.5-1.5 2.5h-4c0-1-.6-1.8-1.5-2.5Z" />
+    </svg>
+  );
+}
+
+function IconoPropuesta({
+  className = "h-5 w-5",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 12h8" />
+      <path d="m13 9 3 3-3 3" />
+      <path d="M5 5h14v14H5z" />
+    </svg>
+  );
+}
+
+function IconoUbicacion({
+  className = "h-3.5 w-3.5",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
+}
+
 function CargandoArtistas() {
   return (
     <section
-      className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-6 pb-20 lg:pb-0"
+      className="relative flex h-full min-h-[420px] items-center justify-center overflow-hidden px-6 pb-20 lg:pb-0"
       role="status"
       aria-live="polite"
       aria-label="Cargando artistas"
@@ -65,14 +212,12 @@ function CargandoArtistas() {
           <span className="absolute inset-2 animate-spin rounded-full border-2 border-zinc-800 border-t-violet-400" />
           <span className="absolute inset-5 animate-pulse rounded-full border border-violet-300/30 bg-violet-500/10" />
 
-          <IconoArtistas className="relative h-6 w-6 text-violet-300" />
+          <IconoUsuarios className="relative h-6 w-6 text-violet-300" />
         </div>
 
         <p className="mt-5 text-sm font-bold text-zinc-100">
           Cargando artistas
-          <span className="inline-block w-4 animate-pulse text-left">
-            ...
-          </span>
+          <span className="inline-block w-4 animate-pulse text-left">...</span>
         </p>
 
         <p className="mt-1 text-[11px] text-zinc-500">
@@ -83,38 +228,165 @@ function CargandoArtistas() {
   );
 }
 
-function ContenidoExplorar({ sesionActiva }: ArtistasClientProps) {
+function TarjetaEstadistica({
+  titulo,
+  valor,
+  icono,
+  nota,
+}: {
+  titulo: string;
+  valor: number;
+  icono: React.ReactNode;
+  nota?: string;
+}) {
   return (
-    <section className="flex h-full min-h-0 items-center justify-center overflow-y-auto px-6 pb-20 lg:pb-0">
-      <div className="max-w-xl text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-violet-300 shadow-[0_0_35px_rgba(139,92,246,0.12)]">
-          <IconoArtistas className="h-7 w-7" />
+    <article className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-medium text-zinc-400">{titulo}</p>
+          <p className="mt-1 text-2xl font-black tracking-tight text-white">
+            {valor.toLocaleString("es-CO")}
+          </p>
         </div>
 
-        <p className="mt-5 text-sm font-semibold text-violet-400">FeatMusic</p>
-
-        <h1 className="mt-3 text-4xl font-bold">Explorar artistas</h1>
-
-        <p className="mt-4 text-zinc-400">
-          Muy pronto podrás descubrir artistas y colaboradores por rol,
-          género y ubicación.
-        </p>
-
-        <Link
-          href={sesionActiva ? "/panel#panel-card-1" : "/"}
-          className="mt-8 inline-flex items-center rounded-full border border-zinc-700 px-6 py-3 font-semibold transition hover:bg-zinc-900"
-        >
-          {sesionActiva ? "Volver a mi perfil" : "Volver al inicio"}
-        </Link>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+          {icono}
+        </div>
       </div>
-    </section>
+
+      {nota && <p className="mt-2 text-[10px] text-zinc-500">{nota}</p>}
+    </article>
+  );
+}
+
+function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
+  const [fallo, setFallo] = useState(false);
+
+  if (!artista.fotoPerfil || fallo) {
+    return (
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-base font-black text-violet-200">
+        {iniciales(artista.nombreArtistico)}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={artista.fotoPerfil}
+      alt={`Foto de ${artista.nombreArtistico}`}
+      className="h-16 w-16 shrink-0 rounded-full border border-white/10 object-cover"
+      onError={() => setFallo(true)}
+    />
+  );
+}
+
+function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
+  const ubicacion =
+    [artista.ciudad, artista.pais].filter(Boolean).join(", ") ||
+    "Ubicación sin completar";
+
+  return (
+    <article className="flex min-h-[290px] flex-col rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
+      <div className="flex items-start gap-3">
+        <FotoArtista artista={artista} />
+
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate text-base font-bold text-white">
+            {artista.nombreArtistico}
+          </h2>
+
+          <p className="truncate text-xs font-medium text-violet-300">
+            @{artista.nombreUsuario}
+          </p>
+
+          <p className="mt-2 flex items-center gap-1.5 text-[11px] text-zinc-400">
+            <IconoUbicacion />
+            <span className="truncate">{ubicacion}</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-1.5">
+        <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-semibold text-violet-200">
+          {formatearRol(artista.rol)}
+        </span>
+
+        {artista.generos.slice(0, 3).map((genero) => (
+          <span
+            key={genero}
+            className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-300"
+          >
+            {genero}
+          </span>
+        ))}
+
+        {artista.generos.length === 0 && (
+          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-500">
+            Sin géneros
+          </span>
+        )}
+      </div>
+
+      <div className="mt-4 flex-1 rounded-xl border border-white/8 bg-white/[0.025] p-3">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[11px] font-semibold text-zinc-300">
+            Ideas publicadas
+          </p>
+          <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold text-violet-300">
+            {artista.ideasActivas}
+          </span>
+        </div>
+
+        {artista.ideasRecientes.length > 0 ? (
+          <div className="mt-2 space-y-1.5">
+            {artista.ideasRecientes.map((idea) => (
+              <p
+                key={idea.id}
+                className="truncate text-[11px] text-zinc-400"
+                title={idea.titulo}
+              >
+                • {idea.titulo}
+              </p>
+            ))}
+
+            {artista.ideasActivas > artista.ideasRecientes.length && (
+              <p className="text-[10px] font-medium text-violet-300">
+                +{artista.ideasActivas - artista.ideasRecientes.length} ideas
+                adicionales
+              </p>
+            )}
+          </div>
+        ) : (
+          <p className="mt-2 text-[11px] text-zinc-500">
+            Sin ideas publicadas actualmente
+          </p>
+        )}
+      </div>
+
+      <Link
+        href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
+        className="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-300/50 hover:bg-violet-500/20"
+      >
+        Ver perfil
+      </Link>
+    </article>
   );
 }
 
 export default function ArtistasClient({
   sesionActiva,
+  artistasIniciales,
+  estadisticas,
+  opciones,
+  errorCarga,
 }: ArtistasClientProps) {
   const [cargando, setCargando] = useState(true);
+  const [busqueda, setBusqueda] = useState("");
+  const [pais, setPais] = useState("");
+  const [ciudad, setCiudad] = useState("");
+  const [genero, setGenero] = useState("");
+  const [rol, setRol] = useState("");
+  const [pagina, setPagina] = useState(1);
 
   useEffect(() => {
     const temporizador = window.setTimeout(() => {
@@ -123,6 +395,60 @@ export default function ArtistasClient({
 
     return () => window.clearTimeout(temporizador);
   }, []);
+
+  useEffect(() => {
+    setPagina(1);
+  }, [busqueda, pais, ciudad, genero, rol]);
+
+  const artistasFiltrados = useMemo(() => {
+    const termino = normalizar(busqueda);
+
+    return artistasIniciales.filter((artista) => {
+      const coincideTexto =
+        !termino ||
+        [
+          artista.nombreArtistico,
+          artista.nombreUsuario,
+          artista.ciudad,
+          artista.pais,
+        ].some((valor) => normalizar(valor).includes(termino));
+
+      const coincidePais = !pais || artista.pais === pais;
+      const coincideCiudad = !ciudad || artista.ciudad === ciudad;
+      const coincideRol = !rol || artista.rol === rol;
+      const coincideGenero =
+        !genero || artista.generos.some((item) => item === genero);
+
+      return (
+        coincideTexto &&
+        coincidePais &&
+        coincideCiudad &&
+        coincideRol &&
+        coincideGenero
+      );
+    });
+  }, [artistasIniciales, busqueda, pais, ciudad, genero, rol]);
+
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(artistasFiltrados.length / ARTISTAS_POR_PAGINA),
+  );
+
+  const artistasPagina = artistasFiltrados.slice(
+    (pagina - 1) * ARTISTAS_POR_PAGINA,
+    pagina * ARTISTAS_POR_PAGINA,
+  );
+
+  function limpiarFiltros() {
+    setBusqueda("");
+    setPais("");
+    setCiudad("");
+    setGenero("");
+    setRol("");
+    setPagina(1);
+  }
+
+  const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
 
   return (
     <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
@@ -166,7 +492,215 @@ export default function ArtistasClient({
           {cargando ? (
             <CargandoArtistas />
           ) : (
-            <ContenidoExplorar sesionActiva={sesionActiva} />
+            <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 lg:px-6 lg:pb-8 lg:pt-6">
+              <div className="mx-auto w-full max-w-[1460px]">
+                <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <TarjetaEstadistica
+                    titulo="Artistas en FeatMusic"
+                    valor={estadisticas.artistas}
+                    icono={<IconoUsuarios />}
+                  />
+                  <TarjetaEstadistica
+                    titulo="Ideas de artistas"
+                    valor={estadisticas.ideas}
+                    icono={<IconoIdea />}
+                  />
+                  <TarjetaEstadistica
+                    titulo="Propuestas de colaboradores"
+                    valor={estadisticas.propuestas}
+                    icono={<IconoPropuesta />}
+                    nota="Disponible cuando se active el sistema de propuestas."
+                  />
+                </section>
+
+                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-sm">
+                  <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
+                    <label className="min-w-0 flex-1">
+                      <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
+                        Buscar artistas
+                      </span>
+                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2.5 focus-within:border-violet-400/40">
+                        <IconoBuscar className="shrink-0 text-zinc-500" />
+                        <input
+                          type="search"
+                          value={busqueda}
+                          onChange={(evento) => setBusqueda(evento.target.value)}
+                          placeholder="Nombre, usuario, ciudad o país"
+                          className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-zinc-600"
+                        />
+                      </span>
+                    </label>
+
+                    <div className="grid grid-cols-2 gap-2 md:grid-cols-4 xl:w-[720px]">
+                      <label>
+                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
+                          País
+                        </span>
+                        <select
+                          value={pais}
+                          onChange={(evento) => setPais(evento.target.value)}
+                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                        >
+                          <option value="">Todos</option>
+                          {opciones.paises.map((opcion) => (
+                            <option key={opcion} value={opcion}>
+                              {opcion}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label>
+                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
+                          Ciudad
+                        </span>
+                        <select
+                          value={ciudad}
+                          onChange={(evento) => setCiudad(evento.target.value)}
+                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                        >
+                          <option value="">Todas</option>
+                          {opciones.ciudades.map((opcion) => (
+                            <option key={opcion} value={opcion}>
+                              {opcion}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label>
+                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
+                          Género
+                        </span>
+                        <select
+                          value={genero}
+                          onChange={(evento) => setGenero(evento.target.value)}
+                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                        >
+                          <option value="">Todos</option>
+                          {opciones.generos.map((opcion) => (
+                            <option key={opcion} value={opcion}>
+                              {opcion}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label>
+                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
+                          Rol
+                        </span>
+                        <select
+                          value={rol}
+                          onChange={(evento) => setRol(evento.target.value)}
+                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                        >
+                          <option value="">Todos</option>
+                          {opciones.roles.map((opcion) => (
+                            <option key={opcion} value={opcion}>
+                              {formatearRol(opcion)}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={limpiarFiltros}
+                      disabled={!hayFiltros}
+                      className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Limpiar
+                    </button>
+                  </div>
+                </section>
+
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <p className="text-xs text-zinc-400">
+                    {artistasFiltrados.length.toLocaleString("es-CO")}{" "}
+                    {artistasFiltrados.length === 1
+                      ? "artista encontrado"
+                      : "artistas encontrados"}
+                  </p>
+
+                  {totalPaginas > 1 && (
+                    <p className="text-[11px] text-zinc-500">
+                      Página {pagina} de {totalPaginas}
+                    </p>
+                  )}
+                </div>
+
+                {errorCarga ? (
+                  <section className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/5 px-5 py-10 text-center">
+                    <p className="text-sm font-semibold text-red-200">
+                      No se pudieron cargar los artistas
+                    </p>
+                    <p className="mt-2 text-xs text-zinc-500">
+                      Revisa la conexión con la base de datos e inténtalo nuevamente.
+                    </p>
+                  </section>
+                ) : artistasIniciales.length === 0 ? (
+                  <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 px-5 py-12 text-center">
+                    <p className="text-sm font-semibold text-zinc-200">
+                      Todavía no hay artistas con el perfil completo
+                    </p>
+                  </section>
+                ) : artistasPagina.length === 0 ? (
+                  <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 px-5 py-12 text-center">
+                    <p className="text-sm font-semibold text-zinc-200">
+                      No encontramos artistas con esos filtros
+                    </p>
+                    <button
+                      type="button"
+                      onClick={limpiarFiltros}
+                      className="mt-4 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2 text-xs font-bold text-violet-200"
+                    >
+                      Limpiar búsqueda
+                    </button>
+                  </section>
+                ) : (
+                  <section className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                    {artistasPagina.map((artista) => (
+                      <TarjetaArtista key={artista.id} artista={artista} />
+                    ))}
+                  </section>
+                )}
+
+                {totalPaginas > 1 && (
+                  <nav
+                    aria-label="Paginación de artistas"
+                    className="mt-6 flex items-center justify-center gap-3"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setPagina((actual) => Math.max(1, actual - 1))}
+                      disabled={pagina === 1}
+                      className="rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Anterior
+                    </button>
+
+                    <span className="text-xs text-zinc-500">
+                      {pagina} / {totalPaginas}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPagina((actual) =>
+                          Math.min(totalPaginas, actual + 1),
+                        )
+                      }
+                      disabled={pagina === totalPaginas}
+                      className="rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Siguiente
+                    </button>
+                  </nav>
+                )}
+              </div>
+            </div>
           )}
         </div>
       </div>
