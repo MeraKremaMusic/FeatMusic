@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
+import MenuMovilPanel from "../panel/components/MenuMovilPanel";
 
 type ArtistasClientProps = {
   sesionActiva: boolean;
@@ -50,8 +51,7 @@ function IconoArtistas({ className = "h-8 w-8" }: { className?: string }) {
 
 function CargandoArtistas() {
   return (
-    <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
+    <section className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-6 pb-20 lg:pb-0">
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/15 blur-3xl" />
 
       <div className="relative flex flex-col items-center text-center">
@@ -85,9 +85,13 @@ function CargandoArtistas() {
 
 function ContenidoExplorar({ sesionActiva }: ArtistasClientProps) {
   return (
-    <section className="flex min-h-[calc(100vh-48px)] items-center justify-center px-6">
+    <section className="flex h-full min-h-0 items-center justify-center overflow-y-auto px-6 pb-20 lg:pb-0">
       <div className="max-w-xl text-center">
-        <p className="text-sm font-semibold text-violet-400">FeatMusic</p>
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-violet-300 shadow-[0_0_35px_rgba(139,92,246,0.12)]">
+          <IconoArtistas className="h-7 w-7" />
+        </div>
+
+        <p className="mt-5 text-sm font-semibold text-violet-400">FeatMusic</p>
 
         <h1 className="mt-3 text-4xl font-bold">Explorar artistas</h1>
 
@@ -121,7 +125,7 @@ export default function ArtistasClient({
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#09070d] text-white">
+    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="relative z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
@@ -154,11 +158,20 @@ export default function ArtistasClient({
         </div>
       </header>
 
-      {cargando ? (
-        <CargandoArtistas />
-      ) : (
-        <ContenidoExplorar sesionActiva={sesionActiva} />
-      )}
+      <div className="relative h-[calc(100dvh-48px)] overflow-hidden lg:h-[calc(100vh-48px)]">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
+
+        <div className="relative z-10 h-full">
+          {cargando ? (
+            <CargandoArtistas />
+          ) : (
+            <ContenidoExplorar sesionActiva={sesionActiva} />
+          )}
+        </div>
+      </div>
+
+      {sesionActiva && <MenuMovilPanel />}
     </main>
   );
 }
