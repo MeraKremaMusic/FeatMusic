@@ -349,8 +349,8 @@ export default function PerfilArtistaCard({
       return;
     }
 
-    if (bioLimpia.length > 300) {
-      setError("La biografía no puede superar 300 caracteres.");
+    if (bioLimpia.length > 80) {
+      setError("La biografía no puede superar 80 caracteres.");
       return;
     }
 
@@ -738,14 +738,14 @@ export default function PerfilArtistaCard({
               <label className="block">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-zinc-200">Biografía</span>
-                  <span className={`text-xs ${biografia.length > 300 ? "text-red-400" : "text-zinc-500"}`}>
-                    {biografia.length}/300
+                  <span className={`text-xs ${biografia.length > 80 ? "text-red-400" : "text-zinc-500"}`}>
+                    {biografia.length}/80
                   </span>
                 </div>
                 <textarea
                   value={biografia}
                   onChange={(event) => setBiografia(event.target.value)}
-                  maxLength={300}
+                  maxLength={80}
                   rows={4}
                   disabled={guardando}
                   placeholder="Cuéntales a otros artistas quién eres y qué tipo de música haces."
@@ -896,7 +896,7 @@ export default function PerfilArtistaCard({
                     guardando ||
                     nombreArtistico.trim().length < 2 ||
                     !USUARIO_REGEX.test(normalizarUsuario(nombreUsuario)) ||
-                    biografia.length > 300
+                    biografia.length > 80
                   }
                   className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
                 >

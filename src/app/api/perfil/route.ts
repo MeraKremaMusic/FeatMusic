@@ -49,7 +49,7 @@ const perfilSchema = z.object({
   biografia: z
     .string()
     .trim()
-    .max(300, "La biografía no puede superar 300 caracteres."),
+    .max(80, "La biografía no puede superar 80 caracteres."),
   spotifyUrl: urlOpcionalSchema("Spotify"),
   youtubeUrl: urlOpcionalSchema("YouTube"),
   instagramUrl: urlOpcionalSchema("Instagram"),

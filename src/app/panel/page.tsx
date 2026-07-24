@@ -275,7 +275,7 @@ export default async function PanelPage() {
   const fechaRegistro = formatearFecha(usuario.creadoEn);
 
   return (
-    <main className="min-h-screen bg-[#09070d] pb-20 text-white lg:h-screen lg:overflow-hidden lg:pb-0">
+    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
@@ -294,15 +294,15 @@ export default async function PanelPage() {
         </div>
       </header>
 
-      <div className="relative lg:h-[calc(100vh-48px)] lg:overflow-hidden">
+      <div className="relative h-[calc(100dvh-48px)] overflow-hidden lg:h-[calc(100vh-48px)]">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
 
         <div
           id="panel-carrusel"
           className="
-            relative mx-auto flex w-full max-w-[1460px] snap-x snap-mandatory
-            items-center gap-4 overflow-x-auto overscroll-x-contain
+            relative mx-auto flex h-[calc(100%-72px)] w-full max-w-[1460px] snap-x snap-mandatory
+            items-center gap-4 overflow-x-auto overflow-y-hidden overscroll-x-contain
             px-4 pb-3 pt-4 scroll-smooth touch-pan-x
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
             lg:grid lg:h-full lg:grid-cols-[0.84fr_1.08fr_1.08fr]
@@ -312,7 +312,7 @@ export default async function PanelPage() {
         >
           <section
             id="panel-card-1"
-            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:!border-0 [&>*]:!bg-transparent [&>*]:!shadow-none lg:h-full lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink"
+            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden [&>*]:!h-full [&>*]:!max-h-full [&>*]:!border-0 [&>*]:!bg-transparent [&>*]:!shadow-none lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink"
           >
             <PerfilArtistaCard
               nombreArtistico={nombreArtistico}
@@ -340,7 +340,7 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-2"
-            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 items-center justify-center overflow-hidden p-4 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
+            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 items-center justify-center overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
           >
             <button
               type="button"
@@ -353,7 +353,7 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-3"
-            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 flex-col overflow-hidden p-4 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
+            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 flex-col overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
           >
             <div className="flex flex-1 items-center justify-center">
               <div className="flex max-w-xs flex-col items-center text-center">
