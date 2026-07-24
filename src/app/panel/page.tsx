@@ -277,10 +277,32 @@ export default async function PanelPage() {
   return (
     <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
+        <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
             Feat<span className="text-violet-400">Music</span>
           </Link>
+
+          <nav
+            aria-label="Navegación principal del panel"
+            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 lg:flex"
+          >
+            <button
+              type="button"
+              title="Próximamente"
+              className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-zinc-400 transition hover:bg-white/5 hover:text-white"
+            >
+              <Icono tipo="planes" className="h-3.5 w-3.5" />
+              Planes
+            </button>
+
+            <Link
+              href="/artistas"
+              className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-zinc-400 transition hover:bg-white/5 hover:text-white"
+            >
+              <Icono tipo="comunidad" className="h-3.5 w-3.5" />
+              Explorar
+            </Link>
+          </nav>
 
           <form action="/api/cerrar-sesion" method="post">
             <button
