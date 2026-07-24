@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import PerfilArtistaCard from "./components/PerfilArtistaCard";
+import MenuMovilPanel from "./components/MenuMovilPanel";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -393,58 +394,7 @@ export default async function PanelPage() {
 
       </div>
 
-      <nav
-        aria-label="Menú principal móvil"
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
-      >
-        <div className="mx-auto grid max-w-md grid-cols-5 items-end">
-          <button
-            type="button"
-            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-violet-300"
-          >
-            <Icono tipo="inicio" className="h-5 w-5" />
-            <span className="truncate text-[9px] font-semibold">Inicio</span>
-          </button>
-
-          <Link
-            href="/artistas"
-            aria-label="Explorar artistas"
-            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
-          >
-            <Icono tipo="comunidad" className="h-5 w-5" />
-            <span className="truncate text-[9px] font-semibold">Explorar</span>
-          </Link>
-
-          <a
-            href="#panel-card-2"
-            aria-label="Ir a publicar una idea"
-            className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
-          >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60 transition group-hover:scale-105 group-hover:bg-violet-400">
-              <Icono tipo="mas" className="h-6 w-6" />
-            </span>
-            <span className="truncate text-[9px] font-semibold">Publicar</span>
-          </a>
-
-          <a
-            href="#panel-card-3"
-            aria-label="Ir a propuestas"
-            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
-          >
-            <Icono tipo="propuestas" className="h-5 w-5" />
-            <span className="truncate text-[9px] font-semibold">Propuestas</span>
-          </a>
-
-          <a
-            href="#panel-card-1"
-            aria-label="Ir al perfil"
-            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
-          >
-            <Icono tipo="perfil" className="h-5 w-5" />
-            <span className="truncate text-[9px] font-semibold">Perfil</span>
-          </a>
-        </div>
-      </nav>
+      <MenuMovilPanel />
     </main>
   );
 }
