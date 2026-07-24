@@ -230,31 +230,44 @@ function CargandoArtistas() {
 
 function TarjetaEstadistica({
   titulo,
+  tituloMovil,
   valor,
   icono,
   nota,
 }: {
   titulo: string;
+  tituloMovil: string;
   valor: number;
   icono: React.ReactNode;
   nota?: string;
 }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium text-zinc-400">{titulo}</p>
-          <p className="mt-1 text-2xl font-black tracking-tight text-white">
-            {valor.toLocaleString("es-CO")}
-          </p>
+    <article className="min-w-0 rounded-lg border border-white/10 bg-black/30 px-2 py-2 backdrop-blur-sm sm:rounded-2xl sm:p-4">
+      <div className="flex items-center justify-center gap-1.5 sm:items-start sm:justify-between sm:gap-3">
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300 sm:order-2 sm:h-10 sm:w-10 sm:rounded-xl">
+          {icono}
         </div>
 
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
-          {icono}
+        <div className="min-w-0 text-left sm:order-1">
+          <p className="text-base font-black leading-none tracking-tight text-white sm:mt-1 sm:text-2xl">
+            {valor.toLocaleString("es-CO")}
+          </p>
+
+          <p className="mt-1 truncate text-[8px] font-semibold leading-none text-zinc-400 sm:hidden">
+            {tituloMovil}
+          </p>
+
+          <p className="mt-1 hidden text-xs font-medium text-zinc-400 sm:block">
+            {titulo}
+          </p>
         </div>
       </div>
 
-      {nota && <p className="mt-2 text-[10px] text-zinc-500">{nota}</p>}
+      {nota && (
+        <p className="mt-2 hidden text-[10px] text-zinc-500 sm:block">
+          {nota}
+        </p>
+      )}
     </article>
   );
 }
@@ -494,33 +507,42 @@ export default function ArtistasClient({
           ) : (
             <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 lg:px-6 lg:pb-8 lg:pt-6">
               <div className="mx-auto w-full max-w-[1460px]">
-                <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <section className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-1.5 sm:max-w-none sm:gap-3">
                   <TarjetaEstadistica
                     titulo="Artistas en FeatMusic"
+                    tituloMovil="Artistas"
                     valor={estadisticas.artistas}
-                    icono={<IconoUsuarios />}
+                    icono={
+                      <IconoUsuarios className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                    }
                   />
                   <TarjetaEstadistica
                     titulo="Ideas de artistas"
+                    tituloMovil="Ideas"
                     valor={estadisticas.ideas}
-                    icono={<IconoIdea />}
+                    icono={
+                      <IconoIdea className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                    }
                   />
                   <TarjetaEstadistica
                     titulo="Propuestas de colaboradores"
+                    tituloMovil="Propuestas"
                     valor={estadisticas.propuestas}
-                    icono={<IconoPropuesta />}
+                    icono={
+                      <IconoPropuesta className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                    }
                     nota="Disponible cuando se active el sistema de propuestas."
                   />
                 </section>
 
-                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur-sm">
+                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm sm:p-4">
                   <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
-                    <label className="min-w-0 flex-1">
+                    <label className="mx-auto w-full max-w-[330px] xl:mx-0 xl:min-w-0 xl:max-w-none xl:flex-1">
                       <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
                         Buscar artistas
                       </span>
-                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2.5 focus-within:border-violet-400/40">
-                        <IconoBuscar className="shrink-0 text-zinc-500" />
+                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2 focus-within:border-violet-400/40 sm:py-2.5">
+                        <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
                         <input
                           type="search"
                           value={busqueda}
