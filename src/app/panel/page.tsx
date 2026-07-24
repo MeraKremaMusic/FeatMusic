@@ -275,7 +275,7 @@ export default async function PanelPage() {
   const fechaRegistro = formatearFecha(usuario.creadoEn);
 
   return (
-    <main className="min-h-screen bg-[#09070d] text-white lg:h-screen lg:overflow-hidden">
+    <main className="min-h-screen bg-[#09070d] pb-20 text-white lg:h-screen lg:overflow-hidden lg:pb-0">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
@@ -370,7 +370,7 @@ export default async function PanelPage() {
         </div>
 
         <div
-          className="relative z-10 flex items-center justify-center gap-2 pb-4 lg:hidden"
+          className="relative z-10 flex items-center justify-center gap-2 pb-5 lg:hidden"
           aria-label="Navegación entre secciones del panel"
         >
           <a
@@ -390,6 +390,56 @@ export default async function PanelPage() {
           />
         </div>
       </div>
+
+      <nav
+        aria-label="Menú principal móvil"
+        className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
+      >
+        <div className="mx-auto grid max-w-md grid-cols-5 items-end">
+          <button
+            type="button"
+            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-violet-300"
+          >
+            <Icono tipo="inicio" className="h-5 w-5" />
+            <span className="truncate text-[9px] font-semibold">Inicio</span>
+          </button>
+
+          <button
+            type="button"
+            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
+          >
+            <Icono tipo="comunidad" className="h-5 w-5" />
+            <span className="truncate text-[9px] font-semibold">Explorar</span>
+          </button>
+
+          <button
+            type="button"
+            aria-label="Publicar una idea"
+            className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
+          >
+            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60 transition group-hover:scale-105 group-hover:bg-violet-400">
+              <Icono tipo="mas" className="h-6 w-6" />
+            </span>
+            <span className="truncate text-[9px] font-semibold">Publicar</span>
+          </button>
+
+          <button
+            type="button"
+            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
+          >
+            <Icono tipo="propuestas" className="h-5 w-5" />
+            <span className="truncate text-[9px] font-semibold">Propuestas</span>
+          </button>
+
+          <button
+            type="button"
+            className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
+          >
+            <Icono tipo="perfil" className="h-5 w-5" />
+            <span className="truncate text-[9px] font-semibold">Perfil</span>
+          </button>
+        </div>
+      </nav>
     </main>
   );
 }
