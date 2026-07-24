@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import PerfilArtistaCard from "./components/PerfilArtistaCard";
 import MenuMovilPanel from "./components/MenuMovilPanel";
+import IdeasMusicalesCard from "./components/IdeasMusicalesCard";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -275,6 +276,36 @@ export default async function PanelPage() {
 
   const fechaRegistro = formatearFecha(usuario.creadoEn);
 
+  const ideasGuardadas = await prisma.idea.findMany({
+    where: {
+      usuarioId: sesion.usuarioId,
+      estado: "ACTIVA",
+      expiraEn: { gt: new Date() },
+    },
+    orderBy: { creadoEn: "desc" },
+    take: 3,
+    select: {
+      id: true,
+      titulo: true,
+      descripcion: true,
+      bpm: true,
+      tonalidad: true,
+      audioUrl: true,
+      duracionSegundos: true,
+      formato: true,
+      tamanoBytes: true,
+      estado: true,
+      expiraEn: true,
+      creadoEn: true,
+    },
+  });
+
+  const ideasIniciales = ideasGuardadas.map((idea) => ({
+    ...idea,
+    expiraEn: idea.expiraEn.toISOString(),
+    creadoEn: idea.creadoEn.toISOString(),
+  }));
+
   return (
     <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
@@ -363,15 +394,9 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-2"
-            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 items-center justify-center overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
+            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
           >
-            <button
-              type="button"
-              className="flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/15 px-6 py-3 text-sm font-bold text-violet-100 shadow-lg shadow-violet-950/30 transition hover:border-violet-300/50 hover:bg-violet-500/25 focus:outline-none focus:ring-2 focus:ring-violet-400/60"
-            >
-              <Icono tipo="mas" className="h-4 w-4" />
-              Publicar una idea
-            </button>
+            <IdeasMusicalesCard ideasIniciales={ideasIniciales} />
           </section>
 
           <section

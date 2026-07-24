@@ -36,7 +36,33 @@ model Usuario {
   creadoEn               DateTime  @default(now()) @map("creado_en")
   actualizadoEn          DateTime  @updatedAt @map("actualizado_en")
 
+  ideas Idea[]
+
   @@map("usuarios")
+}
+
+
+model Idea {
+  id               Int      @id @default(autoincrement())
+  usuarioId        Int      @map("usuario_id")
+  titulo           String   @db.VarChar(80)
+  descripcion      String   @db.VarChar(300)
+  bpm              Int
+  tonalidad        String   @db.VarChar(30)
+  audioUrl         String   @map("audio_url") @db.VarChar(1000)
+  audioPublicId    String   @map("audio_public_id") @db.VarChar(255)
+  duracionSegundos Int      @map("duracion_segundos")
+  formato          String?  @db.VarChar(20)
+  tamanoBytes      Int?     @map("tamano_bytes")
+  estado           String   @default("ACTIVA") @db.VarChar(20)
+  expiraEn         DateTime @map("expira_en")
+  creadoEn         DateTime @default(now()) @map("creado_en")
+  actualizadoEn    DateTime @updatedAt @map("actualizado_en")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, estado, expiraEn])
+  @@map("ideas")
 }
 
 model RegistroPendiente {
