@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import PerfilArtistaCard from "./components/PerfilArtistaCard";
@@ -252,6 +253,10 @@ export default async function PanelPage() {
   if (!usuario.perfilCompleto) {
     redirect("/completar-perfil");
   }
+
+  await limpiarIdeasExpiradasUsuario(sesion.usuarioId).catch((error) => {
+    console.error("No se pudieron limpiar las ideas expiradas.", error);
+  });
 
   const nombreArtistico =
     usuario.nombreArtistico?.trim() ||

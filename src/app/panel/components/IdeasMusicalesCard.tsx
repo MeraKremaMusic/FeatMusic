@@ -23,21 +23,48 @@ type IdeasMusicalesCardProps = {
   ideasIniciales: IdeaPanel[];
 };
 
-const MAX_AUDIO_SIZE = 20 * 1024 * 1024;
-const MAX_AUDIO_DURATION = 120;
+type RespuestaCrearIdea = {
+  ok: boolean;
+  mensaje?: string;
+  idea?: Omit<IdeaPanel, "creadoEn" | "expiraEn"> & {
+    creadoEn: string | Date;
+    expiraEn: string | Date;
+  };
+};
+
+const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
+const MAX_AUDIO_DURATION = 240;
 const MAX_ACTIVE_IDEAS = 3;
 
-const AUDIO_EXTENSIONS = new Set(["mp3", "wav", "m4a", "aac", "ogg"]);
+const AUDIO_EXTENSIONS = new Set([
+  "mp3",
+  "wav",
+  "flac",
+  "m4a",
+  "aac",
+  "ogg",
+  "aiff",
+  "aif",
+  "opus",
+]);
+
 const AUDIO_TYPES = new Set([
   "audio/mpeg",
   "audio/mp3",
   "audio/wav",
   "audio/x-wav",
+  "audio/flac",
+  "audio/x-flac",
   "audio/mp4",
   "audio/x-m4a",
   "audio/aac",
   "audio/ogg",
+  "audio/aiff",
+  "audio/x-aiff",
+  "audio/opus",
 ]);
+
+const MIME_TYPES_GENERICOS = new Set(["", "application/octet-stream"]);
 
 const TONALIDADES = [
   "Do mayor",
@@ -71,7 +98,14 @@ function Icono({
   tipo,
   className = "h-4 w-4",
 }: {
-  tipo: "mas" | "musica" | "subir" | "cerrar" | "reloj";
+  tipo:
+    | "mas"
+    | "musica"
+    | "subir"
+    | "cerrar"
+    | "reloj"
+    | "descargar"
+    | "eliminar";
   className?: string;
 }) {
   const props = {
@@ -122,6 +156,27 @@ function Icono({
     );
   }
 
+  if (tipo === "descargar") {
+    return (
+      <svg {...props}>
+        <path d="M12 4v11" />
+        <path d="m7 10 5 5 5-5" />
+        <path d="M5 20h14" />
+      </svg>
+    );
+  }
+
+  if (tipo === "eliminar") {
+    return (
+      <svg {...props}>
+        <path d="M4 7h16" />
+        <path d="M9 7V4h6v3" />
+        <path d="m7 7 1 13h8l1-13" />
+        <path d="M10 11v5M14 11v5" />
+      </svg>
+    );
+  }
+
   return (
     <svg {...props}>
       <path d="M6 6l12 12M18 6 6 18" />
@@ -134,10 +189,11 @@ function obtenerExtension(nombre: string) {
 }
 
 function audioPermitido(archivo: File) {
-  return (
-    AUDIO_TYPES.has(archivo.type.toLowerCase()) ||
-    AUDIO_EXTENSIONS.has(obtenerExtension(archivo.name))
-  );
+  const extensionValida = AUDIO_EXTENSIONS.has(obtenerExtension(archivo.name));
+  const mime = archivo.type.toLowerCase();
+  const mimeValido = AUDIO_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
+
+  return extensionValida && mimeValido;
 }
 
 function formatearDuracion(segundos: number) {
@@ -182,10 +238,60 @@ function leerDuracionAudio(url: string) {
     };
 
     audio.onerror = () => {
-      reject(new Error("El navegador no pudo leer este archivo de audio."));
+      reject(new Error("El navegador no pudo leer los metadatos del audio."));
     };
 
     audio.src = url;
+  });
+}
+
+function enviarIdeaConProgreso(
+  formData: FormData,
+  onProgress: (porcentaje: number) => void,
+) {
+  return new Promise<RespuestaCrearIdea>((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("POST", "/api/ideas");
+    request.responseType = "text";
+    request.timeout = 180_000;
+
+    request.upload.onprogress = (event) => {
+      if (!event.lengthComputable || event.total <= 0) return;
+      onProgress(Math.min(100, Math.round((event.loaded / event.total) * 100)));
+    };
+
+    request.onload = () => {
+      let data: RespuestaCrearIdea | null = null;
+
+      try {
+        data = JSON.parse(request.responseText) as RespuestaCrearIdea;
+      } catch {
+        data = null;
+      }
+
+      if (request.status < 200 || request.status >= 300 || !data?.ok) {
+        reject(
+          new Error(data?.mensaje ?? "No se pudo publicar la idea musical."),
+        );
+        return;
+      }
+
+      resolve(data);
+    };
+
+    request.onerror = () => {
+      reject(new Error("Se perdió la conexión mientras se subía el audio."));
+    };
+
+    request.ontimeout = () => {
+      reject(
+        new Error(
+          "La subida tardó demasiado. Comprueba tu conexión e inténtalo otra vez.",
+        ),
+      );
+    };
+
+    request.send(formData);
   });
 }
 
@@ -201,9 +307,12 @@ export default function IdeasMusicalesCard({
   const [tonalidad, setTonalidad] = useState("");
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(null);
-  const [duracionSegundos, setDuracionSegundos] = useState(0);
+  const [duracionSegundos, setDuracionSegundos] = useState<number | null>(null);
+  const [avisoAudio, setAvisoAudio] = useState("");
   const [leyendoAudio, setLeyendoAudio] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  const [eliminandoId, setEliminandoId] = useState<number | null>(null);
+  const [progresoSubida, setProgresoSubida] = useState(0);
   const [error, setError] = useState("");
   const inputArchivoRef = useRef<HTMLInputElement>(null);
 
@@ -250,8 +359,10 @@ export default function IdeasMusicalesCard({
     setTonalidad("");
     setArchivo(null);
     setVistaPrevia(null);
-    setDuracionSegundos(0);
+    setDuracionSegundos(null);
+    setAvisoAudio("");
     setLeyendoAudio(false);
+    setProgresoSubida(0);
     setError("");
 
     if (inputArchivoRef.current) {
@@ -260,10 +371,7 @@ export default function IdeasMusicalesCard({
   }
 
   function abrirModal() {
-    if (limiteAlcanzado) {
-      setError("Ya alcanzaste el límite de 3 ideas activas.");
-      return;
-    }
+    if (limiteAlcanzado) return;
 
     limpiarFormulario();
     setModalAbierto(true);
@@ -280,17 +388,20 @@ export default function IdeasMusicalesCard({
     if (!audioSeleccionado) return;
 
     setError("");
+    setAvisoAudio("");
     setArchivo(null);
-    setDuracionSegundos(0);
+    setDuracionSegundos(null);
 
     if (!audioPermitido(audioSeleccionado)) {
-      setError("El audio debe estar en formato MP3, WAV, M4A, AAC u OGG.");
+      setError(
+        "Selecciona un audio MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u OPUS.",
+      );
       event.target.value = "";
       return;
     }
 
     if (audioSeleccionado.size > MAX_AUDIO_SIZE) {
-      setError("El audio no puede pesar más de 20 MB.");
+      setError("El archivo original no puede pesar más de 50 MB.");
       event.target.value = "";
       return;
     }
@@ -301,30 +412,26 @@ export default function IdeasMusicalesCard({
 
     const nuevaVistaPrevia = URL.createObjectURL(audioSeleccionado);
     setVistaPrevia(nuevaVistaPrevia);
+    setArchivo(audioSeleccionado);
     setLeyendoAudio(true);
 
     try {
       const duracion = await leerDuracionAudio(nuevaVistaPrevia);
 
       if (duracion > MAX_AUDIO_DURATION) {
-        setError("El audio no puede durar más de 2 minutos.");
+        setArchivo(null);
+        setError("El audio no puede durar más de 4 minutos.");
         URL.revokeObjectURL(nuevaVistaPrevia);
         setVistaPrevia(null);
         event.target.value = "";
         return;
       }
 
-      setArchivo(audioSeleccionado);
       setDuracionSegundos(duracion);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo leer el archivo de audio.",
+    } catch {
+      setAvisoAudio(
+        "Tu navegador no pudo leer la duración. El servidor la comprobará antes de publicar.",
       );
-      URL.revokeObjectURL(nuevaVistaPrevia);
-      setVistaPrevia(null);
-      event.target.value = "";
     } finally {
       setLeyendoAudio(false);
     }
@@ -360,7 +467,7 @@ export default function IdeasMusicalesCard({
       return;
     }
 
-    if (!archivo || duracionSegundos <= 0) {
+    if (!archivo) {
       setError("Selecciona un archivo de audio válido.");
       return;
     }
@@ -370,28 +477,16 @@ export default function IdeasMusicalesCard({
     formData.set("descripcion", descripcionLimpia);
     formData.set("bpm", String(bpmNumero));
     formData.set("tonalidad", tonalidad);
-    formData.set("duracionSegundos", String(duracionSegundos));
     formData.set("audio", archivo);
 
     try {
       setGuardando(true);
+      setProgresoSubida(0);
 
-      const response = await fetch("/api/ideas", {
-        method: "POST",
-        body: formData,
-      });
+      const data = await enviarIdeaConProgreso(formData, setProgresoSubida);
 
-      const data = (await response.json()) as {
-        ok: boolean;
-        mensaje?: string;
-        idea?: Omit<IdeaPanel, "creadoEn" | "expiraEn"> & {
-          creadoEn: string | Date;
-          expiraEn: string | Date;
-        };
-      };
-
-      if (!response.ok || !data.ok || !data.idea) {
-        throw new Error(data.mensaje ?? "No se pudo publicar la idea.");
+      if (!data.idea) {
+        throw new Error("El servidor no devolvió la idea publicada.");
       }
 
       const ideaNueva: IdeaPanel = {
@@ -406,12 +501,48 @@ export default function IdeasMusicalesCard({
       router.refresh();
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo publicar la idea.",
+        err instanceof Error ? err.message : "No se pudo publicar la idea.",
       );
     } finally {
       setGuardando(false);
+    }
+  }
+
+  async function eliminarIdea(idea: IdeaPanel) {
+    if (eliminandoId !== null) return;
+
+    const confirmado = window.confirm(
+      `¿Eliminar “${idea.titulo}”? El audio también se borrará de Cloudinary.`,
+    );
+
+    if (!confirmado) return;
+
+    setError("");
+    setEliminandoId(idea.id);
+
+    try {
+      const response = await fetch(`/api/ideas/${idea.id}`, {
+        method: "DELETE",
+      });
+      const data = (await response.json()) as {
+        ok: boolean;
+        mensaje?: string;
+      };
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.mensaje ?? "No se pudo eliminar la idea.");
+      }
+
+      setIdeas((ideasActuales) =>
+        ideasActuales.filter((ideaActual) => ideaActual.id !== idea.id),
+      );
+      router.refresh();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "No se pudo eliminar la idea.",
+      );
+    } finally {
+      setEliminandoId(null);
     }
   }
 
@@ -443,8 +574,8 @@ export default function IdeasMusicalesCard({
                 Publica tu primera idea
               </p>
               <p className="mt-2 text-[11px] leading-5 text-zinc-500">
-                Sube un audio y agrega la información necesaria para encontrar
-                colaboradores.
+                Sube una maqueta. Se convertirá automáticamente a un único MP3
+                liviano para escuchar y descargar.
               </p>
               <button
                 type="button"
@@ -479,6 +610,16 @@ export default function IdeasMusicalesCard({
                         <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold text-zinc-400">
                           {formatearDuracion(idea.duracionSegundos)}
                         </span>
+                        {idea.formato && (
+                          <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold uppercase text-zinc-500">
+                            {idea.formato}
+                          </span>
+                        )}
+                        {formatearTamano(idea.tamanoBytes) && (
+                          <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold text-zinc-500">
+                            {formatearTamano(idea.tamanoBytes)}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -500,16 +641,50 @@ export default function IdeasMusicalesCard({
                     Tu navegador no puede reproducir este audio.
                   </audio>
 
-                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] text-zinc-600">
-                    <span>Publicada {formatearFecha(idea.creadoEn)}</span>
-                    <span className="inline-flex items-center gap-1">
-                      <Icono tipo="reloj" className="h-3 w-3" />
-                      Hasta {formatearFecha(idea.expiraEn)}
-                    </span>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2 text-[9px] text-zinc-600">
+                      <span>Publicada {formatearFecha(idea.creadoEn)}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <Icono tipo="reloj" className="h-3 w-3" />
+                        Hasta {formatearFecha(idea.expiraEn)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={`/api/ideas/${idea.id}/descargar`}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/20 bg-violet-500/10 px-2.5 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20"
+                      >
+                        <Icono tipo="descargar" className="h-3.5 w-3.5" />
+                        MP3
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => eliminarIdea(idea)}
+                        disabled={eliminandoId !== null}
+                        aria-label={`Eliminar ${idea.titulo}`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-red-400/20 bg-red-500/[0.07] text-red-300 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {eliminandoId === idea.id ? (
+                          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-200/30 border-t-red-200" />
+                        ) : (
+                          <Icono tipo="eliminar" className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </section>
               ))}
             </div>
+
+            {error && !modalAbierto && (
+              <p
+                role="alert"
+                className="mt-3 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-300"
+              >
+                {error}
+              </p>
+            )}
 
             <button
               type="button"
@@ -552,8 +727,8 @@ export default function IdeasMusicalesCard({
                   Publicar una idea
                 </h2>
                 <p className="mt-1 text-xs leading-5 text-zinc-500">
-                  Comparte un fragmento de hasta 2 minutos y encuentra artistas
-                  para colaborar.
+                  Sube una maqueta de hasta 4 minutos. FeatMusic la optimizará
+                  como un MP3 liviano y compatible.
                 </p>
               </div>
 
@@ -575,7 +750,7 @@ export default function IdeasMusicalesCard({
                     Archivo de audio
                   </span>
                   <span className="text-[10px] text-zinc-600">
-                    Máximo 20 MB · 2 minutos
+                    50 MB · 4 minutos
                   </span>
                 </div>
 
@@ -601,7 +776,7 @@ export default function IdeasMusicalesCard({
                           : "Seleccionar audio")}
                     </span>
                     <span className="mt-1 block text-[10px] text-zinc-500">
-                      MP3, WAV, M4A, AAC u OGG
+                      MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u OPUS
                     </span>
                   </span>
                 </button>
@@ -609,11 +784,22 @@ export default function IdeasMusicalesCard({
                 <input
                   ref={inputArchivoRef}
                   type="file"
-                  accept=".mp3,.wav,.m4a,.aac,.ogg,audio/mpeg,audio/wav,audio/mp4,audio/aac,audio/ogg"
+                  accept=".mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus,audio/mpeg,audio/wav,audio/flac,audio/mp4,audio/aac,audio/ogg,audio/aiff,audio/opus"
                   onChange={seleccionarAudio}
                   disabled={guardando}
                   className="hidden"
                 />
+
+                <p className="mt-2 text-[10px] leading-4 text-zinc-600">
+                  Solo se conservará el MP3 optimizado. El archivo original no
+                  quedará guardado.
+                </p>
+
+                {avisoAudio && (
+                  <p className="mt-2 rounded-lg border border-amber-400/15 bg-amber-500/[0.07] px-3 py-2 text-[10px] leading-4 text-amber-200/80">
+                    {avisoAudio}
+                  </p>
+                )}
 
                 {archivo && vistaPrevia && (
                   <div className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3">
@@ -627,7 +813,11 @@ export default function IdeasMusicalesCard({
                     </audio>
                     <div className="mt-2 flex flex-wrap justify-between gap-2 text-[9px] text-zinc-500">
                       <span>{formatearTamano(archivo.size)}</span>
-                      <span>{formatearDuracion(duracionSegundos)}</span>
+                      <span>
+                        {duracionSegundos
+                          ? formatearDuracion(duracionSegundos)
+                          : "Duración por verificar"}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -716,6 +906,25 @@ export default function IdeasMusicalesCard({
                 </label>
               </div>
 
+              {guardando && (
+                <div className="rounded-xl border border-violet-400/15 bg-violet-500/[0.06] p-3">
+                  <div className="flex items-center justify-between gap-3 text-[10px] font-semibold text-violet-200">
+                    <span>
+                      {progresoSubida < 100
+                        ? "Subiendo archivo..."
+                        : "Procesando y convirtiendo a MP3..."}
+                    </span>
+                    <span>{progresoSubida}%</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">
+                    <div
+                      className="h-full rounded-full bg-violet-400 transition-[width] duration-200"
+                      style={{ width: `${progresoSubida}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
               {error && (
                 <p
                   role="alert"
@@ -750,7 +959,7 @@ export default function IdeasMusicalesCard({
                   {guardando ? (
                     <>
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                      Subiendo audio...
+                      Optimizando audio...
                     </>
                   ) : (
                     <>

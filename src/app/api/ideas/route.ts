@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import {
-  eliminarAudioIdea,
-  subirAudioIdea,
-} from "@/lib/cloudinary";
+import { eliminarAudioIdea, subirAudioIdea } from "@/lib/cloudinary";
+import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAX_AUDIO_SIZE = 20 * 1024 * 1024;
-const MAX_AUDIO_DURATION = 120;
+const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
+const MAX_AUDIO_DURATION = 240;
 const MAX_ACTIVE_IDEAS = 3;
 
 const AUDIO_TYPES = new Set([
@@ -20,18 +18,29 @@ const AUDIO_TYPES = new Set([
   "audio/mp3",
   "audio/wav",
   "audio/x-wav",
+  "audio/flac",
+  "audio/x-flac",
   "audio/mp4",
   "audio/x-m4a",
   "audio/aac",
   "audio/ogg",
+  "audio/aiff",
+  "audio/x-aiff",
+  "audio/opus",
 ]);
+
+const MIME_TYPES_GENERICOS = new Set(["", "application/octet-stream"]);
 
 const AUDIO_EXTENSIONS = new Set([
   "mp3",
   "wav",
+  "flac",
   "m4a",
   "aac",
   "ogg",
+  "aiff",
+  "aif",
+  "opus",
 ]);
 
 const ideaSchema = z.object({
@@ -55,13 +64,6 @@ const ideaSchema = z.object({
     .trim()
     .min(1, "Selecciona la tonalidad de la canción.")
     .max(30, "La tonalidad no puede superar 30 caracteres."),
-  duracionSegundos: z.coerce
-    .number()
-    .positive("No se pudo comprobar la duración del audio.")
-    .max(
-      MAX_AUDIO_DURATION,
-      `El audio no puede durar más de ${MAX_AUDIO_DURATION} segundos.`,
-    ),
 });
 
 function respuestaError(mensaje: string, status: number) {
@@ -73,10 +75,13 @@ function obtenerExtension(nombreArchivo: string) {
 }
 
 function tipoAudioPermitido(archivo: File) {
-  return (
-    AUDIO_TYPES.has(archivo.type.toLowerCase()) ||
-    AUDIO_EXTENSIONS.has(obtenerExtension(archivo.name))
+  const extensionValida = AUDIO_EXTENSIONS.has(
+    obtenerExtension(archivo.name),
   );
+  const mime = archivo.type.toLowerCase();
+  const mimeValido = AUDIO_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
+
+  return extensionValida && mimeValido;
 }
 
 export async function POST(request: Request) {
@@ -95,12 +100,12 @@ export async function POST(request: Request) {
       descripcion: formData.get("descripcion"),
       bpm: formData.get("bpm"),
       tonalidad: formData.get("tonalidad"),
-      duracionSegundos: formData.get("duracionSegundos"),
     });
 
     if (!resultado.success) {
       return respuestaError(
-        resultado.error.issues[0]?.message ?? "Los datos enviados no son válidos.",
+        resultado.error.issues[0]?.message ??
+          "Los datos enviados no son válidos.",
         400,
       );
     }
@@ -113,14 +118,21 @@ export async function POST(request: Request) {
 
     if (!tipoAudioPermitido(audio)) {
       return respuestaError(
-        "El audio debe estar en formato MP3, WAV, M4A, AAC u OGG.",
+        "El audio debe ser MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u OPUS.",
         400,
       );
     }
 
     if (audio.size > MAX_AUDIO_SIZE) {
-      return respuestaError("El audio no puede pesar más de 20 MB.", 400);
+      return respuestaError(
+        "El archivo original no puede pesar más de 50 MB.",
+        400,
+      );
     }
+
+    await limpiarIdeasExpiradasUsuario(sesion.usuarioId).catch((error) => {
+      console.error("No se pudieron limpiar las ideas expiradas.", error);
+    });
 
     const ahora = new Date();
     const ideasActivas = await prisma.idea.count({
@@ -142,6 +154,21 @@ export async function POST(request: Request) {
     audioPublicId = audioSubido.publicId;
 
     if (
+      audioSubido.resourceType !== "video" ||
+      audioSubido.formato?.toLowerCase() !== "mp3"
+    ) {
+      await eliminarAudioIdea(audioSubido.publicId).catch((error) => {
+        console.error("No se pudo eliminar el audio con formato inválido.", error);
+      });
+      audioPublicId = null;
+
+      return respuestaError(
+        "No se pudo convertir el archivo a MP3. Prueba con otro audio.",
+        422,
+      );
+    }
+
+    if (
       audioSubido.duracionSegundos <= 0 ||
       audioSubido.duracionSegundos > MAX_AUDIO_DURATION
     ) {
@@ -151,8 +178,20 @@ export async function POST(request: Request) {
       audioPublicId = null;
 
       return respuestaError(
-        `El audio no puede durar más de ${MAX_AUDIO_DURATION} segundos.`,
+        `El audio no puede durar más de ${MAX_AUDIO_DURATION / 60} minutos.`,
         400,
+      );
+    }
+
+    if (!audioSubido.bytes || audioSubido.bytes <= 0) {
+      await eliminarAudioIdea(audioSubido.publicId).catch((error) => {
+        console.error("No se pudo eliminar el audio incompleto.", error);
+      });
+      audioPublicId = null;
+
+      return respuestaError(
+        "Cloudinary no devolvió un archivo de audio válido.",
+        422,
       );
     }
 
@@ -169,7 +208,7 @@ export async function POST(request: Request) {
         audioUrl: audioSubido.url,
         audioPublicId: audioSubido.publicId,
         duracionSegundos: audioSubido.duracionSegundos,
-        formato: audioSubido.formato,
+        formato: "mp3",
         tamanoBytes: audioSubido.bytes,
         expiraEn,
       },
@@ -194,7 +233,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: true,
-        mensaje: "Idea publicada correctamente.",
+        mensaje: "Idea publicada y optimizada correctamente.",
         idea,
       },
       { status: 201 },

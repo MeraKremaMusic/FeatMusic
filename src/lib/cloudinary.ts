@@ -1,6 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
 
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1";
+const AUDIO_FINAL_FORMAT = "mp3";
+const AUDIO_INCOMING_TRANSFORMATION = "ac_mp3,af_44100,br_64k";
 
 type ParametroFirma = [nombre: string, valor: string];
 
@@ -10,6 +12,7 @@ export type AudioIdeaSubido = {
   duracionSegundos: number;
   formato: string | null;
   bytes: number | null;
+  resourceType: string | null;
 };
 
 function obtenerConfiguracion() {
@@ -26,10 +29,7 @@ function obtenerConfiguracion() {
   return { cloudName, apiKey, apiSecret };
 }
 
-function crearFirma(
-  parametros: ParametroFirma[],
-  apiSecret: string,
-) {
+function crearFirma(parametros: ParametroFirma[], apiSecret: string) {
   const textoFirma = parametros
     .slice()
     .sort(([nombreA], [nombreB]) => nombreA.localeCompare(nombreB))
@@ -97,9 +97,11 @@ export async function subirAudioIdea(
   const publicId = `idea-${randomUUID()}`;
   const parametros: ParametroFirma[] = [
     ["folder", folder],
+    ["format", AUDIO_FINAL_FORMAT],
     ["overwrite", "false"],
     ["public_id", publicId],
     ["timestamp", String(timestamp)],
+    ["transformation", AUDIO_INCOMING_TRANSFORMATION],
   ];
 
   const formData = new FormData();
@@ -109,6 +111,8 @@ export async function subirAudioIdea(
   formData.set("folder", folder);
   formData.set("public_id", publicId);
   formData.set("overwrite", "false");
+  formData.set("format", AUDIO_FINAL_FORMAT);
+  formData.set("transformation", AUDIO_INCOMING_TRANSFORMATION);
   formData.set("signature", crearFirma(parametros, apiSecret));
 
   const response = await fetch(
@@ -125,12 +129,14 @@ export async function subirAudioIdea(
     duration?: number;
     format?: string;
     bytes?: number;
+    resource_type?: string;
     error?: { message?: string };
   };
 
   if (!response.ok || !data.secure_url || !data.public_id) {
     throw new Error(
-      data.error?.message ?? "Cloudinary no pudo guardar el audio.",
+      data.error?.message ??
+        "Cloudinary no pudo convertir y guardar el audio.",
     );
   }
 
@@ -140,6 +146,7 @@ export async function subirAudioIdea(
     duracionSegundos: Math.max(0, Math.ceil(data.duration ?? 0)),
     formato: data.format ?? null,
     bytes: data.bytes ?? null,
+    resourceType: data.resource_type ?? null,
   };
 }
 
