@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import PerfilArtistaCard from "./components/PerfilArtistaCard";
 import MenuMovilPanel from "./components/MenuMovilPanel";
 import IdeasMusicalesCard from "./components/IdeasMusicalesCard";
@@ -319,27 +320,7 @@ export default async function PanelPage() {
             Feat<span className="text-violet-400">Music</span>
           </Link>
 
-          <nav
-            aria-label="Navegación principal del panel"
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 lg:flex"
-          >
-            <button
-              type="button"
-              title="Próximamente"
-              className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-zinc-400 transition hover:bg-white/5 hover:text-white"
-            >
-              <Icono tipo="planes" className="h-3.5 w-3.5" />
-              Planes
-            </button>
-
-            <Link
-              href="/artistas"
-              className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-zinc-400 transition hover:bg-white/5 hover:text-white"
-            >
-              <Icono tipo="comunidad" className="h-3.5 w-3.5" />
-              Explorar
-            </Link>
-          </nav>
+          <NavegacionEscritorio />
 
           <form action="/api/cerrar-sesion" method="post">
             <button
