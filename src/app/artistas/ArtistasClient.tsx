@@ -242,29 +242,39 @@ function TarjetaEstadistica({
   nota?: string;
 }) {
   return (
-    <article className="min-w-0 rounded-lg border border-white/10 bg-black/30 px-2 py-2 backdrop-blur-sm sm:rounded-2xl sm:p-4">
-      <div className="flex items-center justify-center gap-1.5 sm:items-start sm:justify-between sm:gap-3">
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300 sm:order-2 sm:h-10 sm:w-10 sm:rounded-xl">
+    <article className="min-w-0 rounded-lg border border-white/10 bg-black/30 px-2 py-2 backdrop-blur-sm lg:rounded-2xl lg:p-4">
+      {/* Diseño compacto exclusivo para celular y tablet. */}
+      <div className="flex items-center justify-center gap-1.5 lg:hidden">
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300">
           {icono}
         </div>
 
-        <div className="min-w-0 text-left sm:order-1">
-          <p className="text-base font-black leading-none tracking-tight text-white sm:mt-1 sm:text-2xl">
+        <div className="min-w-0 text-left">
+          <p className="text-base font-black leading-none tracking-tight text-white">
             {valor.toLocaleString("es-CO")}
           </p>
-
-          <p className="mt-1 truncate text-[8px] font-semibold leading-none text-zinc-400 sm:hidden">
+          <p className="mt-1 truncate text-[8px] font-semibold leading-none text-zinc-400">
             {tituloMovil}
-          </p>
-
-          <p className="mt-1 hidden text-xs font-medium text-zinc-400 sm:block">
-            {titulo}
           </p>
         </div>
       </div>
 
+      {/* Diseño amplio exclusivo para computador. */}
+      <div className="hidden items-start justify-between gap-4 lg:flex">
+        <div className="min-w-0">
+          <p className="text-xs font-medium text-zinc-400">{titulo}</p>
+          <p className="mt-1 text-2xl font-black tracking-tight text-white">
+            {valor.toLocaleString("es-CO")}
+          </p>
+        </div>
+
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+          {icono}
+        </div>
+      </div>
+
       {nota && (
-        <p className="mt-2 hidden text-[10px] text-zinc-500 sm:block">
+        <p className="mt-2 hidden text-[10px] text-zinc-500 lg:block">
           {nota}
         </p>
       )}
@@ -505,15 +515,15 @@ export default function ArtistasClient({
           {cargando ? (
             <CargandoArtistas />
           ) : (
-            <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 lg:px-6 lg:pb-8 lg:pt-6">
+            <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 lg:px-8 lg:pb-8 lg:pt-6">
               <div className="mx-auto w-full max-w-[1460px]">
-                <section className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-1.5 sm:max-w-none sm:gap-3">
+                <section className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-1.5 lg:max-w-none lg:gap-4">
                   <TarjetaEstadistica
                     titulo="Artistas en FeatMusic"
                     tituloMovil="Artistas"
                     valor={estadisticas.artistas}
                     icono={
-                      <IconoUsuarios className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                      <IconoUsuarios className="h-3.5 w-3.5 lg:h-5 lg:w-5" />
                     }
                   />
                   <TarjetaEstadistica
@@ -521,7 +531,7 @@ export default function ArtistasClient({
                     tituloMovil="Ideas"
                     valor={estadisticas.ideas}
                     icono={
-                      <IconoIdea className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                      <IconoIdea className="h-3.5 w-3.5 lg:h-5 lg:w-5" />
                     }
                   />
                   <TarjetaEstadistica
@@ -529,19 +539,19 @@ export default function ArtistasClient({
                     tituloMovil="Propuestas"
                     valor={estadisticas.propuestas}
                     icono={
-                      <IconoPropuesta className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                      <IconoPropuesta className="h-3.5 w-3.5 lg:h-5 lg:w-5" />
                     }
                     nota="Disponible cuando se active el sistema de propuestas."
                   />
                 </section>
 
-                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm sm:p-4">
-                  <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
-                    <label className="mx-auto w-full max-w-[330px] xl:mx-0 xl:min-w-0 xl:max-w-none xl:flex-1">
+                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm lg:p-4">
+                  <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,2fr)_auto] lg:items-end">
+                    <label className="mx-auto w-full max-w-[330px] lg:mx-0 lg:min-w-0 lg:max-w-none">
                       <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
                         Buscar artistas
                       </span>
-                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2 focus-within:border-violet-400/40 sm:py-2.5">
+                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2 focus-within:border-violet-400/40 lg:py-2.5">
                         <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
                         <input
                           type="search"
@@ -553,7 +563,7 @@ export default function ArtistasClient({
                       </span>
                     </label>
 
-                    <div className="grid grid-cols-2 gap-2 md:grid-cols-4 xl:w-[720px]">
+                    <div className="grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-4">
                       <label>
                         <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
                           País
@@ -631,7 +641,7 @@ export default function ArtistasClient({
                       type="button"
                       onClick={limpiarFiltros}
                       disabled={!hayFiltros}
-                      className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="w-full rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40 lg:w-auto lg:min-w-[86px]"
                     >
                       Limpiar
                     </button>
@@ -682,7 +692,7 @@ export default function ArtistasClient({
                     </button>
                   </section>
                 ) : (
-                  <section className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                  <section className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                     {artistasPagina.map((artista) => (
                       <TarjetaArtista key={artista.id} artista={artista} />
                     ))}
