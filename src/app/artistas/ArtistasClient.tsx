@@ -50,11 +50,11 @@ function IconoArtistas({ className = "h-8 w-8" }: { className?: string }) {
 
 function CargandoArtistas() {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#09070d] px-6 text-white">
+    <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/15 blur-3xl" />
 
-      <section className="relative flex flex-col items-center text-center">
+      <div className="relative flex flex-col items-center text-center">
         <div className="relative flex h-20 w-20 items-center justify-center">
           <span className="absolute inset-0 rounded-full border border-violet-400/20 bg-violet-500/5" />
           <span className="absolute inset-1 animate-ping rounded-full border border-violet-400/30" />
@@ -78,8 +78,32 @@ function CargandoArtistas() {
           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.15s]" />
           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300" />
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  );
+}
+
+function ContenidoExplorar({ sesionActiva }: ArtistasClientProps) {
+  return (
+    <section className="flex min-h-[calc(100vh-48px)] items-center justify-center px-6">
+      <div className="max-w-xl text-center">
+        <p className="text-sm font-semibold text-violet-400">FeatMusic</p>
+
+        <h1 className="mt-3 text-4xl font-bold">Explorar artistas</h1>
+
+        <p className="mt-4 text-zinc-400">
+          Muy pronto podrás descubrir artistas y colaboradores por rol,
+          género y ubicación.
+        </p>
+
+        <Link
+          href={sesionActiva ? "/panel#panel-card-1" : "/"}
+          className="mt-8 inline-flex items-center rounded-full border border-zinc-700 px-6 py-3 font-semibold transition hover:bg-zinc-900"
+        >
+          {sesionActiva ? "Volver a mi perfil" : "Volver al inicio"}
+        </Link>
+      </div>
+    </section>
   );
 }
 
@@ -96,13 +120,9 @@ export default function ArtistasClient({
     return () => window.clearTimeout(temporizador);
   }, []);
 
-  if (cargando) {
-    return <CargandoArtistas />;
-  }
-
   return (
     <main className="min-h-screen bg-[#09070d] text-white">
-      <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
+      <header className="relative z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
             href={sesionActiva ? "/panel" : "/"}
@@ -134,25 +154,11 @@ export default function ArtistasClient({
         </div>
       </header>
 
-      <section className="flex min-h-[calc(100vh-48px)] items-center justify-center px-6">
-        <div className="max-w-xl text-center">
-          <p className="text-sm font-semibold text-violet-400">FeatMusic</p>
-
-          <h1 className="mt-3 text-4xl font-bold">Explorar artistas</h1>
-
-          <p className="mt-4 text-zinc-400">
-            Muy pronto podrás descubrir artistas y colaboradores por rol,
-            género y ubicación.
-          </p>
-
-          <Link
-            href={sesionActiva ? "/panel#panel-card-1" : "/"}
-            className="mt-8 inline-flex items-center rounded-full border border-zinc-700 px-6 py-3 font-semibold transition hover:bg-zinc-900"
-          >
-            {sesionActiva ? "Volver a mi perfil" : "Volver al inicio"}
-          </Link>
-        </div>
-      </section>
+      {cargando ? (
+        <CargandoArtistas />
+      ) : (
+        <ContenidoExplorar sesionActiva={sesionActiva} />
+      )}
     </main>
   );
 }
