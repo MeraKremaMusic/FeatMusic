@@ -369,55 +369,15 @@ export default async function PanelPage() {
             Feat<span className="text-violet-400">Music</span>
           </Link>
 
-          <nav className="hidden h-full items-center gap-5 md:flex">
-            <Link
-              href="/panel"
-              className="relative flex h-full items-center gap-2 px-2 text-xs font-semibold text-white"
-            >
-              <Icono tipo="inicio" className="h-3 w-3" />
-              Inicio
-              <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-violet-400" />
-            </Link>
-
-            <Link
-              href="/artistas"
-              className="flex h-full items-center gap-2 px-2 text-xs text-zinc-400 transition hover:text-white"
-            >
-              <Icono tipo="comunidad" className="h-3 w-3" />
-              Comunidad
-            </Link>
-
-            <Link
-              href="/planes"
-              className="flex h-full items-center gap-2 px-2 text-xs text-zinc-400 transition hover:text-white"
-            >
-              <Icono tipo="planes" className="h-3 w-3" />
-              Planes
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
+          <form action="/api/cerrar-sesion" method="post">
             <button
-              type="button"
-              aria-label="Notificaciones"
-              className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-zinc-300 transition hover:bg-white/[0.07] hover:text-white"
+              type="submit"
+              className="flex items-center gap-2 rounded-lg border border-red-400/50 px-3 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"
             >
-              <Icono tipo="campana" className="h-3 w-3" />
-              <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-500 px-1 text-[9px] font-black">
-                3
-              </span>
+              <Icono tipo="salir" className="h-3 w-3" />
+              Cerrar sesión
             </button>
-
-            <form action="/api/cerrar-sesion" method="post">
-              <button
-                type="submit"
-                className="flex items-center gap-2 rounded-lg border border-red-400/50 px-3 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"
-              >
-                <Icono tipo="salir" className="h-3 w-3" />
-                Cerrar sesión
-              </button>
-            </form>
-          </div>
+          </form>
         </div>
       </header>
 
@@ -460,7 +420,8 @@ export default async function PanelPage() {
               ubicacion={ubicacion}
               idiomaPrincipal={idiomaPrincipal}
               fechaRegistro={fechaRegistro}
-              correoVerificado={usuario.correoVerificado}/>
+              correoVerificado={usuario.correoVerificado}
+/>
           </section>
 
           <section id="panel-card-2" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
