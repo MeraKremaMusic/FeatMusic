@@ -377,11 +377,15 @@ export default function PerfilArtistaCard({
       setOtraDistribuidora(distribuidoraActualizada.otra);
       setVistaPrevia(data.usuario.fotoPerfil);
       setArchivo(null);
-      setExito(data.mensaje ?? "Perfil actualizado correctamente.");
 
       if (inputArchivoRef.current) {
         inputArchivoRef.current.value = "";
       }
+
+      // Cierra el editor después de guardar correctamente para que
+      // el usuario pueda apreciar inmediatamente los cambios en el panel.
+      setExito("");
+      setModalAbierto(false);
     } catch (err) {
       setError(
         err instanceof Error
