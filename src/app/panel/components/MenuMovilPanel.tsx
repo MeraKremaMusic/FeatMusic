@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 type IconoTipo =
   | "inicio"
@@ -76,157 +75,79 @@ function Icono({
   }
 }
 
-function claseOpcion(activa: boolean, bloqueada: boolean) {
+function claseOpcion(activa: boolean) {
   return [
     "flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 transition",
     activa
       ? "text-violet-300"
       : "text-zinc-500 hover:text-zinc-200",
-    bloqueada ? "pointer-events-none" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  ].join(" ");
 }
 
 export default function MenuMovilPanel() {
-  const router = useRouter();
   const pathname = usePathname();
-  const [cargandoExplorar, setCargandoExplorar] = useState(false);
 
   const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
   const estaEnExplorar =
     pathname === "/artistas" || pathname.startsWith("/artistas/");
 
-  useEffect(() => {
-    router.prefetch("/panel");
-    router.prefetch("/artistas");
-  }, [router]);
-
-  function abrirExplorar() {
-    if (cargandoExplorar || estaEnExplorar) {
-      return;
-    }
-
-    setCargandoExplorar(true);
-
-    // En celular mostramos una sola animación completa antes de navegar.
-    window.setTimeout(() => {
-      router.push("/artistas");
-    }, 700);
-  }
-
   return (
-    <>
-      {cargandoExplorar && (
-        <div
-          className="fixed inset-0 z-40 flex h-[100dvh] flex-col overflow-hidden bg-[#09070d] text-white lg:hidden"
-          role="status"
-          aria-live="polite"
-          aria-label="Cargando artistas"
+    <nav
+      aria-label="Menú principal móvil"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
+    >
+      <div className="mx-auto grid max-w-md grid-cols-5 items-end">
+        <Link
+          href="/panel"
+          aria-label="Ir al panel"
+          aria-current={estaEnPanel ? "page" : undefined}
+          className={claseOpcion(estaEnPanel)}
         >
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
+          <Icono tipo="inicio" />
+          <span className="truncate text-[9px] font-semibold">Inicio</span>
+        </Link>
 
-          <div className="relative z-10 flex h-12 shrink-0 items-center border-b border-white/10 bg-black/90 px-4 backdrop-blur-xl">
-            <span className="text-lg font-black tracking-tight">
-              Feat<span className="text-violet-400">Music</span>
-            </span>
-          </div>
+        <Link
+          href="/artistas"
+          aria-label="Explorar artistas"
+          aria-current={estaEnExplorar ? "page" : undefined}
+          className={claseOpcion(estaEnExplorar)}
+        >
+          <Icono tipo="explorar" />
+          <span className="truncate text-[9px] font-semibold">Explorar</span>
+        </Link>
 
-          <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-20">
-            <div className="flex flex-col items-center text-center">
-              <div className="relative flex h-20 w-20 items-center justify-center">
-                <span className="absolute inset-0 animate-ping rounded-full border border-violet-400/20 bg-violet-500/5" />
-                <span className="absolute inset-2 animate-spin rounded-full border-2 border-zinc-800 border-t-violet-400" />
-                <span className="absolute inset-5 animate-pulse rounded-full border border-violet-300/30 bg-violet-500/10" />
+        <Link
+          href="/panel#panel-card-2"
+          aria-label="Ir a publicar una idea"
+          className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
+        >
+          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60 transition group-hover:scale-105 group-hover:bg-violet-400">
+            <Icono tipo="mas" className="h-6 w-6" />
+          </span>
+          <span className="truncate text-[9px] font-semibold">Publicar</span>
+        </Link>
 
-                <Icono
-                  tipo="explorar"
-                  className="relative h-6 w-6 text-violet-300"
-                />
-              </div>
+        <Link
+          href="/panel#panel-card-3"
+          aria-label="Ir a propuestas"
+          className={claseOpcion(false)}
+        >
+          <Icono tipo="propuestas" />
+          <span className="truncate text-[9px] font-semibold">
+            Propuestas
+          </span>
+        </Link>
 
-              <p className="mt-5 text-sm font-bold text-zinc-100">
-                Cargando artistas
-                <span className="inline-block w-4 animate-pulse text-left">
-                  ...
-                </span>
-              </p>
-
-              <p className="mt-1 text-[11px] text-zinc-500">
-                Preparando nuevas conexiones musicales
-              </p>
-            </div>
-          </div>
-
-          <div className="relative z-10 h-[72px] shrink-0 border-t border-white/10 bg-[#0b0810]/95 backdrop-blur-xl" />
-        </div>
-      )}
-
-      <nav
-        aria-label="Menú principal móvil"
-        aria-busy={cargandoExplorar}
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
-      >
-        <div className="mx-auto grid max-w-md grid-cols-5 items-end">
-          <Link
-            href="/panel"
-            aria-label="Ir al panel"
-            className={claseOpcion(estaEnPanel, cargandoExplorar)}
-          >
-            <Icono tipo="inicio" />
-            <span className="truncate text-[9px] font-semibold">Inicio</span>
-          </Link>
-
-          <button
-            type="button"
-            onClick={abrirExplorar}
-            disabled={cargandoExplorar}
-            aria-label="Explorar artistas"
-            aria-current={estaEnExplorar || cargandoExplorar ? "page" : undefined}
-            className={claseOpcion(
-              estaEnExplorar || cargandoExplorar,
-              cargandoExplorar,
-            )}
-          >
-            <Icono tipo="explorar" />
-            <span className="truncate text-[9px] font-semibold">Explorar</span>
-          </button>
-
-          <Link
-            href="/panel#panel-card-2"
-            aria-label="Ir a publicar una idea"
-            className={`group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300 ${
-              cargandoExplorar ? "pointer-events-none" : ""
-            }`}
-          >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60 transition group-hover:scale-105 group-hover:bg-violet-400">
-              <Icono tipo="mas" className="h-6 w-6" />
-            </span>
-            <span className="truncate text-[9px] font-semibold">Publicar</span>
-          </Link>
-
-          <Link
-            href="/panel#panel-card-3"
-            aria-label="Ir a propuestas"
-            className={claseOpcion(false, cargandoExplorar)}
-          >
-            <Icono tipo="propuestas" />
-            <span className="truncate text-[9px] font-semibold">
-              Propuestas
-            </span>
-          </Link>
-
-          <Link
-            href="/panel#panel-card-1"
-            aria-label="Ir al perfil"
-            className={claseOpcion(false, cargandoExplorar)}
-          >
-            <Icono tipo="perfil" />
-            <span className="truncate text-[9px] font-semibold">Perfil</span>
-          </Link>
-        </div>
-      </nav>
-    </>
+        <Link
+          href="/panel#panel-card-1"
+          aria-label="Ir al perfil"
+          className={claseOpcion(false)}
+        >
+          <Icono tipo="perfil" />
+          <span className="truncate text-[9px] font-semibold">Perfil</span>
+        </Link>
+      </div>
+    </nav>
   );
 }

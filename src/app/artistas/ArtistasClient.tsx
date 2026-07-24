@@ -51,33 +51,33 @@ function IconoArtistas({ className = "h-8 w-8" }: { className?: string }) {
 
 function CargandoArtistas() {
   return (
-    <section className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-6 pb-20 lg:pb-0">
+    <section
+      className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-6 pb-20 lg:pb-0"
+      role="status"
+      aria-live="polite"
+      aria-label="Cargando artistas"
+    >
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/15 blur-3xl" />
 
       <div className="relative flex flex-col items-center text-center">
         <div className="relative flex h-20 w-20 items-center justify-center">
-          <span className="absolute inset-0 rounded-full border border-violet-400/20 bg-violet-500/5" />
-          <span className="absolute inset-1 animate-ping rounded-full border border-violet-400/30" />
-          <span className="absolute inset-3 animate-pulse rounded-full bg-violet-500/15" />
+          <span className="absolute inset-0 animate-ping rounded-full border border-violet-400/20 bg-violet-500/5" />
+          <span className="absolute inset-2 animate-spin rounded-full border-2 border-zinc-800 border-t-violet-400" />
+          <span className="absolute inset-5 animate-pulse rounded-full border border-violet-300/30 bg-violet-500/10" />
 
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/30 bg-violet-500/15 text-violet-200 shadow-[0_0_35px_rgba(139,92,246,0.25)]">
-            <IconoArtistas />
-          </div>
+          <IconoArtistas className="relative h-6 w-6 text-violet-300" />
         </div>
 
-        <p className="mt-6 text-base font-bold tracking-tight text-zinc-100">
-          Cargando artistas...
+        <p className="mt-5 text-sm font-bold text-zinc-100">
+          Cargando artistas
+          <span className="inline-block w-4 animate-pulse text-left">
+            ...
+          </span>
         </p>
 
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-1 text-[11px] text-zinc-500">
           Preparando nuevas conexiones musicales
         </p>
-
-        <div className="mt-5 flex items-center gap-1.5" aria-hidden="true">
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.3s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.15s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300" />
-        </div>
       </div>
     </section>
   );
@@ -164,17 +164,7 @@ export default function ArtistasClient({
 
         <div className="relative z-10 h-full">
           {cargando ? (
-            <>
-              {/* En PC conservamos la animación propia de la página. */}
-              <div className="hidden h-full lg:block">
-                <CargandoArtistas />
-              </div>
-
-              {/* En celular la animación ya ocurrió desde MenuMovilPanel. */}
-              <div className="h-full lg:hidden">
-                <ContenidoExplorar sesionActiva={sesionActiva} />
-              </div>
-            </>
+            <CargandoArtistas />
           ) : (
             <ContenidoExplorar sesionActiva={sesionActiva} />
           )}
