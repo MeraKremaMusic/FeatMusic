@@ -402,7 +402,7 @@ export default function PerfilArtistaCard({
       <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-4">
-            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-violet-400/35 bg-gradient-to-br from-violet-700 to-fuchsia-600 text-2xl font-black shadow-lg shadow-violet-950/40">
+            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-violet-700 to-fuchsia-600 text-2xl font-black shadow-lg shadow-black/30">
               {perfil.fotoPerfil ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -416,22 +416,19 @@ export default function PerfilArtistaCard({
 
             </div>
 
-            <div className="min-w-0 pt-1">
-              <div className="flex min-w-0 items-center gap-1.5">
-                <h2 className="min-w-0 truncate text-lg font-black tracking-tight text-white">
-                  {nombreVisible}
-                </h2>
-
+            <div className="min-w-0 flex-1 pt-1">
+              <h2 className="break-words text-lg font-black leading-tight tracking-tight text-white">
+                {nombreVisible}
                 {correoVerificado && (
                   <span
                     title="Cuenta verificada"
                     aria-label="Cuenta verificada"
-                    className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-violet-500 text-[8px] font-black text-white"
+                    className="ml-1.5 inline-flex h-4 w-4 shrink-0 translate-y-[-1px] items-center justify-center rounded-full bg-violet-500 text-[8px] font-black text-white align-middle"
                   >
                     ✓
                   </span>
                 )}
-              </div>
+              </h2>
               <p className="mt-0.5 truncate text-[11px] text-violet-300">
                 @{usuarioVisible}
               </p>
@@ -449,13 +446,27 @@ export default function PerfilArtistaCard({
           <button
             type="button"
             onClick={abrirModal}
-            className="shrink-0 rounded-lg border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+            title="Editar perfil"
+            aria-label="Editar perfil"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-violet-300 transition hover:bg-violet-500/15 hover:text-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
           >
-            Editar perfil
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
+            </svg>
           </button>
         </div>
 
-        <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.025] p-3.5">
+        <div className="mt-5 rounded-xl bg-white/[0.025] p-3.5">
           <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-zinc-500">
             Biografía
           </p>
@@ -534,9 +545,6 @@ export default function PerfilArtistaCard({
           </div>
         </div>
 
-        <p className="mt-auto pt-4 text-[10px] text-zinc-500">
-          {correoVerificado ? "Cuenta verificada" : "Verificación pendiente"}
-        </p>
       </article>
 
       {modalAbierto && (
@@ -582,7 +590,7 @@ export default function PerfilArtistaCard({
                     type="button"
                     onClick={() => inputArchivoRef.current?.click()}
                     disabled={guardando}
-                    className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-violet-400/35 bg-gradient-to-br from-violet-700 to-fuchsia-600 text-xl font-black text-white disabled:opacity-60"
+                    className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-violet-700 to-fuchsia-600 text-xl font-black text-white disabled:opacity-60"
                   >
                     {vistaPrevia ? (
                       // eslint-disable-next-line @next/next/no-img-element
