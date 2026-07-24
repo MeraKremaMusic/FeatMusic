@@ -109,10 +109,10 @@ export default function MenuMovilPanel() {
 
     setCargandoExplorar(true);
 
-    // Permite que React pinte la animación antes de iniciar la navegación.
+    // En celular mostramos una sola animación completa antes de navegar.
     window.setTimeout(() => {
       router.push("/artistas");
-    }, 80);
+    }, 700);
   }
 
   return (

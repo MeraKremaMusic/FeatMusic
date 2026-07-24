@@ -164,7 +164,17 @@ export default function ArtistasClient({
 
         <div className="relative z-10 h-full">
           {cargando ? (
-            <CargandoArtistas />
+            <>
+              {/* En PC conservamos la animación propia de la página. */}
+              <div className="hidden h-full lg:block">
+                <CargandoArtistas />
+              </div>
+
+              {/* En celular la animación ya ocurrió desde MenuMovilPanel. */}
+              <div className="h-full lg:hidden">
+                <ContenidoExplorar sesionActiva={sesionActiva} />
+              </div>
+            </>
           ) : (
             <ContenidoExplorar sesionActiva={sesionActiva} />
           )}
