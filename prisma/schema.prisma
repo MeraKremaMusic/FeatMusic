@@ -15,13 +15,17 @@ datasource db {
 model Usuario {
   id              Int     @id @default(autoincrement())
   nombre          String?
-  nombreArtistico String? @map("nombre_artistico")
-  correo          String  @unique
-  passwordHash    String  @map("password_hash")
+  nombreArtistico String?  @map("nombre_artistico")
+  nombreUsuario   String?  @unique @map("nombre_usuario")
+  fotoPerfil      String?  @db.VarChar(500) @map("foto_perfil")
+  biografia       String?  @db.VarChar(300)
+
+  correo       String @unique
+  passwordHash String @map("password_hash")
 
   pais             String?
   ciudad           String?
-  idiomaPrincipal  String?   @map("idioma_principal")
+  idiomaPrincipal  String?  @map("idioma_principal")
   rolPrincipal     String    @map("rol_principal")
   generos          Json?
   tipoColaboracion String?   @map("tipo_colaboracion")

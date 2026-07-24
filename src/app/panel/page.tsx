@@ -46,6 +46,25 @@ function crearUsuario(nombre: string) {
   );
 }
 
+function formatearFecha(fecha: Date | string | null | undefined) {
+  if (!fecha) {
+    return "Sin registrar";
+  }
+
+  const fechaConvertida =
+    fecha instanceof Date ? fecha : new Date(fecha);
+
+  if (Number.isNaN(fechaConvertida.getTime())) {
+    return "Sin registrar";
+  }
+
+  return new Intl.DateTimeFormat("es-CO", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(fechaConvertida);
+}
+
 type IconoTipo =
   | "inicio"
   | "comunidad"
@@ -340,6 +359,15 @@ export default async function PanelPage() {
     [usuario.ciudad, usuario.pais].filter(Boolean).join(", ") ||
     "Ubicación sin completar";
 
+
+  const idiomaPrincipal =
+    usuario.idiomaPrincipal?.trim() || "Sin completar";
+
+  const tipoColaboracion =
+    usuario.tipoColaboracion?.trim() || "Sin completar";
+
+  const fechaRegistro = formatearFecha(usuario.creadoEn);
+
   return (
     <main className="min-h-screen bg-[#09070d] text-white lg:h-screen lg:overflow-hidden">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
@@ -416,95 +444,158 @@ export default async function PanelPage() {
             lg:px-4 lg:py-3
           "
         >
-          <section id="panel-card-1" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
-            <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
-              <Icono tipo="perfil" className="h-3 w-3 text-violet-400" />
-              <span className="text-violet-400">1</span>
-              Perfil del artista
-            </div>
-
-            <div className="mt-3 flex items-center gap-3">
-              <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-violet-400/40 bg-gradient-to-br from-violet-700 to-fuchsia-500 text-2xl font-black shadow-xl shadow-violet-950/40">
-                {iniciales}
-                <span className="absolute bottom-1 right-0.5 h-3 w-3 rounded-full border-2 border-[#0d0913] bg-emerald-400" />
+          <section
+            id="panel-card-1"
+            className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-y-auto rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-5 shadow-2xl shadow-black/35 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-4"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.12em] text-zinc-400 lg:text-[9px]">
+                <Icono
+                  tipo="perfil"
+                  className="h-3.5 w-3.5 text-violet-400"
+                />
+                <span className="text-violet-400">1</span>
+                Perfil del artista
               </div>
 
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h1 className="truncate text-lg font-black">
-                    {nombreArtistico}
-                  </h1>
-                  {usuario.correoVerificado && (
-                    <span className="flex h-3 w-3 items-center justify-center rounded-full bg-violet-500 text-[10px] font-black">
-                      ✓
-                    </span>
-                  )}
-                </div>
+              <span
+                className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${
+                  usuario.perfilCompleto
+                    ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-300"
+                    : "border-amber-400/25 bg-amber-400/10 text-amber-300"
+                }`}
+              >
+                {usuario.perfilCompleto
+                  ? "Perfil completo"
+                  : "Perfil pendiente"}
+              </span>
+            </div>
 
-                <p className="mt-0.5 text-[9px] text-zinc-400">
+            <div className="mt-5 flex items-center gap-4">
+              <div className="relative flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-full border border-violet-300/40 bg-gradient-to-br from-violet-700 to-fuchsia-500 text-[28px] font-black shadow-xl shadow-violet-950/40 lg:h-16 lg:w-16 lg:text-2xl">
+                {iniciales}
+
+                {usuario.correoVerificado && (
+                  <span
+                    title="Correo verificado"
+                    className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full border-[3px] border-[#0d0913] bg-violet-500 text-[11px] font-black"
+                  >
+                    ✓
+                  </span>
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <h1 className="truncate text-[22px] font-black leading-tight tracking-tight lg:text-lg">
+                  {nombreArtistico}
+                </h1>
+
+                <p className="mt-1 truncate text-[13px] text-zinc-400 lg:text-[10px]">
                   @{usuarioPublico}
                 </p>
 
-                <p className="mt-1 text-xs text-zinc-300">{rol}</p>
-
-                <div className="mt-2 flex flex-wrap gap-1">
-                  <span className="rounded-lg border border-violet-400/30 bg-violet-500/10 px-2.5 py-1 text-[10px] text-violet-200">
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <span className="rounded-full border border-violet-400/25 bg-violet-500/10 px-2.5 py-1 text-[11px] font-semibold text-violet-200 lg:text-[10px]">
                     {rol}
                   </span>
-                  <span className="rounded-lg border border-red-400/30 bg-red-500/5 px-2.5 py-1 text-[10px] text-red-200">
-                    Colaborador
+
+                  <span className="rounded-full border border-fuchsia-400/20 bg-fuchsia-500/10 px-2.5 py-1 text-[11px] font-semibold text-fuchsia-200 lg:text-[10px]">
+                    {tipoColaboracion}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="my-3 h-px bg-white/10" />
+            <div className="mt-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                Géneros musicales
+              </p>
 
-            <p className="text-[9px] leading-4 text-zinc-300">
-              Artista en FeatMusic buscando nuevas colaboraciones.
-            </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(generos.length > 0
+                  ? generos
+                  : ["Sin completar"]
+                ).map((genero) => (
+                  <span
+                    key={genero}
+                    className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-[11px] font-medium text-violet-200"
+                  >
+                    {genero}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-            <div className="my-3 h-px bg-white/10" />
-
-            <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-zinc-500">
-              Géneros
-            </p>
-
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {(generos.length > 0
-                ? generos.slice(0, 4)
-                : ["Urbano", "Pop", "R&B"]
-              ).map((genero) => (
-                <span
-                  key={genero}
-                  className="rounded-lg border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] text-violet-200"
-                >
-                  {genero}
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300">
+                  <Icono tipo="ubicacion" className="h-4 w-4" />
                 </span>
-              ))}
-            </div>
 
-            <div className="mt-2 space-y-1.5 text-[10px] text-zinc-300">
-              <div className="flex items-center gap-3">
-                <Icono tipo="ubicacion" className="h-3 w-3 text-violet-400" />
-                {ubicacion}
+                <div className="min-w-0">
+                  <p className="text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+                    Ciudad y país
+                  </p>
+                  <p className="truncate text-[12px] font-semibold text-zinc-200">
+                    {ubicacion}
+                  </p>
+                </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Icono tipo="mundo" className="h-3 w-3 text-violet-400" />
-                {usuario.pais || "País sin completar"}
+              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300">
+                  <Icono tipo="mundo" className="h-4 w-4" />
+                </span>
+
+                <div className="min-w-0">
+                  <p className="text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+                    Idioma principal
+                  </p>
+                  <p className="truncate text-[12px] font-semibold text-zinc-200">
+                    {idiomaPrincipal}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300">
+                  <Icono tipo="musica" className="h-4 w-4" />
+                </span>
+
+                <div className="min-w-0">
+                  <p className="text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+                    Tipo de colaboración
+                  </p>
+                  <p className="truncate text-[12px] font-semibold text-zinc-200">
+                    {tipoColaboracion}
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="my-3 h-px bg-white/10" />
+            <div className="mt-4">
+              <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.025] px-3.5 py-3">
+                <div>
+                  <p className="text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+                    Miembro de FeatMusic desde
+                  </p>
+                  <p className="mt-1 text-[12px] font-semibold text-zinc-200">
+                    {fechaRegistro}
+                  </p>
+                </div>
 
-            <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-zinc-500">
-              Última conexión
-            </p>
-
-            <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-              En línea ahora
+                <span
+                  className={`rounded-full px-2.5 py-1 text-[9px] font-bold ${
+                    usuario.correoVerificado
+                      ? "bg-emerald-400/10 text-emerald-300"
+                      : "bg-amber-400/10 text-amber-300"
+                  }`}
+                >
+                  {usuario.correoVerificado
+                    ? "Cuenta verificada"
+                    : "Verificación pendiente"}
+                </span>
+              </div>
             </div>
           </section>
 
