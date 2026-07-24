@@ -119,7 +119,7 @@ export default function MenuMovilPanel() {
     <>
       {cargandoExplorar && (
         <div
-          className="fixed inset-0 z-[100] flex h-[100dvh] flex-col overflow-hidden bg-[#09070d] text-white lg:hidden"
+          className="fixed inset-0 z-40 flex h-[100dvh] flex-col overflow-hidden bg-[#09070d] text-white lg:hidden"
           role="status"
           aria-live="polite"
           aria-label="Cargando artistas"
@@ -183,8 +183,11 @@ export default function MenuMovilPanel() {
             onClick={abrirExplorar}
             disabled={cargandoExplorar}
             aria-label="Explorar artistas"
-            aria-current={estaEnExplorar ? "page" : undefined}
-            className={claseOpcion(estaEnExplorar, cargandoExplorar)}
+            aria-current={estaEnExplorar || cargandoExplorar ? "page" : undefined}
+            className={claseOpcion(
+              estaEnExplorar || cargandoExplorar,
+              cargandoExplorar,
+            )}
           >
             <Icono tipo="explorar" />
             <span className="truncate text-[9px] font-semibold">Explorar</span>
