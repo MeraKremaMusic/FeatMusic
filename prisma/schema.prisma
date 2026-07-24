@@ -13,19 +13,23 @@ datasource db {
 }
 
 model Usuario {
-  id              Int     @id @default(autoincrement())
-  nombre          String?
-  nombreArtistico String?  @map("nombre_artistico")
-  nombreUsuario   String?  @unique @map("nombre_usuario")
-  fotoPerfil      String?  @db.VarChar(500) @map("foto_perfil")
-  biografia       String?  @db.VarChar(300)
+  id                     Int     @id @default(autoincrement())
+  nombre                 String?
+  nombreArtistico        String? @map("nombre_artistico")
+  nombreUsuario          String? @unique @map("nombre_usuario")
+  fotoPerfil             String? @map("foto_perfil") @db.VarChar(500)
+  biografia              String? @db.VarChar(300)
+  spotifyUrl             String? @map("spotify_url") @db.VarChar(500)
+  youtubeUrl             String? @map("youtube_url") @db.VarChar(500)
+  instagramUrl           String? @map("instagram_url") @db.VarChar(500)
+  distribuidoraPreferida String? @map("distribuidora_preferida") @db.VarChar(120)
 
   correo       String @unique
   passwordHash String @map("password_hash")
 
   pais             String?
   ciudad           String?
-  idiomaPrincipal  String?  @map("idioma_principal")
+  idiomaPrincipal  String?   @map("idioma_principal")
   rolPrincipal     String    @map("rol_principal")
   generos          Json?
   tipoColaboracion String?   @map("tipo_colaboracion")

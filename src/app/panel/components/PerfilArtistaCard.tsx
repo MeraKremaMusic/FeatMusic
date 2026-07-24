@@ -1,19 +1,22 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { ChangeEvent, FormEvent, ReactNode } from "react";
 
 type PerfilActualizado = {
   nombreArtistico: string | null;
   nombreUsuario: string | null;
   biografia: string | null;
   fotoPerfil: string | null;
+  spotifyUrl: string | null;
+  youtubeUrl: string | null;
+  instagramUrl: string | null;
+  distribuidoraPreferida: string | null;
 };
 
-type PerfilArtistaCardProps = {
+type PerfilArtistaCardProps = PerfilActualizado & {
   nombreArtistico: string;
   nombreUsuario: string;
-  fotoPerfil: string | null;
-  biografia: string | null;
   rol: string;
   tipoColaboracion: string;
   generos: string[];
@@ -21,11 +24,24 @@ type PerfilArtistaCardProps = {
   idiomaPrincipal: string;
   fechaRegistro: string;
   correoVerificado: boolean;
-  perfilCompleto: boolean;
 };
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const USUARIO_REGEX = /^[a-z0-9._]{3,24}$/;
+const DISTRIBUIDORAS = [
+  "ONErpm",
+  "DistroKid",
+  "TuneCore",
+  "CD Baby",
+  "Amuse",
+  "SoundOn",
+  "Ditto",
+  "UnitedMasters",
+  "Symphonic",
+  "Believe",
+  "Ninguna",
+] as const;
 
 function obtenerIniciales(nombre: string) {
   return nombre
@@ -36,11 +52,94 @@ function obtenerIniciales(nombre: string) {
     .join("");
 }
 
+function normalizarUsuario(valor: string) {
+  return valor
+    .trim()
+    .toLowerCase()
+    .replace(/^@+/, "")
+    .replace(/[^a-z0-9._]/g, "");
+}
+
+function esUrlHttpValida(valor: string) {
+  if (!valor.trim()) return true;
+
+  try {
+    const url = new URL(valor.trim());
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function obtenerSeleccionDistribuidora(valor: string | null) {
+  if (!valor) {
+    return { seleccion: "", otra: "" };
+  }
+
+  if (DISTRIBUIDORAS.includes(valor as (typeof DISTRIBUIDORAS)[number])) {
+    return { seleccion: valor, otra: "" };
+  }
+
+  return { seleccion: "Otra", otra: valor };
+}
+
+function IconoPlataforma({ plataforma }: { plataforma: "spotify" | "youtube" | "instagram" }) {
+  if (plataforma === "spotify") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor">
+        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.58 14.42a.75.75 0 0 1-1.03.25c-2.83-1.73-6.39-2.12-10.58-1.16a.75.75 0 1 1-.34-1.46c4.58-1.05 8.52-.6 11.7 1.34.35.22.46.68.25 1.03Zm1.47-3.25a.94.94 0 0 1-1.29.31c-3.24-1.99-8.18-2.57-12.01-1.4a.94.94 0 1 1-.55-1.8c4.39-1.33 9.83-.69 13.54 1.59.44.27.58.85.31 1.3Zm.13-3.38C14.3 7.49 7.9 7.28 4.2 8.4a1.13 1.13 0 0 1-.65-2.16c4.25-1.28 11.33-1.03 15.79 1.61a1.13 1.13 0 0 1-1.15 1.94Z" />
+      </svg>
+    );
+  }
+
+  if (plataforma === "youtube") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor">
+        <path d="M21.58 7.19a2.99 2.99 0 0 0-2.1-2.12C17.62 4.56 12 4.56 12 4.56s-5.62 0-7.48.51a2.99 2.99 0 0 0-2.1 2.12A31.2 31.2 0 0 0 1.91 12c0 1.62.17 3.23.51 4.81a2.99 2.99 0 0 0 2.1 2.12c1.86.51 7.48.51 7.48.51s5.62 0 7.48-.51a2.99 2.99 0 0 0 2.1-2.12c.34-1.58.51-3.19.51-4.81s-.17-3.23-.51-4.81ZM9.94 15.15v-6.3L15.4 12l-5.46 3.15Z" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function BotonPlataforma({
+  href,
+  plataforma,
+  children,
+}: {
+  href: string;
+  plataforma: "spotify" | "youtube" | "instagram";
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/20 bg-violet-500/[0.07] px-2.5 py-1.5 text-[10px] font-bold text-violet-200 transition hover:border-violet-400/40 hover:bg-violet-500/15 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+    >
+      <IconoPlataforma plataforma={plataforma} />
+      {children}
+    </a>
+  );
+}
+
 export default function PerfilArtistaCard({
   nombreArtistico: nombreInicial,
-  nombreUsuario,
+  nombreUsuario: usuarioInicial,
   fotoPerfil: fotoInicial,
   biografia: biografiaInicial,
+  spotifyUrl: spotifyInicial,
+  youtubeUrl: youtubeInicial,
+  instagramUrl: instagramInicial,
+  distribuidoraPreferida: distribuidoraInicial,
   rol,
   tipoColaboracion,
   generos,
@@ -48,17 +147,31 @@ export default function PerfilArtistaCard({
   idiomaPrincipal,
   fechaRegistro,
   correoVerificado,
-  perfilCompleto,
 }: PerfilArtistaCardProps) {
   const [perfil, setPerfil] = useState<PerfilActualizado>({
     nombreArtistico: nombreInicial,
-    nombreUsuario,
+    nombreUsuario: usuarioInicial,
     biografia: biografiaInicial,
     fotoPerfil: fotoInicial,
+    spotifyUrl: spotifyInicial,
+    youtubeUrl: youtubeInicial,
+    instagramUrl: instagramInicial,
+    distribuidoraPreferida: distribuidoraInicial,
   });
   const [modalAbierto, setModalAbierto] = useState(false);
   const [nombreArtistico, setNombreArtistico] = useState(nombreInicial);
+  const [nombreUsuario, setNombreUsuario] = useState(usuarioInicial);
   const [biografia, setBiografia] = useState(biografiaInicial ?? "");
+  const [spotifyUrl, setSpotifyUrl] = useState(spotifyInicial ?? "");
+  const [youtubeUrl, setYoutubeUrl] = useState(youtubeInicial ?? "");
+  const [instagramUrl, setInstagramUrl] = useState(instagramInicial ?? "");
+  const distribuidoraInicialNormalizada = obtenerSeleccionDistribuidora(distribuidoraInicial);
+  const [distribuidoraSeleccionada, setDistribuidoraSeleccionada] = useState(
+    distribuidoraInicialNormalizada.seleccion,
+  );
+  const [otraDistribuidora, setOtraDistribuidora] = useState(
+    distribuidoraInicialNormalizada.otra,
+  );
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(fotoInicial);
   const [guardando, setGuardando] = useState(false);
@@ -67,9 +180,10 @@ export default function PerfilArtistaCard({
   const inputArchivoRef = useRef<HTMLInputElement>(null);
 
   const nombreVisible = perfil.nombreArtistico?.trim() || "Artista";
-  const iniciales = useMemo(
-    () => obtenerIniciales(nombreVisible),
-    [nombreVisible],
+  const usuarioVisible = perfil.nombreUsuario?.trim() || usuarioInicial;
+  const iniciales = useMemo(() => obtenerIniciales(nombreVisible), [nombreVisible]);
+  const tienePlataformas = Boolean(
+    perfil.spotifyUrl || perfil.youtubeUrl || perfil.instagramUrl,
   );
 
   useEffect(() => {
@@ -99,8 +213,18 @@ export default function PerfilArtistaCard({
   }, [vistaPrevia]);
 
   function abrirModal() {
+    const distribuidora = obtenerSeleccionDistribuidora(
+      perfil.distribuidoraPreferida,
+    );
+
     setNombreArtistico(perfil.nombreArtistico ?? "");
+    setNombreUsuario(perfil.nombreUsuario ?? usuarioInicial);
     setBiografia(perfil.biografia ?? "");
+    setSpotifyUrl(perfil.spotifyUrl ?? "");
+    setYoutubeUrl(perfil.youtubeUrl ?? "");
+    setInstagramUrl(perfil.instagramUrl ?? "");
+    setDistribuidoraSeleccionada(distribuidora.seleccion);
+    setOtraDistribuidora(distribuidora.otra);
     setArchivo(null);
     setVistaPrevia(perfil.fotoPerfil);
     setError("");
@@ -124,7 +248,6 @@ export default function PerfilArtistaCard({
 
   function seleccionarImagen(event: ChangeEvent<HTMLInputElement>) {
     const imagen = event.target.files?.[0];
-
     if (!imagen) return;
 
     setError("");
@@ -152,27 +275,70 @@ export default function PerfilArtistaCard({
 
   async function guardarPerfil(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     if (guardando) return;
 
     setError("");
     setExito("");
 
     const nombreLimpio = nombreArtistico.trim();
+    const usuarioLimpio = normalizarUsuario(nombreUsuario);
+    const bioLimpia = biografia.trim();
+    const spotifyLimpio = spotifyUrl.trim();
+    const youtubeLimpio = youtubeUrl.trim();
+    const instagramLimpio = instagramUrl.trim();
+    const distribuidoraLimpia =
+      distribuidoraSeleccionada === "Otra"
+        ? otraDistribuidora.trim()
+        : distribuidoraSeleccionada.trim();
 
     if (nombreLimpio.length < 2) {
       setError("El nombre artístico debe tener al menos 2 caracteres.");
       return;
     }
 
-    if (biografia.trim().length > 300) {
+    if (!USUARIO_REGEX.test(usuarioLimpio)) {
+      setError(
+        "El nombre de usuario debe tener entre 3 y 24 caracteres y usar solo letras, números, punto o guion bajo.",
+      );
+      return;
+    }
+
+    if (bioLimpia.length > 300) {
       setError("La biografía no puede superar 300 caracteres.");
+      return;
+    }
+
+    const enlaces = [
+      ["Spotify", spotifyLimpio],
+      ["YouTube", youtubeLimpio],
+      ["Instagram", instagramLimpio],
+    ] as const;
+
+    for (const [plataforma, enlace] of enlaces) {
+      if (!esUrlHttpValida(enlace)) {
+        setError(`El enlace de ${plataforma} debe comenzar con http:// o https://.`);
+        return;
+      }
+
+      if (enlace.length > 500) {
+        setError(`El enlace de ${plataforma} no puede superar 500 caracteres.`);
+        return;
+      }
+    }
+
+    if (distribuidoraLimpia.length > 120) {
+      setError("La distribuidora no puede superar 120 caracteres.");
       return;
     }
 
     const formData = new FormData();
     formData.set("nombreArtistico", nombreLimpio);
-    formData.set("biografia", biografia.trim());
+    formData.set("nombreUsuario", usuarioLimpio);
+    formData.set("biografia", bioLimpia);
+    formData.set("spotifyUrl", spotifyLimpio);
+    formData.set("youtubeUrl", youtubeLimpio);
+    formData.set("instagramUrl", instagramLimpio);
+    formData.set("distribuidoraPreferida", distribuidoraLimpia);
 
     if (archivo) {
       formData.set("fotoPerfil", archivo);
@@ -198,7 +364,17 @@ export default function PerfilArtistaCard({
 
       setPerfil(data.usuario);
       setNombreArtistico(data.usuario.nombreArtistico ?? "");
+      setNombreUsuario(data.usuario.nombreUsuario ?? "");
       setBiografia(data.usuario.biografia ?? "");
+      setSpotifyUrl(data.usuario.spotifyUrl ?? "");
+      setYoutubeUrl(data.usuario.youtubeUrl ?? "");
+      setInstagramUrl(data.usuario.instagramUrl ?? "");
+
+      const distribuidoraActualizada = obtenerSeleccionDistribuidora(
+        data.usuario.distribuidoraPreferida,
+      );
+      setDistribuidoraSeleccionada(distribuidoraActualizada.seleccion);
+      setOtraDistribuidora(distribuidoraActualizada.otra);
       setVistaPrevia(data.usuario.fotoPerfil);
       setArchivo(null);
       setExito(data.mensaje ?? "Perfil actualizado correctamente.");
@@ -219,91 +395,75 @@ export default function PerfilArtistaCard({
 
   return (
     <>
-      <article className="relative flex h-full min-h-[430px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-zinc-950/95 p-5 shadow-2xl shadow-black/30 sm:p-6">
-        <div className="mb-5 flex items-start justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/15 text-xs font-bold text-violet-300">
-                1
-              </span>
-              <h2 className="text-sm font-semibold text-white">
-                Perfil del artista
-              </h2>
+      <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex min-w-0 items-start gap-4">
+            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-violet-400/35 bg-gradient-to-br from-violet-700 to-fuchsia-600 text-2xl font-black shadow-lg shadow-violet-950/40">
+              {perfil.fotoPerfil ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={perfil.fotoPerfil}
+                  alt={`Foto de perfil de ${nombreVisible}`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                iniciales
+              )}
+
+              {correoVerificado && (
+                <span
+                  title="Cuenta verificada"
+                  className="absolute bottom-1 right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#0d0913] bg-violet-500 text-[8px] font-black text-white"
+                >
+                  ✓
+                </span>
+              )}
             </div>
-            <p className="mt-1 pl-8 text-xs text-zinc-500">
-              {perfilCompleto ? "Perfil completo" : "Perfil pendiente"}
-            </p>
+
+            <div className="min-w-0 pt-1">
+              <h2 className="truncate text-lg font-black tracking-tight text-white">
+                {nombreVisible}
+              </h2>
+              <p className="mt-0.5 truncate text-[11px] text-violet-300">
+                @{usuarioVisible}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <span className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-zinc-300">
+                  {rol}
+                </span>
+                <span className="rounded-md border border-violet-400/20 bg-violet-500/[0.07] px-2 py-1 text-[10px] text-violet-200">
+                  {tipoColaboracion}
+                </span>
+              </div>
+            </div>
           </div>
 
           <button
             type="button"
             onClick={abrirModal}
-            className="shrink-0 rounded-lg border border-violet-400/30 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-violet-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="shrink-0 rounded-lg border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
           >
             Editar perfil
           </button>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-violet-400/25 bg-gradient-to-br from-violet-600 to-fuchsia-700 text-xl font-bold text-white">
-            {perfil.fotoPerfil ? (
-              // Se usa <img> porque Cloudinary es un dominio externo y así no
-              // necesitas modificar next.config.ts.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={perfil.fotoPerfil}
-                alt={`Foto de perfil de ${nombreVisible}`}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              iniciales
-            )}
-            {correoVerificado && (
-              <span
-                className="absolute bottom-1 right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-zinc-950 bg-violet-500 text-[10px]"
-                aria-label="Cuenta verificada"
-                title="Cuenta verificada"
-              >
-                ✓
-              </span>
-            )}
-          </div>
-
-          <div className="min-w-0">
-            <h3 className="truncate text-xl font-bold text-white">
-              {nombreVisible}
-            </h3>
-            <p className="mt-1 truncate text-sm text-violet-300">
-              @{perfil.nombreUsuario || nombreUsuario}
-            </p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              <span className="rounded-md bg-white/5 px-2 py-1 text-[11px] text-zinc-300">
-                {rol}
-              </span>
-              <span className="rounded-md bg-white/5 px-2 py-1 text-[11px] text-zinc-300">
-                {tipoColaboracion}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-5 rounded-xl border border-white/5 bg-white/[0.025] p-3">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+        <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.025] p-3.5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-zinc-500">
             Biografía
           </p>
-          <p className="mt-1.5 line-clamp-3 text-sm leading-5 text-zinc-300">
+          <p className="mt-2 text-[12px] leading-5 text-zinc-200">
             {perfil.biografia || "Todavía no has agregado una biografía."}
           </p>
         </div>
 
-        <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+        <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-[11px]">
           <div>
-            <p className="text-xs text-zinc-500">Géneros musicales</p>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {(generos.length ? generos : ["Sin completar"]).map((genero) => (
+            <p className="text-zinc-500">Géneros musicales</p>
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {(generos.length ? generos : ["Sin completar"]).slice(0, 4).map((genero) => (
                 <span
                   key={genero}
-                  className="rounded-md border border-white/5 bg-white/[0.035] px-2 py-1 text-[11px] text-zinc-300"
+                  className="rounded-md border border-white/5 bg-white/[0.035] px-2 py-1 text-[10px] text-zinc-300"
                 >
                   {genero}
                 </span>
@@ -312,29 +472,68 @@ export default function PerfilArtistaCard({
           </div>
 
           <div>
-            <p className="text-xs text-zinc-500">Ciudad y país</p>
+            <p className="text-zinc-500">Ciudad y país</p>
             <p className="mt-1 font-medium text-zinc-200">{ubicacion}</p>
           </div>
 
           <div>
-            <p className="text-xs text-zinc-500">Idioma principal</p>
+            <p className="text-zinc-500">Idioma principal</p>
             <p className="mt-1 font-medium text-zinc-200">{idiomaPrincipal}</p>
           </div>
 
           <div>
-            <p className="text-xs text-zinc-500">Miembro desde</p>
+            <p className="text-zinc-500">Miembro desde</p>
             <p className="mt-1 font-medium text-zinc-200">{fechaRegistro}</p>
           </div>
         </div>
 
-        <p className="mt-auto pt-4 text-xs text-zinc-500">
+        <div className="mt-4 border-t border-white/10 pt-4">
+          <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-zinc-500">
+            Presencia musical
+          </p>
+
+          {tienePlataformas ? (
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {perfil.spotifyUrl && (
+                <BotonPlataforma href={perfil.spotifyUrl} plataforma="spotify">
+                  Spotify
+                </BotonPlataforma>
+              )}
+              {perfil.youtubeUrl && (
+                <BotonPlataforma href={perfil.youtubeUrl} plataforma="youtube">
+                  YouTube
+                </BotonPlataforma>
+              )}
+              {perfil.instagramUrl && (
+                <BotonPlataforma href={perfil.instagramUrl} plataforma="instagram">
+                  Instagram
+                </BotonPlataforma>
+              )}
+            </div>
+          ) : (
+            <p className="mt-2 text-[10px] text-zinc-500">
+              Agrega tus plataformas desde “Editar perfil”.
+            </p>
+          )}
+
+          <div className="mt-3 flex items-center justify-between rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5">
+            <span className="text-[10px] text-zinc-500">
+              Distribuidora preferida
+            </span>
+            <span className="max-w-[55%] truncate text-right text-[10px] font-semibold text-zinc-200">
+              {perfil.distribuidoraPreferida || "Sin especificar"}
+            </span>
+          </div>
+        </div>
+
+        <p className="mt-auto pt-4 text-[10px] text-zinc-500">
           {correoVerificado ? "Cuenta verificada" : "Verificación pendiente"}
         </p>
       </article>
 
       {modalAbierto && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-4"
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) cerrarModal();
@@ -344,18 +543,15 @@ export default function PerfilArtistaCard({
             role="dialog"
             aria-modal="true"
             aria-labelledby="editar-perfil-titulo"
-            className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-zinc-950 p-5 shadow-2xl sm:p-6"
+            className="max-h-[94dvh] w-full overflow-y-auto rounded-t-[24px] border border-white/10 bg-zinc-950 p-5 shadow-2xl sm:max-w-xl sm:rounded-2xl sm:p-6"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2
-                  id="editar-perfil-titulo"
-                  className="text-xl font-bold text-white"
-                >
+                <h2 id="editar-perfil-titulo" className="text-xl font-bold text-white">
                   Editar perfil
                 </h2>
                 <p className="mt-1 text-sm text-zinc-400">
-                  Actualiza tu foto, nombre artístico y biografía.
+                  Actualiza tu identidad, plataformas y distribuidora musical.
                 </p>
               </div>
 
@@ -372,12 +568,14 @@ export default function PerfilArtistaCard({
 
             <form onSubmit={guardarPerfil} className="mt-6 space-y-5">
               <div>
-                <label className="text-sm font-semibold text-zinc-200">
-                  Foto de perfil
-                </label>
-
+                <p className="text-sm font-semibold text-zinc-200">Foto de perfil</p>
                 <div className="mt-3 flex items-center gap-4">
-                  <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-violet-400/25 bg-gradient-to-br from-violet-600 to-fuchsia-700 text-2xl font-bold text-white">
+                  <button
+                    type="button"
+                    onClick={() => inputArchivoRef.current?.click()}
+                    disabled={guardando}
+                    className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-violet-400/35 bg-gradient-to-br from-violet-700 to-fuchsia-600 text-xl font-black text-white disabled:opacity-60"
+                  >
                     {vistaPrevia ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -388,92 +586,176 @@ export default function PerfilArtistaCard({
                     ) : (
                       obtenerIniciales(nombreArtistico || nombreVisible)
                     )}
-                  </div>
+                  </button>
 
-                  <div className="min-w-0">
-                    <input
-                      ref={inputArchivoRef}
-                      id="fotoPerfil"
-                      name="fotoPerfil"
-                      type="file"
-                      accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                      onChange={seleccionarImagen}
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => inputArchivoRef.current?.click()}
                       disabled={guardando}
-                      className="block w-full text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/15 file:px-3 file:py-2 file:font-semibold file:text-violet-200 hover:file:bg-violet-500/25 disabled:opacity-50"
-                    />
-                    <p className="mt-2 text-xs leading-4 text-zinc-500">
+                      className="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-zinc-200 transition hover:bg-white/5 disabled:opacity-60"
+                    >
+                      Seleccionar imagen
+                    </button>
+                    <p className="mt-2 text-[10px] text-zinc-500">
                       JPG, PNG o WebP. Máximo 5 MB.
                     </p>
                   </div>
                 </div>
-              </div>
 
-              <div>
-                <label
-                  htmlFor="nombreArtistico"
-                  className="text-sm font-semibold text-zinc-200"
-                >
-                  Nombre artístico
-                </label>
                 <input
-                  id="nombreArtistico"
-                  name="nombreArtistico"
-                  value={nombreArtistico}
-                  onChange={(event) => setNombreArtistico(event.target.value)}
-                  minLength={2}
-                  maxLength={80}
-                  required
+                  ref={inputArchivoRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={seleccionarImagen}
                   disabled={guardando}
-                  autoComplete="nickname"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                  className="hidden"
                 />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <label
-                    htmlFor="biografia"
-                    className="text-sm font-semibold text-zinc-200"
-                  >
-                    Biografía
-                  </label>
-                  <span
-                    className={`text-xs ${
-                      biografia.length > 300
-                        ? "text-red-400"
-                        : "text-zinc-500"
-                    }`}
-                  >
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label>
+                  <span className="text-sm font-semibold text-zinc-200">
+                    Nombre artístico
+                  </span>
+                  <input
+                    value={nombreArtistico}
+                    onChange={(event) => setNombreArtistico(event.target.value)}
+                    minLength={2}
+                    maxLength={80}
+                    required
+                    disabled={guardando}
+                    autoComplete="nickname"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                  />
+                </label>
+
+                <label>
+                  <span className="text-sm font-semibold text-zinc-200">
+                    Nombre de usuario
+                  </span>
+                  <div className="mt-2 flex overflow-hidden rounded-xl border border-white/10 bg-black/40 focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20">
+                    <span className="flex items-center border-r border-white/10 px-3 text-sm text-zinc-500">@</span>
+                    <input
+                      value={nombreUsuario}
+                      onChange={(event) => setNombreUsuario(normalizarUsuario(event.target.value))}
+                      minLength={3}
+                      maxLength={24}
+                      required
+                      disabled={guardando}
+                      autoComplete="username"
+                      className="min-w-0 flex-1 bg-transparent px-3.5 py-3 text-sm text-white outline-none disabled:opacity-60"
+                    />
+                  </div>
+                </label>
+              </div>
+
+              <label className="block">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-zinc-200">Biografía</span>
+                  <span className={`text-xs ${biografia.length > 300 ? "text-red-400" : "text-zinc-500"}`}>
                     {biografia.length}/300
                   </span>
                 </div>
                 <textarea
-                  id="biografia"
-                  name="biografia"
                   value={biografia}
                   onChange={(event) => setBiografia(event.target.value)}
                   maxLength={300}
-                  rows={5}
+                  rows={4}
                   disabled={guardando}
                   placeholder="Cuéntales a otros artistas quién eres y qué tipo de música haces."
                   className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm leading-6 text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
                 />
+              </label>
+
+              <div className="border-t border-white/10 pt-5">
+                <p className="text-sm font-semibold text-zinc-200">Plataformas del artista</p>
+                <div className="mt-3 grid gap-4">
+                  <label>
+                    <span className="text-xs text-zinc-400">Perfil de Spotify</span>
+                    <input
+                      type="url"
+                      value={spotifyUrl}
+                      onChange={(event) => setSpotifyUrl(event.target.value)}
+                      maxLength={500}
+                      disabled={guardando}
+                      placeholder="https://open.spotify.com/artist/..."
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                    />
+                  </label>
+
+                  <label>
+                    <span className="text-xs text-zinc-400">Canal de YouTube</span>
+                    <input
+                      type="url"
+                      value={youtubeUrl}
+                      onChange={(event) => setYoutubeUrl(event.target.value)}
+                      maxLength={500}
+                      disabled={guardando}
+                      placeholder="https://www.youtube.com/@artista"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                    />
+                  </label>
+
+                  <label>
+                    <span className="text-xs text-zinc-400">Instagram</span>
+                    <input
+                      type="url"
+                      value={instagramUrl}
+                      onChange={(event) => setInstagramUrl(event.target.value)}
+                      maxLength={500}
+                      disabled={guardando}
+                      placeholder="https://www.instagram.com/artista"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="border-t border-white/10 pt-5">
+                <label>
+                  <span className="text-sm font-semibold text-zinc-200">
+                    Distribuidora musical preferida
+                  </span>
+                  <select
+                    value={distribuidoraSeleccionada}
+                    onChange={(event) => setDistribuidoraSeleccionada(event.target.value)}
+                    disabled={guardando}
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                  >
+                    <option value="">Sin especificar</option>
+                    {DISTRIBUIDORAS.map((distribuidora) => (
+                      <option key={distribuidora} value={distribuidora}>
+                        {distribuidora}
+                      </option>
+                    ))}
+                    <option value="Otra">Otra</option>
+                  </select>
+                </label>
+
+                {distribuidoraSeleccionada === "Otra" && (
+                  <label className="mt-3 block">
+                    <span className="text-xs text-zinc-400">Escribe la distribuidora</span>
+                    <input
+                      value={otraDistribuidora}
+                      onChange={(event) => setOtraDistribuidora(event.target.value)}
+                      maxLength={120}
+                      disabled={guardando}
+                      placeholder="Nombre de la distribuidora"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                    />
+                  </label>
+                )}
               </div>
 
               {error && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2.5 text-sm text-red-300"
-                >
+                <p role="alert" className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2.5 text-sm text-red-300">
                   {error}
                 </p>
               )}
 
               {exito && (
-                <p
-                  role="status"
-                  className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-300"
-                >
+                <p role="status" className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-300">
                   {exito}
                 </p>
               )}
@@ -492,6 +774,7 @@ export default function PerfilArtistaCard({
                   disabled={
                     guardando ||
                     nombreArtistico.trim().length < 2 ||
+                    !USUARIO_REGEX.test(normalizarUsuario(nombreUsuario)) ||
                     biografia.length > 300
                   }
                   className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"

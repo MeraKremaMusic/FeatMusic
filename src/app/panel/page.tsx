@@ -446,15 +446,21 @@ export default async function PanelPage() {
               nombreUsuario={usuarioPublico}
               fotoPerfil={usuario.fotoPerfil}
               biografia={usuario.biografia}
+
+              spotifyUrl={usuario.spotifyUrl}
+
+              youtubeUrl={usuario.youtubeUrl}
+
+              instagramUrl={usuario.instagramUrl}
+
+              distribuidoraPreferida={usuario.distribuidoraPreferida}
               rol={rol}
               tipoColaboracion={tipoColaboracion}
               generos={generos}
               ubicacion={ubicacion}
               idiomaPrincipal={idiomaPrincipal}
               fechaRegistro={fechaRegistro}
-              correoVerificado={usuario.correoVerificado}
-              perfilCompleto={usuario.perfilCompleto}
-            />
+              correoVerificado={usuario.correoVerificado}/>
           </section>
 
           <section id="panel-card-2" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
