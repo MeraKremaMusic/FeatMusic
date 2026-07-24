@@ -256,42 +256,6 @@ function Onda({
   );
 }
 
-const ideasDemo = [
-  {
-    id: 1,
-    titulo: "Luces de Medianoche",
-    genero: "Pop alternativo",
-    bpm: "96 BPM",
-    tonalidad: "Em",
-    descripcion: "Idea sobre noches en la ciudad, deseos y nuevos comienzos.",
-    duracion: "0:28",
-    imagen:
-      "bg-[radial-gradient(circle_at_70%_30%,#fb7185_0%,transparent_22%),linear-gradient(160deg,#312e81_0%,#7c3aed_46%,#111827_100%)]",
-  },
-  {
-    id: 2,
-    titulo: "Mar sin Ruido",
-    genero: "R&B",
-    bpm: "82 BPM",
-    tonalidad: "Am",
-    descripcion: "Una balada íntima sobre soltar, aceptar y seguir adelante.",
-    duracion: "0:26",
-    imagen:
-      "bg-[radial-gradient(circle_at_50%_40%,#22d3ee_0%,transparent_24%),linear-gradient(160deg,#0f172a_0%,#1d4ed8_52%,#111827_100%)]",
-  },
-  {
-    id: 3,
-    titulo: "Órbitas",
-    genero: "Electrónica",
-    bpm: "120 BPM",
-    tonalidad: "Dm",
-    descripcion: "Texturas electrónicas y voces etéreas para la pista de baile.",
-    duracion: "0:24",
-    imagen:
-      "bg-[radial-gradient(circle_at_58%_28%,#c4b5fd_0%,transparent_18%),linear-gradient(160deg,#111827_0%,#312e81_48%,#020617_100%)]",
-  },
-];
-
 const propuestasDemo = [
   {
     nombre: "Neo Wave",
@@ -425,90 +389,16 @@ export default async function PanelPage() {
 />
           </section>
 
-          <section id="panel-card-2" className="min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400">
-                <Icono tipo="idea" className="h-3 w-3 text-violet-400" />
-                <span className="text-violet-400">2</span>
-                Ideas musicales
-              </div>
-
-              <button
-                type="button"
-                className="flex items-center gap-2 rounded-lg border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20"
-              >
-                <Icono tipo="mas" className="h-3 w-3" />
-                Nueva idea
-              </button>
-            </div>
-
-            <p className="mt-2 text-[10px] text-zinc-400">
-              Selecciona una idea para ver sus propuestas.
-            </p>
-
-            <div className="mt-1.5 space-y-1">
-              {ideasDemo.map((idea, indice) => {
-                const seleccionada = indice === 0;
-
-                return (
-                  <button
-                    key={idea.id}
-                    type="button"
-                    className={`w-full rounded-lg border p-2 text-left transition ${
-                      seleccionada
-                        ? "border-violet-400/80 bg-violet-500/[0.06] shadow-lg shadow-violet-950/30"
-                        : "border-white/10 bg-white/[0.025] hover:border-white/20"
-                    }`}
-                  >
-                    <div className="flex gap-3">
-                      <div
-                        className={`h-16 w-16 shrink-0 rounded-lg ${idea.imagen}`}
-                      />
-
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <h3 className="text-xs font-bold">
-                              {idea.titulo}
-                            </h3>
-                            <p className="mt-0.5 text-[9px] text-zinc-400">
-                              {idea.genero} · {idea.bpm} · {idea.tonalidad}
-                            </p>
-                          </div>
-
-                          {seleccionada && (
-                            <span className="rounded-full bg-violet-500 px-2 py-0.5 text-[8px] font-black uppercase">
-                              Seleccionada
-                            </span>
-                          )}
-                        </div>
-
-                        <p className="mt-1 line-clamp-2 text-[9px] leading-4 text-zinc-400">
-                          {idea.descripcion}
-                        </p>
-
-                        <div className="mt-1.5 flex items-center gap-1.5">
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/20 text-white">
-                            <Icono tipo="play" className="h-3 w-3" />
-                          </span>
-                          <Onda activa={seleccionada} />
-                          <span className="text-[10px] text-zinc-500">
-                            {idea.duracion}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
+          <section
+            id="panel-card-2"
+            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 items-center justify-center overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3"
+          >
             <button
               type="button"
-              className="mt-0.5 flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[10px] font-bold text-violet-300 transition hover:bg-violet-500/10"
+              className="flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/15 px-6 py-3 text-sm font-bold text-violet-100 shadow-lg shadow-violet-950/30 transition hover:border-violet-300/50 hover:bg-violet-500/25 focus:outline-none focus:ring-2 focus:ring-violet-400/60"
             >
-              Ver todas las ideas
-              <Icono tipo="flecha" className="h-3 w-3" />
+              <Icono tipo="mas" className="h-4 w-4" />
+              Publicar una idea
             </button>
           </section>
 
