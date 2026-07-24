@@ -312,7 +312,7 @@ export default async function PanelPage() {
         >
           <section
             id="panel-card-1"
-            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:h-full lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink"
+            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:!border-0 [&>*]:!bg-transparent [&>*]:!shadow-none lg:h-full lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink"
           >
             <PerfilArtistaCard
               nombreArtistico={nombreArtistico}
@@ -340,7 +340,7 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-2"
-            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 items-center justify-center overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3"
+            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 items-center justify-center overflow-hidden p-4 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
           >
             <button
               type="button"
@@ -353,7 +353,7 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-3"
-            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#0d0913]/95 p-4 shadow-2xl shadow-black/35 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:rounded-[18px] lg:p-3"
+            className="flex min-h-[calc(100dvh-116px)] w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 flex-col overflow-hidden p-4 lg:min-h-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
           >
             <div className="flex flex-1 items-center justify-center">
               <div className="flex max-w-xs flex-col items-center text-center">
@@ -369,26 +369,6 @@ export default async function PanelPage() {
           </section>
         </div>
 
-        <div
-          className="relative z-10 flex items-center justify-center gap-2 pb-5 lg:hidden"
-          aria-label="Navegación entre secciones del panel"
-        >
-          <a
-            href="#panel-card-1"
-            aria-label="Ir al perfil del artista"
-            className="h-2 w-5 rounded-full bg-violet-400 shadow-sm shadow-violet-500/50 transition hover:bg-violet-300"
-          />
-          <a
-            href="#panel-card-2"
-            aria-label="Ir a ideas musicales"
-            className="h-2 w-2 rounded-full bg-white/25 transition hover:bg-white/50"
-          />
-          <a
-            href="#panel-card-3"
-            aria-label="Ir a propuestas"
-            className="h-2 w-2 rounded-full bg-white/25 transition hover:bg-white/50"
-          />
-        </div>
       </div>
 
       <nav
@@ -404,40 +384,43 @@ export default async function PanelPage() {
             <span className="truncate text-[9px] font-semibold">Inicio</span>
           </button>
 
-          <button
-            type="button"
+          <Link
+            href="/artistas"
+            aria-label="Explorar artistas"
             className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
           >
             <Icono tipo="comunidad" className="h-5 w-5" />
             <span className="truncate text-[9px] font-semibold">Explorar</span>
-          </button>
+          </Link>
 
-          <button
-            type="button"
-            aria-label="Publicar una idea"
+          <a
+            href="#panel-card-2"
+            aria-label="Ir a publicar una idea"
             className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60 transition group-hover:scale-105 group-hover:bg-violet-400">
               <Icono tipo="mas" className="h-6 w-6" />
             </span>
             <span className="truncate text-[9px] font-semibold">Publicar</span>
-          </button>
+          </a>
 
-          <button
-            type="button"
+          <a
+            href="#panel-card-3"
+            aria-label="Ir a propuestas"
             className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
           >
             <Icono tipo="propuestas" className="h-5 w-5" />
             <span className="truncate text-[9px] font-semibold">Propuestas</span>
-          </button>
+          </a>
 
-          <button
-            type="button"
+          <a
+            href="#panel-card-1"
+            aria-label="Ir al perfil"
             className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-zinc-200"
           >
             <Icono tipo="perfil" className="h-5 w-5" />
             <span className="truncate text-[9px] font-semibold">Perfil</span>
-          </button>
+          </a>
         </div>
       </nav>
     </main>
