@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import ReproductorAudio from "../../components/ReproductorAudio";
 
 export type IdeaPanel = {
   id: number;
@@ -94,18 +95,20 @@ const TONALIDADES = [
   "No estoy seguro",
 ] as const;
 
+type IconoTipo =
+  | "mas"
+  | "musica"
+  | "subir"
+  | "cerrar"
+  | "reloj"
+  | "descargar"
+  | "eliminar";
+
 function Icono({
   tipo,
   className = "h-4 w-4",
 }: {
-  tipo:
-    | "mas"
-    | "musica"
-    | "subir"
-    | "cerrar"
-    | "reloj"
-    | "descargar"
-    | "eliminar";
+  tipo: IconoTipo;
   className?: string;
 }) {
   const props = {
@@ -120,11 +123,7 @@ function Icono({
   };
 
   if (tipo === "mas") {
-    return (
-      <svg {...props}>
-        <path d="M12 5v14M5 12h14" />
-      </svg>
-    );
+    return <svg {...props}><path d="M12 5v14M5 12h14" /></svg>;
   }
 
   if (tipo === "musica") {
@@ -179,7 +178,7 @@ function Icono({
 
   return (
     <svg {...props}>
-      <path d="M6 6l12 12M18 6 6 18" />
+      <path d="m6 6 12 12M18 6 6 18" />
     </svg>
   );
 }
@@ -191,15 +190,10 @@ function obtenerExtension(nombre: string) {
 function audioPermitido(archivo: File) {
   const extensionValida = AUDIO_EXTENSIONS.has(obtenerExtension(archivo.name));
   const mime = archivo.type.toLowerCase();
-  const mimeValido = AUDIO_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
+  const mimeValido =
+    AUDIO_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
 
   return extensionValida && mimeValido;
-}
-
-function formatearDuracion(segundos: number) {
-  const minutos = Math.floor(segundos / 60);
-  const segundosRestantes = Math.floor(segundos % 60);
-  return `${minutos}:${String(segundosRestantes).padStart(2, "0")}`;
 }
 
 function formatearTamano(bytes: number | null) {
@@ -228,12 +222,10 @@ function leerDuracionAudio(url: string) {
 
     audio.onloadedmetadata = () => {
       const duracion = audio.duration;
-
       if (!Number.isFinite(duracion) || duracion <= 0) {
         reject(new Error("No se pudo comprobar la duración del audio."));
         return;
       }
-
       resolve(Math.ceil(duracion));
     };
 
@@ -257,7 +249,9 @@ function enviarIdeaConProgreso(
 
     request.upload.onprogress = (event) => {
       if (!event.lengthComputable || event.total <= 0) return;
-      onProgress(Math.min(100, Math.round((event.loaded / event.total) * 100)));
+      onProgress(
+        Math.min(100, Math.round((event.loaded / event.total) * 100)),
+      );
     };
 
     request.onload = () => {
@@ -372,7 +366,6 @@ export default function IdeasMusicalesCard({
 
   function abrirModal() {
     if (limiteAlcanzado) return;
-
     limpiarFormulario();
     setModalAbierto(true);
   }
@@ -514,7 +507,6 @@ export default function IdeasMusicalesCard({
     const confirmado = window.confirm(
       `¿Eliminar “${idea.titulo}”? El audio también se borrará de Cloudinary.`,
     );
-
     if (!confirmado) return;
 
     setError("");
@@ -548,26 +540,26 @@ export default function IdeasMusicalesCard({
 
   return (
     <>
-      <article className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[20px] p-1 lg:rounded-[18px]">
-        <div className="flex items-center justify-between gap-3 px-1 pb-3">
+      <div className="flex h-full min-h-0 w-full flex-col rounded-2xl border border-white/10 bg-black/30 p-4 shadow-xl shadow-black/20 backdrop-blur-sm">
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-violet-400">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300">
               Mis publicaciones
             </p>
-            <h2 className="mt-1 text-base font-black text-white">
+            <h2 className="mt-1 text-lg font-black text-white">
               Ideas musicales
             </h2>
           </div>
 
-          <span className="rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[10px] font-semibold text-zinc-400">
+          <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-[10px] font-black text-violet-200">
             {ideas.length}/{MAX_ACTIVE_IDEAS} activas
           </span>
         </div>
 
         {ideas.length === 0 ? (
-          <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-dashed border-violet-400/20 bg-violet-500/[0.035] p-5">
-            <div className="flex max-w-xs flex-col items-center text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300 shadow-lg shadow-violet-950/30">
+          <div className="flex min-h-0 flex-1 items-center justify-center">
+            <div className="max-w-xs text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300 shadow-lg shadow-violet-950/30">
                 <Icono tipo="musica" className="h-6 w-6" />
               </div>
               <p className="mt-4 text-sm font-bold text-zinc-100">
@@ -589,75 +581,55 @@ export default function IdeasMusicalesCard({
           </div>
         ) : (
           <>
-            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1 [scrollbar-width:thin]">
-              {ideas.map((idea) => (
+            <div className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1 [scrollbar-width:thin]">
+              {ideas.map((idea, indice) => (
                 <section
                   key={idea.id}
                   className="rounded-2xl border border-white/10 bg-black/25 p-3.5 shadow-lg shadow-black/15"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <h3 className="truncate text-sm font-black text-white">
-                        {idea.titulo}
-                      </h3>
-                      <div className="mt-1.5 flex flex-wrap gap-1.5">
-                        <span className="rounded-md bg-violet-500/10 px-2 py-1 text-[9px] font-bold text-violet-300">
-                          {idea.bpm} BPM
-                        </span>
-                        <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold text-zinc-300">
-                          {idea.tonalidad}
-                        </span>
-                        <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold text-zinc-400">
-                          {formatearDuracion(idea.duracionSegundos)}
-                        </span>
-                        {idea.formato && (
-                          <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold uppercase text-zinc-500">
-                            {idea.formato}
-                          </span>
-                        )}
-                        {formatearTamano(idea.tamanoBytes) && (
-                          <span className="rounded-md bg-white/[0.045] px-2 py-1 text-[9px] font-semibold text-zinc-500">
-                            {formatearTamano(idea.tamanoBytes)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/15 bg-violet-500/[0.08] text-violet-300">
-                      <Icono tipo="musica" />
-                    </div>
-                  </div>
-
-                  <p className="mt-3 break-words text-[11px] leading-5 text-zinc-400">
+                  <p className="mb-3 line-clamp-3 text-[11px] leading-5 text-zinc-400">
                     {idea.descripcion}
                   </p>
 
-                  <audio
-                    controls
-                    preload="metadata"
+                  <ReproductorAudio
+                    id={`panel-${idea.id}`}
                     src={idea.audioUrl}
-                    className="mt-3 h-9 w-full"
-                  >
-                    Tu navegador no puede reproducir este audio.
-                  </audio>
+                    titulo={idea.titulo}
+                    bpm={idea.bpm}
+                    tonalidad={idea.tonalidad}
+                    duracionSegundos={idea.duracionSegundos}
+                    numero={indice + 1}
+                  />
 
                   <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex flex-wrap items-center gap-2 text-[9px] text-zinc-600">
-                      <span>Publicada {formatearFecha(idea.creadoEn)}</span>
+                    <div className="flex flex-wrap items-center gap-2 text-[9px] text-zinc-500">
                       <span className="inline-flex items-center gap-1">
                         <Icono tipo="reloj" className="h-3 w-3" />
-                        Hasta {formatearFecha(idea.expiraEn)}
+                        Publicada {formatearFecha(idea.creadoEn)}
                       </span>
+                      <span>Hasta {formatearFecha(idea.expiraEn)}</span>
+                      {idea.formato && (
+                        <span className="font-semibold uppercase">
+                          {idea.formato}
+                        </span>
+                      )}
+                      {formatearTamano(idea.tamanoBytes) && (
+                        <span>{formatearTamano(idea.tamanoBytes)}</span>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       <a
-                        href={`/api/ideas/${idea.id}/descargar`}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/20 bg-violet-500/10 px-2.5 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20"
+                        href={idea.audioUrl}
+                        download
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.035] px-2.5 text-[9px] font-bold text-zinc-300 transition hover:bg-white/[0.07]"
                       >
-                        <Icono tipo="descargar" className="h-3.5 w-3.5" />
+                        <Icono tipo="descargar" className="h-3 w-3" />
                         MP3
                       </a>
+
                       <button
                         type="button"
                         onClick={() => eliminarIdea(idea)}
@@ -666,9 +638,9 @@ export default function IdeasMusicalesCard({
                         className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-red-400/20 bg-red-500/[0.07] text-red-300 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {eliminandoId === idea.id ? (
-                          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-200/30 border-t-red-200" />
+                          <span className="h-3 w-3 animate-spin rounded-full border border-red-300/30 border-t-red-200" />
                         ) : (
-                          <Icono tipo="eliminar" className="h-3.5 w-3.5" />
+                          <Icono tipo="eliminar" className="h-3 w-3" />
                         )}
                       </button>
                     </div>
@@ -678,10 +650,7 @@ export default function IdeasMusicalesCard({
             </div>
 
             {error && !modalAbierto && (
-              <p
-                role="alert"
-                className="mt-3 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-300"
-              >
+              <p className="mt-3 rounded-xl border border-red-400/20 bg-red-500/[0.06] px-3 py-2 text-[10px] text-red-200">
                 {error}
               </p>
             )}
@@ -690,7 +659,7 @@ export default function IdeasMusicalesCard({
               type="button"
               onClick={abrirModal}
               disabled={limiteAlcanzado}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-300/40 hover:bg-violet-500/20 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.03] disabled:text-zinc-600"
+              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-300/40 hover:bg-violet-500/20 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.025] disabled:text-zinc-600"
             >
               <Icono tipo="mas" />
               {limiteAlcanzado
@@ -699,34 +668,29 @@ export default function IdeasMusicalesCard({
             </button>
           </>
         )}
-      </article>
+      </div>
 
       {modalAbierto && (
         <div
-          className="fixed inset-0 z-[110] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
           role="presentation"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) cerrarModal();
           }}
         >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="publicar-idea-titulo"
-            className="max-h-[94dvh] w-full overflow-y-auto rounded-t-[24px] border border-white/10 bg-zinc-950 p-5 shadow-2xl sm:max-w-xl sm:rounded-2xl sm:p-6"
+          <form
+            onSubmit={publicarIdea}
+            className="max-h-[94vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#100d15] p-4 shadow-2xl shadow-black/60 md:p-6"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-violet-400">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300">
                   Nueva publicación
                 </p>
-                <h2
-                  id="publicar-idea-titulo"
-                  className="mt-1 text-xl font-black text-white"
-                >
+                <h2 className="mt-1 text-xl font-black text-white">
                   Publicar una idea
                 </h2>
-                <p className="mt-1 text-xs leading-5 text-zinc-500">
+                <p className="mt-2 text-[11px] leading-5 text-zinc-500">
                   Sube una maqueta de hasta 4 minutos. FeatMusic la optimizará
                   como un MP3 liviano y compatible.
                 </p>
@@ -737,240 +701,162 @@ export default function IdeasMusicalesCard({
                 onClick={cerrarModal}
                 disabled={guardando}
                 aria-label="Cerrar"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:opacity-50"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:opacity-40"
               >
                 <Icono tipo="cerrar" />
               </button>
             </div>
 
-            <form onSubmit={publicarIdea} className="mt-6 space-y-5">
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm font-semibold text-zinc-200">
-                    Archivo de audio
-                  </span>
-                  <span className="text-[10px] text-zinc-600">
-                    50 MB · 4 minutos
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => inputArchivoRef.current?.click()}
-                  disabled={guardando || leyendoAudio}
-                  className="mt-2 flex w-full items-center gap-3 rounded-xl border border-dashed border-violet-400/25 bg-violet-500/[0.04] p-4 text-left transition hover:border-violet-300/45 hover:bg-violet-500/[0.08] disabled:opacity-60"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300">
-                    {leyendoAudio ? (
-                      <span className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-700 border-t-violet-400" />
-                    ) : (
-                      <Icono tipo="subir" className="h-5 w-5" />
-                    )}
-                  </span>
-
-                  <span className="min-w-0">
-                    <span className="block truncate text-xs font-bold text-zinc-200">
-                      {archivo?.name ??
-                        (leyendoAudio
-                          ? "Leyendo información del audio..."
-                          : "Seleccionar audio")}
-                    </span>
-                    <span className="mt-1 block text-[10px] text-zinc-500">
-                      MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u OPUS
-                    </span>
-                  </span>
-                </button>
-
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <label className="md:col-span-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  Archivo de audio
+                </span>
                 <input
                   ref={inputArchivoRef}
                   type="file"
-                  accept=".mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus,audio/mpeg,audio/wav,audio/flac,audio/mp4,audio/aac,audio/ogg,audio/aiff,audio/opus"
+                  accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus"
                   onChange={seleccionarAudio}
                   disabled={guardando}
-                  className="hidden"
+                  className="mt-2 block w-full rounded-xl border border-dashed border-violet-400/25 bg-violet-500/[0.05] p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-violet-200"
                 />
+                <span className="mt-1.5 block text-[9px] text-zinc-600">
+                  50 MB · 4 minutos · MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u
+                  OPUS
+                </span>
+              </label>
 
-                <p className="mt-2 text-[10px] leading-4 text-zinc-600">
-                  Solo se conservará el MP3 optimizado. El archivo original no
-                  quedará guardado.
-                </p>
-
-                {avisoAudio && (
-                  <p className="mt-2 rounded-lg border border-amber-400/15 bg-amber-500/[0.07] px-3 py-2 text-[10px] leading-4 text-amber-200/80">
-                    {avisoAudio}
-                  </p>
-                )}
-
-                {archivo && vistaPrevia && (
-                  <div className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3">
-                    <audio
-                      controls
-                      preload="metadata"
-                      src={vistaPrevia}
-                      className="h-9 w-full"
-                    >
-                      Tu navegador no puede reproducir este audio.
-                    </audio>
-                    <div className="mt-2 flex flex-wrap justify-between gap-2 text-[9px] text-zinc-500">
-                      <span>{formatearTamano(archivo.size)}</span>
-                      <span>
-                        {duracionSegundos
-                          ? formatearDuracion(duracionSegundos)
-                          : "Duración por verificar"}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <label className="block">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-zinc-200">
-                    Título
-                  </span>
-                  <span className="text-[10px] text-zinc-600">
-                    {titulo.length}/80
-                  </span>
+              {vistaPrevia && (
+                <div className="md:col-span-2">
+                  <ReproductorAudio
+                    id="vista-previa-publicacion"
+                    src={vistaPrevia}
+                    titulo={titulo.trim() || archivo?.name || "Vista previa del audio"}
+                    bpm={bpm ? Number(bpm) : null}
+                    tonalidad={tonalidad || null}
+                    duracionSegundos={duracionSegundos}
+                  />
+                  {leyendoAudio && (
+                    <p className="mt-2 text-[10px] text-violet-300">
+                      Leyendo duración del audio...
+                    </p>
+                  )}
+                  {avisoAudio && (
+                    <p className="mt-2 text-[10px] text-amber-300">
+                      {avisoAudio}
+                    </p>
+                  )}
                 </div>
+              )}
+
+              <label>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  Título
+                </span>
                 <input
                   value={titulo}
                   onChange={(event) => setTitulo(event.target.value)}
-                  minLength={3}
                   maxLength={80}
-                  required
                   disabled={guardando}
-                  placeholder="Ejemplo: Noche en Cali"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                  placeholder="Ej. Coro para reggaetón"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
                 />
               </label>
 
-              <label className="block">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-zinc-200">
-                    Descripción
-                  </span>
-                  <span className="text-[10px] text-zinc-600">
-                    {descripcion.length}/300
-                  </span>
-                </div>
+              <label>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  BPM
+                </span>
+                <input
+                  type="number"
+                  min={40}
+                  max={250}
+                  value={bpm}
+                  onChange={(event) => setBpm(event.target.value)}
+                  disabled={guardando}
+                  placeholder="Ej. 92"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
+                />
+              </label>
+
+              <label>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  Tonalidad
+                </span>
+                <select
+                  value={tonalidad}
+                  onChange={(event) => setTonalidad(event.target.value)}
+                  disabled={guardando}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                >
+                  <option value="">Selecciona una tonalidad</option>
+                  {TONALIDADES.map((opcion) => (
+                    <option key={opcion} value={opcion}>
+                      {opcion}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="md:col-span-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  Descripción
+                </span>
                 <textarea
                   value={descripcion}
                   onChange={(event) => setDescripcion(event.target.value)}
-                  minLength={10}
-                  maxLength={300}
+                  maxLength={500}
                   rows={4}
-                  required
                   disabled={guardando}
-                  placeholder="Describe la idea y qué tipo de colaboración estás buscando."
-                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm leading-6 text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
+                  placeholder="Explica qué colaboración buscas y qué te gustaría recibir."
+                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
                 />
+                <span className="mt-1 block text-right text-[9px] text-zinc-600">
+                  {descripcion.length}/500
+                </span>
               </label>
+            </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label>
-                  <span className="text-sm font-semibold text-zinc-200">
-                    BPM
-                  </span>
-                  <input
-                    type="number"
-                    value={bpm}
-                    onChange={(event) => setBpm(event.target.value)}
-                    min={40}
-                    max={250}
-                    step={1}
-                    required
-                    disabled={guardando}
-                    placeholder="96"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
-                  />
-                </label>
+            {error && (
+              <p className="mt-4 rounded-xl border border-red-400/20 bg-red-500/[0.06] px-3 py-2.5 text-[10px] text-red-200">
+                {error}
+              </p>
+            )}
 
-                <label>
-                  <span className="text-sm font-semibold text-zinc-200">
-                    Tonalidad
-                  </span>
-                  <select
-                    value={tonalidad}
-                    onChange={(event) => setTonalidad(event.target.value)}
-                    required
-                    disabled={guardando}
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:opacity-60"
-                  >
-                    <option value="">Seleccionar</option>
-                    {TONALIDADES.map((opcion) => (
-                      <option key={opcion} value={opcion}>
-                        {opcion}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-
-              {guardando && (
-                <div className="rounded-xl border border-violet-400/15 bg-violet-500/[0.06] p-3">
-                  <div className="flex items-center justify-between gap-3 text-[10px] font-semibold text-violet-200">
-                    <span>
-                      {progresoSubida < 100
-                        ? "Subiendo archivo..."
-                        : "Procesando y convirtiendo a MP3..."}
-                    </span>
-                    <span>{progresoSubida}%</span>
-                  </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">
-                    <div
-                      className="h-full rounded-full bg-violet-400 transition-[width] duration-200"
-                      style={{ width: `${progresoSubida}%` }}
-                    />
-                  </div>
+            {guardando && (
+              <div className="mt-4 rounded-xl border border-violet-400/20 bg-violet-500/[0.06] p-3">
+                <div className="flex items-center justify-between text-[10px] font-semibold text-violet-200">
+                  <span>Subiendo y procesando audio...</span>
+                  <span>{progresoSubida}%</span>
                 </div>
-              )}
-
-              {error && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2.5 text-sm text-red-300"
-                >
-                  {error}
-                </p>
-              )}
-
-              <div className="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:justify-end">
-                <button
-                  type="button"
-                  onClick={cerrarModal}
-                  disabled={guardando}
-                  className="rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-zinc-300 transition hover:bg-white/5 disabled:opacity-50"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={
-                    guardando ||
-                    leyendoAudio ||
-                    !archivo ||
-                    titulo.trim().length < 3 ||
-                    descripcion.trim().length < 10 ||
-                    !tonalidad ||
-                    !bpm
-                  }
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {guardando ? (
-                    <>
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                      Optimizando audio...
-                    </>
-                  ) : (
-                    <>
-                      <Icono tipo="subir" />
-                      Publicar idea
-                    </>
-                  )}
-                </button>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">
+                  <div
+                    className="h-full rounded-full bg-violet-400 transition-[width]"
+                    style={{ width: `${progresoSubida}%` }}
+                  />
+                </div>
               </div>
-            </form>
-          </div>
+            )}
+
+            <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={cerrarModal}
+                disabled={guardando}
+                className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-bold text-zinc-400 transition hover:bg-white/5 disabled:opacity-40"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={guardando || leyendoAudio}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/20 px-5 py-2.5 text-xs font-bold text-violet-100 transition hover:border-violet-300/50 hover:bg-violet-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Icono tipo="subir" />
+                {guardando ? "Publicando..." : "Publicar idea"}
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </>
