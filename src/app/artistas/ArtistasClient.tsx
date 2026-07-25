@@ -392,6 +392,7 @@ export default function ArtistasClient({
   const [ciudad, setCiudad] = useState("");
   const [genero, setGenero] = useState("");
   const [rol, setRol] = useState("");
+  const [soloConIdeas, setSoloConIdeas] = useState(true);
   const [pagina, setPagina] = useState(1);
 
   useEffect(() => {
@@ -401,7 +402,7 @@ export default function ArtistasClient({
 
   useEffect(() => {
     setPagina(1);
-  }, [busqueda, pais, ciudad, genero, rol]);
+  }, [busqueda, pais, ciudad, genero, rol, soloConIdeas]);
 
   const artistasFiltrados = useMemo(() => {
     const termino = normalizar(busqueda);
@@ -417,16 +418,26 @@ export default function ArtistasClient({
       const coincideRol = !rol || artista.rol === rol;
       const coincideGenero =
         !genero || artista.generos.some((item) => item === genero);
+      const coincideIdeas = !soloConIdeas || artista.ideasActivas > 0;
 
       return (
         coincideTexto &&
         coincidePais &&
         coincideCiudad &&
         coincideRol &&
-        coincideGenero
+        coincideGenero &&
+        coincideIdeas
       );
     });
-  }, [artistasIniciales, busqueda, pais, ciudad, genero, rol]);
+  }, [
+    artistasIniciales,
+    busqueda,
+    pais,
+    ciudad,
+    genero,
+    rol,
+    soloConIdeas,
+  ]);
 
   const totalPaginas = Math.max(
     1,
@@ -580,6 +591,18 @@ export default function ArtistasClient({
                   Limpiar
                 </button>
               )}
+            </div>
+
+            <div className="mt-3 border-t border-white/5 pt-3">
+              <label className="inline-flex cursor-pointer items-center gap-2.5 rounded-xl px-1 py-1 text-xs font-semibold text-zinc-300 transition hover:text-white">
+                <input
+                  type="checkbox"
+                  checked={soloConIdeas}
+                  onChange={(evento) => setSoloConIdeas(evento.target.checked)}
+                  className="h-4 w-4 cursor-pointer rounded border-white/20 bg-[#100d15] accent-violet-500"
+                />
+                <span>Mostrar solo artistas con ideas</span>
+              </label>
             </div>
           </section>
 
