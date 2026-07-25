@@ -60,7 +60,13 @@ const claseInactiva =
 const claseActiva =
   "bg-violet-500/15 text-violet-200 ring-1 ring-inset ring-violet-400/30";
 
-export default function NavegacionEscritorio() {
+type NavegacionEscritorioProps = {
+  mostrarDesde?: "md" | "lg";
+};
+
+export default function NavegacionEscritorio({
+  mostrarDesde = "lg",
+}: NavegacionEscritorioProps) {
   const pathname = usePathname();
 
   const explorando =
@@ -71,7 +77,9 @@ export default function NavegacionEscritorio() {
   return (
     <nav
       aria-label="Navegación principal"
-      className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 lg:flex"
+      className={`absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 ${
+        mostrarDesde === "md" ? "md:flex" : "lg:flex"
+      }`}
     >
       <button
         type="button"

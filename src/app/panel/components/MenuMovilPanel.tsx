@@ -84,7 +84,13 @@ function claseOpcion(activa: boolean) {
   ].join(" ");
 }
 
-export default function MenuMovilPanel() {
+type MenuMovilPanelProps = {
+  ocultarDesde?: "md" | "lg";
+};
+
+export default function MenuMovilPanel({
+  ocultarDesde = "lg",
+}: MenuMovilPanelProps) {
   const pathname = usePathname();
 
   const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
@@ -94,7 +100,9 @@ export default function MenuMovilPanel() {
   return (
     <nav
       aria-label="Menú principal móvil"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
+      className={`fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
+        ocultarDesde === "md" ? "md:hidden" : "lg:hidden"
+      }`}
     >
       <div className="mx-auto grid max-w-md grid-cols-5 items-end">
         <Link

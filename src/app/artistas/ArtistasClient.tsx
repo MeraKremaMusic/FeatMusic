@@ -199,7 +199,7 @@ function IconoUbicacion({
 function CargandoArtistas() {
   return (
     <section
-      className="relative flex h-full min-h-[420px] items-center justify-center overflow-hidden px-6 pb-20 lg:pb-0"
+      className="relative flex h-full min-h-[420px] items-center justify-center overflow-hidden px-6 pb-20 md:pb-0"
       role="status"
       aria-live="polite"
       aria-label="Cargando artistas"
@@ -242,9 +242,9 @@ function TarjetaEstadistica({
   nota?: string;
 }) {
   return (
-    <article className="min-w-0 rounded-lg border border-white/10 bg-black/30 px-2 py-2 backdrop-blur-sm lg:rounded-2xl lg:p-4">
+    <article className="min-w-0 rounded-lg border border-white/10 bg-black/30 px-2 py-2 backdrop-blur-sm md:rounded-2xl md:p-4">
       {/* Diseño compacto exclusivo para celular y tablet. */}
-      <div className="flex items-center justify-center gap-1.5 lg:hidden">
+      <div className="flex items-center justify-center gap-1.5 md:hidden">
         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300">
           {icono}
         </div>
@@ -260,7 +260,7 @@ function TarjetaEstadistica({
       </div>
 
       {/* Diseño amplio exclusivo para computador. */}
-      <div className="hidden items-start justify-between gap-4 lg:flex">
+      <div className="hidden items-start justify-between gap-4 md:flex">
         <div className="min-w-0">
           <p className="text-xs font-medium text-zinc-400">{titulo}</p>
           <p className="mt-1 text-2xl font-black tracking-tight text-white">
@@ -274,7 +274,7 @@ function TarjetaEstadistica({
       </div>
 
       {nota && (
-        <p className="mt-2 hidden text-[10px] text-zinc-500 lg:block">
+        <p className="mt-2 hidden text-[10px] text-zinc-500 md:block">
           {nota}
         </p>
       )}
@@ -474,7 +474,7 @@ export default function ArtistasClient({
   const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
 
   return (
-    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
+    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white md:h-screen">
       <header className="relative z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
@@ -484,7 +484,7 @@ export default function ArtistasClient({
             Feat<span className="text-violet-400">Music</span>
           </Link>
 
-          <NavegacionEscritorio />
+          <NavegacionEscritorio mostrarDesde="md" />
 
           {sesionActiva ? (
             <form action="/api/cerrar-sesion" method="post">
@@ -507,7 +507,7 @@ export default function ArtistasClient({
         </div>
       </header>
 
-      <div className="relative h-[calc(100dvh-48px)] overflow-hidden lg:h-[calc(100vh-48px)]">
+      <div className="relative h-[calc(100dvh-48px)] overflow-hidden md:h-[calc(100vh-48px)]">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
 
@@ -515,15 +515,15 @@ export default function ArtistasClient({
           {cargando ? (
             <CargandoArtistas />
           ) : (
-            <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 lg:px-8 lg:pb-8 lg:pt-6">
+            <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 md:px-6 md:pb-8 md:pt-6 xl:px-8">
               <div className="mx-auto w-full max-w-[1460px]">
-                <section className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-1.5 lg:max-w-none lg:gap-4">
+                <section className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-1.5 md:max-w-none md:gap-4">
                   <TarjetaEstadistica
                     titulo="Artistas en FeatMusic"
                     tituloMovil="Artistas"
                     valor={estadisticas.artistas}
                     icono={
-                      <IconoUsuarios className="h-3.5 w-3.5 lg:h-5 lg:w-5" />
+                      <IconoUsuarios className="h-3.5 w-3.5 md:h-5 md:w-5" />
                     }
                   />
                   <TarjetaEstadistica
@@ -531,7 +531,7 @@ export default function ArtistasClient({
                     tituloMovil="Ideas"
                     valor={estadisticas.ideas}
                     icono={
-                      <IconoIdea className="h-3.5 w-3.5 lg:h-5 lg:w-5" />
+                      <IconoIdea className="h-3.5 w-3.5 md:h-5 md:w-5" />
                     }
                   />
                   <TarjetaEstadistica
@@ -539,19 +539,19 @@ export default function ArtistasClient({
                     tituloMovil="Propuestas"
                     valor={estadisticas.propuestas}
                     icono={
-                      <IconoPropuesta className="h-3.5 w-3.5 lg:h-5 lg:w-5" />
+                      <IconoPropuesta className="h-3.5 w-3.5 md:h-5 md:w-5" />
                     }
                     nota="Disponible cuando se active el sistema de propuestas."
                   />
                 </section>
 
-                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm lg:p-4">
-                  <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,2fr)_auto] lg:items-end">
-                    <label className="mx-auto w-full max-w-[330px] lg:mx-0 lg:min-w-0 lg:max-w-none">
+                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm md:p-4">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.7fr)] md:items-end xl:grid-cols-[minmax(260px,0.9fr)_minmax(0,2fr)_auto]">
+                    <label className="mx-auto w-full max-w-[330px] md:mx-0 md:min-w-0 md:max-w-none">
                       <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
                         Buscar artistas
                       </span>
-                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2 focus-within:border-violet-400/40 lg:py-2.5">
+                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2 focus-within:border-violet-400/40 md:py-2.5">
                         <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
                         <input
                           type="search"
@@ -563,7 +563,7 @@ export default function ArtistasClient({
                       </span>
                     </label>
 
-                    <div className="grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-4">
+                    <div className="grid min-w-0 grid-cols-2 gap-2 md:grid-cols-4">
                       <label>
                         <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
                           País
@@ -641,7 +641,7 @@ export default function ArtistasClient({
                       type="button"
                       onClick={limpiarFiltros}
                       disabled={!hayFiltros}
-                      className="w-full rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40 lg:w-auto lg:min-w-[86px]"
+                      className="w-full rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40 md:col-span-2 md:w-auto md:min-w-[86px] md:justify-self-end xl:col-span-1"
                     >
                       Limpiar
                     </button>
@@ -692,7 +692,7 @@ export default function ArtistasClient({
                     </button>
                   </section>
                 ) : (
-                  <section className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+                  <section className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {artistasPagina.map((artista) => (
                       <TarjetaArtista key={artista.id} artista={artista} />
                     ))}
@@ -737,7 +737,7 @@ export default function ArtistasClient({
         </div>
       </div>
 
-      {sesionActiva && <MenuMovilPanel />}
+      {sesionActiva && <MenuMovilPanel ocultarDesde="md" />}
     </main>
   );
 }
