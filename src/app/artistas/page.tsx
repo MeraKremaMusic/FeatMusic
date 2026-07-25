@@ -20,15 +20,31 @@ function obtenerGeneros(generos: unknown): string[] {
     .filter(Boolean);
 }
 
-function crearUsuario(nombre: string, id: number) {
-  const usuario =
-    nombre
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "");
+function tieneTexto(valor: string | null | undefined): valor is string {
+  return typeof valor === "string" && valor.trim().length > 0;
+}
 
-  return usuario || `artista-${id}`;
+/**
+ * Un perfil puede mostrarse en Explorar solamente cuando tiene todos los
+ * datos públicos esenciales. Las redes sociales, la biografía y la foto
+ * continúan siendo opcionales.
+ */
+function perfilEsPublicable(usuario: {
+  nombreArtistico: string | null;
+  nombreUsuario: string | null;
+  ciudad: string | null;
+  pais: string | null;
+  rolPrincipal: string;
+  generos: unknown;
+}) {
+  return (
+    tieneTexto(usuario.nombreArtistico) &&
+    tieneTexto(usuario.nombreUsuario) &&
+    tieneTexto(usuario.ciudad) &&
+    tieneTexto(usuario.pais) &&
+    tieneTexto(usuario.rolPrincipal) &&
+    obtenerGeneros(usuario.generos).length > 0
+  );
 }
 
 function valoresUnicos(valores: Array<string | null | undefined>) {
@@ -60,83 +76,66 @@ export default async function ArtistasPage() {
   let errorCarga = false;
 
   try {
-    const [totalArtistas, totalIdeas, usuarios] = await Promise.all([
-      prisma.usuario.count({
-        where: { perfilCompleto: true },
-      }),
-      prisma.idea.count({
-        where: {
-          estado: "ACTIVA",
-          expiraEn: { gt: ahora },
-        },
-      }),
-      prisma.usuario.findMany({
-        where: { perfilCompleto: true },
-        orderBy: { creadoEn: "desc" },
-        select: {
-          id: true,
-          nombre: true,
-          nombreArtistico: true,
-          nombreUsuario: true,
-          fotoPerfil: true,
-          ciudad: true,
-          pais: true,
-          rolPrincipal: true,
-          generos: true,
-          creadoEn: true,
-          ideas: {
-            where: {
-              estado: "ACTIVA",
-              expiraEn: { gt: ahora },
-            },
-            orderBy: { creadoEn: "desc" },
-            take: 2,
-            select: {
-              id: true,
-              titulo: true,
-              audioUrl: true,
-              duracionSegundos: true,
-              bpm: true,
-              tonalidad: true,
-            },
+    const usuarios = await prisma.usuario.findMany({
+      // Este primer filtro evita cargar cuentas que ni siquiera han terminado
+      // el formulario inicial. Después se hace una validación más estricta.
+      where: { perfilCompleto: true },
+      orderBy: { creadoEn: "desc" },
+      select: {
+        id: true,
+        nombreArtistico: true,
+        nombreUsuario: true,
+        fotoPerfil: true,
+        ciudad: true,
+        pais: true,
+        rolPrincipal: true,
+        generos: true,
+        creadoEn: true,
+        ideas: {
+          where: {
+            estado: "ACTIVA",
+            expiraEn: { gt: ahora },
           },
-          _count: {
-            select: {
-              ideas: {
-                where: {
-                  estado: "ACTIVA",
-                  expiraEn: { gt: ahora },
-                },
+          orderBy: { creadoEn: "desc" },
+          take: 2,
+          select: {
+            id: true,
+            titulo: true,
+            audioUrl: true,
+            duracionSegundos: true,
+            bpm: true,
+            tonalidad: true,
+          },
+        },
+        _count: {
+          select: {
+            ideas: {
+              where: {
+                estado: "ACTIVA",
+                expiraEn: { gt: ahora },
               },
             },
           },
         },
-      }),
-    ]);
+      },
+    });
 
-    artistas = usuarios
-      .map((usuario) => {
-        const nombreArtistico =
-          usuario.nombreArtistico?.trim() ||
-          usuario.nombre?.trim() ||
-          "Artista";
+    const usuariosPublicables = usuarios.filter(perfilEsPublicable);
 
-        return {
-          id: usuario.id,
-          nombreArtistico,
-          nombreUsuario:
-            usuario.nombreUsuario?.trim() ||
-            crearUsuario(nombreArtistico, usuario.id),
-          fotoPerfil: usuario.fotoPerfil,
-          ciudad: usuario.ciudad?.trim() || "",
-          pais: usuario.pais?.trim() || "",
-          rol: usuario.rolPrincipal,
-          generos: obtenerGeneros(usuario.generos),
-          ideasActivas: usuario._count.ideas,
-          ideasRecientes: usuario.ideas,
-          creadoEn: usuario.creadoEn.toISOString(),
-        };
-      })
+    artistas = usuariosPublicables
+      .map((usuario) => ({
+        id: usuario.id,
+        nombreArtistico: usuario.nombreArtistico!.trim(),
+        nombreUsuario: usuario.nombreUsuario!.trim(),
+        fotoPerfil: usuario.fotoPerfil,
+        ciudad: usuario.ciudad!.trim(),
+        pais: usuario.pais!.trim(),
+        rol: usuario.rolPrincipal,
+        generos: obtenerGeneros(usuario.generos),
+        ideasActivas: usuario._count.ideas,
+        ideasRecientes: usuario.ideas,
+        creadoEn: usuario.creadoEn.toISOString(),
+      }))
       .sort((a, b) => {
         if (b.ideasActivas !== a.ideasActivas) {
           return b.ideasActivas - a.ideasActivas;
@@ -148,8 +147,13 @@ export default async function ArtistasPage() {
       });
 
     estadisticas = {
-      artistas: totalArtistas,
-      ideas: totalIdeas,
+      artistas: artistas.length,
+      // Solo cuenta las ideas pertenecientes a artistas que realmente se
+      // muestran en Explorar.
+      ideas: artistas.reduce(
+        (total, artista) => total + artista.ideasActivas,
+        0,
+      ),
       // Todavía no existe un modelo Propuesta en Prisma.
       propuestas: 0,
     };
