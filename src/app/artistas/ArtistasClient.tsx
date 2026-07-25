@@ -14,6 +14,7 @@ export type ArtistaExplorar = {
   fotoPerfil: string | null;
   ciudad: string;
   pais: string;
+  codigoPais: string;
   rol: string;
   generos: string[];
   ideasActivas: number;
@@ -289,6 +290,49 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
   );
 }
 
+
+function BanderaPais({
+  codigoPais,
+  pais,
+}: {
+  codigoPais: string;
+  pais: string;
+}) {
+  const [falloImagen, setFalloImagen] = useState(false);
+  const codigo = codigoPais.trim().toLowerCase();
+  const codigoValido = /^[a-z]{2}$/.test(codigo);
+
+  if (!codigoValido) {
+    return null;
+  }
+
+  return (
+    <span
+      title={pais}
+      aria-label={`Bandera de ${pais}`}
+      className="flex h-7 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md border border-white/15 bg-white/5 shadow-sm"
+    >
+      {falloImagen ? (
+        <span className="text-[9px] font-black uppercase tracking-wide text-zinc-300">
+          {codigo}
+        </span>
+      ) : (
+        <img
+          src={`https://flagcdn.com/w40/${codigo}.png`}
+          srcSet={`https://flagcdn.com/w80/${codigo}.png 2x`}
+          width={28}
+          height={20}
+          alt=""
+          className="h-5 w-7 object-contain"
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          onError={() => setFalloImagen(true)}
+        />
+      )}
+    </span>
+  );
+}
+
 function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
   const ubicacion =
     [artista.ciudad, artista.pais].filter(Boolean).join(", ") ||
@@ -310,6 +354,8 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
             <span className="truncate">{ubicacion}</span>
           </p>
         </div>
+
+        <BanderaPais codigoPais={artista.codigoPais} pais={artista.pais} />
       </div>
 
       <div className="mt-4 flex flex-wrap gap-1.5">

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import { obtenerPaises } from "@/lib/ubicaciones";
 import ArtistasClient, {
   type ArtistaExplorar,
   type EstadisticasExplorar,
@@ -45,6 +46,40 @@ function perfilEsPublicable(usuario: {
     tieneTexto(usuario.rolPrincipal) &&
     obtenerGeneros(usuario.generos).length > 0
   );
+}
+
+
+function normalizarNombrePais(valor: string) {
+  return valor
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLocaleLowerCase("es");
+}
+
+function crearMapaCodigosPais(
+  paises: Array<{ codigo: string; nombre: string }>,
+) {
+  const mapa = new Map<string, string>();
+
+  for (const pais of paises) {
+    mapa.set(normalizarNombrePais(pais.nombre), pais.codigo.toUpperCase());
+  }
+
+  return mapa;
+}
+
+function resolverCodigoPais(
+  nombrePais: string,
+  codigosPorNombre: Map<string, string>,
+) {
+  const paisLimpio = nombrePais.trim();
+
+  if (/^[a-z]{2}$/i.test(paisLimpio)) {
+    return paisLimpio.toUpperCase();
+  }
+
+  return codigosPorNombre.get(normalizarNombrePais(paisLimpio)) ?? "";
 }
 
 function valoresUnicos(valores: Array<string | null | undefined>) {
@@ -120,6 +155,18 @@ export default async function ArtistasPage() {
       },
     });
 
+    let codigosPais = new Map<string, string>();
+
+    try {
+      codigosPais = crearMapaCodigosPais(await obtenerPaises());
+    } catch (errorCatalogo) {
+      // El explorador debe seguir funcionando aunque el catálogo no cargue.
+      console.error(
+        "No se pudieron resolver las banderas de los países.",
+        errorCatalogo,
+      );
+    }
+
     const usuariosPublicables = usuarios.filter(perfilEsPublicable);
 
     artistas = usuariosPublicables
@@ -130,6 +177,7 @@ export default async function ArtistasPage() {
         fotoPerfil: usuario.fotoPerfil,
         ciudad: usuario.ciudad!.trim(),
         pais: usuario.pais!.trim(),
+        codigoPais: resolverCodigoPais(usuario.pais!, codigosPais),
         rol: usuario.rolPrincipal,
         generos: obtenerGeneros(usuario.generos),
         ideasActivas: usuario._count.ideas,
