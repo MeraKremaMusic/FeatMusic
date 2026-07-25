@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
-import { obtenerPaises } from "@/lib/ubicaciones";
+
 import ArtistasClient, {
   type ArtistaExplorar,
   type EstadisticasExplorar,
@@ -9,6 +9,8 @@ import ArtistasClient, {
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+const CODIGOS_ISO_PAIS = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(" ");
 
 function obtenerGeneros(generos: unknown): string[] {
   if (!Array.isArray(generos)) {
@@ -48,7 +50,6 @@ function perfilEsPublicable(usuario: {
   );
 }
 
-
 function normalizarNombrePais(valor: string) {
   return valor
     .normalize("NFD")
@@ -57,29 +58,69 @@ function normalizarNombrePais(valor: string) {
     .toLocaleLowerCase("es");
 }
 
-function crearMapaCodigosPais(
-  paises: Array<{ codigo: string; nombre: string }>,
-) {
+/**
+ * Crea el mapa país -> código ISO usando únicamente Intl de Node.js.
+ * Así Explorar no depende de los archivos JSON internos del paquete
+ * @countrystatecity/countries en producción.
+ */
+function crearMapaCodigosPais() {
   const mapa = new Map<string, string>();
+  const idiomas = ["es", "en", "pt"] as const;
 
-  for (const pais of paises) {
-    mapa.set(normalizarNombrePais(pais.nombre), pais.codigo.toUpperCase());
+  for (const idioma of idiomas) {
+    const nombresPaises = new Intl.DisplayNames([idioma], { type: "region" });
+
+    for (const codigo of CODIGOS_ISO_PAIS) {
+      const nombre = nombresPaises.of(codigo);
+
+      if (nombre && nombre !== codigo) {
+        mapa.set(normalizarNombrePais(nombre), codigo);
+      }
+    }
+  }
+
+  // Alias frecuentes para perfiles antiguos o nombres escritos manualmente.
+  const alias: Record<string, string> = {
+    "ee uu": "US",
+    "e e u u": "US",
+    usa: "US",
+    "estados unidos de america": "US",
+    "gran bretana": "GB",
+    inglaterra: "GB",
+    "republica checa": "CZ",
+    "corea del sur": "KR",
+    "corea del norte": "KP",
+    rusia: "RU",
+    bolivia: "BO",
+    venezuela: "VE",
+    moldavia: "MD",
+    palestina: "PS",
+    "costa de marfil": "CI",
+    "cabo verde": "CV",
+    "republica democratica del congo": "CD",
+    "republica del congo": "CG",
+    taiwan: "TW",
+  };
+
+  for (const [nombre, codigo] of Object.entries(alias)) {
+    mapa.set(normalizarNombrePais(nombre), codigo);
   }
 
   return mapa;
 }
 
-function resolverCodigoPais(
-  nombrePais: string,
-  codigosPorNombre: Map<string, string>,
-) {
+const CODIGOS_PAIS_POR_NOMBRE = crearMapaCodigosPais();
+
+function resolverCodigoPais(nombrePais: string) {
   const paisLimpio = nombrePais.trim();
 
   if (/^[a-z]{2}$/i.test(paisLimpio)) {
     return paisLimpio.toUpperCase();
   }
 
-  return codigosPorNombre.get(normalizarNombrePais(paisLimpio)) ?? "";
+  return (
+    CODIGOS_PAIS_POR_NOMBRE.get(normalizarNombrePais(paisLimpio)) ?? ""
+  );
 }
 
 function valoresUnicos(valores: Array<string | null | undefined>) {
@@ -155,18 +196,6 @@ export default async function ArtistasPage() {
       },
     });
 
-    let codigosPais = new Map<string, string>();
-
-    try {
-      codigosPais = crearMapaCodigosPais(await obtenerPaises());
-    } catch (errorCatalogo) {
-      // El explorador debe seguir funcionando aunque el catálogo no cargue.
-      console.error(
-        "No se pudieron resolver las banderas de los países.",
-        errorCatalogo,
-      );
-    }
-
     const usuariosPublicables = usuarios.filter(perfilEsPublicable);
 
     artistas = usuariosPublicables
@@ -177,7 +206,7 @@ export default async function ArtistasPage() {
         fotoPerfil: usuario.fotoPerfil,
         ciudad: usuario.ciudad!.trim(),
         pais: usuario.pais!.trim(),
-        codigoPais: resolverCodigoPais(usuario.pais!, codigosPais),
+        codigoPais: resolverCodigoPais(usuario.pais!),
         rol: usuario.rolPrincipal,
         generos: obtenerGeneros(usuario.generos),
         ideasActivas: usuario._count.ideas,
