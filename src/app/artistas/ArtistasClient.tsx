@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
-
+import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
+import ReproductorAudio from "../components/ReproductorAudio";
 import MenuMovilPanel from "../panel/components/MenuMovilPanel";
 
 export type ArtistaExplorar = {
@@ -124,7 +125,7 @@ function IconoUsuarios({ className = "h-5 w-5" }: { className?: string }) {
       className={className}
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.8}
+      strokeWidth={1.7}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -144,22 +145,18 @@ function IconoIdea({ className = "h-5 w-5" }: { className?: string }) {
       className={className}
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.8}
+      strokeWidth={1.7}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
       <path d="M9 18h6" />
       <path d="M10 22h4" />
-      <path d="M8.5 15.5A7 7 0 1 1 15.5 15.5c-.9.7-1.5 1.5-1.5 2.5h-4c0-1-.6-1.8-1.5-2.5Z" />
+      <path d="M8.2 14.5A7 7 0 1 1 15.8 14.5c-1.1.8-1.8 1.8-1.8 3.5h-4c0-1.7-.7-2.7-1.8-3.5Z" />
     </svg>
   );
 }
 
-function IconoPropuesta({
-  className = "h-5 w-5",
-}: {
-  className?: string;
-}) {
+function IconoPropuesta({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg
       aria-hidden="true"
@@ -167,22 +164,17 @@ function IconoPropuesta({
       className={className}
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.8}
+      strokeWidth={1.7}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M8 12h8" />
-      <path d="m13 9 3 3-3 3" />
-      <path d="M5 5h14v14H5z" />
+      <path d="M4 5h16v12H8l-4 3V5Z" />
+      <path d="M8 9h8M8 13h5" />
     </svg>
   );
 }
 
-function IconoUbicacion({
-  className = "h-3.5 w-3.5",
-}: {
-  className?: string;
-}) {
+function IconoUbicacion({ className = "h-3.5 w-3.5" }: { className?: string }) {
   return (
     <svg
       aria-hidden="true"
@@ -200,237 +192,33 @@ function IconoUbicacion({
   );
 }
 
-
-function IconoPlay({ className = "h-3.5 w-3.5" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-    >
-      <path d="m8.5 5.5 10 6.5-10 6.5v-13Z" />
-    </svg>
-  );
-}
-
-function IconoPausa({ className = "h-3.5 w-3.5" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-    >
-      <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
-    </svg>
-  );
-}
-
-function formatearTiempo(segundos: number) {
-  if (!Number.isFinite(segundos) || segundos < 0) {
-    return "0:00";
-  }
-
-  const minutos = Math.floor(segundos / 60);
-  const segundosRestantes = Math.floor(segundos % 60)
-    .toString()
-    .padStart(2, "0");
-
-  return `${minutos}:${segundosRestantes}`;
-}
-
-type IdeaPreview = ArtistaExplorar["ideasRecientes"][number];
-
-function PreviewIdea({
-  idea,
-  numero,
-}: {
-  idea: IdeaPreview;
-  numero: number;
-}) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [reproduciendo, setReproduciendo] = useState(false);
-  const [tiempoActual, setTiempoActual] = useState(0);
-  const [duracion, setDuracion] = useState(idea.duracionSegundos || 0);
-
-  useEffect(() => {
-    function detenerOtroPreview(evento: Event) {
-      const eventoPersonalizado = evento as CustomEvent<number>;
-
-      if (eventoPersonalizado.detail === idea.id) {
-        return;
-      }
-
-      const audio = audioRef.current;
-
-      if (audio && !audio.paused) {
-        audio.pause();
-      }
-    }
-
-    window.addEventListener(
-      "featmusic:reproducir-preview",
-      detenerOtroPreview,
-    );
-
-    return () => {
-      window.removeEventListener(
-        "featmusic:reproducir-preview",
-        detenerOtroPreview,
-      );
-    };
-  }, [idea.id]);
-
-  async function alternarReproduccion() {
-    const audio = audioRef.current;
-
-    if (!audio) {
-      return;
-    }
-
-    if (audio.paused) {
-      window.dispatchEvent(
-        new CustomEvent<number>("featmusic:reproducir-preview", {
-          detail: idea.id,
-        }),
-      );
-
-      try {
-        await audio.play();
-      } catch (error) {
-        console.error("No se pudo reproducir el preview de la idea.", error);
-      }
-
-      return;
-    }
-
-    audio.pause();
-  }
-
-  function cambiarPosicion(evento: React.ChangeEvent<HTMLInputElement>) {
-    const audio = audioRef.current;
-
-    if (!audio) {
-      return;
-    }
-
-    const nuevoTiempo = Number(evento.target.value);
-    audio.currentTime = nuevoTiempo;
-    setTiempoActual(nuevoTiempo);
-  }
-
-  const duracionSegura =
-    Number.isFinite(duracion) && duracion > 0
-      ? duracion
-      : idea.duracionSegundos;
-
-  return (
-    <div className="rounded-lg border border-white/8 bg-black/25 px-2.5 py-2">
-      <div className="flex min-w-0 items-center gap-2">
-        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-[9px] font-black text-violet-200">
-          {numero.toString().padStart(2, "0")}
-        </span>
-
-        <button
-          type="button"
-          onClick={alternarReproduccion}
-          aria-label={
-            reproduciendo
-              ? `Pausar ${idea.titulo}`
-              : `Reproducir ${idea.titulo}`
-          }
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-violet-400/30 bg-violet-500/15 text-violet-200 transition hover:bg-violet-500/25"
-        >
-          {reproduciendo ? <IconoPausa /> : <IconoPlay />}
-        </button>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex min-w-0 items-center justify-between gap-2">
-            <p
-              className="truncate text-[10px] font-semibold text-zinc-200"
-              title={idea.titulo}
-            >
-              {idea.titulo}
-            </p>
-
-            <span className="shrink-0 text-[8px] text-zinc-500">
-              {idea.bpm} BPM · {idea.tonalidad}
-            </span>
-          </div>
-
-          <div className="mt-1 flex items-center gap-2">
-            <input
-              type="range"
-              min="0"
-              max={Math.max(duracionSegura, 1)}
-              step="0.1"
-              value={Math.min(tiempoActual, Math.max(duracionSegura, 1))}
-              onChange={cambiarPosicion}
-              aria-label={`Posición de reproducción de ${idea.titulo}`}
-              className="h-1 min-w-0 flex-1 cursor-pointer accent-violet-400"
-            />
-
-            <span className="w-[58px] shrink-0 text-right text-[8px] tabular-nums text-zinc-500">
-              {formatearTiempo(tiempoActual)} /{" "}
-              {formatearTiempo(duracionSegura)}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <audio
-        ref={audioRef}
-        src={idea.audioUrl}
-        preload="metadata"
-        onLoadedMetadata={(evento) => {
-          const duracionAudio = evento.currentTarget.duration;
-
-          if (Number.isFinite(duracionAudio) && duracionAudio > 0) {
-            setDuracion(duracionAudio);
-          }
-        }}
-        onTimeUpdate={(evento) => {
-          setTiempoActual(evento.currentTarget.currentTime);
-        }}
-        onPlay={() => setReproduciendo(true)}
-        onPause={() => setReproduciendo(false)}
-        onEnded={() => {
-          setReproduciendo(false);
-          setTiempoActual(0);
-        }}
-      />
-    </div>
-  );
-}
-
 function CargandoArtistas() {
   return (
-    <section
-      className="relative flex h-full min-h-[420px] items-center justify-center overflow-hidden px-6 pb-20 md:pb-0"
-      role="status"
-      aria-live="polite"
-      aria-label="Cargando artistas"
-    >
+    <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/15 blur-3xl" />
 
       <div className="relative flex flex-col items-center text-center">
         <div className="relative flex h-20 w-20 items-center justify-center">
-          <span className="absolute inset-0 animate-ping rounded-full border border-violet-400/20 bg-violet-500/5" />
-          <span className="absolute inset-2 animate-spin rounded-full border-2 border-zinc-800 border-t-violet-400" />
-          <span className="absolute inset-5 animate-pulse rounded-full border border-violet-300/30 bg-violet-500/10" />
-
-          <IconoUsuarios className="relative h-6 w-6 text-violet-300" />
+          <span className="absolute inset-0 rounded-full border border-violet-400/20 bg-violet-500/5" />
+          <span className="absolute inset-1 animate-ping rounded-full border border-violet-400/30" />
+          <span className="absolute inset-3 animate-pulse rounded-full bg-violet-500/15" />
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/30 bg-violet-500/15 text-violet-200 shadow-[0_0_35px_rgba(139,92,246,0.25)]">
+            <IconoUsuarios className="h-7 w-7" />
+          </div>
         </div>
 
-        <p className="mt-5 text-sm font-bold text-zinc-100">
-          Cargando artistas
-          <span className="inline-block w-4 animate-pulse text-left">...</span>
+        <p className="mt-6 text-base font-bold tracking-tight text-zinc-100">
+          Cargando artistas...
         </p>
-
-        <p className="mt-1 text-[11px] text-zinc-500">
+        <p className="mt-2 text-xs text-zinc-500">
           Preparando nuevas conexiones musicales
         </p>
+        <div className="mt-5 flex items-center gap-1.5" aria-hidden="true">
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.3s]" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.15s]" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300" />
+        </div>
       </div>
     </section>
   );
@@ -446,46 +234,36 @@ function TarjetaEstadistica({
   titulo: string;
   tituloMovil: string;
   valor: number;
-  icono: React.ReactNode;
+  icono: ReactNode;
   nota?: string;
 }) {
   return (
-    <article className="min-w-0 rounded-lg border border-white/10 bg-black/30 px-2 py-2 backdrop-blur-sm md:rounded-2xl md:p-4">
-      {/* Diseño compacto exclusivo para celular y tablet. */}
-      <div className="flex items-center justify-center gap-1.5 md:hidden">
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300">
+    <article className="rounded-2xl border border-white/10 bg-black/35 p-3.5 backdrop-blur-sm md:p-5">
+      <div className="flex items-center gap-3 md:hidden">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
           {icono}
         </div>
-
-        <div className="min-w-0 text-left">
-          <p className="text-base font-black leading-none tracking-tight text-white">
+        <div>
+          <p className="text-xl font-black text-white">
             {valor.toLocaleString("es-CO")}
           </p>
-          <p className="mt-1 truncate text-[8px] font-semibold leading-none text-zinc-400">
-            {tituloMovil}
-          </p>
+          <p className="text-[10px] font-semibold text-zinc-500">{tituloMovil}</p>
         </div>
       </div>
 
-      {/* Diseño amplio exclusivo para computador. */}
       <div className="hidden items-start justify-between gap-4 md:flex">
-        <div className="min-w-0">
-          <p className="text-xs font-medium text-zinc-400">{titulo}</p>
-          <p className="mt-1 text-2xl font-black tracking-tight text-white">
+        <div>
+          <p className="text-xs font-semibold text-zinc-500">{titulo}</p>
+          <p className="mt-2 text-3xl font-black text-white">
             {valor.toLocaleString("es-CO")}
           </p>
         </div>
-
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
           {icono}
         </div>
       </div>
 
-      {nota && (
-        <p className="mt-2 hidden text-[10px] text-zinc-500 md:block">
-          {nota}
-        </p>
-      )}
+      {nota && <p className="mt-2 hidden text-[10px] text-zinc-500 md:block">{nota}</p>}
     </article>
   );
 }
@@ -520,16 +298,13 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
     <article className="flex min-h-[350px] flex-col rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
       <div className="flex items-start gap-3">
         <FotoArtista artista={artista} />
-
         <div className="min-w-0 flex-1">
           <h2 className="truncate text-base font-bold text-white">
             {artista.nombreArtistico}
           </h2>
-
           <p className="truncate text-xs font-medium text-violet-300">
             @{artista.nombreUsuario}
           </p>
-
           <p className="mt-2 flex items-center gap-1.5 text-[11px] text-zinc-400">
             <IconoUbicacion />
             <span className="truncate">{ubicacion}</span>
@@ -541,7 +316,6 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
         <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-semibold text-violet-200">
           {formatearRol(artista.rol)}
         </span>
-
         {artista.generos.slice(0, 3).map((genero) => (
           <span
             key={genero}
@@ -550,7 +324,6 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
             {genero}
           </span>
         ))}
-
         {artista.generos.length === 0 && (
           <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-500">
             Sin géneros
@@ -558,35 +331,39 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
         )}
       </div>
 
-      <div className="mt-4 flex-1 rounded-xl border border-white/8 bg-white/[0.025] p-3">
+      <div className="mt-4 flex-1 rounded-xl border border-white/10 bg-white/[0.025] p-3">
         <div className="flex items-center justify-between gap-3">
-          <p className="text-[11px] font-semibold text-zinc-300">
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
             Ideas publicadas
           </p>
-          <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold text-violet-300">
+          <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-black text-violet-200">
             {artista.ideasActivas}
           </span>
         </div>
 
         {artista.ideasRecientes.length > 0 ? (
-          <div className="mt-2 space-y-2">
+          <div className="mt-3 space-y-2">
             {artista.ideasRecientes.map((idea, indice) => (
-              <PreviewIdea
+              <ReproductorAudio
                 key={idea.id}
-                idea={idea}
+                id={`explorar-${idea.id}`}
+                src={idea.audioUrl}
+                titulo={idea.titulo}
+                bpm={idea.bpm}
+                tonalidad={idea.tonalidad}
+                duracionSegundos={idea.duracionSegundos}
                 numero={indice + 1}
               />
             ))}
 
             {artista.ideasActivas > artista.ideasRecientes.length && (
-              <p className="text-[10px] font-medium text-violet-300">
-                +{artista.ideasActivas - artista.ideasRecientes.length} ideas
-                adicionales
+              <p className="pt-1 text-center text-[9px] font-semibold text-zinc-600">
+                +{artista.ideasActivas - artista.ideasRecientes.length} ideas adicionales
               </p>
             )}
           </div>
         ) : (
-          <p className="mt-2 text-[11px] text-zinc-500">
+          <p className="mt-4 text-center text-[10px] leading-5 text-zinc-600">
             Sin ideas publicadas actualmente
           </p>
         )}
@@ -618,10 +395,7 @@ export default function ArtistasClient({
   const [pagina, setPagina] = useState(1);
 
   useEffect(() => {
-    const temporizador = window.setTimeout(() => {
-      setCargando(false);
-    }, 700);
-
+    const temporizador = window.setTimeout(() => setCargando(false), 700);
     return () => window.clearTimeout(temporizador);
   }, []);
 
@@ -635,13 +409,9 @@ export default function ArtistasClient({
     return artistasIniciales.filter((artista) => {
       const coincideTexto =
         !termino ||
-        [
-          artista.nombreArtistico,
-          artista.nombreUsuario,
-          artista.ciudad,
-          artista.pais,
-        ].some((valor) => normalizar(valor).includes(termino));
-
+        [artista.nombreArtistico, artista.nombreUsuario, artista.ciudad, artista.pais].some(
+          (valor) => normalizar(valor).includes(termino),
+        );
       const coincidePais = !pais || artista.pais === pais;
       const coincideCiudad = !ciudad || artista.ciudad === ciudad;
       const coincideRol = !rol || artista.rol === rol;
@@ -662,10 +432,10 @@ export default function ArtistasClient({
     1,
     Math.ceil(artistasFiltrados.length / ARTISTAS_POR_PAGINA),
   );
-
+  const paginaSegura = Math.min(pagina, totalPaginas);
   const artistasPagina = artistasFiltrados.slice(
-    (pagina - 1) * ARTISTAS_POR_PAGINA,
-    pagina * ARTISTAS_POR_PAGINA,
+    (paginaSegura - 1) * ARTISTAS_POR_PAGINA,
+    paginaSegura * ARTISTAS_POR_PAGINA,
   );
 
   function limpiarFiltros() {
@@ -680,8 +450,8 @@ export default function ArtistasClient({
   const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
 
   return (
-    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white md:h-screen">
-      <header className="relative z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
+    <main className="min-h-screen bg-[#09070d] pb-20 text-white lg:pb-0">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
             href={sesionActiva ? "/panel" : "/"}
@@ -690,7 +460,7 @@ export default function ArtistasClient({
             Feat<span className="text-violet-400">Music</span>
           </Link>
 
-          <NavegacionEscritorio mostrarDesde="md" />
+          <NavegacionEscritorio />
 
           {sesionActiva ? (
             <form action="/api/cerrar-sesion" method="post">
@@ -713,237 +483,170 @@ export default function ArtistasClient({
         </div>
       </header>
 
-      <div className="relative h-[calc(100dvh-48px)] overflow-hidden md:h-[calc(100vh-48px)]">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
+      {cargando ? (
+        <CargandoArtistas />
+      ) : (
+        <div className="mx-auto max-w-[1460px] px-4 py-5 md:py-7">
+          <section className="grid grid-cols-3 gap-2.5 md:gap-4">
+            <TarjetaEstadistica
+              titulo="Artistas en FeatMusic"
+              tituloMovil="Artistas"
+              valor={estadisticas.artistas}
+              icono={<IconoUsuarios />}
+            />
+            <TarjetaEstadistica
+              titulo="Ideas musicales activas"
+              tituloMovil="Ideas"
+              valor={estadisticas.ideas}
+              icono={<IconoIdea />}
+            />
+            <TarjetaEstadistica
+              titulo="Propuestas enviadas"
+              tituloMovil="Propuestas"
+              valor={estadisticas.propuestas}
+              icono={<IconoPropuesta />}
+              nota="Disponible cuando se active el sistema de propuestas."
+            />
+          </section>
 
-        <div className="relative z-10 h-full">
-          {cargando ? (
-            <CargandoArtistas />
-          ) : (
-            <div className="h-full overflow-y-auto overscroll-y-contain px-4 pb-28 pt-4 md:px-6 md:pb-8 md:pt-6 xl:px-8">
-              <div className="mx-auto w-full max-w-[1460px]">
-                <section className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-1.5 md:max-w-none md:gap-4">
-                  <TarjetaEstadistica
-                    titulo="Artistas en FeatMusic"
-                    tituloMovil="Artistas"
-                    valor={estadisticas.artistas}
-                    icono={
-                      <IconoUsuarios className="h-3.5 w-3.5 md:h-5 md:w-5" />
-                    }
-                  />
-                  <TarjetaEstadistica
-                    titulo="Ideas de artistas"
-                    tituloMovil="Ideas"
-                    valor={estadisticas.ideas}
-                    icono={
-                      <IconoIdea className="h-3.5 w-3.5 md:h-5 md:w-5" />
-                    }
-                  />
-                  <TarjetaEstadistica
-                    titulo="Propuestas de colaboradores"
-                    tituloMovil="Propuestas"
-                    valor={estadisticas.propuestas}
-                    icono={
-                      <IconoPropuesta className="h-3.5 w-3.5 md:h-5 md:w-5" />
-                    }
-                    nota="Disponible cuando se active el sistema de propuestas."
-                  />
-                </section>
+          <section className="mt-5 rounded-2xl border border-white/10 bg-black/35 p-3.5 backdrop-blur-sm md:p-5">
+            <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
+              <label className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 focus-within:border-violet-400/40">
+                <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
+                <input
+                  value={busqueda}
+                  onChange={(evento) => setBusqueda(evento.target.value)}
+                  placeholder="Nombre, usuario, ciudad o país"
+                  className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-zinc-600"
+                />
+              </label>
 
-                <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm md:p-4">
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.7fr)] md:items-end xl:grid-cols-[minmax(260px,0.9fr)_minmax(0,2fr)_auto]">
-                    <label className="mx-auto w-full max-w-[330px] md:mx-0 md:min-w-0 md:max-w-none">
-                      <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
-                        Buscar artistas
-                      </span>
-                      <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-3 py-2 focus-within:border-violet-400/40 md:py-2.5">
-                        <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
-                        <input
-                          type="search"
-                          value={busqueda}
-                          onChange={(evento) => setBusqueda(evento.target.value)}
-                          placeholder="Nombre, usuario, ciudad o país"
-                          className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-zinc-600"
-                        />
-                      </span>
-                    </label>
+              <div className="grid grid-cols-2 gap-2 md:grid-cols-4 xl:w-[660px]">
+                <select
+                  value={pais}
+                  onChange={(evento) => setPais(evento.target.value)}
+                  aria-label="Filtrar por país"
+                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                >
+                  <option value="">Todos los países</option>
+                  {opciones.paises.map((opcion) => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
 
-                    <div className="grid min-w-0 grid-cols-2 gap-2 md:grid-cols-4">
-                      <label>
-                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
-                          País
-                        </span>
-                        <select
-                          value={pais}
-                          onChange={(evento) => setPais(evento.target.value)}
-                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
-                        >
-                          <option value="">Todos</option>
-                          {opciones.paises.map((opcion) => (
-                            <option key={opcion} value={opcion}>
-                              {opcion}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
+                <select
+                  value={ciudad}
+                  onChange={(evento) => setCiudad(evento.target.value)}
+                  aria-label="Filtrar por ciudad"
+                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                >
+                  <option value="">Todas las ciudades</option>
+                  {opciones.ciudades.map((opcion) => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
 
-                      <label>
-                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
-                          Ciudad
-                        </span>
-                        <select
-                          value={ciudad}
-                          onChange={(evento) => setCiudad(evento.target.value)}
-                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
-                        >
-                          <option value="">Todas</option>
-                          {opciones.ciudades.map((opcion) => (
-                            <option key={opcion} value={opcion}>
-                              {opcion}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
+                <select
+                  value={genero}
+                  onChange={(evento) => setGenero(evento.target.value)}
+                  aria-label="Filtrar por género"
+                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                >
+                  <option value="">Todos los géneros</option>
+                  {opciones.generos.map((opcion) => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
 
-                      <label>
-                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
-                          Género
-                        </span>
-                        <select
-                          value={genero}
-                          onChange={(evento) => setGenero(evento.target.value)}
-                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
-                        >
-                          <option value="">Todos</option>
-                          {opciones.generos.map((opcion) => (
-                            <option key={opcion} value={opcion}>
-                              {opcion}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-
-                      <label>
-                        <span className="mb-1.5 block text-[11px] font-semibold text-zinc-400">
-                          Rol
-                        </span>
-                        <select
-                          value={rol}
-                          onChange={(evento) => setRol(evento.target.value)}
-                          className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
-                        >
-                          <option value="">Todos</option>
-                          {opciones.roles.map((opcion) => (
-                            <option key={opcion} value={opcion}>
-                              {formatearRol(opcion)}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={limpiarFiltros}
-                      disabled={!hayFiltros}
-                      className="w-full rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40 md:col-span-2 md:w-auto md:min-w-[86px] md:justify-self-end xl:col-span-1"
-                    >
-                      Limpiar
-                    </button>
-                  </div>
-                </section>
-
-                <div className="mt-4 flex items-center justify-between gap-3">
-                  <p className="text-xs text-zinc-400">
-                    {artistasFiltrados.length.toLocaleString("es-CO")}{" "}
-                    {artistasFiltrados.length === 1
-                      ? "artista encontrado"
-                      : "artistas encontrados"}
-                  </p>
-
-                  {totalPaginas > 1 && (
-                    <p className="text-[11px] text-zinc-500">
-                      Página {pagina} de {totalPaginas}
-                    </p>
-                  )}
-                </div>
-
-                {errorCarga ? (
-                  <section className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/5 px-5 py-10 text-center">
-                    <p className="text-sm font-semibold text-red-200">
-                      No se pudieron cargar los artistas
-                    </p>
-                    <p className="mt-2 text-xs text-zinc-500">
-                      Revisa la conexión con la base de datos e inténtalo nuevamente.
-                    </p>
-                  </section>
-                ) : artistasIniciales.length === 0 ? (
-                  <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 px-5 py-12 text-center">
-                    <p className="text-sm font-semibold text-zinc-200">
-                      Todavía no hay artistas con el perfil completo
-                    </p>
-                  </section>
-                ) : artistasPagina.length === 0 ? (
-                  <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 px-5 py-12 text-center">
-                    <p className="text-sm font-semibold text-zinc-200">
-                      No encontramos artistas con esos filtros
-                    </p>
-                    <button
-                      type="button"
-                      onClick={limpiarFiltros}
-                      className="mt-4 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2 text-xs font-bold text-violet-200"
-                    >
-                      Limpiar búsqueda
-                    </button>
-                  </section>
-                ) : (
-                  <section className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                    {artistasPagina.map((artista) => (
-                      <TarjetaArtista key={artista.id} artista={artista} />
-                    ))}
-                  </section>
-                )}
-
-                {totalPaginas > 1 && (
-                  <nav
-                    aria-label="Paginación de artistas"
-                    className="mt-6 flex items-center justify-center gap-3"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setPagina((actual) => Math.max(1, actual - 1))}
-                      disabled={pagina === 1}
-                      className="rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      Anterior
-                    </button>
-
-                    <span className="text-xs text-zinc-500">
-                      {pagina} / {totalPaginas}
-                    </span>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setPagina((actual) =>
-                          Math.min(totalPaginas, actual + 1),
-                        )
-                      }
-                      disabled={pagina === totalPaginas}
-                      className="rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      Siguiente
-                    </button>
-                  </nav>
-                )}
+                <select
+                  value={rol}
+                  onChange={(evento) => setRol(evento.target.value)}
+                  aria-label="Filtrar por rol"
+                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                >
+                  <option value="">Todos los roles</option>
+                  {opciones.roles.map((opcion) => (
+                    <option key={opcion} value={opcion}>{formatearRol(opcion)}</option>
+                  ))}
+                </select>
               </div>
+
+              {hayFiltros && (
+                <button
+                  type="button"
+                  onClick={limpiarFiltros}
+                  className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-bold text-zinc-300 transition hover:bg-white/5"
+                >
+                  Limpiar
+                </button>
+              )}
+            </div>
+          </section>
+
+          <div className="mt-5 flex items-center justify-between gap-4">
+            <p className="text-xs font-semibold text-zinc-400">
+              {artistasFiltrados.length.toLocaleString("es-CO")} {artistasFiltrados.length === 1 ? "artista encontrado" : "artistas encontrados"}
+            </p>
+            {totalPaginas > 1 && (
+              <p className="text-[10px] font-semibold text-zinc-600">
+                Página {paginaSegura} de {totalPaginas}
+              </p>
+            )}
+          </div>
+
+          {errorCarga ? (
+            <section className="mt-5 rounded-2xl border border-red-400/20 bg-red-500/[0.05] px-5 py-14 text-center">
+              <h2 className="text-base font-bold text-red-200">No se pudieron cargar los artistas</h2>
+              <p className="mt-2 text-xs text-red-200/60">Revisa la conexión con la base de datos e inténtalo nuevamente.</p>
+            </section>
+          ) : artistasIniciales.length === 0 ? (
+            <section className="mt-5 rounded-2xl border border-white/10 bg-black/35 px-5 py-14 text-center text-sm font-semibold text-zinc-400">
+              Todavía no hay artistas con el perfil completo
+            </section>
+          ) : artistasPagina.length === 0 ? (
+            <section className="mt-5 rounded-2xl border border-white/10 bg-black/35 px-5 py-14 text-center">
+              <p className="text-sm font-semibold text-zinc-300">No encontramos artistas con esos filtros</p>
+              <button
+                type="button"
+                onClick={limpiarFiltros}
+                className="mt-4 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2 text-xs font-bold text-violet-200"
+              >
+                Limpiar búsqueda
+              </button>
+            </section>
+          ) : (
+            <section className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {artistasPagina.map((artista) => (
+                <TarjetaArtista key={artista.id} artista={artista} />
+              ))}
+            </section>
+          )}
+
+          {totalPaginas > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => setPagina((actual) => Math.max(1, actual - 1))}
+                disabled={paginaSegura === 1}
+                className="rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Anterior
+              </button>
+              <span className="text-xs font-bold text-zinc-500">{paginaSegura} / {totalPaginas}</span>
+              <button
+                type="button"
+                onClick={() => setPagina((actual) => Math.min(totalPaginas, actual + 1))}
+                disabled={paginaSegura === totalPaginas}
+                className="rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Siguiente
+              </button>
             </div>
           )}
         </div>
-      </div>
+      )}
 
-      {sesionActiva && <MenuMovilPanel ocultarDesde="md" />}
+      {sesionActiva && <MenuMovilPanel />}
     </main>
   );
 }
