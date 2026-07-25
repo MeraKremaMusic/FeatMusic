@@ -94,6 +94,10 @@ export default async function ArtistasPage() {
             select: {
               id: true,
               titulo: true,
+              audioUrl: true,
+              duracionSegundos: true,
+              bpm: true,
+              tonalidad: true,
             },
           },
           _count: {

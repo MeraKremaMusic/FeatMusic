@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import MenuMovilPanel from "../panel/components/MenuMovilPanel";
@@ -19,6 +19,10 @@ export type ArtistaExplorar = {
   ideasRecientes: Array<{
     id: number;
     titulo: string;
+    audioUrl: string;
+    duracionSegundos: number;
+    bpm: number;
+    tonalidad: string;
   }>;
   creadoEn: string;
 };
@@ -196,6 +200,210 @@ function IconoUbicacion({
   );
 }
 
+
+function IconoPlay({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="currentColor"
+    >
+      <path d="m8.5 5.5 10 6.5-10 6.5v-13Z" />
+    </svg>
+  );
+}
+
+function IconoPausa({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="currentColor"
+    >
+      <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+    </svg>
+  );
+}
+
+function formatearTiempo(segundos: number) {
+  if (!Number.isFinite(segundos) || segundos < 0) {
+    return "0:00";
+  }
+
+  const minutos = Math.floor(segundos / 60);
+  const segundosRestantes = Math.floor(segundos % 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${minutos}:${segundosRestantes}`;
+}
+
+type IdeaPreview = ArtistaExplorar["ideasRecientes"][number];
+
+function PreviewIdea({
+  idea,
+  numero,
+}: {
+  idea: IdeaPreview;
+  numero: number;
+}) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [reproduciendo, setReproduciendo] = useState(false);
+  const [tiempoActual, setTiempoActual] = useState(0);
+  const [duracion, setDuracion] = useState(idea.duracionSegundos || 0);
+
+  useEffect(() => {
+    function detenerOtroPreview(evento: Event) {
+      const eventoPersonalizado = evento as CustomEvent<number>;
+
+      if (eventoPersonalizado.detail === idea.id) {
+        return;
+      }
+
+      const audio = audioRef.current;
+
+      if (audio && !audio.paused) {
+        audio.pause();
+      }
+    }
+
+    window.addEventListener(
+      "featmusic:reproducir-preview",
+      detenerOtroPreview,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "featmusic:reproducir-preview",
+        detenerOtroPreview,
+      );
+    };
+  }, [idea.id]);
+
+  async function alternarReproduccion() {
+    const audio = audioRef.current;
+
+    if (!audio) {
+      return;
+    }
+
+    if (audio.paused) {
+      window.dispatchEvent(
+        new CustomEvent<number>("featmusic:reproducir-preview", {
+          detail: idea.id,
+        }),
+      );
+
+      try {
+        await audio.play();
+      } catch (error) {
+        console.error("No se pudo reproducir el preview de la idea.", error);
+      }
+
+      return;
+    }
+
+    audio.pause();
+  }
+
+  function cambiarPosicion(evento: React.ChangeEvent<HTMLInputElement>) {
+    const audio = audioRef.current;
+
+    if (!audio) {
+      return;
+    }
+
+    const nuevoTiempo = Number(evento.target.value);
+    audio.currentTime = nuevoTiempo;
+    setTiempoActual(nuevoTiempo);
+  }
+
+  const duracionSegura =
+    Number.isFinite(duracion) && duracion > 0
+      ? duracion
+      : idea.duracionSegundos;
+
+  return (
+    <div className="rounded-lg border border-white/8 bg-black/25 px-2.5 py-2">
+      <div className="flex min-w-0 items-center gap-2">
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-[9px] font-black text-violet-200">
+          {numero.toString().padStart(2, "0")}
+        </span>
+
+        <button
+          type="button"
+          onClick={alternarReproduccion}
+          aria-label={
+            reproduciendo
+              ? `Pausar ${idea.titulo}`
+              : `Reproducir ${idea.titulo}`
+          }
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-violet-400/30 bg-violet-500/15 text-violet-200 transition hover:bg-violet-500/25"
+        >
+          {reproduciendo ? <IconoPausa /> : <IconoPlay />}
+        </button>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center justify-between gap-2">
+            <p
+              className="truncate text-[10px] font-semibold text-zinc-200"
+              title={idea.titulo}
+            >
+              {idea.titulo}
+            </p>
+
+            <span className="shrink-0 text-[8px] text-zinc-500">
+              {idea.bpm} BPM · {idea.tonalidad}
+            </span>
+          </div>
+
+          <div className="mt-1 flex items-center gap-2">
+            <input
+              type="range"
+              min="0"
+              max={Math.max(duracionSegura, 1)}
+              step="0.1"
+              value={Math.min(tiempoActual, Math.max(duracionSegura, 1))}
+              onChange={cambiarPosicion}
+              aria-label={`Posición de reproducción de ${idea.titulo}`}
+              className="h-1 min-w-0 flex-1 cursor-pointer accent-violet-400"
+            />
+
+            <span className="w-[58px] shrink-0 text-right text-[8px] tabular-nums text-zinc-500">
+              {formatearTiempo(tiempoActual)} /{" "}
+              {formatearTiempo(duracionSegura)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <audio
+        ref={audioRef}
+        src={idea.audioUrl}
+        preload="metadata"
+        onLoadedMetadata={(evento) => {
+          const duracionAudio = evento.currentTarget.duration;
+
+          if (Number.isFinite(duracionAudio) && duracionAudio > 0) {
+            setDuracion(duracionAudio);
+          }
+        }}
+        onTimeUpdate={(evento) => {
+          setTiempoActual(evento.currentTarget.currentTime);
+        }}
+        onPlay={() => setReproduciendo(true)}
+        onPause={() => setReproduciendo(false)}
+        onEnded={() => {
+          setReproduciendo(false);
+          setTiempoActual(0);
+        }}
+      />
+    </div>
+  );
+}
+
 function CargandoArtistas() {
   return (
     <section
@@ -309,7 +517,7 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
     "Ubicación sin completar";
 
   return (
-    <article className="flex min-h-[290px] flex-col rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
+    <article className="flex min-h-[350px] flex-col rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
       <div className="flex items-start gap-3">
         <FotoArtista artista={artista} />
 
@@ -361,15 +569,13 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
         </div>
 
         {artista.ideasRecientes.length > 0 ? (
-          <div className="mt-2 space-y-1.5">
-            {artista.ideasRecientes.map((idea) => (
-              <p
+          <div className="mt-2 space-y-2">
+            {artista.ideasRecientes.map((idea, indice) => (
+              <PreviewIdea
                 key={idea.id}
-                className="truncate text-[11px] text-zinc-400"
-                title={idea.titulo}
-              >
-                • {idea.titulo}
-              </p>
+                idea={idea}
+                numero={indice + 1}
+              />
             ))}
 
             {artista.ideasActivas > artista.ideasRecientes.length && (
