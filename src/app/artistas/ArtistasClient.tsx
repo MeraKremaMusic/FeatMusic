@@ -239,32 +239,28 @@ function TarjetaEstadistica({
   nota?: string;
 }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-black/35 p-3.5 backdrop-blur-sm md:p-5">
-      <div className="flex items-center gap-3 md:hidden">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
-          {icono}
-        </div>
-        <div>
-          <p className="text-xl font-black text-white">
-            {valor.toLocaleString("es-CO")}
-          </p>
-          <p className="text-[10px] font-semibold text-zinc-500">{tituloMovil}</p>
-        </div>
+    <article className="flex min-w-0 items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300 md:h-8 md:w-8">
+        {icono}
       </div>
 
-      <div className="hidden items-start justify-between gap-4 md:flex">
-        <div>
-          <p className="text-xs font-semibold text-zinc-500">{titulo}</p>
-          <p className="mt-2 text-3xl font-black text-white">
-            {valor.toLocaleString("es-CO")}
-          </p>
-        </div>
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
-          {icono}
-        </div>
+      <div className="min-w-0">
+        <p className="truncate text-[8px] font-semibold text-zinc-500 sm:hidden">
+          {tituloMovil}
+        </p>
+        <p className="hidden truncate text-[9px] font-semibold text-zinc-500 sm:block lg:text-[10px]">
+          {titulo}
+        </p>
+        <p className="mt-0.5 text-base font-black leading-none text-white md:text-lg">
+          {valor.toLocaleString("es-CO")}
+        </p>
       </div>
 
-      {nota && <p className="mt-2 hidden text-[10px] text-zinc-500 md:block">{nota}</p>}
+      {nota && (
+        <span className="ml-auto hidden rounded-full border border-violet-400/15 bg-violet-500/[0.07] px-2 py-0.5 text-[8px] font-bold text-violet-300/70 xl:inline-flex">
+          Próximamente
+        </span>
+      )}
     </article>
   );
 }
@@ -274,7 +270,7 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-base font-black text-violet-200">
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-sm font-black text-violet-200">
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -284,7 +280,7 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
     <img
       src={artista.fotoPerfil}
       alt={`Foto de ${artista.nombreArtistico}`}
-      className="h-16 w-16 shrink-0 rounded-full border border-white/10 object-cover"
+      className="h-14 w-14 shrink-0 rounded-full border border-white/10 object-cover"
       onError={() => setFallo(true)}
     />
   );
@@ -339,7 +335,7 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
     "Ubicación sin completar";
 
   return (
-    <article className="flex min-h-[350px] flex-col rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
+    <article className="flex min-h-[330px] flex-col rounded-xl border border-white/10 bg-black/35 p-3.5 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
       <div className="flex items-start gap-3">
         <FotoArtista artista={artista} />
         <div className="min-w-0 flex-1">
@@ -509,7 +505,7 @@ export default function ArtistasClient({
   return (
     <main className="min-h-screen bg-[#09070d] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
-        <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
+        <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <Link
             href={sesionActiva ? "/panel" : "/"}
             className="text-lg font-black tracking-tight"
@@ -543,47 +539,47 @@ export default function ArtistasClient({
       {cargando ? (
         <CargandoArtistas />
       ) : (
-        <div className="mx-auto max-w-[1460px] px-4 py-5 md:py-7">
-          <section className="grid grid-cols-3 gap-2.5 md:gap-4">
+        <div className="mx-auto max-w-[1280px] px-4 py-4 md:py-5">
+          <section className="grid grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-black/35 backdrop-blur-sm">
             <TarjetaEstadistica
               titulo="Artistas en FeatMusic"
               tituloMovil="Artistas"
               valor={estadisticas.artistas}
-              icono={<IconoUsuarios />}
+              icono={<IconoUsuarios className="h-3.5 w-3.5 md:h-4 md:w-4" />}
             />
             <TarjetaEstadistica
               titulo="Ideas musicales activas"
               tituloMovil="Ideas"
               valor={estadisticas.ideas}
-              icono={<IconoIdea />}
+              icono={<IconoIdea className="h-3.5 w-3.5 md:h-4 md:w-4" />}
             />
             <TarjetaEstadistica
               titulo="Propuestas enviadas"
               tituloMovil="Propuestas"
               valor={estadisticas.propuestas}
-              icono={<IconoPropuesta />}
+              icono={<IconoPropuesta className="h-3.5 w-3.5 md:h-4 md:w-4" />}
               nota="Disponible cuando se active el sistema de propuestas."
             />
           </section>
 
-          <section className="mt-5 rounded-2xl border border-white/10 bg-black/35 p-3.5 backdrop-blur-sm md:p-5">
-            <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
-              <label className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 focus-within:border-violet-400/40">
+          <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
+            <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
+              <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#100d15] px-3 py-2 focus-within:border-violet-400/40 lg:w-[320px] lg:flex-none">
                 <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
                 <input
                   value={busqueda}
                   onChange={(evento) => setBusqueda(evento.target.value)}
                   placeholder="Nombre, usuario, ciudad o país"
-                  className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-zinc-600"
+                  className="min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
                 />
               </label>
 
-              <div className="grid grid-cols-2 gap-2 md:grid-cols-4 xl:w-[660px]">
+              <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:min-w-0 lg:flex-1">
                 <select
                   value={pais}
                   onChange={(evento) => setPais(evento.target.value)}
                   aria-label="Filtrar por país"
-                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
                 >
                   <option value="">Todos los países</option>
                   {opciones.paises.map((opcion) => (
@@ -595,7 +591,7 @@ export default function ArtistasClient({
                   value={ciudad}
                   onChange={(evento) => setCiudad(evento.target.value)}
                   aria-label="Filtrar por ciudad"
-                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
                 >
                   <option value="">Todas las ciudades</option>
                   {opciones.ciudades.map((opcion) => (
@@ -607,7 +603,7 @@ export default function ArtistasClient({
                   value={genero}
                   onChange={(evento) => setGenero(evento.target.value)}
                   aria-label="Filtrar por género"
-                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
                 >
                   <option value="">Todos los géneros</option>
                   {opciones.generos.map((opcion) => (
@@ -619,7 +615,7 @@ export default function ArtistasClient({
                   value={rol}
                   onChange={(evento) => setRol(evento.target.value)}
                   aria-label="Filtrar por rol"
-                  className="w-full rounded-xl border border-white/10 bg-[#100d15] px-3 py-2.5 text-xs text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
                 >
                   <option value="">Todos los roles</option>
                   {opciones.roles.map((opcion) => (
@@ -632,27 +628,27 @@ export default function ArtistasClient({
                 <button
                   type="button"
                   onClick={limpiarFiltros}
-                  className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-bold text-zinc-300 transition hover:bg-white/5"
+                  className="rounded-lg border border-white/10 px-3 py-2 text-[11px] font-bold text-zinc-300 transition hover:bg-white/5"
                 >
                   Limpiar
                 </button>
               )}
             </div>
 
-            <div className="mt-3 border-t border-white/5 pt-3">
-              <label className="inline-flex cursor-pointer items-center gap-2.5 rounded-xl px-1 py-1 text-xs font-semibold text-zinc-300 transition hover:text-white">
+            <div className="mt-2 border-t border-white/5 pt-2">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg px-1 py-0.5 text-[11px] font-semibold text-zinc-400 transition hover:text-white">
                 <input
                   type="checkbox"
                   checked={soloConIdeas}
                   onChange={(evento) => setSoloConIdeas(evento.target.checked)}
-                  className="h-4 w-4 cursor-pointer rounded border-white/20 bg-[#100d15] accent-violet-500"
+                  className="h-3.5 w-3.5 cursor-pointer rounded border-white/20 bg-[#100d15] accent-violet-500"
                 />
                 <span>Mostrar solo artistas con ideas</span>
               </label>
             </div>
           </section>
 
-          <div className="mt-5 flex items-center justify-between gap-4">
+          <div className="mt-4 flex items-center justify-between gap-4">
             <p className="text-xs font-semibold text-zinc-400">
               {artistasFiltrados.length.toLocaleString("es-CO")} {artistasFiltrados.length === 1 ? "artista encontrado" : "artistas encontrados"}
             </p>
@@ -684,7 +680,7 @@ export default function ArtistasClient({
               </button>
             </section>
           ) : (
-            <section className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <section className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {artistasPagina.map((artista) => (
                 <TarjetaArtista key={artista.id} artista={artista} />
               ))}
