@@ -25,6 +25,7 @@ model Usuario {
   correo                 String    @unique
   passwordHash           String    @map("password_hash")
   pais                   String?
+  departamento           String?   @db.VarChar(120)
   ciudad                 String?
   idiomaPrincipal        String?   @map("idioma_principal")
   rolPrincipal           String    @map("rol_principal")
@@ -35,12 +36,10 @@ model Usuario {
   aceptoTerminosEn       DateTime? @map("acepto_terminos_en")
   creadoEn               DateTime  @default(now()) @map("creado_en")
   actualizadoEn          DateTime  @updatedAt @map("actualizado_en")
-
-  ideas Idea[]
+  ideas                  Idea[]
 
   @@map("usuarios")
 }
-
 
 model Idea {
   id               Int      @id @default(autoincrement())
@@ -58,8 +57,7 @@ model Idea {
   expiraEn         DateTime @map("expira_en")
   creadoEn         DateTime @default(now()) @map("creado_en")
   actualizadoEn    DateTime @updatedAt @map("actualizado_en")
-
-  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuario          Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@index([usuarioId, estado, expiraEn])
   @@map("ideas")
