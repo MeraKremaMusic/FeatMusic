@@ -558,7 +558,6 @@ export default function ArtistasClient({
               tituloMovil="Propuestas"
               valor={estadisticas.propuestas}
               icono={<IconoPropuesta className="h-3.5 w-3.5 md:h-4 md:w-4" />}
-              nota="Disponible cuando se active el sistema de propuestas."
             />
           </section>
 

@@ -196,6 +196,8 @@ export default async function ArtistasPage() {
       },
     });
 
+    const totalPropuestas = await prisma.propuesta.count();
+
     const usuariosPublicables = usuarios.filter(perfilEsPublicable);
 
     artistas = usuariosPublicables
@@ -231,8 +233,7 @@ export default async function ArtistasPage() {
         (total, artista) => total + artista.ideasActivas,
         0,
       ),
-      // Todavía no existe un modelo Propuesta en Prisma.
-      propuestas: 0,
+      propuestas: totalPropuestas,
     };
 
     opciones = {
