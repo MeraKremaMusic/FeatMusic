@@ -9,7 +9,9 @@ type IdeaParaLimpiar = {
   usuarioId: number;
   audioPublicId: string;
   propuestas: Array<{
-    audioPublicId: string;
+    id: number;
+    estado: string;
+    audioPublicId: string | null;
   }>;
 };
 
@@ -19,19 +21,46 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
 
   for (const idea of ideas) {
     try {
-      for (const propuesta of idea.propuestas) {
-        await eliminarAudioIdea(propuesta.audioPublicId);
+      const propuestasNoAceptadas = idea.propuestas.filter(
+        (propuesta) => propuesta.estado !== "ACEPTADA",
+      );
+      const tienePropuestaAceptada = idea.propuestas.some(
+        (propuesta) => propuesta.estado === "ACEPTADA",
+      );
+
+      for (const propuesta of propuestasNoAceptadas) {
+        if (propuesta.audioPublicId) {
+          await eliminarAudioIdea(propuesta.audioPublicId);
+        }
       }
 
-      await eliminarAudioIdea(idea.audioPublicId);
+      // Si existe una colaboración aceptada, conservamos también el audio
+      // original de la idea para que pueda usarse en el futuro chat.
+      if (!tienePropuestaAceptada) {
+        await eliminarAudioIdea(idea.audioPublicId);
+      }
 
       const resultado = await prisma.$transaction(async (tx) => {
         await tx.propuesta.updateMany({
           where: {
             ideaId: idea.id,
+            estado: { in: ["PENDIENTE", "RECHAZANDO"] },
           },
           data: {
             estado: "EXPIRADA",
+            audioUrl: null,
+            audioPublicId: null,
+          },
+        });
+
+        await tx.propuesta.updateMany({
+          where: {
+            ideaId: idea.id,
+            estado: { in: ["RECHAZADA", "EXPIRADA"] },
+          },
+          data: {
+            audioUrl: null,
+            audioPublicId: null,
           },
         });
 
@@ -68,6 +97,8 @@ const seleccionLimpieza = {
   audioPublicId: true,
   propuestas: {
     select: {
+      id: true,
+      estado: true,
       audioPublicId: true,
     },
   },

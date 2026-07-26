@@ -90,6 +90,13 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
     );
   }
 
+  if (!propuesta.audioUrl) {
+    return respuestaError(
+      "El archivo de esta propuesta ya no está disponible.",
+      410,
+    );
+  }
+
   if (propuesta.formato?.toLowerCase() !== "mp3") {
     return respuestaError("El audio todavía no está disponible en MP3.", 409);
   }

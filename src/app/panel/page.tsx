@@ -317,8 +317,6 @@ export default async function PanelPage() {
     where: {
       idea: {
         usuarioId: sesion.usuarioId,
-        estado: "ACTIVA",
-        expiraEn: { gt: new Date() },
       },
     },
     orderBy: {

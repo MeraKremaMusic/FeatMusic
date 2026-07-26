@@ -19,7 +19,7 @@ type ArtistaResumen = {
 type PropuestaBase = {
   id: number;
   mensaje: string | null;
-  audioUrl: string;
+  audioUrl: string | null;
   duracionSegundos: number;
   estado: EstadoPropuesta | string;
   creadoEn: string;
@@ -47,6 +47,7 @@ type RespuestaActualizacion = {
   propuesta?: {
     id: number;
     estado: string;
+    audioUrl: string | null;
   };
 };
 
@@ -119,10 +120,26 @@ function textoEstadoEnviado(estado: string) {
   }
 
   if (estado === "EXPIRADA") {
-    return "La idea venció antes de recibir una respuesta.";
+    return "La idea terminó antes de recibir una respuesta. El audio fue eliminado.";
+  }
+
+  if (estado === "RECHAZANDO") {
+    return "La propuesta se está procesando.";
   }
 
   return "Esperando la respuesta del artista.";
+}
+
+function textoAudioNoDisponible(estado: string) {
+  if (estado === "RECHAZADA") {
+    return "El archivo MP3 fue eliminado al rechazar la propuesta.";
+  }
+
+  if (estado === "EXPIRADA") {
+    return "El archivo MP3 fue eliminado cuando terminó la idea.";
+  }
+
+  return "El archivo de audio ya no está disponible.";
 }
 
 function IconoPropuestas() {
@@ -219,6 +236,15 @@ export default function PropuestasRecibidasCard({
   ) {
     if (procesandoId !== null) return;
 
+    if (
+      estado === "RECHAZADA" &&
+      !window.confirm(
+        "¿Seguro que deseas rechazar esta propuesta? La decisión será definitiva y el archivo MP3 se eliminará.",
+      )
+    ) {
+      return;
+    }
+
     setError("");
     setProcesandoId(propuestaId);
 
@@ -243,6 +269,10 @@ export default function PropuestasRecibidasCard({
             ? {
                 ...propuesta,
                 estado: data.propuesta?.estado ?? estado,
+                audioUrl:
+                  estado === "RECHAZADA"
+                    ? null
+                    : data.propuesta?.audioUrl ?? propuesta.audioUrl,
               }
             : propuesta,
         ),
@@ -390,43 +420,51 @@ export default function PropuestasRecibidasCard({
                     </p>
                   )}
 
-                  <ReproductorAudio
-                    id={`propuesta-recibida-${propuesta.id}`}
-                    src={propuesta.audioUrl}
-                    titulo={`Propuesta de ${nombre}`}
-                    duracionSegundos={propuesta.duracionSegundos}
-                    numero={indice + 1}
-                    className="mt-3"
-                  />
+                  {propuesta.audioUrl ? (
+                    <ReproductorAudio
+                      id={`propuesta-recibida-${propuesta.id}`}
+                      src={propuesta.audioUrl}
+                      titulo={`Propuesta de ${nombre}`}
+                      duracionSegundos={propuesta.duracionSegundos}
+                      numero={indice + 1}
+                      className="mt-3"
+                    />
+                  ) : (
+                    <p className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[9px] font-semibold text-zinc-500">
+                      {textoAudioNoDisponible(propuesta.estado)}
+                    </p>
+                  )}
 
-                  <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
-                    {propuesta.estado === "ACEPTADA" && (
+                  {propuesta.estado === "PENDIENTE" ? (
+                    <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        disabled={procesando}
+                        onClick={() => actualizarEstado(propuesta.id, "RECHAZADA")}
+                        className="rounded-lg border border-red-400/25 bg-red-500/10 px-3 py-1.5 text-[9px] font-bold text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        {procesando ? "Procesando…" : "Rechazar"}
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={procesando}
+                        onClick={() => actualizarEstado(propuesta.id, "ACEPTADA")}
+                        className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-3 py-1.5 text-[9px] font-bold text-emerald-200 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        {procesando ? "Procesando…" : "Aceptar"}
+                      </button>
+                    </div>
+                  ) : propuesta.estado === "ACEPTADA" && propuesta.audioUrl ? (
+                    <div className="mt-3 flex justify-end">
                       <a
                         href={`/api/propuestas/${propuesta.id}/descargar`}
                         className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20"
                       >
                         Descargar MP3
                       </a>
-                    )}
-
-                    <button
-                      type="button"
-                      disabled={procesando || propuesta.estado === "RECHAZADA"}
-                      onClick={() => actualizarEstado(propuesta.id, "RECHAZADA")}
-                      className="rounded-lg border border-red-400/25 bg-red-500/10 px-3 py-1.5 text-[9px] font-bold text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      {procesando ? "Procesando…" : "Rechazar"}
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={procesando || propuesta.estado === "ACEPTADA"}
-                      onClick={() => actualizarEstado(propuesta.id, "ACEPTADA")}
-                      className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-3 py-1.5 text-[9px] font-bold text-emerald-200 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      {procesando ? "Procesando…" : "Aceptar"}
-                    </button>
-                  </div>
+                    </div>
+                  ) : null}
                 </article>
               );
             })}
@@ -497,14 +535,20 @@ export default function PropuestasRecibidasCard({
                   </div>
                 )}
 
-                <ReproductorAudio
-                  id={`propuesta-enviada-${propuesta.id}`}
-                  src={propuesta.audioUrl}
-                  titulo={`Tu propuesta para ${propuesta.idea.titulo}`}
-                  duracionSegundos={propuesta.duracionSegundos}
-                  numero={indice + 1}
-                  className="mt-3"
-                />
+                {propuesta.audioUrl ? (
+                  <ReproductorAudio
+                    id={`propuesta-enviada-${propuesta.id}`}
+                    src={propuesta.audioUrl}
+                    titulo={`Tu propuesta para ${propuesta.idea.titulo}`}
+                    duracionSegundos={propuesta.duracionSegundos}
+                    numero={indice + 1}
+                    className="mt-3"
+                  />
+                ) : (
+                  <p className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[9px] font-semibold text-zinc-500">
+                    {textoAudioNoDisponible(propuesta.estado)}
+                  </p>
+                )}
 
                 <p
                   className={`mt-3 rounded-lg border px-3 py-2 text-[9px] font-semibold ${claseEstado(
