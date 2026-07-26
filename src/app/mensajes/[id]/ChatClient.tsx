@@ -5,7 +5,6 @@ import {
   FormEvent,
   KeyboardEvent,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -107,32 +106,62 @@ export default function ChatClient({
   const [error, setError] = useState("");
   const finalRef = useRef<HTMLDivElement | null>(null);
 
-  const ultimoMensajeId = useMemo(
-    () => mensajes[mensajes.length - 1]?.id ?? 0,
-    [mensajes],
+  const ultimoMensajeIdRef = useRef(
+    mensajesIniciales[mensajesIniciales.length - 1]?.id ?? 0,
   );
 
   useEffect(() => {
+    ultimoMensajeIdRef.current = mensajes[mensajes.length - 1]?.id ?? 0;
     finalRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [mensajes.length]);
+  }, [mensajes]);
 
   useEffect(() => {
     let activo = true;
     let consultando = false;
+    let temporizador: number | null = null;
+    let controlador: AbortController | null = null;
 
-    async function consultarMensajes() {
-      if (consultando || document.visibilityState !== "visible") {
+    function cancelarTemporizador() {
+      if (temporizador !== null) {
+        window.clearTimeout(temporizador);
+        temporizador = null;
+      }
+    }
+
+    function programarSiguienteConsulta() {
+      cancelarTemporizador();
+
+      if (!activo) {
         return;
       }
 
+      temporizador = window.setTimeout(() => {
+        void consultarMensajes();
+      }, 2500);
+    }
+
+    async function consultarMensajes() {
+      if (!activo || consultando) {
+        return;
+      }
+
+      cancelarTemporizador();
       consultando = true;
+      controlador = new AbortController();
 
       try {
+        const marcaTiempo = Date.now();
         const response = await fetch(
-          `/api/conversaciones/${conversacionId}?despuesDe=${ultimoMensajeId}`,
+          `/api/conversaciones/${conversacionId}?despuesDe=${ultimoMensajeIdRef.current}&_=${marcaTiempo}`,
           {
             cache: "no-store",
             credentials: "include",
+            signal: controlador.signal,
+            headers: {
+              Accept: "application/json",
+              "Cache-Control": "no-cache, no-store, max-age=0",
+              Pragma: "no-cache",
+            },
           },
         );
 
@@ -146,9 +175,13 @@ export default function ChatClient({
           setMensajes((actuales) =>
             agregarSinDuplicados(actuales, data.mensajes ?? []),
           );
+          setError("");
         }
       } catch (errorConsulta) {
-        if (activo) {
+        if (
+          activo &&
+          !(errorConsulta instanceof DOMException && errorConsulta.name === "AbortError")
+        ) {
           setError(
             errorConsulta instanceof Error
               ? errorConsulta.message
@@ -157,27 +190,29 @@ export default function ChatClient({
         }
       } finally {
         consultando = false;
+        controlador = null;
+        programarSiguienteConsulta();
       }
     }
 
-    const intervalo = window.setInterval(() => {
-      void consultarMensajes();
-    }, 5000);
-
     const alVolver = () => {
-      void consultarMensajes();
+      if (document.visibilityState === "visible") {
+        void consultarMensajes();
+      }
     };
 
+    void consultarMensajes();
     window.addEventListener("focus", alVolver);
     document.addEventListener("visibilitychange", alVolver);
 
     return () => {
       activo = false;
-      window.clearInterval(intervalo);
+      cancelarTemporizador();
+      controlador?.abort();
       window.removeEventListener("focus", alVolver);
       document.removeEventListener("visibilitychange", alVolver);
     };
-  }, [conversacionId, ultimoMensajeId]);
+  }, [conversacionId]);
 
   async function enviarMensaje(event?: FormEvent) {
     event?.preventDefault();
@@ -309,7 +344,7 @@ export default function ChatClient({
             Conversación con {otroArtista.nombreVisible}
           </p>
           <p className="mt-1 text-[9px] font-medium text-zinc-600">
-            Los mensajes se actualizan automáticamente.
+            Los mensajes se sincronizan automáticamente cada pocos segundos.
           </p>
         </div>
 

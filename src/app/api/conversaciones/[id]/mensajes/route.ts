@@ -6,6 +6,15 @@ import { obtenerSesion } from "@/lib/session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const CABECERAS_SIN_CACHE = {
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0",
+  Pragma: "no-cache",
+  Expires: "0",
+  Vary: "Cookie",
+};
 
 const mensajeSchema = z.object({
   contenido: z
@@ -19,8 +28,15 @@ type ContextoRuta = {
   params: Promise<{ id: string }>;
 };
 
+function respuestaJson(datos: unknown, status = 200) {
+  return NextResponse.json(datos, {
+    status,
+    headers: CABECERAS_SIN_CACHE,
+  });
+}
+
 function respuestaError(mensaje: string, status: number) {
-  return NextResponse.json({ ok: false, mensaje }, { status });
+  return respuestaJson({ ok: false, mensaje }, status);
 }
 
 function convertirId(valor: string) {
@@ -119,7 +135,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       return mensaje;
     });
 
-    return NextResponse.json({
+    return respuestaJson({
       ok: true,
       nuevoMensaje: {
         ...nuevoMensaje,
