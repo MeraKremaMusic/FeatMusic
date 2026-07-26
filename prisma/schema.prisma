@@ -37,6 +37,7 @@ model Usuario {
   creadoEn               DateTime  @default(now()) @map("creado_en")
   actualizadoEn          DateTime  @updatedAt @map("actualizado_en")
   ideas                  Idea[]
+  propuestasEnviadas     Propuesta[] @relation("PropuestasEnviadas")
 
   @@map("usuarios")
 }
@@ -58,9 +59,33 @@ model Idea {
   creadoEn         DateTime @default(now()) @map("creado_en")
   actualizadoEn    DateTime @updatedAt @map("actualizado_en")
   usuario          Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  propuestas       Propuesta[]
 
   @@index([usuarioId, estado, expiraEn])
   @@map("ideas")
+}
+
+
+model Propuesta {
+  id               Int      @id @default(autoincrement())
+  ideaId           Int      @map("idea_id")
+  remitenteId      Int      @map("remitente_id")
+  mensaje          String?  @db.VarChar(500)
+  audioUrl         String   @map("audio_url") @db.VarChar(1000)
+  audioPublicId    String   @map("audio_public_id") @db.VarChar(255)
+  duracionSegundos Int      @map("duracion_segundos")
+  formato          String?  @db.VarChar(20)
+  tamanoBytes      Int?     @map("tamano_bytes")
+  estado           String   @default("PENDIENTE") @db.VarChar(20)
+  creadoEn         DateTime @default(now()) @map("creado_en")
+  actualizadoEn    DateTime @updatedAt @map("actualizado_en")
+  idea             Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  remitente        Usuario  @relation("PropuestasEnviadas", fields: [remitenteId], references: [id], onDelete: Cascade)
+
+  @@unique([ideaId, remitenteId])
+  @@index([ideaId, estado, creadoEn])
+  @@index([remitenteId, estado, creadoEn])
+  @@map("propuestas")
 }
 
 model RegistroPendiente {

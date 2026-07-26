@@ -87,14 +87,14 @@ export async function subirImagenPerfil(
   return data.secure_url;
 }
 
-export async function subirAudioIdea(
+async function subirAudioConvertido(
   archivo: File,
-  usuarioId: number,
+  folder: string,
+  prefijoPublicId: string,
 ): Promise<AudioIdeaSubido> {
   const { cloudName, apiKey, apiSecret } = obtenerConfiguracion();
   const timestamp = Math.floor(Date.now() / 1000);
-  const folder = `featmusic/ideas/usuario-${usuarioId}`;
-  const publicId = `idea-${randomUUID()}`;
+  const publicId = `${prefijoPublicId}-${randomUUID()}`;
   const parametros: ParametroFirma[] = [
     ["folder", folder],
     ["format", AUDIO_FINAL_FORMAT],
@@ -148,6 +148,29 @@ export async function subirAudioIdea(
     bytes: data.bytes ?? null,
     resourceType: data.resource_type ?? null,
   };
+}
+
+export async function subirAudioIdea(
+  archivo: File,
+  usuarioId: number,
+): Promise<AudioIdeaSubido> {
+  return subirAudioConvertido(
+    archivo,
+    `featmusic/ideas/usuario-${usuarioId}`,
+    "idea",
+  );
+}
+
+export async function subirAudioPropuesta(
+  archivo: File,
+  usuarioId: number,
+  ideaId: number,
+): Promise<AudioIdeaSubido> {
+  return subirAudioConvertido(
+    archivo,
+    `featmusic/propuestas/idea-${ideaId}/usuario-${usuarioId}`,
+    "propuesta",
+  );
 }
 
 export async function eliminarAudioIdea(publicId: string) {

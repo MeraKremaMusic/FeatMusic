@@ -42,6 +42,11 @@ export async function DELETE(_request: Request, contexto: ContextoRuta) {
     select: {
       id: true,
       audioPublicId: true,
+      propuestas: {
+        select: {
+          audioPublicId: true,
+        },
+      },
     },
   });
 
@@ -50,6 +55,10 @@ export async function DELETE(_request: Request, contexto: ContextoRuta) {
   }
 
   try {
+    for (const propuesta of idea.propuestas) {
+      await eliminarAudioIdea(propuesta.audioPublicId);
+    }
+
     await eliminarAudioIdea(idea.audioPublicId);
 
     await prisma.idea.delete({
@@ -58,7 +67,7 @@ export async function DELETE(_request: Request, contexto: ContextoRuta) {
 
     return NextResponse.json({
       ok: true,
-      mensaje: "La idea y su audio fueron eliminados correctamente.",
+      mensaje: "La idea, sus propuestas y todos los audios fueron eliminados correctamente.",
     });
   } catch (error) {
     console.error("No se pudo eliminar la idea musical.", error);

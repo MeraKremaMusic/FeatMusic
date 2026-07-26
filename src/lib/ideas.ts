@@ -8,6 +8,9 @@ type IdeaParaLimpiar = {
   id: number;
   usuarioId: number;
   audioPublicId: string;
+  propuestas: Array<{
+    audioPublicId: string;
+  }>;
 };
 
 async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
@@ -16,21 +19,36 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
 
   for (const idea of ideas) {
     try {
+      for (const propuesta of idea.propuestas) {
+        await eliminarAudioIdea(propuesta.audioPublicId);
+      }
+
       await eliminarAudioIdea(idea.audioPublicId);
 
-      const actualizada = await prisma.idea.updateMany({
-        where: {
-          id: idea.id,
-          usuarioId: idea.usuarioId,
-          estado: "ACTIVA",
-          expiraEn: { lte: ahora },
-        },
-        data: {
-          estado: "EXPIRADA",
-        },
+      const resultado = await prisma.$transaction(async (tx) => {
+        await tx.propuesta.updateMany({
+          where: {
+            ideaId: idea.id,
+          },
+          data: {
+            estado: "EXPIRADA",
+          },
+        });
+
+        return tx.idea.updateMany({
+          where: {
+            id: idea.id,
+            usuarioId: idea.usuarioId,
+            estado: "ACTIVA",
+            expiraEn: { lte: ahora },
+          },
+          data: {
+            estado: "EXPIRADA",
+          },
+        });
       });
 
-      eliminadas += actualizada.count;
+      eliminadas += resultado.count;
     } catch (error) {
       fallidas += 1;
       console.error(`No se pudo limpiar la idea expirada ${idea.id}.`, error);
@@ -44,6 +62,17 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
   };
 }
 
+const seleccionLimpieza = {
+  id: true,
+  usuarioId: true,
+  audioPublicId: true,
+  propuestas: {
+    select: {
+      audioPublicId: true,
+    },
+  },
+} as const;
+
 export async function limpiarIdeasExpiradasUsuario(usuarioId: number) {
   const ahora = new Date();
   const ideasExpiradas = await prisma.idea.findMany({
@@ -54,11 +83,7 @@ export async function limpiarIdeasExpiradasUsuario(usuarioId: number) {
     },
     orderBy: { expiraEn: "asc" },
     take: MAX_IDEAS_POR_USUARIO,
-    select: {
-      id: true,
-      usuarioId: true,
-      audioPublicId: true,
-    },
+    select: seleccionLimpieza,
   });
 
   return limpiarListado(ideasExpiradas, ahora);
@@ -73,11 +98,7 @@ export async function limpiarIdeasExpiradasGlobales() {
     },
     orderBy: { expiraEn: "asc" },
     take: MAX_IDEAS_POR_TAREA,
-    select: {
-      id: true,
-      usuarioId: true,
-      audioPublicId: true,
-    },
+    select: seleccionLimpieza,
   });
 
   return limpiarListado(ideasExpiradas, ahora);

@@ -5,6 +5,7 @@ import { obtenerSesion } from "@/lib/session";
 import NavegacionEscritorio from "../../components/NavegacionEscritorio";
 import ReproductorAudio from "../../components/ReproductorAudio";
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
+import EnviarPropuesta from "./components/EnviarPropuesta";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -159,6 +160,12 @@ export default async function PerfilPublicoPage({
           audioUrl: true,
           duracionSegundos: true,
           expiraEn: true,
+          propuestas: {
+            select: {
+              remitenteId: true,
+              estado: true,
+            },
+          },
         },
       },
     },
@@ -332,6 +339,21 @@ export default async function PerfilPublicoPage({
                       tonalidad={idea.tonalidad}
                       duracionSegundos={idea.duracionSegundos}
                       numero={indice + 1}
+                    />
+
+                    <EnviarPropuesta
+                      ideaId={idea.id}
+                      sesionActiva={Boolean(sesion)}
+                      esPropietario={sesion?.usuarioId === artista.id}
+                      propuestasActuales={idea.propuestas.length}
+                      estadoPropuestaUsuario={
+                        sesion
+                          ? idea.propuestas.find(
+                              (propuesta) =>
+                                propuesta.remitenteId === sesion.usuarioId,
+                            )?.estado ?? null
+                          : null
+                      }
                     />
                   </article>
                 ))}

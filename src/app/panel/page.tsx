@@ -8,6 +8,7 @@ import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import PerfilArtistaCard from "./components/PerfilArtistaCard";
 import MenuMovilPanel from "./components/MenuMovilPanel";
 import IdeasMusicalesCard from "./components/IdeasMusicalesCard";
+import PropuestasRecibidasCard from "./components/PropuestasRecibidasCard";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -312,6 +313,48 @@ export default async function PanelPage() {
     creadoEn: idea.creadoEn.toISOString(),
   }));
 
+  const propuestasGuardadas = await prisma.propuesta.findMany({
+    where: {
+      idea: {
+        usuarioId: sesion.usuarioId,
+        estado: "ACTIVA",
+        expiraEn: { gt: new Date() },
+      },
+    },
+    orderBy: {
+      creadoEn: "desc",
+    },
+    take: 30,
+    select: {
+      id: true,
+      mensaje: true,
+      audioUrl: true,
+      duracionSegundos: true,
+      estado: true,
+      creadoEn: true,
+      idea: {
+        select: {
+          id: true,
+          titulo: true,
+        },
+      },
+      remitente: {
+        select: {
+          id: true,
+          nombre: true,
+          nombreArtistico: true,
+          nombreUsuario: true,
+          fotoPerfil: true,
+        },
+      },
+    },
+  });
+
+  const propuestasIniciales = propuestasGuardadas.map((propuesta) => ({
+    ...propuesta,
+    creadoEn: propuesta.creadoEn.toISOString(),
+  }));
+
   return (
     <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
@@ -387,19 +430,11 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-3"
-            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 flex-col overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
+            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
           >
-            <div className="flex flex-1 items-center justify-center">
-              <div className="flex max-w-xs flex-col items-center text-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-violet-300">
-                  <Icono tipo="propuestas" className="h-5 w-5" />
-                </div>
-
-                <p className="mt-4 text-sm font-semibold text-zinc-200">
-                  No has recibido ninguna propuesta
-                </p>
-              </div>
-            </div>
+            <PropuestasRecibidasCard
+              propuestasIniciales={propuestasIniciales}
+            />
           </section>
         </div>
 
