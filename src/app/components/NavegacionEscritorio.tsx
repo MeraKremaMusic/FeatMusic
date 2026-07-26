@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type IconoTipo = "planes" | "explorar" | "perfil";
+import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
+
+type IconoTipo = "planes" | "explorar" | "propuestas" | "perfil";
 
 function Icono({
   tipo,
@@ -43,6 +45,17 @@ function Icono({
     );
   }
 
+  if (tipo === "propuestas") {
+    return (
+      <svg {...props}>
+        <circle cx="8" cy="8" r="3" />
+        <circle cx="16.5" cy="9.5" r="2.5" />
+        <path d="M2.5 20a5.5 5.5 0 0 1 11 0" />
+        <path d="M13.5 17a4.5 4.5 0 0 1 8 3" />
+      </svg>
+    );
+  }
+
   return (
     <svg {...props}>
       <circle cx="12" cy="8" r="4" />
@@ -68,11 +81,14 @@ export default function NavegacionEscritorio({
   mostrarDesde = "lg",
 }: NavegacionEscritorioProps) {
   const pathname = usePathname();
+  const { total: mensajesNoLeidos } = useNotificacionesChat();
+  const etiquetaMensajes = mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
 
   const explorando =
     pathname === "/artistas" || pathname.startsWith("/artistas/");
 
   const viendoPerfil = pathname === "/panel";
+  const viendoMensajes = pathname.startsWith("/mensajes/");
 
   return (
     <nav
@@ -99,6 +115,24 @@ export default function NavegacionEscritorio({
       >
         <Icono tipo="explorar" />
         Explorar
+      </Link>
+
+      <Link
+        href="/panel#panel-card-3"
+        aria-current={viendoMensajes ? "page" : undefined}
+        className={`${claseBase} ${
+          viendoMensajes ? claseActiva : claseInactiva
+        }`}
+      >
+        <span className="relative flex">
+          <Icono tipo="propuestas" />
+          {mensajesNoLeidos > 0 && (
+            <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#09070d] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+              {etiquetaMensajes}
+            </span>
+          )}
+        </span>
+        Propuestas
       </Link>
 
       <Link

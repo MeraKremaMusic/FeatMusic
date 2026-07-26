@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
+import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
 type EstadoPropuesta = "PENDIENTE" | "ACEPTADA" | "RECHAZADA" | "EXPIRADA";
 type PestanaPropuestas = "RECIBIDAS" | "ENVIADAS";
@@ -144,6 +145,10 @@ function textoAudioNoDisponible(estado: string) {
   return "El archivo de audio ya no está disponible.";
 }
 
+function etiquetaCantidad(cantidad: number) {
+  return cantidad > 99 ? "99+" : String(cantidad);
+}
+
 function IconoPropuestas() {
   return (
     <svg
@@ -210,6 +215,7 @@ export default function PropuestasRecibidasCard({
   const [propuestas, setPropuestas] = useState(propuestasIniciales);
   const [procesandoId, setProcesandoId] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const { total: mensajesNoLeidos, porConversacion } = useNotificacionesChat();
 
   const pendientesRecibidas = useMemo(
     () => propuestas.filter((propuesta) => propuesta.estado === "PENDIENTE").length,
@@ -222,6 +228,24 @@ export default function PropuestasRecibidasCard({
         (propuesta) => propuesta.estado === "PENDIENTE",
       ).length,
     [propuestasEnviadasIniciales],
+  );
+
+  const mensajesNoLeidosRecibidos = useMemo(
+    () =>
+      propuestas.reduce((total, propuesta) => {
+        if (!propuesta.conversacionId) return total;
+        return total + (porConversacion[propuesta.conversacionId] ?? 0);
+      }, 0),
+    [propuestas, porConversacion],
+  );
+
+  const mensajesNoLeidosEnviados = useMemo(
+    () =>
+      propuestasEnviadasIniciales.reduce((total, propuesta) => {
+        if (!propuesta.conversacionId) return total;
+        return total + (porConversacion[propuesta.conversacionId] ?? 0);
+      }, 0),
+    [propuestasEnviadasIniciales, porConversacion],
   );
 
   const mostrandoRecibidas = pestana === "RECIBIDAS";
@@ -296,14 +320,25 @@ export default function PropuestasRecibidasCard({
     <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/35 shadow-xl shadow-black/20 backdrop-blur-sm">
       <div className="flex shrink-0 items-center justify-between gap-3 px-4 pb-3 pt-3">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+          <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
             <IconoPropuestas />
+            {mensajesNoLeidos > 0 && (
+              <span className="absolute -right-2 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#100d15] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+                {etiquetaCantidad(mensajesNoLeidos)}
+              </span>
+            )}
           </span>
           <div className="min-w-0">
             <p className="truncate text-sm font-black text-white">Propuestas</p>
             <p className="mt-0.5 text-[10px] font-medium text-zinc-500">
               {pendientesActivas} pendiente{pendientesActivas === 1 ? "" : "s"} ·{" "}
               {cantidadActiva} total
+              {mensajesNoLeidos > 0 && (
+                <>
+                  {" "}· {mensajesNoLeidos} mensaje
+                  {mensajesNoLeidos === 1 ? "" : "s"} sin leer
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -336,6 +371,11 @@ export default function PropuestasRecibidasCard({
           >
             {propuestas.length}
           </span>
+          {mensajesNoLeidosRecibidos > 0 && (
+            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] text-white">
+              {etiquetaCantidad(mensajesNoLeidosRecibidos)}
+            </span>
+          )}
         </button>
 
         <button
@@ -360,6 +400,11 @@ export default function PropuestasRecibidasCard({
           >
             {propuestasEnviadasIniciales.length}
           </span>
+          {mensajesNoLeidosEnviados > 0 && (
+            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] text-white">
+              {etiquetaCantidad(mensajesNoLeidosEnviados)}
+            </span>
+          )}
         </button>
       </div>
 
@@ -390,11 +435,18 @@ export default function PropuestasRecibidasCard({
             {propuestas.map((propuesta, indice) => {
               const nombre = nombreArtista(propuesta.remitente);
               const procesando = procesandoId === propuesta.id;
+              const mensajesPendientes = propuesta.conversacionId
+                ? porConversacion[propuesta.conversacionId] ?? 0
+                : 0;
 
               return (
                 <article
                   key={propuesta.id}
-                  className="rounded-xl border border-white/10 bg-white/[0.025] p-3"
+                  className={`rounded-xl border p-3 transition ${
+                    mensajesPendientes > 0
+                      ? "border-violet-400/35 bg-violet-500/[0.07] shadow-[0_0_24px_rgba(139,92,246,0.08)]"
+                      : "border-white/10 bg-white/[0.025]"
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2.5">
@@ -409,13 +461,21 @@ export default function PropuestasRecibidasCard({
                       </div>
                     </div>
 
-                    <span
-                      className={`shrink-0 rounded-full border px-2 py-1 text-[9px] font-bold ${claseEstado(
-                        propuesta.estado,
-                      )}`}
-                    >
-                      {etiquetaEstado(propuesta.estado)}
-                    </span>
+                    <div className="flex shrink-0 flex-col items-end gap-1">
+                      <span
+                        className={`rounded-full border px-2 py-1 text-[9px] font-bold ${claseEstado(
+                          propuesta.estado,
+                        )}`}
+                      >
+                        {etiquetaEstado(propuesta.estado)}
+                      </span>
+                      {mensajesPendientes > 0 && (
+                        <span className="rounded-full bg-red-500 px-2 py-1 text-[8px] font-black text-white">
+                          {mensajesPendientes} nuevo
+                          {mensajesPendientes === 1 ? "" : "s"}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {propuesta.mensaje && (
@@ -473,9 +533,14 @@ export default function PropuestasRecibidasCard({
                       {propuesta.conversacionId ? (
                         <Link
                           href={`/mensajes/${propuesta.conversacionId}`}
-                          className="rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
+                          className="flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
                         >
                           Abrir chat
+                          {mensajesPendientes > 0 && (
+                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] leading-none text-white">
+                              {etiquetaCantidad(mensajesPendientes)}
+                            </span>
+                          )}
                         </Link>
                       ) : (
                         <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-semibold text-zinc-500">
@@ -515,11 +580,18 @@ export default function PropuestasRecibidasCard({
           {propuestasEnviadasIniciales.map((propuesta, indice) => {
             const destinatario = propuesta.idea.usuario;
             const nombre = nombreArtista(destinatario);
+            const mensajesPendientes = propuesta.conversacionId
+              ? porConversacion[propuesta.conversacionId] ?? 0
+              : 0;
 
             return (
               <article
                 key={propuesta.id}
-                className="rounded-xl border border-white/10 bg-white/[0.025] p-3"
+                className={`rounded-xl border p-3 transition ${
+                  mensajesPendientes > 0
+                    ? "border-violet-400/35 bg-violet-500/[0.07] shadow-[0_0_24px_rgba(139,92,246,0.08)]"
+                    : "border-white/10 bg-white/[0.025]"
+                }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2.5">
@@ -534,13 +606,21 @@ export default function PropuestasRecibidasCard({
                     </div>
                   </div>
 
-                  <span
-                    className={`shrink-0 rounded-full border px-2 py-1 text-[9px] font-bold ${claseEstado(
-                      propuesta.estado,
-                    )}`}
-                  >
-                    {etiquetaEstado(propuesta.estado)}
-                  </span>
+                  <div className="flex shrink-0 flex-col items-end gap-1">
+                    <span
+                      className={`rounded-full border px-2 py-1 text-[9px] font-bold ${claseEstado(
+                        propuesta.estado,
+                      )}`}
+                    >
+                      {etiquetaEstado(propuesta.estado)}
+                    </span>
+                    {mensajesPendientes > 0 && (
+                      <span className="rounded-full bg-red-500 px-2 py-1 text-[8px] font-black text-white">
+                        {mensajesPendientes} nuevo
+                        {mensajesPendientes === 1 ? "" : "s"}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {propuesta.mensaje && (
@@ -591,9 +671,14 @@ export default function PropuestasRecibidasCard({
                     {propuesta.conversacionId ? (
                       <Link
                         href={`/mensajes/${propuesta.conversacionId}`}
-                        className="rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
+                        className="flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
                       >
                         Abrir chat
+                        {mensajesPendientes > 0 && (
+                          <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] leading-none text-white">
+                            {etiquetaCantidad(mensajesPendientes)}
+                          </span>
+                        )}
                       </Link>
                     ) : (
                       <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-semibold text-zinc-500">

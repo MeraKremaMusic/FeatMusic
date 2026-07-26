@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
+
 type IconoTipo =
   | "inicio"
   | "explorar"
@@ -92,6 +94,8 @@ export default function MenuMovilPanel({
   ocultarDesde = "lg",
 }: MenuMovilPanelProps) {
   const pathname = usePathname();
+  const { total: mensajesNoLeidos } = useNotificacionesChat();
+  const etiquetaMensajes = mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
 
   const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
   const estaEnExplorar =
@@ -138,10 +142,23 @@ export default function MenuMovilPanel({
 
         <Link
           href="/panel#panel-card-3"
-          aria-label="Ir a propuestas"
+          aria-label={
+            mensajesNoLeidos > 0
+              ? `Ir a propuestas. ${mensajesNoLeidos} mensaje${
+                  mensajesNoLeidos === 1 ? "" : "s"
+                } sin leer`
+              : "Ir a propuestas"
+          }
           className={claseOpcion(false)}
         >
-          <Icono tipo="propuestas" />
+          <span className="relative flex">
+            <Icono tipo="propuestas" />
+            {mensajesNoLeidos > 0 && (
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#0b0810] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+                {etiquetaMensajes}
+              </span>
+            )}
+          </span>
           <span className="truncate text-[9px] font-semibold">
             Propuestas
           </span>
