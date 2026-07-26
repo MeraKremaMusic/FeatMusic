@@ -142,6 +142,72 @@ function IconoUbicacion({ className = "h-3.5 w-3.5" }: { className?: string }) {
   );
 }
 
+function IconoIdea({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 18V5l10-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="16" cy="16" r="3" />
+    </svg>
+  );
+}
+
+function IconoDescripcion({
+  className = "h-3 w-3",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 5h16v11H8l-4 4V5Z" />
+      <path d="M8 9h8" />
+      <path d="M8 12h5" />
+    </svg>
+  );
+}
+
+function IconoColaboracion({
+  className = "h-3.5 w-3.5",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="9" cy="8" r="3" />
+      <circle cx="17" cy="10" r="2.5" />
+      <path d="M3.5 19c.7-3.1 2.6-4.7 5.5-4.7s4.8 1.6 5.5 4.7" />
+      <path d="M14.5 15.5c2.7-.5 4.7.7 6 3.5" />
+    </svg>
+  );
+}
+
 function IconoRedSocial({
   nombre,
   className = "h-4 w-4",
@@ -394,20 +460,30 @@ export default async function PerfilPublicoPage({
                   </div>
                 )}
 
-                {preferenciasMusicales.length > 0 && (
-                  <div className="grid gap-1.5 lg:hidden">
-                    {preferenciasMusicales.map((preferencia) => (
-                      <span
-                        key={preferencia.etiqueta}
-                        title={`${preferencia.etiqueta}: ${preferencia.valor}`}
-                        aria-label={`${preferencia.etiqueta}: ${preferencia.valor}`}
-                        className="flex min-h-7 w-full items-center justify-center rounded-lg border border-violet-400/20 bg-violet-500/[0.08] px-1.5 py-1 text-center text-[8px] font-bold leading-tight text-violet-200"
-                      >
-                        {preferencia.valor}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="grid gap-1.5">
+                  <span
+                    title={`Rol: ${formatearRol(artista.rolPrincipal)}`}
+                    aria-label={`Rol: ${formatearRol(artista.rolPrincipal)}`}
+                    className="flex min-h-7 w-full items-center justify-center rounded-lg border border-violet-400/25 bg-violet-500/10 px-1.5 py-1 text-center text-[8px] font-black leading-tight text-violet-100"
+                  >
+                    {formatearRol(artista.rolPrincipal)}
+                  </span>
+
+                  {preferenciasMusicales.length > 0 && (
+                    <div className="grid gap-1.5 lg:hidden">
+                      {preferenciasMusicales.map((preferencia) => (
+                        <span
+                          key={preferencia.etiqueta}
+                          title={`${preferencia.etiqueta}: ${preferencia.valor}`}
+                          aria-label={`${preferencia.etiqueta}: ${preferencia.valor}`}
+                          className="flex min-h-7 w-full items-center justify-center rounded-lg border border-violet-400/20 bg-violet-500/[0.08] px-1.5 py-1 text-center text-[8px] font-bold leading-tight text-violet-200"
+                        >
+                          {preferencia.valor}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="min-w-0 flex-1 pr-12 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
@@ -423,19 +499,18 @@ export default async function PerfilPublicoPage({
                   <span className="min-w-0 truncate">{ubicacion}</span>
                 </p>
 
-                <div className="mt-2.5 flex flex-wrap gap-1.5 lg:justify-center">
-                  <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[9px] font-semibold text-violet-200 sm:text-[10px]">
-                    {formatearRol(artista.rolPrincipal)}
-                  </span>
-                  {generos.map((genero) => (
-                    <span
-                      key={genero}
-                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[9px] text-zinc-300 sm:text-[10px]"
-                    >
-                      {genero}
-                    </span>
-                  ))}
-                </div>
+                {generos.length > 0 && (
+                  <div className="mt-2.5 flex flex-wrap gap-1.5 lg:justify-center">
+                    {generos.map((genero) => (
+                      <span
+                        key={genero}
+                        className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[9px] text-zinc-300 sm:text-[10px]"
+                      >
+                        {genero}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 <p className="mt-2.5 whitespace-pre-wrap text-[11px] leading-[1.45] text-zinc-400 sm:text-xs sm:leading-5 lg:text-center">
                   {artista.biografia?.trim() ||
@@ -448,9 +523,15 @@ export default async function PerfilPublicoPage({
 
           <section className="min-w-0 p-0 lg:rounded-2xl lg:border lg:border-white/10 lg:bg-black/35 lg:p-5 lg:backdrop-blur-sm">
             <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
-              <h2 className="text-sm font-black text-white sm:text-base lg:text-lg">
-                Ideas activas
-              </h2>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-violet-400/20 bg-violet-500/10 text-violet-300 sm:h-7 sm:w-7">
+                  <IconoIdea className="h-3.5 w-3.5" />
+                </span>
+                <h2 className="text-sm font-black text-white sm:text-base lg:text-lg">
+                  Ideas activas
+                </h2>
+              </div>
+
               <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-0.5 text-[10px] font-bold text-violet-200 sm:px-3 sm:py-1 sm:text-xs">
                 {artista.ideas.length}
               </span>
@@ -481,29 +562,38 @@ export default async function PerfilPublicoPage({
                         className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-1.5"
                       />
 
-                      <div className="mt-2 border-t border-white/[0.07] pt-2">
-                        <p className="whitespace-pre-wrap text-[10px] leading-4 text-zinc-400 sm:text-[11px] sm:leading-[1.15rem]">
+                      <div className="mt-2 flex items-start gap-2 border-t border-white/[0.07] pt-2">
+                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white/[0.035] text-zinc-500">
+                          <IconoDescripcion />
+                        </span>
+                        <p className="min-w-0 flex-1 whitespace-pre-wrap text-[10px] leading-4 text-zinc-400 sm:text-[11px] sm:leading-[1.15rem]">
                           {idea.descripcion}
                         </p>
                       </div>
                     </div>
 
                     <div className="border-t border-white/[0.07] bg-white/[0.018] px-2.5 py-1.5 sm:px-3">
-                      <div className="[&>div]:mt-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent [&>div]:px-0 [&>div]:py-0">
-                        <EnviarPropuesta
-                          ideaId={idea.id}
-                          sesionActiva={Boolean(sesion)}
-                          esPropietario={sesion?.usuarioId === artista.id}
-                          propuestasActuales={idea.propuestas.length}
-                          estadoPropuestaUsuario={
-                            sesion
-                              ? idea.propuestas.find(
-                                  (propuesta) =>
-                                    propuesta.remitenteId === sesion.usuarioId,
-                                )?.estado ?? null
-                              : null
-                          }
-                        />
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-violet-400/15 bg-violet-500/[0.07] text-violet-300">
+                          <IconoColaboracion />
+                        </span>
+
+                        <div className="min-w-0 flex-1 [&>div]:mt-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent [&>div]:px-0 [&>div]:py-0">
+                          <EnviarPropuesta
+                            ideaId={idea.id}
+                            sesionActiva={Boolean(sesion)}
+                            esPropietario={sesion?.usuarioId === artista.id}
+                            propuestasActuales={idea.propuestas.length}
+                            estadoPropuestaUsuario={
+                              sesion
+                                ? idea.propuestas.find(
+                                    (propuesta) =>
+                                      propuesta.remitenteId === sesion.usuarioId,
+                                  )?.estado ?? null
+                                : null
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
                   </article>
