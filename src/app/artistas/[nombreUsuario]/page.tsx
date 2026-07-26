@@ -12,6 +12,7 @@ export const revalidate = 0;
 
 const ESTADOS_QUE_OCUPAN_CUPO = [
   "PENDIENTE",
+  "CAMBIOS_SOLICITADOS",
   "ACEPTADA",
   "RECHAZANDO",
 ];
@@ -352,6 +353,9 @@ export default async function PerfilPublicoPage({
             },
             select: {
               estado: true,
+              motivoDecision: true,
+              permiteReintento: true,
+              numeroIntento: true,
             },
             take: 1,
           },
@@ -567,8 +571,9 @@ export default async function PerfilPublicoPage({
               <div className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
                 {artista.ideas.map((idea, indice) => (
                   <article
+                    id={`idea-${idea.id}`}
                     key={idea.id}
-                    className="overflow-hidden rounded-xl border border-white/10 bg-black/25 transition hover:border-violet-400/20"
+                    className="scroll-mt-16 overflow-hidden rounded-xl border border-white/10 bg-black/25 transition hover:border-violet-400/20"
                   >
                     <div className="p-2.5 sm:p-3">
                       <ReproductorAudio
@@ -604,9 +609,7 @@ export default async function PerfilPublicoPage({
                             sesionActiva={Boolean(sesion)}
                             esPropietario={sesion?.usuarioId === artista.id}
                             propuestasActuales={idea._count.propuestas}
-                            estadoPropuestaUsuario={
-                              idea.propuestas[0]?.estado ?? null
-                            }
+                            propuestaUsuario={idea.propuestas[0] ?? null}
                           />
                         </div>
                       </div>

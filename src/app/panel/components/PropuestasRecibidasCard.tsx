@@ -1,12 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
+import { useEffect, useMemo, useState } from "react";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
-type EstadoPropuesta = "PENDIENTE" | "ACEPTADA" | "RECHAZADA" | "EXPIRADA";
+type EstadoPropuesta =
+  | "PENDIENTE"
+  | "CAMBIOS_SOLICITADOS"
+  | "ACEPTADA"
+  | "RECHAZADA"
+  | "EXPIRADA";
 type PestanaPropuestas = "RECIBIDAS" | "ENVIADAS";
 
 type ArtistaResumen = {
@@ -23,6 +29,10 @@ type PropuestaBase = {
   audioUrl: string | null;
   duracionSegundos: number;
   estado: EstadoPropuesta | string;
+  motivoDecision: string | null;
+  permiteReintento: boolean;
+  numeroIntento: number;
+  decisionEn: string | null;
   creadoEn: string;
   conversacionId: number | null;
 };
@@ -51,6 +61,10 @@ type RespuestaActualizacion = {
     estado: string;
     audioUrl: string | null;
     conversacionId: number | null;
+    motivoDecision: string | null;
+    permiteReintento: boolean;
+    numeroIntento: number;
+    decisionEn: string | null;
   };
 };
 
@@ -93,6 +107,7 @@ function formatearFecha(fecha: string) {
 function etiquetaEstado(estado: string) {
   const etiquetas: Record<string, string> = {
     PENDIENTE: "Pendiente",
+    CAMBIOS_SOLICITADOS: "Cambios solicitados",
     ACEPTADA: "Aceptada",
     RECHAZADA: "Rechazada",
     EXPIRADA: "Expirada",
@@ -106,6 +121,10 @@ function claseEstado(estado: string) {
     return "border-emerald-400/25 bg-emerald-500/10 text-emerald-200";
   }
 
+  if (estado === "CAMBIOS_SOLICITADOS") {
+    return "border-sky-400/25 bg-sky-500/10 text-sky-200";
+  }
+
   if (estado === "RECHAZADA" || estado === "EXPIRADA") {
     return "border-red-400/20 bg-red-500/10 text-red-200";
   }
@@ -116,6 +135,10 @@ function claseEstado(estado: string) {
 function textoEstadoEnviado(estado: string) {
   if (estado === "ACEPTADA") {
     return "El artista aceptó tu propuesta.";
+  }
+
+  if (estado === "CAMBIOS_SOLICITADOS") {
+    return "El artista solicitó cambios. Tu cupo continúa reservado.";
   }
 
   if (estado === "RECHAZADA") {
@@ -234,7 +257,25 @@ export default function PropuestasRecibidasCard({
   const [propuestas, setPropuestas] = useState(propuestasIniciales);
   const [procesandoId, setProcesandoId] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [modalDecision, setModalDecision] = useState<{
+    propuestaId: number;
+    accion: "SOLICITAR_CAMBIOS" | "RECHAZAR";
+    numeroIntento: number;
+  } | null>(null);
+  const [motivoDecision, setMotivoDecision] = useState("");
+  const [permiteReintento, setPermiteReintento] = useState(false);
   const { total: mensajesNoLeidos, porConversacion } = useNotificacionesChat();
+
+  useEffect(() => {
+    if (!modalDecision) return;
+
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+    };
+  }, [modalDecision]);
 
   const pendientesRecibidas = useMemo(
     () => propuestas.filter((propuesta) => propuesta.estado === "PENDIENTE").length,
@@ -271,20 +312,36 @@ export default function PropuestasRecibidasCard({
     ? pendientesRecibidas
     : pendientesEnviadas;
 
-  async function actualizarEstado(
+  function abrirModalDecision(
     propuestaId: number,
-    estado: "ACEPTADA" | "RECHAZADA",
+    accion: "SOLICITAR_CAMBIOS" | "RECHAZAR",
+    numeroIntento: number,
+  ) {
+    setError("");
+    setMotivoDecision("");
+    setPermiteReintento(false);
+    setModalDecision({ propuestaId, accion, numeroIntento });
+  }
+
+  function cerrarModalDecision() {
+    if (procesandoId !== null) return;
+    setModalDecision(null);
+    setMotivoDecision("");
+    setPermiteReintento(false);
+  }
+
+  async function enviarDecision(
+    propuestaId: number,
+    payload:
+      | { accion: "ACEPTAR" }
+      | { accion: "SOLICITAR_CAMBIOS"; motivo: string }
+      | {
+          accion: "RECHAZAR";
+          motivo: string;
+          permiteReintento: boolean;
+        },
   ) {
     if (procesandoId !== null) return;
-
-    if (
-      estado === "RECHAZADA" &&
-      !window.confirm(
-        "¿Seguro que deseas rechazar esta propuesta? La decisión será definitiva y el archivo MP3 se eliminará.",
-      )
-    ) {
-      return;
-    }
 
     setError("");
     setProcesandoId(propuestaId);
@@ -295,7 +352,7 @@ export default function PropuestasRecibidasCard({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ estado }),
+        body: JSON.stringify(payload),
       });
 
       const data = (await response.json()) as RespuestaActualizacion;
@@ -309,17 +366,32 @@ export default function PropuestasRecibidasCard({
           propuesta.id === propuestaId
             ? {
                 ...propuesta,
-                estado: data.propuesta?.estado ?? estado,
-                audioUrl:
-                  estado === "RECHAZADA"
-                    ? null
-                    : data.propuesta?.audioUrl ?? propuesta.audioUrl,
-                conversacionId:
-                  data.propuesta?.conversacionId ?? propuesta.conversacionId,
+                estado: data.propuesta?.estado ?? propuesta.estado,
+                audioUrl: data.propuesta
+                  ? data.propuesta.audioUrl
+                  : propuesta.audioUrl,
+                conversacionId: data.propuesta
+                  ? data.propuesta.conversacionId
+                  : propuesta.conversacionId,
+                motivoDecision: data.propuesta
+                  ? data.propuesta.motivoDecision
+                  : propuesta.motivoDecision,
+                permiteReintento: data.propuesta
+                  ? data.propuesta.permiteReintento
+                  : propuesta.permiteReintento,
+                numeroIntento:
+                  data.propuesta?.numeroIntento ?? propuesta.numeroIntento,
+                decisionEn: data.propuesta
+                  ? data.propuesta.decisionEn
+                  : propuesta.decisionEn,
               }
             : propuesta,
         ),
       );
+
+      setModalDecision(null);
+      setMotivoDecision("");
+      setPermiteReintento(false);
     } catch (errorActualizacion) {
       setError(
         errorActualizacion instanceof Error
@@ -329,6 +401,32 @@ export default function PropuestasRecibidasCard({
     } finally {
       setProcesandoId(null);
     }
+  }
+
+  async function confirmarModalDecision() {
+    if (!modalDecision || procesandoId !== null) return;
+
+    const motivo = motivoDecision.trim();
+
+    if (motivo.length < 3) {
+      setError("Escribe un motivo de al menos 3 caracteres.");
+      return;
+    }
+
+    if (modalDecision.accion === "SOLICITAR_CAMBIOS") {
+      await enviarDecision(modalDecision.propuestaId, {
+        accion: "SOLICITAR_CAMBIOS",
+        motivo,
+      });
+      return;
+    }
+
+    await enviarDecision(modalDecision.propuestaId, {
+      accion: "RECHAZAR",
+      motivo,
+      permiteReintento:
+        modalDecision.numeroIntento < 2 && permiteReintento,
+    });
   }
 
   return (
@@ -507,6 +605,18 @@ export default function PropuestasRecibidasCard({
                     </p>
                   )}
 
+                  {propuesta.motivoDecision &&
+                    propuesta.estado !== "PENDIENTE" && (
+                      <div className="mt-3 rounded-lg border border-sky-400/15 bg-sky-500/[0.06] px-3 py-2">
+                        <p className="text-[8px] font-black uppercase tracking-[0.14em] text-sky-300/70">
+                          Motivo enviado
+                        </p>
+                        <p className="mt-1 whitespace-pre-wrap text-[10px] leading-4 text-zinc-400">
+                          {propuesta.motivoDecision}
+                        </p>
+                      </div>
+                    )}
+
                   {propuesta.audioUrl ? (
                     <ReproductorAudio
                       id={`propuesta-recibida-${propuesta.id}`}
@@ -527,16 +637,41 @@ export default function PropuestasRecibidasCard({
                       <button
                         type="button"
                         disabled={procesando}
-                        onClick={() => actualizarEstado(propuesta.id, "RECHAZADA")}
+                        onClick={() =>
+                          abrirModalDecision(
+                            propuesta.id,
+                            "RECHAZAR",
+                            propuesta.numeroIntento,
+                          )
+                        }
                         className="rounded-lg border border-red-400/25 bg-red-500/10 px-3 py-1.5 text-[9px] font-bold text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
                       >
-                        {procesando ? "Procesando…" : "Rechazar"}
+                        Rechazar
                       </button>
+
+                      {propuesta.numeroIntento < 2 && (
+                        <button
+                          type="button"
+                          disabled={procesando}
+                          onClick={() =>
+                            abrirModalDecision(
+                              propuesta.id,
+                              "SOLICITAR_CAMBIOS",
+                              propuesta.numeroIntento,
+                            )
+                          }
+                          className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          Solicitar cambios
+                        </button>
+                      )}
 
                       <button
                         type="button"
                         disabled={procesando}
-                        onClick={() => actualizarEstado(propuesta.id, "ACEPTADA")}
+                        onClick={() =>
+                          enviarDecision(propuesta.id, { accion: "ACEPTAR" })
+                        }
                         className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-3 py-1.5 text-[9px] font-bold text-emerald-200 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {procesando ? "Procesando…" : "Aceptar"}
@@ -606,6 +741,11 @@ export default function PropuestasRecibidasCard({
             const mensajesPendientes = propuesta.conversacionId
               ? porConversacion[propuesta.conversacionId] ?? 0
               : 0;
+            const rutaIdea = destinatario.nombreUsuario?.trim()
+              ? `/artistas/${encodeURIComponent(
+                  destinatario.nombreUsuario.trim(),
+                )}#idea-${propuesta.idea.id}`
+              : null;
 
             return (
               <article
@@ -657,6 +797,18 @@ export default function PropuestasRecibidasCard({
                   </div>
                 )}
 
+                {propuesta.motivoDecision &&
+                  propuesta.estado !== "PENDIENTE" && (
+                    <div className="mt-3 rounded-lg border border-sky-400/20 bg-sky-500/[0.07] px-3 py-2">
+                      <p className="text-[8px] font-black uppercase tracking-[0.14em] text-sky-300/80">
+                        Motivo del artista
+                      </p>
+                      <p className="mt-1 whitespace-pre-wrap text-[10px] leading-4 text-zinc-300">
+                        {propuesta.motivoDecision}
+                      </p>
+                    </div>
+                  )}
+
                 {propuesta.audioUrl ? (
                   <ReproductorAudio
                     id={`propuesta-enviada-${propuesta.id}`}
@@ -678,7 +830,28 @@ export default function PropuestasRecibidasCard({
                   )}`}
                 >
                   {textoEstadoEnviado(propuesta.estado)}
+                  {propuesta.estado === "RECHAZADA" &&
+                    propuesta.permiteReintento && (
+                      <> Puedes participar otra vez si todavía hay cupos.</>
+                    )}
                 </p>
+
+                {rutaIdea &&
+                  propuesta.numeroIntento < 2 &&
+                  (propuesta.estado === "CAMBIOS_SOLICITADOS" ||
+                    (propuesta.estado === "RECHAZADA" &&
+                      propuesta.permiteReintento)) && (
+                    <div className="mt-3 flex justify-end">
+                      <Link
+                        href={rutaIdea}
+                        className="rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
+                      >
+                        {propuesta.estado === "CAMBIOS_SOLICITADOS"
+                          ? "Enviar corrección"
+                          : "Intentar nuevamente"}
+                      </Link>
+                    </div>
+                  )}
 
                 {propuesta.estado === "ACEPTADA" && (
                   <div className="mt-3 flex flex-wrap justify-end gap-2">
@@ -715,6 +888,164 @@ export default function PropuestasRecibidasCard({
           })}
         </div>
       )}
+
+      {modalDecision &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-decision-propuesta"
+            className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+            onPointerDown={(evento) => {
+              if (evento.target === evento.currentTarget) {
+                cerrarModalDecision();
+              }
+            }}
+          >
+            <div className="w-full rounded-t-2xl border border-white/10 bg-[#120e18] p-4 shadow-2xl shadow-black/70 sm:max-w-md sm:rounded-2xl sm:p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-violet-300">
+                    Decisión de la propuesta
+                  </p>
+                  <h3
+                    id="titulo-decision-propuesta"
+                    className="mt-1 text-lg font-black text-white"
+                  >
+                    {modalDecision.accion === "SOLICITAR_CAMBIOS"
+                      ? "Solicitar una nueva versión"
+                      : "Rechazar propuesta"}
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={cerrarModalDecision}
+                  disabled={procesandoId !== null}
+                  aria-label="Cerrar"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-xl text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:opacity-40"
+                >
+                  ×
+                </button>
+              </div>
+
+              <p className="mt-3 text-[10px] leading-4 text-zinc-400">
+                {modalDecision.accion === "SOLICITAR_CAMBIOS"
+                  ? "El cupo seguirá ocupado mientras la persona prepara la corrección."
+                  : "El archivo actual se eliminará y el cupo quedará disponible inmediatamente."}
+              </p>
+
+              <div className="mt-4">
+                <div className="flex items-center justify-between gap-3">
+                  <label
+                    htmlFor="motivo-decision-propuesta"
+                    className="text-xs font-bold text-zinc-200"
+                  >
+                    Motivo obligatorio
+                  </label>
+                  <span className="text-[10px] text-zinc-600">
+                    {motivoDecision.length}/500
+                  </span>
+                </div>
+                <textarea
+                  id="motivo-decision-propuesta"
+                  value={motivoDecision}
+                  onChange={(evento) => {
+                    setMotivoDecision(evento.target.value);
+                    setError("");
+                  }}
+                  maxLength={500}
+                  rows={4}
+                  disabled={procesandoId !== null}
+                  placeholder={
+                    modalDecision.accion === "SOLICITAR_CAMBIOS"
+                      ? "Explícale exactamente qué debe corregir en la nueva versión."
+                      : "Explícale de forma respetuosa por qué la propuesta no fue elegida."
+                  }
+                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
+                />
+              </div>
+
+              {modalDecision.accion === "RECHAZAR" && (
+                <div className="mt-4 space-y-2">
+                  <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-black/20 p-3">
+                    <input
+                      type="radio"
+                      name="tipo-rechazo"
+                      checked={!permiteReintento}
+                      onChange={() => setPermiteReintento(false)}
+                      disabled={procesandoId !== null}
+                      className="mt-0.5 accent-violet-500"
+                    />
+                    <span>
+                      <span className="block text-[10px] font-black text-zinc-200">
+                        Rechazo definitivo
+                      </span>
+                      <span className="mt-1 block text-[9px] leading-4 text-zinc-500">
+                        Libera el cupo y esta persona no podrá volver a participar en esta idea.
+                      </span>
+                    </span>
+                  </label>
+
+                  {modalDecision.numeroIntento < 2 && (
+                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-violet-400/15 bg-violet-500/[0.05] p-3">
+                      <input
+                        type="radio"
+                        name="tipo-rechazo"
+                        checked={permiteReintento}
+                        onChange={() => setPermiteReintento(true)}
+                        disabled={procesandoId !== null}
+                        className="mt-0.5 accent-violet-500"
+                      />
+                      <span>
+                        <span className="block text-[10px] font-black text-violet-200">
+                          Permitir otro intento
+                        </span>
+                        <span className="mt-1 block text-[9px] leading-4 text-zinc-500">
+                          Libera el cupo y no se lo reserva. Podrá intentarlo otra vez solo si encuentra espacio disponible.
+                        </span>
+                      </span>
+                    </label>
+                  )}
+                </div>
+              )}
+
+              {error && (
+                <p className="mt-3 rounded-lg border border-red-400/20 bg-red-500/10 px-3 py-2 text-[10px] text-red-200">
+                  {error}
+                </p>
+              )}
+
+              <div className="mt-5 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={cerrarModalDecision}
+                  disabled={procesandoId !== null}
+                  className="min-h-10 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-zinc-300 transition hover:bg-white/5 disabled:opacity-40"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmarModalDecision}
+                  disabled={procesandoId !== null || motivoDecision.trim().length < 3}
+                  className={`min-h-10 rounded-xl border px-3 py-2 text-xs font-black transition disabled:cursor-not-allowed disabled:opacity-40 ${
+                    modalDecision.accion === "SOLICITAR_CAMBIOS"
+                      ? "border-sky-400/30 bg-sky-500/15 text-sky-100 hover:bg-sky-500/25"
+                      : "border-red-400/30 bg-red-500/15 text-red-100 hover:bg-red-500/25"
+                  }`}
+                >
+                  {procesandoId !== null
+                    ? "Procesando…"
+                    : modalDecision.accion === "SOLICITAR_CAMBIOS"
+                      ? "Solicitar cambios"
+                      : "Confirmar rechazo"}
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

@@ -15,8 +15,10 @@ export const dynamic = "force-dynamic";
 const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
 const MAX_AUDIO_DURATION = 240;
 const MAX_PROPUESTAS_POR_IDEA = 3;
+const MAX_INTENTOS_POR_IDEA = 2;
 const ESTADOS_QUE_OCUPAN_CUPO = [
   "PENDIENTE",
+  "CAMBIOS_SOLICITADOS",
   "ACEPTADA",
   "RECHAZANDO",
 ];
@@ -60,6 +62,16 @@ const propuestaSchema = z.object({
 
 type ContextoRuta = {
   params: Promise<{ id: string }>;
+};
+
+type ModoEnvio = "NUEVA" | "CORRECCION" | "REINTENTO";
+
+type PropuestaExistente = {
+  id: number;
+  estado: string;
+  permiteReintento: boolean;
+  numeroIntento: number;
+  audioPublicId: string | null;
 };
 
 class ErrorPropuesta extends Error {
@@ -107,7 +119,77 @@ function codigoErrorPrisma(error: unknown) {
   return null;
 }
 
-async function crearPropuestaConCupo(
+function resolverModoEnvio(
+  propuesta: PropuestaExistente | null,
+): ModoEnvio {
+  if (!propuesta) {
+    return "NUEVA";
+  }
+
+  if (
+    propuesta.estado === "CAMBIOS_SOLICITADOS" &&
+    propuesta.numeroIntento < MAX_INTENTOS_POR_IDEA
+  ) {
+    return "CORRECCION";
+  }
+
+  if (
+    propuesta.estado === "RECHAZADA" &&
+    propuesta.permiteReintento &&
+    propuesta.numeroIntento < MAX_INTENTOS_POR_IDEA
+  ) {
+    return "REINTENTO";
+  }
+
+  if (propuesta.estado === "PENDIENTE") {
+    throw new ErrorPropuesta(
+      "Ya tienes una propuesta pendiente para esta idea.",
+      409,
+    );
+  }
+
+  if (propuesta.estado === "ACEPTADA") {
+    throw new ErrorPropuesta(
+      "Tu propuesta para esta idea ya fue aceptada.",
+      409,
+    );
+  }
+
+  if (propuesta.estado === "CAMBIOS_SOLICITADOS") {
+    throw new ErrorPropuesta(
+      "Ya utilizaste el máximo de 2 intentos para esta idea.",
+      409,
+    );
+  }
+
+  if (propuesta.estado === "RECHAZADA" && propuesta.permiteReintento) {
+    throw new ErrorPropuesta(
+      "Ya utilizaste el máximo de 2 intentos para esta idea.",
+      409,
+    );
+  }
+
+  if (propuesta.estado === "RECHAZADA") {
+    throw new ErrorPropuesta(
+      "Esta propuesta fue rechazada definitivamente.",
+      409,
+    );
+  }
+
+  if (propuesta.estado === "EXPIRADA") {
+    throw new ErrorPropuesta(
+      "La propuesta anterior expiró y esta idea ya no admite otro envío.",
+      409,
+    );
+  }
+
+  throw new ErrorPropuesta(
+    "Tu propuesta está siendo procesada. Actualiza la página.",
+    409,
+  );
+}
+
+async function guardarPropuestaConCupo(
   ideaId: number,
   remitenteId: number,
   datosAudio: {
@@ -119,7 +201,7 @@ async function crearPropuestaConCupo(
     tamanoBytes: number;
   },
 ) {
-  for (let intento = 0; intento < 3; intento += 1) {
+  for (let intentoTransaccion = 0; intentoTransaccion < 3; intentoTransaccion += 1) {
     try {
       return await prisma.$transaction(
         async (tx) => {
@@ -157,56 +239,136 @@ async function crearPropuestaConCupo(
             },
             select: {
               id: true,
+              estado: true,
+              permiteReintento: true,
+              numeroIntento: true,
+              audioPublicId: true,
             },
           });
 
-          if (propuestaExistente) {
-            throw new ErrorPropuesta(
-              "Ya enviaste una propuesta a esta idea.",
-              409,
-            );
-          }
+          const modo = resolverModoEnvio(propuestaExistente);
 
-          const cuposOcupados = await tx.propuesta.count({
-            where: {
-              ideaId,
-              estado: {
-                in: ESTADOS_QUE_OCUPAN_CUPO,
+          if (modo === "NUEVA" || modo === "REINTENTO") {
+            const cuposOcupados = await tx.propuesta.count({
+              where: {
+                ideaId,
+                estado: {
+                  in: ESTADOS_QUE_OCUPAN_CUPO,
+                },
               },
-            },
-          });
+            });
 
-          if (cuposOcupados >= MAX_PROPUESTAS_POR_IDEA) {
+            if (cuposOcupados >= MAX_PROPUESTAS_POR_IDEA) {
+              throw new ErrorPropuesta(
+                "Esta idea ya tiene sus 3 cupos ocupados.",
+                409,
+              );
+            }
+          }
+
+          if (modo === "NUEVA") {
+            const propuesta = await tx.propuesta.create({
+              data: {
+                ideaId,
+                remitenteId,
+                mensaje: datosAudio.mensaje,
+                audioUrl: datosAudio.audioUrl,
+                audioPublicId: datosAudio.audioPublicId,
+                duracionSegundos: datosAudio.duracionSegundos,
+                formato: datosAudio.formato,
+                tamanoBytes: datosAudio.tamanoBytes,
+                estado: "PENDIENTE",
+                numeroIntento: 1,
+                permiteReintento: false,
+              },
+              select: {
+                id: true,
+                estado: true,
+                permiteReintento: true,
+                numeroIntento: true,
+                motivoDecision: true,
+                creadoEn: true,
+              },
+            });
+
+            return {
+              propuesta,
+              modo,
+              audioPublicIdAnterior: null,
+            };
+          }
+
+          if (!propuestaExistente) {
             throw new ErrorPropuesta(
-              "Esta idea ya tiene sus 3 cupos ocupados.",
+              "No se encontró la propuesta que deseas actualizar.",
               409,
             );
           }
 
-          return tx.propuesta.create({
+          const ahora = new Date();
+          const actualizacion = await tx.propuesta.updateMany({
+            where: {
+              id: propuestaExistente.id,
+              estado:
+                modo === "CORRECCION"
+                  ? "CAMBIOS_SOLICITADOS"
+                  : "RECHAZADA",
+              numeroIntento: propuestaExistente.numeroIntento,
+              ...(modo === "REINTENTO"
+                ? { permiteReintento: true }
+                : {}),
+            },
             data: {
-              ideaId,
-              remitenteId,
               mensaje: datosAudio.mensaje,
               audioUrl: datosAudio.audioUrl,
               audioPublicId: datosAudio.audioPublicId,
               duracionSegundos: datosAudio.duracionSegundos,
               formato: datosAudio.formato,
               tamanoBytes: datosAudio.tamanoBytes,
+              estado: "PENDIENTE",
+              permiteReintento: false,
+              numeroIntento: {
+                increment: 1,
+              },
+              motivoDecision: null,
+              decisionEn: null,
+              ...(modo === "REINTENTO" ? { creadoEn: ahora } : {}),
+            },
+          });
+
+          if (actualizacion.count === 0) {
+            throw new ErrorPropuesta(
+              "La propuesta cambió desde otra sesión. Actualiza la página.",
+              409,
+            );
+          }
+
+          const propuesta = await tx.propuesta.findUniqueOrThrow({
+            where: {
+              id: propuestaExistente.id,
             },
             select: {
               id: true,
               estado: true,
+              permiteReintento: true,
+              numeroIntento: true,
+              motivoDecision: true,
               creadoEn: true,
             },
           });
+
+          return {
+            propuesta,
+            modo,
+            audioPublicIdAnterior: propuestaExistente.audioPublicId,
+          };
         },
         {
           isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
         },
       );
     } catch (error) {
-      if (codigoErrorPrisma(error) === "P2034" && intento < 2) {
+      if (codigoErrorPrisma(error) === "P2034" && intentoTransaccion < 2) {
         continue;
       }
 
@@ -234,7 +396,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
     return respuestaError("El identificador de la idea no es válido.", 400);
   }
 
-  let audioPublicId: string | null = null;
+  let audioPublicIdNuevo: string | null = null;
 
   try {
     const formData = await request.formData();
@@ -299,6 +461,10 @@ export async function POST(request: Request, contexto: ContextoRuta) {
           },
           select: {
             id: true,
+            estado: true,
+            permiteReintento: true,
+            numeroIntento: true,
+            audioPublicId: true,
           },
           take: 1,
         },
@@ -319,14 +485,12 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       );
     }
 
-    if (idea.propuestas.length > 0) {
-      return respuestaError(
-        "Ya enviaste una propuesta a esta idea.",
-        409,
-      );
-    }
+    const modoPrevio = resolverModoEnvio(idea.propuestas[0] ?? null);
 
-    if (idea._count.propuestas >= MAX_PROPUESTAS_POR_IDEA) {
+    if (
+      (modoPrevio === "NUEVA" || modoPrevio === "REINTENTO") &&
+      idea._count.propuestas >= MAX_PROPUESTAS_POR_IDEA
+    ) {
       return respuestaError(
         "Esta idea ya tiene sus 3 cupos ocupados.",
         409,
@@ -338,7 +502,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       sesion.usuarioId,
       ideaId,
     );
-    audioPublicId = audioSubido.publicId;
+    audioPublicIdNuevo = audioSubido.publicId;
 
     if (
       audioSubido.resourceType !== "video" ||
@@ -367,7 +531,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       );
     }
 
-    const propuesta = await crearPropuestaConCupo(
+    const resultadoGuardado = await guardarPropuestaConCupo(
       ideaId,
       sesion.usuarioId,
       {
@@ -380,22 +544,45 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       },
     );
 
-    audioPublicId = null;
+    audioPublicIdNuevo = null;
+
+    if (
+      resultadoGuardado.audioPublicIdAnterior &&
+      resultadoGuardado.audioPublicIdAnterior !== audioSubido.publicId
+    ) {
+      await eliminarAudioIdea(resultadoGuardado.audioPublicIdAnterior).catch(
+        (errorEliminacion) => {
+          console.error(
+            "La nueva versión se guardó, pero no se pudo eliminar el audio anterior.",
+            errorEliminacion,
+          );
+        },
+      );
+    }
+
+    const mensajes: Record<ModoEnvio, string> = {
+      NUEVA: "Tu propuesta fue enviada correctamente.",
+      CORRECCION:
+        "La corrección fue enviada. El artista volverá a revisar tu propuesta.",
+      REINTENTO:
+        "Tu nuevo intento fue enviado y volvió a ocupar un cupo disponible.",
+    };
 
     return NextResponse.json(
       {
         ok: true,
-        mensaje: "Tu propuesta fue enviada correctamente.",
+        mensaje: mensajes[resultadoGuardado.modo],
+        modo: resultadoGuardado.modo,
         propuesta: {
-          ...propuesta,
-          creadoEn: propuesta.creadoEn.toISOString(),
+          ...resultadoGuardado.propuesta,
+          creadoEn: resultadoGuardado.propuesta.creadoEn.toISOString(),
         },
       },
-      { status: 201 },
+      { status: resultadoGuardado.modo === "NUEVA" ? 201 : 200 },
     );
   } catch (error) {
-    if (audioPublicId) {
-      await eliminarAudioIdea(audioPublicId).catch((errorEliminacion) => {
+    if (audioPublicIdNuevo) {
+      await eliminarAudioIdea(audioPublicIdNuevo).catch((errorEliminacion) => {
         console.error(
           "No se pudo eliminar el audio de una propuesta fallida.",
           errorEliminacion,
@@ -413,7 +600,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
 
     if (codigo === "P2002") {
       return respuestaError(
-        "Ya enviaste una propuesta a esta idea.",
+        "Ya existe una propuesta tuya para esta idea.",
         409,
       );
     }

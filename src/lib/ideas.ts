@@ -44,7 +44,7 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
         await tx.propuesta.updateMany({
           where: {
             ideaId: idea.id,
-            estado: { in: ["PENDIENTE", "RECHAZANDO"] },
+            estado: { in: ["PENDIENTE", "CAMBIOS_SOLICITADOS", "RECHAZANDO"] },
           },
           data: {
             estado: "EXPIRADA",

@@ -28,20 +28,31 @@ const EXTENSIONES_PERMITIDAS = new Set([
   "opus",
 ]);
 
+type PropuestaUsuario = {
+  estado: string;
+  motivoDecision: string | null;
+  permiteReintento: boolean;
+  numeroIntento: number;
+};
+
 type EnviarPropuestaProps = {
   ideaId: number;
   sesionActiva: boolean;
   esPropietario: boolean;
   propuestasActuales: number;
-  estadoPropuestaUsuario: string | null;
+  propuestaUsuario: PropuestaUsuario | null;
 };
 
 type RespuestaApi = {
   ok: boolean;
   mensaje?: string;
+  modo?: "NUEVA" | "CORRECCION" | "REINTENTO";
   propuesta?: {
     id: number;
     estado: string;
+    motivoDecision: string | null;
+    permiteReintento: boolean;
+    numeroIntento: number;
   };
 };
 
@@ -121,6 +132,7 @@ function enviarConProgreso(
 function etiquetaEstado(estado: string) {
   const etiquetas: Record<string, string> = {
     PENDIENTE: "Propuesta pendiente",
+    CAMBIOS_SOLICITADOS: "Cambios solicitados",
     ACEPTADA: "Propuesta aceptada",
     RECHAZADA: "Propuesta rechazada",
     EXPIRADA: "Propuesta expirada",
@@ -132,6 +144,10 @@ function etiquetaEstado(estado: string) {
 function claseEstado(estado: string) {
   if (estado === "ACEPTADA") {
     return "border-emerald-400/30 bg-emerald-500/10 text-emerald-200";
+  }
+
+  if (estado === "CAMBIOS_SOLICITADOS") {
+    return "border-sky-400/25 bg-sky-500/10 text-sky-200";
   }
 
   if (estado === "RECHAZADA" || estado === "EXPIRADA") {
@@ -146,7 +162,7 @@ export default function EnviarPropuesta({
   sesionActiva,
   esPropietario,
   propuestasActuales,
-  estadoPropuestaUsuario,
+  propuestaUsuario,
 }: EnviarPropuestaProps) {
   const router = useRouter();
   const inputArchivoRef = useRef<HTMLInputElement>(null);
@@ -168,17 +184,15 @@ export default function EnviarPropuesta({
     esMovil: boolean;
   } | null>(null);
   const [totalPropuestas, setTotalPropuestas] = useState(propuestasActuales);
-  const [estadoPropio, setEstadoPropio] = useState(
-    estadoPropuestaUsuario,
-  );
+  const [propuestaPropia, setPropuestaPropia] = useState(propuestaUsuario);
 
   useEffect(() => {
     setTotalPropuestas(propuestasActuales);
   }, [propuestasActuales]);
 
   useEffect(() => {
-    setEstadoPropio(estadoPropuestaUsuario);
-  }, [estadoPropuestaUsuario]);
+    setPropuestaPropia(propuestaUsuario);
+  }, [propuestaUsuario]);
 
   const cancelarAjustesMensaje = useCallback(() => {
     temporizadoresAjusteRef.current.forEach((temporizador) => {
@@ -411,9 +425,25 @@ export default function EnviarPropuesta({
         setProgreso,
       );
 
-      const nuevoEstado = data.propuesta?.estado ?? "PENDIENTE";
-      setEstadoPropio(nuevoEstado);
-      setTotalPropuestas((actual) => Math.min(MAX_PROPUESTAS, actual + 1));
+      const ocupabaCupoAntes =
+        propuestaPropia?.estado === "CAMBIOS_SOLICITADOS";
+      const propuestaActualizada: PropuestaUsuario = {
+        estado: data.propuesta?.estado ?? "PENDIENTE",
+        motivoDecision: data.propuesta?.motivoDecision ?? null,
+        permiteReintento: data.propuesta?.permiteReintento ?? false,
+        numeroIntento:
+          data.propuesta?.numeroIntento ??
+          Math.min(2, (propuestaPropia?.numeroIntento ?? 0) + 1),
+      };
+
+      setPropuestaPropia(propuestaActualizada);
+
+      if (!ocupabaCupoAntes) {
+        setTotalPropuestas((actual) =>
+          Math.min(MAX_PROPUESTAS, actual + 1),
+        );
+      }
+
       limpiarArchivo();
       setMensaje("");
       setModalAbierto(false);
@@ -429,6 +459,27 @@ export default function EnviarPropuesta({
     }
   }
 
+  const estadoPropio = propuestaPropia?.estado ?? null;
+  const cuposCompletos = totalPropuestas >= MAX_PROPUESTAS;
+  const puedeEnviarCorreccion =
+    estadoPropio === "CAMBIOS_SOLICITADOS" &&
+    (propuestaPropia?.numeroIntento ?? 0) < 2;
+  const puedeReintentar =
+    estadoPropio === "RECHAZADA" &&
+    Boolean(propuestaPropia?.permiteReintento) &&
+    (propuestaPropia?.numeroIntento ?? 0) < 2;
+  const formularioBloqueado = puedeReintentar && cuposCompletos;
+  const tituloFormulario = puedeEnviarCorreccion
+    ? "Enviar corrección"
+    : puedeReintentar
+      ? "Intentar nuevamente"
+      : "Enviar propuesta";
+  const subtituloFormulario = puedeEnviarCorreccion
+    ? "El cupo continúa reservado para ti"
+    : puedeReintentar
+      ? "El nuevo intento ocupará un cupo disponible"
+      : "Colaborar con esta idea";
+
   if (esPropietario) {
     return (
       <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
@@ -442,19 +493,32 @@ export default function EnviarPropuesta({
     );
   }
 
-  if (estadoPropio) {
+  if (
+    estadoPropio &&
+    !puedeEnviarCorreccion &&
+    !puedeReintentar
+  ) {
     return (
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
-        <span
-          className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${claseEstado(
-            estadoPropio,
-          )}`}
-        >
-          {etiquetaEstado(estadoPropio)}
-        </span>
-        <span className="text-[10px] font-bold text-zinc-500">
-          {totalPropuestas}/{MAX_PROPUESTAS} cupos ocupados
-        </span>
+      <div className="mt-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span
+            className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${claseEstado(
+              estadoPropio,
+            )}`}
+          >
+            {etiquetaEstado(estadoPropio)}
+          </span>
+          <span className="text-[10px] font-bold text-zinc-500">
+            {totalPropuestas}/{MAX_PROPUESTAS} cupos ocupados
+          </span>
+        </div>
+
+        {propuestaPropia?.motivoDecision && (
+          <p className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-zinc-400">
+            <span className="font-bold text-zinc-300">Motivo:</span>{" "}
+            {propuestaPropia.motivoDecision}
+          </p>
+        )}
       </div>
     );
   }
@@ -475,32 +539,77 @@ export default function EnviarPropuesta({
     );
   }
 
-  const cuposCompletos = totalPropuestas >= MAX_PROPUESTAS;
-
   return (
     <>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
-        <p className="text-[10px] font-medium text-zinc-500">
-          {cuposCompletos
-            ? "Esta idea ya tiene sus 3 cupos ocupados."
-            : `${MAX_PROPUESTAS - totalPropuestas} cupo${
-                MAX_PROPUESTAS - totalPropuestas === 1 ? "" : "s"
-              } disponible${
-                MAX_PROPUESTAS - totalPropuestas === 1 ? "" : "s"
-              }.`}
-        </p>
-        <button
-          type="button"
-          disabled={cuposCompletos}
-          onClick={() => {
-            setError("");
-            setModalAbierto(true);
-          }}
-          className="rounded-lg border border-violet-400/35 bg-violet-500/15 px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:bg-violet-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
-        >
-          {cuposCompletos ? "Cupos completos" : "Enviar propuesta"}
-        </button>
-      </div>
+      {puedeEnviarCorreccion || puedeReintentar ? (
+        <div className="mt-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span
+              className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${claseEstado(
+                estadoPropio ?? "RECHAZADA",
+              )}`}
+            >
+              {puedeEnviarCorreccion
+                ? "Cambios solicitados"
+                : "Nuevo intento permitido"}
+            </span>
+            <span className="text-[10px] font-bold text-zinc-500">
+              {totalPropuestas}/{MAX_PROPUESTAS} cupos ocupados
+            </span>
+          </div>
+
+          {propuestaPropia?.motivoDecision && (
+            <p className="mt-2 text-[10px] leading-4 text-zinc-400">
+              <span className="font-bold text-zinc-300">Motivo:</span>{" "}
+              {propuestaPropia.motivoDecision}
+            </p>
+          )}
+
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.07] pt-2">
+            <p className="text-[9px] leading-4 text-zinc-500">
+              {puedeEnviarCorreccion
+                ? "Tu cupo sigue reservado. Envía una nueva versión para volver a revisión."
+                : formularioBloqueado
+                  ? "El cupo se liberó, pero ahora mismo la idea está completa."
+                  : "El cupo no está reservado. Puedes participar otra vez mientras haya espacio."}
+            </p>
+            <button
+              type="button"
+              disabled={formularioBloqueado}
+              onClick={() => {
+                setError("");
+                setModalAbierto(true);
+              }}
+              className="rounded-lg border border-violet-400/35 bg-violet-500/15 px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:bg-violet-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
+            >
+              {formularioBloqueado ? "Sin cupos" : tituloFormulario}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
+          <p className="text-[10px] font-medium text-zinc-500">
+            {cuposCompletos
+              ? "Esta idea ya tiene sus 3 cupos ocupados."
+              : `${MAX_PROPUESTAS - totalPropuestas} cupo${
+                  MAX_PROPUESTAS - totalPropuestas === 1 ? "" : "s"
+                } disponible${
+                  MAX_PROPUESTAS - totalPropuestas === 1 ? "" : "s"
+                }.`}
+          </p>
+          <button
+            type="button"
+            disabled={cuposCompletos}
+            onClick={() => {
+              setError("");
+              setModalAbierto(true);
+            }}
+            className="rounded-lg border border-violet-400/35 bg-violet-500/15 px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:bg-violet-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
+          >
+            {cuposCompletos ? "Cupos completos" : "Enviar propuesta"}
+          </button>
+        </div>
+      )}
 
       {modalAbierto &&
         typeof document !== "undefined" &&
@@ -534,13 +643,13 @@ export default function EnviarPropuesta({
               <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#120e18]/95 px-4 py-3.5 backdrop-blur lg:px-5 lg:py-4">
                 <div className="min-w-0">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 lg:text-xs lg:normal-case lg:tracking-normal">
-                    Colaborar con esta idea
+                    {subtituloFormulario}
                   </p>
                   <h3
                     id={`titulo-propuesta-${ideaId}`}
                     className="mt-1 text-lg font-black text-white lg:text-xl"
                   >
-                    Enviar propuesta
+                    {tituloFormulario}
                   </h3>
                 </div>
                 <button
@@ -564,7 +673,9 @@ export default function EnviarPropuesta({
               >
                 <div>
                   <label className="text-xs font-bold text-zinc-200">
-                    Audio de la propuesta
+                    {puedeEnviarCorreccion
+                      ? "Nueva versión del audio"
+                      : "Audio de la propuesta"}
                   </label>
                   <input
                     ref={inputArchivoRef}
@@ -633,7 +744,13 @@ export default function EnviarPropuesta({
                     maxLength={500}
                     rows={4}
                     disabled={enviando}
-                    placeholder="Cuéntale al artista qué agregaste o cómo imaginas la colaboración."
+                    placeholder={
+                      puedeEnviarCorreccion
+                        ? "Cuéntale al artista qué corregiste en esta nueva versión."
+                        : puedeReintentar
+                          ? "Explícale qué cambiaste para este nuevo intento."
+                          : "Cuéntale al artista qué agregaste o cómo imaginas la colaboración."
+                    }
                     className="mt-2 w-full scroll-mt-4 scroll-mb-6 resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
                   />
                 </div>
@@ -680,7 +797,7 @@ export default function EnviarPropuesta({
                   disabled={enviando || !archivo}
                   className="min-h-11 rounded-xl border border-violet-300/30 bg-violet-500 px-3 py-2.5 text-xs font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-45 lg:px-4"
                 >
-                  {enviando ? "Enviando…" : "Enviar propuesta"}
+                  {enviando ? "Enviando…" : tituloFormulario}
                 </button>
               </div>
             </form>

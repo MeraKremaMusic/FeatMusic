@@ -8,9 +8,27 @@ import { obtenerSesion } from "@/lib/session";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const estadoSchema = z.object({
-  estado: z.enum(["ACEPTADA", "RECHAZADA"]),
-});
+const MAX_INTENTOS_POR_IDEA = 2;
+const motivoSchema = z
+  .string()
+  .trim()
+  .min(3, "Escribe un motivo de al menos 3 caracteres.")
+  .max(500, "El motivo no puede superar 500 caracteres.");
+
+const decisionSchema = z.discriminatedUnion("accion", [
+  z.object({
+    accion: z.literal("ACEPTAR"),
+  }),
+  z.object({
+    accion: z.literal("SOLICITAR_CAMBIOS"),
+    motivo: motivoSchema,
+  }),
+  z.object({
+    accion: z.literal("RECHAZAR"),
+    motivo: motivoSchema,
+    permiteReintento: z.boolean(),
+  }),
+]);
 
 type ContextoRuta = {
   params: Promise<{ id: string }>;
@@ -30,8 +48,12 @@ function mensajeDecisionTomada(estado: string) {
     return "Esta propuesta ya fue aceptada y la decisión es definitiva.";
   }
 
+  if (estado === "CAMBIOS_SOLICITADOS") {
+    return "Ya solicitaste una nueva versión. Espera a que el artista la envíe.";
+  }
+
   if (estado === "RECHAZADA") {
-    return "Esta propuesta ya fue rechazada y la decisión es definitiva.";
+    return "Esta propuesta ya fue rechazada.";
   }
 
   if (estado === "EXPIRADA") {
@@ -66,11 +88,11 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
     return respuestaError("El contenido enviado no es válido.", 400);
   }
 
-  const resultado = estadoSchema.safeParse(body);
+  const resultado = decisionSchema.safeParse(body);
 
   if (!resultado.success) {
     return respuestaError(
-      resultado.error.issues[0]?.message ?? "El estado no es válido.",
+      resultado.error.issues[0]?.message ?? "La decisión no es válida.",
       400,
     );
   }
@@ -89,6 +111,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       estado: true,
       audioPublicId: true,
       remitenteId: true,
+      numeroIntento: true,
       idea: {
         select: {
           usuarioId: true,
@@ -108,9 +131,31 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
     return respuestaError(mensajeDecisionTomada(propuesta.estado), 409);
   }
 
+  if (
+    resultado.data.accion === "SOLICITAR_CAMBIOS" &&
+    propuesta.numeroIntento >= MAX_INTENTOS_POR_IDEA
+  ) {
+    return respuestaError(
+      "Esta persona ya utilizó sus 2 intentos. Debes aceptar o rechazar la propuesta.",
+      409,
+    );
+  }
+
+  if (
+    resultado.data.accion === "RECHAZAR" &&
+    resultado.data.permiteReintento &&
+    propuesta.numeroIntento >= MAX_INTENTOS_POR_IDEA
+  ) {
+    return respuestaError(
+      "Esta persona ya utilizó sus 2 intentos y no puede recibir otra oportunidad.",
+      409,
+    );
+  }
+
   try {
-    if (resultado.data.estado === "ACEPTADA") {
+    if (resultado.data.accion === "ACEPTAR") {
       const resultadoAceptacion = await prisma.$transaction(async (tx) => {
+        const ahora = new Date();
         const actualizacion = await tx.propuesta.updateMany({
           where: {
             id: propuesta.id,
@@ -118,6 +163,9 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           },
           data: {
             estado: "ACEPTADA",
+            motivoDecision: null,
+            permiteReintento: false,
+            decisionEn: ahora,
           },
         });
 
@@ -133,7 +181,6 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           propuesta.idea.usuarioId,
           propuesta.remitenteId,
         );
-        const ahora = new Date();
 
         const conversacion = await tx.conversacion.upsert({
           where: {
@@ -166,6 +213,10 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
             id: true,
             estado: true,
             audioUrl: true,
+            motivoDecision: true,
+            permiteReintento: true,
+            numeroIntento: true,
+            decisionEn: true,
             actualizadoEn: true,
           },
         });
@@ -186,16 +237,71 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       return NextResponse.json({
         ok: true,
         mensaje:
-          "Propuesta aceptada. Ya puedes continuar la colaboración en el chat privado con este artista.",
+          "Propuesta aceptada. El cupo quedó ocupado y ya puedes continuar la colaboración en el chat privado.",
         propuesta: {
           ...resultadoAceptacion.actualizada,
           conversacionId: resultadoAceptacion.conversacionId,
+          decisionEn:
+            resultadoAceptacion.actualizada.decisionEn?.toISOString() ?? null,
           actualizadoEn:
             resultadoAceptacion.actualizada.actualizadoEn.toISOString(),
         },
       });
     }
 
+    if (resultado.data.accion === "SOLICITAR_CAMBIOS") {
+      const ahora = new Date();
+      const actualizacion = await prisma.propuesta.updateMany({
+        where: {
+          id: propuesta.id,
+          estado: "PENDIENTE",
+          numeroIntento: propuesta.numeroIntento,
+        },
+        data: {
+          estado: "CAMBIOS_SOLICITADOS",
+          motivoDecision: resultado.data.motivo,
+          permiteReintento: false,
+          decisionEn: ahora,
+        },
+      });
+
+      if (actualizacion.count === 0) {
+        return respuestaError(
+          "La propuesta ya fue respondida desde otra sesión. Actualiza la página.",
+          409,
+        );
+      }
+
+      const actualizada = await prisma.propuesta.findUniqueOrThrow({
+        where: {
+          id: propuesta.id,
+        },
+        select: {
+          id: true,
+          estado: true,
+          audioUrl: true,
+          motivoDecision: true,
+          permiteReintento: true,
+          numeroIntento: true,
+          decisionEn: true,
+          actualizadoEn: true,
+        },
+      });
+
+      return NextResponse.json({
+        ok: true,
+        mensaje:
+          "Cambios solicitados. El cupo sigue reservado mientras la persona envía una nueva versión.",
+        propuesta: {
+          ...actualizada,
+          conversacionId: null,
+          decisionEn: actualizada.decisionEn?.toISOString() ?? null,
+          actualizadoEn: actualizada.actualizadoEn.toISOString(),
+        },
+      });
+    }
+
+    const ahora = new Date();
     const reclamada = await prisma.propuesta.updateMany({
       where: {
         id: propuesta.id,
@@ -203,6 +309,9 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       },
       data: {
         estado: "RECHAZANDO",
+        motivoDecision: resultado.data.motivo,
+        permiteReintento: resultado.data.permiteReintento,
+        decisionEn: ahora,
       },
     });
 
@@ -226,6 +335,9 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           },
           data: {
             estado: "PENDIENTE",
+            motivoDecision: null,
+            permiteReintento: false,
+            decisionEn: null,
           },
         })
         .catch((errorRestauracion) => {
@@ -259,19 +371,23 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           id: true,
           estado: true,
           audioUrl: true,
+          motivoDecision: true,
+          permiteReintento: true,
+          numeroIntento: true,
+          decisionEn: true,
           actualizadoEn: true,
         },
       });
 
       return NextResponse.json({
         ok: true,
-        mensaje:
-          actualizada.estado === "RECHAZADA"
-            ? "Propuesta rechazada. El archivo MP3 fue eliminado y el cupo quedó disponible para otro artista."
-            : "La idea terminó mientras se procesaba la propuesta. El archivo MP3 fue eliminado.",
+        mensaje: actualizada.permiteReintento
+          ? "Propuesta rechazada. El cupo fue liberado y la persona podrá intentarlo una vez más si encuentra espacio disponible."
+          : "Propuesta rechazada definitivamente. El cupo fue liberado para otro artista.",
         propuesta: {
           ...actualizada,
           conversacionId: null,
+          decisionEn: actualizada.decisionEn?.toISOString() ?? null,
           actualizadoEn: actualizada.actualizadoEn.toISOString(),
         },
       });

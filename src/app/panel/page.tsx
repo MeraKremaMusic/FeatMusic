@@ -329,6 +329,10 @@ export default async function PanelPage() {
       audioUrl: true,
       duracionSegundos: true,
       estado: true,
+      motivoDecision: true,
+      permiteReintento: true,
+      numeroIntento: true,
+      decisionEn: true,
       creadoEn: true,
       conversacion: {
         select: {
@@ -359,6 +363,7 @@ export default async function PanelPage() {
     return {
       ...datosPropuesta,
       conversacionId: conversacion?.id ?? null,
+      decisionEn: propuesta.decisionEn?.toISOString() ?? null,
       creadoEn: propuesta.creadoEn.toISOString(),
     };
   });
@@ -377,6 +382,10 @@ export default async function PanelPage() {
       audioUrl: true,
       duracionSegundos: true,
       estado: true,
+      motivoDecision: true,
+      permiteReintento: true,
+      numeroIntento: true,
+      decisionEn: true,
       creadoEn: true,
       conversacion: {
         select: {
@@ -408,6 +417,7 @@ export default async function PanelPage() {
       return {
         ...datosPropuesta,
         conversacionId: conversacion?.id ?? null,
+        decisionEn: propuesta.decisionEn?.toISOString() ?? null,
         creadoEn: propuesta.creadoEn.toISOString(),
       };
     },
