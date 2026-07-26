@@ -193,6 +193,45 @@ function IconoUbicacion({ className = "h-3.5 w-3.5" }: { className?: string }) {
   );
 }
 
+function IconoAudio({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 13h2l2.2-5 3.2 10 2.5-7 1.8 4H20" />
+    </svg>
+  );
+}
+
+function IconoFlechaDerecha({
+  className = "h-3.5 w-3.5",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m14 7 5 5-5 5" />
+    </svg>
+  );
+}
+
 function CargandoArtistas() {
   return (
     <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
@@ -270,7 +309,7 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-sm font-black text-violet-200">
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-500/10 text-sm font-black text-violet-200 shadow-[0_10px_25px_rgba(0,0,0,0.2)]">
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -280,7 +319,7 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
     <img
       src={artista.fotoPerfil}
       alt={`Foto de ${artista.nombreArtistico}`}
-      className="h-14 w-14 shrink-0 rounded-full border border-white/10 object-cover"
+      className="h-14 w-14 shrink-0 rounded-2xl border border-white/10 object-cover shadow-[0_10px_25px_rgba(0,0,0,0.2)]"
       onError={() => setFallo(true)}
     />
   );
@@ -302,30 +341,31 @@ function BanderaPais({
     return null;
   }
 
+  if (falloImagen) {
+    return (
+      <span
+        title={pais}
+        aria-label={`País: ${pais}`}
+        className="shrink-0 text-[9px] font-black uppercase tracking-wide text-zinc-500"
+      >
+        {codigo}
+      </span>
+    );
+  }
+
   return (
-    <span
+    <img
+      src={`https://flagcdn.com/w40/${codigo}.png`}
+      srcSet={`https://flagcdn.com/w80/${codigo}.png 2x`}
+      width={28}
+      height={20}
+      alt={`Bandera de ${pais}`}
       title={pais}
-      aria-label={`Bandera de ${pais}`}
-      className="flex h-7 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md border border-white/15 bg-white/5 shadow-sm"
-    >
-      {falloImagen ? (
-        <span className="text-[9px] font-black uppercase tracking-wide text-zinc-300">
-          {codigo}
-        </span>
-      ) : (
-        <img
-          src={`https://flagcdn.com/w40/${codigo}.png`}
-          srcSet={`https://flagcdn.com/w80/${codigo}.png 2x`}
-          width={28}
-          height={20}
-          alt=""
-          className="h-5 w-7 object-contain"
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          onError={() => setFalloImagen(true)}
-        />
-      )}
-    </span>
+      className="h-[18px] w-7 shrink-0 rounded-[3px] object-cover shadow-sm"
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      onError={() => setFalloImagen(true)}
+    />
   );
 }
 
@@ -333,89 +373,119 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
   const ubicacion =
     [artista.ciudad, artista.pais].filter(Boolean).join(", ") ||
     "Ubicación sin completar";
+  const ideasAdicionales =
+    artista.ideasActivas - artista.ideasRecientes.length;
 
   return (
-    <article className="flex min-h-[330px] flex-col rounded-xl border border-white/10 bg-black/35 p-3.5 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-violet-400/25 hover:bg-black/45">
-      <div className="flex items-start gap-3">
-        <FotoArtista artista={artista} />
-        <div className="min-w-0 flex-1">
-          <h2 className="truncate text-base font-bold text-white">
-            {artista.nombreArtistico}
-          </h2>
-          <p className="truncate text-xs font-medium text-violet-300">
-            @{artista.nombreUsuario}
-          </p>
-          <p className="mt-2 flex items-center gap-1.5 text-[11px] text-zinc-400">
-            <IconoUbicacion />
-            <span className="truncate">{ubicacion}</span>
-          </p>
+    <article className="group relative flex h-full min-h-[290px] flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
+      <div className="pointer-events-none absolute -right-14 -top-16 h-32 w-32 rounded-full bg-violet-500/[0.08] blur-3xl transition duration-300 group-hover:bg-violet-500/[0.12]" />
+
+      <div className="relative p-3.5 sm:p-4">
+        <div className="flex items-start gap-3">
+          <FotoArtista artista={artista} />
+
+          <div className="min-w-0 flex-1">
+            <div className="flex min-w-0 items-start justify-between gap-2">
+              <div className="min-w-0">
+                <h2 className="truncate text-[15px] font-black leading-tight text-white sm:text-base">
+                  {artista.nombreArtistico}
+                </h2>
+                <p className="mt-0.5 truncate text-[11px] font-semibold text-violet-300">
+                  @{artista.nombreUsuario}
+                </p>
+              </div>
+
+              <BanderaPais
+                codigoPais={artista.codigoPais}
+                pais={artista.pais}
+              />
+            </div>
+
+            <p className="mt-2 flex min-w-0 items-center gap-1.5 text-[10px] text-zinc-500 sm:text-[11px]">
+              <IconoUbicacion className="h-3 w-3 shrink-0" />
+              <span className="truncate">{ubicacion}</span>
+            </p>
+          </div>
         </div>
 
-        <BanderaPais codigoPais={artista.codigoPais} pais={artista.pais} />
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <span className="rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2.5 py-1 text-[9px] font-bold text-violet-200">
+            {formatearRol(artista.rol)}
+          </span>
+
+          {artista.generos.slice(0, 3).map((genero) => (
+            <span
+              key={genero}
+              className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-1 text-[9px] font-medium text-zinc-400"
+            >
+              {genero}
+            </span>
+          ))}
+
+          {artista.generos.length === 0 && (
+            <span className="rounded-full border border-white/[0.08] bg-white/[0.025] px-2.5 py-1 text-[9px] text-zinc-600">
+              Sin géneros
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-1.5">
-        <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-semibold text-violet-200">
-          {formatearRol(artista.rol)}
-        </span>
-        {artista.generos.slice(0, 3).map((genero) => (
-          <span
-            key={genero}
-            className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-300"
-          >
-            {genero}
-          </span>
-        ))}
-        {artista.generos.length === 0 && (
-          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-500">
-            Sin géneros
-          </span>
-        )}
-      </div>
+      <div className="relative flex flex-1 flex-col border-t border-white/[0.07]">
+        <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-violet-500/[0.09] text-violet-300">
+              <IconoAudio />
+            </span>
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
+              Ideas activas
+            </p>
+          </div>
 
-      <div className="mt-4 flex-1 rounded-xl border border-white/10 bg-white/[0.025] p-3">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
-            Ideas publicadas
-          </p>
-          <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-black text-violet-200">
+          <span className="rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2 py-0.5 text-[9px] font-black tabular-nums text-violet-200">
             {artista.ideasActivas}
           </span>
         </div>
 
         {artista.ideasRecientes.length > 0 ? (
-          <div className="mt-3 space-y-2">
+          <div className="flex-1 divide-y divide-white/[0.06] border-t border-white/[0.06] px-3.5 sm:px-4">
             {artista.ideasRecientes.map((idea, indice) => (
-              <ReproductorAudio
-                key={idea.id}
-                id={`explorar-${idea.id}`}
-                src={idea.audioUrl}
-                titulo={idea.titulo}
-                bpm={idea.bpm}
-                tonalidad={idea.tonalidad}
-                duracionSegundos={idea.duracionSegundos}
-                numero={indice + 1}
-              />
+              <div key={idea.id} className="py-2.5">
+                <ReproductorAudio
+                  id={`explorar-${idea.id}`}
+                  src={idea.audioUrl}
+                  titulo={idea.titulo}
+                  bpm={idea.bpm}
+                  tonalidad={idea.tonalidad}
+                  duracionSegundos={idea.duracionSegundos}
+                  numero={indice + 1}
+                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                />
+              </div>
             ))}
 
-            {artista.ideasActivas > artista.ideasRecientes.length && (
-              <p className="pt-1 text-center text-[9px] font-semibold text-zinc-600">
-                +{artista.ideasActivas - artista.ideasRecientes.length} ideas adicionales
+            {ideasAdicionales > 0 && (
+              <p className="py-2 text-center text-[9px] font-semibold text-zinc-600">
+                +{ideasAdicionales} {ideasAdicionales === 1 ? "idea adicional" : "ideas adicionales"}
               </p>
             )}
           </div>
         ) : (
-          <p className="mt-4 text-center text-[10px] leading-5 text-zinc-600">
-            Sin ideas publicadas actualmente
-          </p>
+          <div className="flex flex-1 items-center justify-center border-t border-white/[0.06] px-4 py-8">
+            <p className="text-center text-[10px] leading-5 text-zinc-600">
+              Sin ideas publicadas actualmente
+            </p>
+          </div>
         )}
       </div>
 
       <Link
         href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-        className="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-300/50 hover:bg-violet-500/20"
+        className="relative flex items-center justify-between border-t border-white/[0.07] bg-white/[0.018] px-4 py-3 text-[11px] font-bold text-zinc-300 transition hover:bg-violet-500/[0.08] hover:text-violet-100"
       >
-        Ver perfil
+        <span>Ver perfil completo</span>
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.035] text-zinc-500 transition group-hover:border-violet-400/20 group-hover:text-violet-300">
+          <IconoFlechaDerecha className="h-3 w-3" />
+        </span>
       </Link>
     </article>
   );
@@ -679,7 +749,7 @@ export default function ArtistasClient({
               </button>
             </section>
           ) : (
-            <section className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <section className="mt-3 grid items-stretch gap-3.5 sm:grid-cols-2 lg:gap-4 xl:grid-cols-3">
               {artistasPagina.map((artista) => (
                 <TarjetaArtista key={artista.id} artista={artista} />
               ))}
