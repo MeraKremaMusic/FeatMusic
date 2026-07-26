@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import {
   useEffect,
   useRef,
@@ -148,6 +149,7 @@ export default function EnviarPropuesta({
 }: EnviarPropuestaProps) {
   const router = useRouter();
   const inputArchivoRef = useRef<HTMLInputElement>(null);
+  const enviandoRef = useRef(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(null);
@@ -156,6 +158,10 @@ export default function EnviarPropuesta({
   const [avisoAudio, setAvisoAudio] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [progreso, setProgreso] = useState(0);
+  const [vistaModal, setVistaModal] = useState<{
+    alto: number;
+    desplazamientoSuperior: number;
+  } | null>(null);
   const [totalPropuestas, setTotalPropuestas] = useState(propuestasActuales);
   const [estadoPropio, setEstadoPropio] = useState(
     estadoPropuestaUsuario,
@@ -168,6 +174,68 @@ export default function EnviarPropuesta({
       }
     };
   }, [vistaPrevia]);
+
+  useEffect(() => {
+    enviandoRef.current = enviando;
+  }, [enviando]);
+
+  useEffect(() => {
+    if (!modalAbierto) {
+      setVistaModal(null);
+      return;
+    }
+
+    const cuerpo = document.body;
+    const documento = document.documentElement;
+    const desplazamientoAnterior = window.scrollY;
+    const estilosAnteriores = {
+      overflow: cuerpo.style.overflow,
+      position: cuerpo.style.position,
+      top: cuerpo.style.top,
+      width: cuerpo.style.width,
+      overscrollBehavior: documento.style.overscrollBehavior,
+    };
+
+    const actualizarVistaModal = () => {
+      const vistaVisual = window.visualViewport;
+      setVistaModal({
+        alto: Math.round(vistaVisual?.height ?? window.innerHeight),
+        desplazamientoSuperior: Math.round(vistaVisual?.offsetTop ?? 0),
+      });
+    };
+
+    const cerrarConEscape = (evento: KeyboardEvent) => {
+      if (evento.key === "Escape" && !enviandoRef.current) {
+        cerrarModal();
+      }
+    };
+
+    cuerpo.style.overflow = "hidden";
+    cuerpo.style.position = "fixed";
+    cuerpo.style.top = `-${desplazamientoAnterior}px`;
+    cuerpo.style.width = "100%";
+    documento.style.overscrollBehavior = "none";
+
+    actualizarVistaModal();
+    window.addEventListener("resize", actualizarVistaModal);
+    window.addEventListener("keydown", cerrarConEscape);
+    window.visualViewport?.addEventListener("resize", actualizarVistaModal);
+    window.visualViewport?.addEventListener("scroll", actualizarVistaModal);
+
+    return () => {
+      window.removeEventListener("resize", actualizarVistaModal);
+      window.removeEventListener("keydown", cerrarConEscape);
+      window.visualViewport?.removeEventListener("resize", actualizarVistaModal);
+      window.visualViewport?.removeEventListener("scroll", actualizarVistaModal);
+
+      cuerpo.style.overflow = estilosAnteriores.overflow;
+      cuerpo.style.position = estilosAnteriores.position;
+      cuerpo.style.top = estilosAnteriores.top;
+      cuerpo.style.width = estilosAnteriores.width;
+      documento.style.overscrollBehavior = estilosAnteriores.overscrollBehavior;
+      window.scrollTo(0, desplazamientoAnterior);
+    };
+  }, [modalAbierto]);
 
   function limpiarArchivo() {
     if (vistaPrevia) {
@@ -364,162 +432,174 @@ export default function EnviarPropuesta({
         </button>
       </div>
 
-      {modalAbierto && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Enviar propuesta musical"
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-          onMouseDown={(evento) => {
-            if (evento.target === evento.currentTarget) {
-              cerrarModal();
-            }
-          }}
-        >
-          <form
-            onSubmit={enviarPropuesta}
-            className="max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-[#120e18] p-5 shadow-2xl shadow-black/60"
+      {modalAbierto &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`titulo-propuesta-${ideaId}`}
+            className="fixed inset-x-0 z-[9999] flex items-end justify-center bg-black/80 px-2 pt-2 backdrop-blur-sm sm:items-center sm:p-4"
+            style={{
+              top: vistaModal?.desplazamientoSuperior ?? 0,
+              height: vistaModal ? `${vistaModal.alto}px` : "100dvh",
+            }}
+            onPointerDown={(evento) => {
+              if (evento.target === evento.currentTarget) {
+                cerrarModal();
+              }
+            }}
           >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold text-violet-300">
-                  Colaborar con esta idea
-                </p>
-                <h3 className="mt-1 text-xl font-black text-white">
-                  Enviar propuesta
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={cerrarModal}
-                disabled={enviando}
-                aria-label="Cerrar formulario"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:opacity-40"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="mt-5">
-              <label className="text-xs font-bold text-zinc-200">
-                Audio de la propuesta
-              </label>
-              <input
-                ref={inputArchivoRef}
-                type="file"
-                accept=".mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus,audio/*"
-                onChange={seleccionarAudio}
-                disabled={enviando}
-                className="mt-2 block w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-300 file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-violet-200"
-              />
-              <p className="mt-2 text-[10px] leading-4 text-zinc-500">
-                Máximo 50 MB y 4 minutos. Se guardará automáticamente como
-                MP3 de 64 kbps.
-              </p>
-            </div>
-
-            {archivo && (
-              <div className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-xs font-bold text-zinc-200">
-                      {archivo.name}
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-zinc-500">
-                      {formatearTamano(archivo.size)}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={limpiarArchivo}
-                    disabled={enviando}
-                    className="rounded-lg border border-red-400/20 px-2.5 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"
+            <form
+              onSubmit={enviarPropuesta}
+              className="flex max-h-[calc(100%-0.5rem)] w-full flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-[#120e18] shadow-2xl shadow-black/60 sm:max-h-[90dvh] sm:max-w-lg sm:rounded-2xl"
+            >
+              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 px-4 py-4 sm:px-5">
+                <div className="min-w-0">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 sm:text-xs sm:normal-case sm:tracking-normal">
+                    Colaborar con esta idea
+                  </p>
+                  <h3
+                    id={`titulo-propuesta-${ideaId}`}
+                    className="mt-1 text-lg font-black text-white sm:text-xl"
                   >
-                    Quitar
-                  </button>
+                    Enviar propuesta
+                  </h3>
                 </div>
-                {vistaPrevia && (
-                  <audio
-                    controls
-                    preload="metadata"
-                    src={vistaPrevia}
-                    className="mt-3 h-9 w-full"
+                <button
+                  type="button"
+                  onClick={cerrarModal}
+                  disabled={enviando}
+                  aria-label="Cerrar formulario"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 text-xl leading-none text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:opacity-40"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
+                <div>
+                  <label className="text-xs font-bold text-zinc-200">
+                    Audio de la propuesta
+                  </label>
+                  <input
+                    ref={inputArchivoRef}
+                    type="file"
+                    accept=".mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus,audio/*"
+                    onChange={seleccionarAudio}
+                    disabled={enviando}
+                    className="mt-2 block w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-300 file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-violet-200"
                   />
+                  <p className="mt-2 text-[10px] leading-4 text-zinc-500">
+                    Máximo 50 MB y 4 minutos. Se guardará automáticamente como
+                    MP3 de 64 kbps.
+                  </p>
+                </div>
+
+                {archivo && (
+                  <div className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-bold text-zinc-200">
+                          {archivo.name}
+                        </p>
+                        <p className="mt-0.5 text-[10px] text-zinc-500">
+                          {formatearTamano(archivo.size)}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={limpiarArchivo}
+                        disabled={enviando}
+                        className="shrink-0 rounded-lg border border-red-400/20 px-2.5 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                    {vistaPrevia && (
+                      <audio
+                        controls
+                        preload="metadata"
+                        src={vistaPrevia}
+                        className="mt-3 h-9 w-full"
+                      />
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <label
+                      htmlFor={`mensaje-propuesta-${ideaId}`}
+                      className="text-xs font-bold text-zinc-200"
+                    >
+                      Mensaje opcional
+                    </label>
+                    <span className="text-[10px] text-zinc-600">
+                      {mensaje.length}/500
+                    </span>
+                  </div>
+                  <textarea
+                    id={`mensaje-propuesta-${ideaId}`}
+                    value={mensaje}
+                    onChange={(evento) => setMensaje(evento.target.value)}
+                    maxLength={500}
+                    rows={4}
+                    disabled={enviando}
+                    placeholder="Cuéntale al artista qué agregaste o cómo imaginas la colaboración."
+                    className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
+                  />
+                </div>
+
+                {avisoAudio && (
+                  <p className="mt-3 rounded-lg border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-[10px] text-amber-200">
+                    {avisoAudio}
+                  </p>
+                )}
+
+                {error && (
+                  <p className="mt-3 rounded-lg border border-red-400/20 bg-red-500/10 px-3 py-2 text-[10px] text-red-200">
+                    {error}
+                  </p>
+                )}
+
+                {enviando && (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between text-[10px] font-semibold text-zinc-400">
+                      <span>Subiendo y convirtiendo el audio…</span>
+                      <span>{progreso}%</span>
+                    </div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                      <div
+                        className="h-full rounded-full bg-violet-400 transition-[width]"
+                        style={{ width: `${progreso}%` }}
+                      />
+                    </div>
+                  </div>
                 )}
               </div>
-            )}
 
-            <div className="mt-4">
-              <div className="flex items-center justify-between gap-3">
-                <label
-                  htmlFor={`mensaje-propuesta-${ideaId}`}
-                  className="text-xs font-bold text-zinc-200"
+              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#120e18]/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:flex sm:justify-end sm:px-5 sm:pb-4">
+                <button
+                  type="button"
+                  onClick={cerrarModal}
+                  disabled={enviando}
+                  className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-xs font-bold text-zinc-300 transition hover:bg-white/5 disabled:opacity-40 sm:px-4"
                 >
-                  Mensaje opcional
-                </label>
-                <span className="text-[10px] text-zinc-600">
-                  {mensaje.length}/500
-                </span>
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={enviando || !archivo}
+                  className="min-h-11 rounded-xl border border-violet-300/30 bg-violet-500 px-3 py-2.5 text-xs font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-45 sm:px-4"
+                >
+                  {enviando ? "Enviando…" : "Enviar propuesta"}
+                </button>
               </div>
-              <textarea
-                id={`mensaje-propuesta-${ideaId}`}
-                value={mensaje}
-                onChange={(evento) => setMensaje(evento.target.value)}
-                maxLength={500}
-                rows={4}
-                disabled={enviando}
-                placeholder="Cuéntale al artista qué agregaste o cómo imaginas la colaboración."
-                className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
-              />
-            </div>
-
-            {avisoAudio && (
-              <p className="mt-3 rounded-lg border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-[10px] text-amber-200">
-                {avisoAudio}
-              </p>
-            )}
-
-            {error && (
-              <p className="mt-3 rounded-lg border border-red-400/20 bg-red-500/10 px-3 py-2 text-[10px] text-red-200">
-                {error}
-              </p>
-            )}
-
-            {enviando && (
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-[10px] font-semibold text-zinc-400">
-                  <span>Subiendo y convirtiendo el audio…</span>
-                  <span>{progreso}%</span>
-                </div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="h-full rounded-full bg-violet-400 transition-[width]"
-                    style={{ width: `${progreso}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="mt-5 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={cerrarModal}
-                disabled={enviando}
-                className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-bold text-zinc-300 transition hover:bg-white/5 disabled:opacity-40"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={enviando || !archivo}
-                className="rounded-xl border border-violet-300/30 bg-violet-500 px-4 py-2.5 text-xs font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-45"
-              >
-                {enviando ? "Enviando…" : "Enviar propuesta"}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+            </form>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
