@@ -54,36 +54,34 @@ export async function GET(request: Request, contexto: ContextoRuta) {
       id: conversacionId,
     },
     select: {
-      id: true,
-      propuesta: {
+      usuarioAId: true,
+      usuarioBId: true,
+      propuestas: {
+        where: {
+          estado: "ACEPTADA",
+        },
+        take: 1,
         select: {
-          estado: true,
-          remitenteId: true,
-          idea: {
-            select: {
-              usuarioId: true,
-            },
-          },
+          id: true,
         },
       },
     },
   });
 
-  if (!conversacion || conversacion.propuesta.estado !== "ACEPTADA") {
+  if (!conversacion || conversacion.propuestas.length === 0) {
     return respuestaError("La conversación no está disponible.", 404);
   }
 
   const participa =
-    conversacion.propuesta.remitenteId === sesion.usuarioId ||
-    conversacion.propuesta.idea.usuarioId === sesion.usuarioId;
+    conversacion.usuarioAId === sesion.usuarioId ||
+    conversacion.usuarioBId === sesion.usuarioId;
 
   if (!participa) {
     return respuestaError("No tienes permiso para abrir esta conversación.", 403);
   }
 
   const url = new URL(request.url);
-  const despuesDe =
-    convertirId(url.searchParams.get("despuesDe")) ?? 0;
+  const despuesDe = convertirId(url.searchParams.get("despuesDe")) ?? 0;
 
   const mensajes = await prisma.mensaje.findMany({
     where: {

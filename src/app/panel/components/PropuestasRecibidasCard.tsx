@@ -149,6 +149,25 @@ function etiquetaCantidad(cantidad: number) {
   return cantidad > 99 ? "99+" : String(cantidad);
 }
 
+function sumarMensajesConversacionesUnicas(
+  propuestas: Array<{ conversacionId: number | null }>,
+  porConversacion: Record<number, number>,
+) {
+  const ids = new Set<number>();
+
+  for (const propuesta of propuestas) {
+    if (propuesta.conversacionId) {
+      ids.add(propuesta.conversacionId);
+    }
+  }
+
+  return Array.from(ids).reduce(
+    (total, conversacionId) =>
+      total + (porConversacion[conversacionId] ?? 0),
+    0,
+  );
+}
+
 function IconoPropuestas() {
   return (
     <svg
@@ -231,20 +250,16 @@ export default function PropuestasRecibidasCard({
   );
 
   const mensajesNoLeidosRecibidos = useMemo(
-    () =>
-      propuestas.reduce((total, propuesta) => {
-        if (!propuesta.conversacionId) return total;
-        return total + (porConversacion[propuesta.conversacionId] ?? 0);
-      }, 0),
+    () => sumarMensajesConversacionesUnicas(propuestas, porConversacion),
     [propuestas, porConversacion],
   );
 
   const mensajesNoLeidosEnviados = useMemo(
     () =>
-      propuestasEnviadasIniciales.reduce((total, propuesta) => {
-        if (!propuesta.conversacionId) return total;
-        return total + (porConversacion[propuesta.conversacionId] ?? 0);
-      }, 0),
+      sumarMensajesConversacionesUnicas(
+        propuestasEnviadasIniciales,
+        porConversacion,
+      ),
     [propuestasEnviadasIniciales, porConversacion],
   );
 
@@ -343,9 +358,17 @@ export default function PropuestasRecibidasCard({
           </div>
         </div>
 
-        <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-black text-violet-200">
-          {cantidadActiva}
-        </span>
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/mensajes"
+            className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-[9px] font-black text-zinc-300 transition hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-violet-200"
+          >
+            Mensajes
+          </Link>
+          <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-black text-violet-200">
+            {cantidadActiva}
+          </span>
+        </div>
       </div>
 
       <div className="grid shrink-0 grid-cols-2 gap-1 border-b border-t border-white/10 bg-black/20 p-1.5">

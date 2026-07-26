@@ -50,33 +50,44 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
     },
     select: {
       id: true,
-      propuesta: {
+      usuarioAId: true,
+      usuarioBId: true,
+      usuarioA: {
         select: {
           id: true,
-          estado: true,
+          nombre: true,
+          nombreArtistico: true,
+          nombreUsuario: true,
+          fotoPerfil: true,
+        },
+      },
+      usuarioB: {
+        select: {
+          id: true,
+          nombre: true,
+          nombreArtistico: true,
+          nombreUsuario: true,
+          fotoPerfil: true,
+        },
+      },
+      propuestas: {
+        where: {
+          estado: "ACEPTADA",
+        },
+        orderBy: {
+          actualizadoEn: "desc",
+        },
+        select: {
+          id: true,
+          mensaje: true,
           audioUrl: true,
           duracionSegundos: true,
+          actualizadoEn: true,
           idea: {
             select: {
               titulo: true,
-              usuario: {
-                select: {
-                  id: true,
-                  nombre: true,
-                  nombreArtistico: true,
-                  nombreUsuario: true,
-                  fotoPerfil: true,
-                },
-              },
-            },
-          },
-          remitente: {
-            select: {
-              id: true,
-              nombre: true,
-              nombreArtistico: true,
-              nombreUsuario: true,
-              fotoPerfil: true,
+              bpm: true,
+              tonalidad: true,
             },
           },
         },
@@ -97,14 +108,13 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
     },
   });
 
-  if (!conversacion || conversacion.propuesta.estado !== "ACEPTADA") {
+  if (!conversacion || conversacion.propuestas.length === 0) {
     notFound();
   }
 
-  const propietario = conversacion.propuesta.idea.usuario;
-  const remitente = conversacion.propuesta.remitente;
   const participa =
-    propietario.id === sesion.usuarioId || remitente.id === sesion.usuarioId;
+    conversacion.usuarioAId === sesion.usuarioId ||
+    conversacion.usuarioBId === sesion.usuarioId;
 
   if (!participa) {
     notFound();
@@ -124,7 +134,9 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
   });
 
   const otroArtista =
-    propietario.id === sesion.usuarioId ? remitente : propietario;
+    conversacion.usuarioAId === sesion.usuarioId
+      ? conversacion.usuarioB
+      : conversacion.usuarioA;
 
   const mensajesIniciales = conversacion.mensajes
     .slice()
@@ -137,15 +149,26 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
       leidoEn: mensaje.leidoEn?.toISOString() ?? null,
     }));
 
+  const colaboraciones = conversacion.propuestas.map((propuesta) => ({
+    propuestaId: propuesta.id,
+    ideaTitulo: propuesta.idea.titulo,
+    bpm: propuesta.idea.bpm,
+    tonalidad: propuesta.idea.tonalidad,
+    mensaje: propuesta.mensaje,
+    audioUrl: propuesta.audioUrl,
+    duracionSegundos: propuesta.duracionSegundos,
+    aceptadaEn: propuesta.actualizadoEn.toISOString(),
+  }));
+
   return (
     <main className="min-h-[100dvh] bg-[#09070d] text-white">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <Link
-            href="/panel#panel-card-3"
+            href="/mensajes"
             className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-zinc-300 transition hover:bg-white/10 hover:text-white"
           >
-            ← Propuestas
+            ← Mensajes
           </Link>
 
           <Link href="/panel" className="text-lg font-black tracking-tight">
@@ -160,15 +183,12 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
 
       <ChatClient
         conversacionId={conversacion.id}
-        propuestaId={conversacion.propuesta.id}
         usuarioActualId={sesion.usuarioId}
-        ideaTitulo={conversacion.propuesta.idea.titulo}
-        audioUrl={conversacion.propuesta.audioUrl}
-        duracionSegundos={conversacion.propuesta.duracionSegundos}
         otroArtista={{
           ...otroArtista,
           nombreVisible: nombreArtista(otroArtista),
         }}
+        colaboraciones={colaboraciones}
         mensajesIniciales={mensajesIniciales}
       />
     </main>

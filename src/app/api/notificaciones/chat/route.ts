@@ -36,34 +36,32 @@ export async function GET() {
   }
 
   try {
-    const propuestas = await prisma.propuesta.findMany({
+    const chats = await prisma.conversacion.findMany({
       where: {
-        estado: "ACEPTADA",
         OR: [
           {
-            remitenteId: sesion.usuarioId,
+            usuarioAId: sesion.usuarioId,
           },
           {
-            idea: {
-              usuarioId: sesion.usuarioId,
-            },
+            usuarioBId: sesion.usuarioId,
           },
         ],
+        propuestas: {
+          some: {
+            estado: "ACEPTADA",
+          },
+        },
       },
       select: {
-        conversacion: {
+        id: true,
+        _count: {
           select: {
-            id: true,
-            _count: {
-              select: {
-                mensajes: {
-                  where: {
-                    remitenteId: {
-                      not: sesion.usuarioId,
-                    },
-                    leidoEn: null,
-                  },
+            mensajes: {
+              where: {
+                remitenteId: {
+                  not: sesion.usuarioId,
                 },
+                leidoEn: null,
               },
             },
           },
@@ -71,17 +69,16 @@ export async function GET() {
       },
     });
 
-    const conversaciones = propuestas.flatMap((propuesta) => {
-      const conversacion = propuesta.conversacion;
-      const cantidad = conversacion?._count.mensajes ?? 0;
+    const conversaciones = chats.flatMap((chat) => {
+      const cantidad = chat._count.mensajes;
 
-      if (!conversacion || cantidad <= 0) {
+      if (cantidad <= 0) {
         return [];
       }
 
       return [
         {
-          conversacionId: conversacion.id,
+          conversacionId: chat.id,
           cantidad,
         },
       ];

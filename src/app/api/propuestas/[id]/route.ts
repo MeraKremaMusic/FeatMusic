@@ -88,6 +88,12 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       id: true,
       estado: true,
       audioPublicId: true,
+      remitenteId: true,
+      idea: {
+        select: {
+          usuarioId: true,
+        },
+      },
     },
   });
 
@@ -119,21 +125,43 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           return null;
         }
 
+        const usuarioAId = Math.min(
+          propuesta.idea.usuarioId,
+          propuesta.remitenteId,
+        );
+        const usuarioBId = Math.max(
+          propuesta.idea.usuarioId,
+          propuesta.remitenteId,
+        );
+        const ahora = new Date();
+
         const conversacion = await tx.conversacion.upsert({
           where: {
-            propuestaId: propuesta.id,
+            usuarioAId_usuarioBId: {
+              usuarioAId,
+              usuarioBId,
+            },
           },
-          update: {},
+          update: {
+            ultimaActividadEn: ahora,
+          },
           create: {
-            propuestaId: propuesta.id,
+            usuarioAId,
+            usuarioBId,
+            ultimaActividadEn: ahora,
           },
           select: {
             id: true,
           },
         });
 
-        const actualizada = await tx.propuesta.findUniqueOrThrow({
-          where: { id: propuesta.id },
+        const actualizada = await tx.propuesta.update({
+          where: {
+            id: propuesta.id,
+          },
+          data: {
+            conversacionId: conversacion.id,
+          },
           select: {
             id: true,
             estado: true,
@@ -158,7 +186,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       return NextResponse.json({
         ok: true,
         mensaje:
-          "Propuesta aceptada. Se creó un chat privado para continuar la colaboración.",
+          "Propuesta aceptada. Ya puedes continuar la colaboración en el chat privado con este artista.",
         propuesta: {
           ...resultadoAceptacion.actualizada,
           conversacionId: resultadoAceptacion.conversacionId,

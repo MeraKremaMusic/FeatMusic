@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
-type IconoTipo = "planes" | "explorar" | "propuestas" | "perfil";
+type IconoTipo = "planes" | "explorar" | "mensajes" | "perfil";
 
 function Icono({
   tipo,
@@ -45,13 +45,12 @@ function Icono({
     );
   }
 
-  if (tipo === "propuestas") {
+  if (tipo === "mensajes") {
     return (
       <svg {...props}>
-        <circle cx="8" cy="8" r="3" />
-        <circle cx="16.5" cy="9.5" r="2.5" />
-        <path d="M2.5 20a5.5 5.5 0 0 1 11 0" />
-        <path d="M13.5 17a4.5 4.5 0 0 1 8 3" />
+        <path d="M4 5h16v11H8l-4 4V5Z" />
+        <path d="M8 9h8" />
+        <path d="M8 12h5" />
       </svg>
     );
   }
@@ -82,13 +81,14 @@ export default function NavegacionEscritorio({
 }: NavegacionEscritorioProps) {
   const pathname = usePathname();
   const { total: mensajesNoLeidos } = useNotificacionesChat();
-  const etiquetaMensajes = mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
+  const etiquetaMensajes =
+    mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
 
   const explorando =
     pathname === "/artistas" || pathname.startsWith("/artistas/");
-
   const viendoPerfil = pathname === "/panel";
-  const viendoMensajes = pathname.startsWith("/mensajes/");
+  const viendoMensajes =
+    pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
   return (
     <nav
@@ -118,21 +118,21 @@ export default function NavegacionEscritorio({
       </Link>
 
       <Link
-        href="/panel#panel-card-3"
+        href="/mensajes"
         aria-current={viendoMensajes ? "page" : undefined}
         className={`${claseBase} ${
           viendoMensajes ? claseActiva : claseInactiva
         }`}
       >
         <span className="relative flex">
-          <Icono tipo="propuestas" />
+          <Icono tipo="mensajes" />
           {mensajesNoLeidos > 0 && (
             <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#09070d] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
               {etiquetaMensajes}
             </span>
           )}
         </span>
-        Propuestas
+        Mensajes
       </Link>
 
       <Link

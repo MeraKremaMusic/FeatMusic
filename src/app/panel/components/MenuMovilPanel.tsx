@@ -8,7 +8,7 @@ import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 type IconoTipo =
   | "inicio"
   | "explorar"
-  | "propuestas"
+  | "mensajes"
   | "perfil"
   | "mas";
 
@@ -50,13 +50,12 @@ function Icono({
         </svg>
       );
 
-    case "propuestas":
+    case "mensajes":
       return (
         <svg {...props}>
-          <circle cx="8" cy="8" r="3" />
-          <circle cx="16.5" cy="9.5" r="2.5" />
-          <path d="M2.5 20a5.5 5.5 0 0 1 11 0" />
-          <path d="M13.5 17a4.5 4.5 0 0 1 8 3" />
+          <path d="M4 5h16v11H8l-4 4V5Z" />
+          <path d="M8 9h8" />
+          <path d="M8 12h5" />
         </svg>
       );
 
@@ -95,11 +94,14 @@ export default function MenuMovilPanel({
 }: MenuMovilPanelProps) {
   const pathname = usePathname();
   const { total: mensajesNoLeidos } = useNotificacionesChat();
-  const etiquetaMensajes = mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
+  const etiquetaMensajes =
+    mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
 
   const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
   const estaEnExplorar =
     pathname === "/artistas" || pathname.startsWith("/artistas/");
+  const estaEnMensajes =
+    pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
   return (
     <nav
@@ -141,27 +143,26 @@ export default function MenuMovilPanel({
         </Link>
 
         <Link
-          href="/panel#panel-card-3"
+          href="/mensajes"
           aria-label={
             mensajesNoLeidos > 0
-              ? `Ir a propuestas. ${mensajesNoLeidos} mensaje${
+              ? `Ir a mensajes. ${mensajesNoLeidos} mensaje${
                   mensajesNoLeidos === 1 ? "" : "s"
                 } sin leer`
-              : "Ir a propuestas"
+              : "Ir a mensajes"
           }
-          className={claseOpcion(false)}
+          aria-current={estaEnMensajes ? "page" : undefined}
+          className={claseOpcion(estaEnMensajes)}
         >
           <span className="relative flex">
-            <Icono tipo="propuestas" />
+            <Icono tipo="mensajes" />
             {mensajesNoLeidos > 0 && (
               <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#0b0810] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
                 {etiquetaMensajes}
               </span>
             )}
           </span>
-          <span className="truncate text-[9px] font-semibold">
-            Propuestas
-          </span>
+          <span className="truncate text-[9px] font-semibold">Mensajes</span>
         </Link>
 
         <Link

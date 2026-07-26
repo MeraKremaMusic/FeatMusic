@@ -11,34 +11,36 @@ datasource db {
 }
 
 model Usuario {
-  id                     Int         @id @default(autoincrement())
+  id                     Int            @id @default(autoincrement())
   nombre                 String?
-  nombreArtistico        String?     @map("nombre_artistico")
-  nombreUsuario          String?     @unique @map("nombre_usuario")
-  fotoPerfil             String?     @map("foto_perfil") @db.VarChar(500)
-  biografia              String?     @db.VarChar(300)
-  spotifyUrl             String?     @map("spotify_url") @db.VarChar(500)
-  youtubeUrl             String?     @map("youtube_url") @db.VarChar(500)
-  instagramUrl           String?     @map("instagram_url") @db.VarChar(500)
-  distribuidoraPreferida String?     @map("distribuidora_preferida") @db.VarChar(120)
-  softwarePreferido      String?     @map("software_preferido") @db.VarChar(120)
-  correo                 String      @unique
-  passwordHash           String      @map("password_hash")
+  nombreArtistico        String?        @map("nombre_artistico")
+  nombreUsuario          String?        @unique @map("nombre_usuario")
+  fotoPerfil             String?        @map("foto_perfil") @db.VarChar(500)
+  biografia              String?        @db.VarChar(300)
+  spotifyUrl             String?        @map("spotify_url") @db.VarChar(500)
+  youtubeUrl             String?        @map("youtube_url") @db.VarChar(500)
+  instagramUrl           String?        @map("instagram_url") @db.VarChar(500)
+  distribuidoraPreferida String?        @map("distribuidora_preferida") @db.VarChar(120)
+  softwarePreferido      String?        @map("software_preferido") @db.VarChar(120)
+  correo                 String         @unique
+  passwordHash           String         @map("password_hash")
   pais                   String?
-  departamento           String?     @db.VarChar(120)
+  departamento           String?        @db.VarChar(120)
   ciudad                 String?
-  idiomaPrincipal        String?     @map("idioma_principal")
-  rolPrincipal           String      @map("rol_principal")
+  idiomaPrincipal        String?        @map("idioma_principal")
+  rolPrincipal           String         @map("rol_principal")
   generos                Json?
-  tipoColaboracion       String?     @map("tipo_colaboracion")
-  correoVerificado       Boolean     @default(true) @map("correo_verificado")
-  perfilCompleto         Boolean     @default(false) @map("perfil_completo")
-  aceptoTerminosEn       DateTime?   @map("acepto_terminos_en")
-  creadoEn               DateTime    @default(now()) @map("creado_en")
-  actualizadoEn          DateTime    @updatedAt @map("actualizado_en")
+  tipoColaboracion       String?        @map("tipo_colaboracion")
+  correoVerificado       Boolean        @default(true) @map("correo_verificado")
+  perfilCompleto         Boolean        @default(false) @map("perfil_completo")
+  aceptoTerminosEn       DateTime?      @map("acepto_terminos_en")
+  creadoEn               DateTime       @default(now()) @map("creado_en")
+  actualizadoEn          DateTime       @updatedAt @map("actualizado_en")
   ideas                  Idea[]
-  propuestasEnviadas     Propuesta[] @relation("PropuestasEnviadas")
-  mensajesEnviados       Mensaje[]   @relation("MensajesEnviados")
+  propuestasEnviadas     Propuesta[]    @relation("PropuestasEnviadas")
+  mensajesEnviados       Mensaje[]      @relation("MensajesEnviados")
+  conversacionesComoA    Conversacion[] @relation("ConversacionUsuarioA")
+  conversacionesComoB    Conversacion[] @relation("ConversacionUsuarioB")
 
   @@map("usuarios")
 }
@@ -70,6 +72,7 @@ model Propuesta {
   id               Int           @id @default(autoincrement())
   ideaId           Int           @map("idea_id")
   remitenteId      Int           @map("remitente_id")
+  conversacionId   Int?          @map("conversacion_id")
   mensaje          String?       @db.VarChar(500)
   audioUrl         String?       @map("audio_url") @db.VarChar(1000)
   audioPublicId    String?       @map("audio_public_id") @db.VarChar(255)
@@ -81,23 +84,31 @@ model Propuesta {
   actualizadoEn    DateTime      @updatedAt @map("actualizado_en")
   idea             Idea          @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   remitente        Usuario       @relation("PropuestasEnviadas", fields: [remitenteId], references: [id], onDelete: Cascade)
-  conversacion     Conversacion?
+  conversacion     Conversacion? @relation(fields: [conversacionId], references: [id], onDelete: SetNull)
 
   @@unique([ideaId, remitenteId])
   @@index([ideaId, estado, creadoEn])
   @@index([remitenteId, estado, creadoEn])
+  @@index([conversacionId, estado, creadoEn])
   @@map("propuestas")
 }
 
 model Conversacion {
-  id              Int       @id @default(autoincrement())
-  propuestaId     Int       @unique @map("propuesta_id")
-  ultimoMensajeEn DateTime? @map("ultimo_mensaje_en")
-  creadoEn        DateTime  @default(now()) @map("creado_en")
-  actualizadoEn   DateTime  @updatedAt @map("actualizado_en")
-  propuesta       Propuesta @relation(fields: [propuestaId], references: [id], onDelete: Cascade)
-  mensajes        Mensaje[]
+  id                Int        @id @default(autoincrement())
+  usuarioAId        Int        @map("usuario_a_id")
+  usuarioBId        Int        @map("usuario_b_id")
+  ultimoMensajeEn   DateTime?  @map("ultimo_mensaje_en")
+  ultimaActividadEn DateTime   @default(now()) @map("ultima_actividad_en")
+  creadoEn          DateTime   @default(now()) @map("creado_en")
+  actualizadoEn     DateTime   @updatedAt @map("actualizado_en")
+  usuarioA          Usuario    @relation("ConversacionUsuarioA", fields: [usuarioAId], references: [id], onDelete: Cascade)
+  usuarioB          Usuario    @relation("ConversacionUsuarioB", fields: [usuarioBId], references: [id], onDelete: Cascade)
+  propuestas        Propuesta[]
+  mensajes          Mensaje[]
 
+  @@unique([usuarioAId, usuarioBId])
+  @@index([usuarioAId, ultimaActividadEn])
+  @@index([usuarioBId, ultimaActividadEn])
   @@index([ultimoMensajeEn])
   @@map("conversaciones")
 }

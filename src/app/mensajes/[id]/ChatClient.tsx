@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
+import { actualizarNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
 type MensajeChat = {
   id: number;
@@ -26,6 +27,17 @@ type OtroArtista = {
   nombreUsuario: string | null;
   fotoPerfil: string | null;
   nombreVisible: string;
+};
+
+type ColaboracionChat = {
+  propuestaId: number;
+  ideaTitulo: string;
+  bpm: number;
+  tonalidad: string;
+  mensaje: string | null;
+  audioUrl: string | null;
+  duracionSegundos: number;
+  aceptadaEn: string;
 };
 
 type RespuestaMensajes = {
@@ -50,6 +62,20 @@ function formatearHora(fecha: string) {
   return new Intl.DateTimeFormat("es-CO", {
     hour: "2-digit",
     minute: "2-digit",
+  }).format(valor);
+}
+
+function formatearFechaCorta(fecha: string) {
+  const valor = new Date(fecha);
+
+  if (Number.isNaN(valor.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat("es-CO", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   }).format(valor);
 }
 
@@ -81,23 +107,36 @@ function agregarSinDuplicados(
   return combinados.sort((a, b) => a.id - b.id);
 }
 
+function IconoColaboracion() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 18V5l10-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="16" cy="16" r="3" />
+    </svg>
+  );
+}
+
 export default function ChatClient({
   conversacionId,
-  propuestaId,
   usuarioActualId,
-  ideaTitulo,
-  audioUrl,
-  duracionSegundos,
   otroArtista,
+  colaboraciones,
   mensajesIniciales,
 }: {
   conversacionId: number;
-  propuestaId: number;
   usuarioActualId: number;
-  ideaTitulo: string;
-  audioUrl: string | null;
-  duracionSegundos: number;
   otroArtista: OtroArtista;
+  colaboraciones: ColaboracionChat[];
   mensajesIniciales: MensajeChat[];
 }) {
   const [mensajes, setMensajes] = useState(mensajesIniciales);
@@ -114,6 +153,10 @@ export default function ChatClient({
     ultimoMensajeIdRef.current = mensajes[mensajes.length - 1]?.id ?? 0;
     finalRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
+
+  useEffect(() => {
+    void actualizarNotificacionesChat();
+  }, []);
 
   useEffect(() => {
     let activo = true;
@@ -176,6 +219,7 @@ export default function ChatClient({
             agregarSinDuplicados(actuales, data.mensajes ?? []),
           );
           setError("");
+          void actualizarNotificacionesChat();
         }
       } catch (errorConsulta) {
         if (
@@ -268,73 +312,118 @@ export default function ChatClient({
   }
 
   return (
-    <div className="mx-auto grid min-h-[calc(100dvh-56px)] max-w-6xl gap-4 px-3 py-4 lg:grid-cols-[320px_minmax(0,1fr)] lg:px-4">
-      <aside className="h-fit rounded-2xl border border-white/10 bg-black/35 p-4 shadow-xl shadow-black/20 backdrop-blur-sm lg:sticky lg:top-[72px]">
-        <div className="flex items-center gap-3">
-          {otroArtista.fotoPerfil ? (
-            <img
-              src={otroArtista.fotoPerfil}
-              alt={`Foto de ${otroArtista.nombreVisible}`}
-              className="h-12 w-12 rounded-full object-cover"
-            />
-          ) : (
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-xs font-black text-violet-200">
-              {iniciales(otroArtista.nombreVisible)}
-            </span>
-          )}
+    <div className="mx-auto grid min-h-[calc(100dvh-56px)] max-w-6xl gap-4 px-3 py-4 lg:grid-cols-[340px_minmax(0,1fr)] lg:px-4">
+      <aside className="h-fit overflow-hidden rounded-2xl border border-white/10 bg-black/35 shadow-xl shadow-black/20 backdrop-blur-sm lg:sticky lg:top-[72px]">
+        <div className="p-4">
+          <div className="flex items-center gap-3">
+            {otroArtista.fotoPerfil ? (
+              <img
+                src={otroArtista.fotoPerfil}
+                alt={`Foto de ${otroArtista.nombreVisible}`}
+                className="h-12 w-12 rounded-full object-cover"
+              />
+            ) : (
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-xs font-black text-violet-200">
+                {iniciales(otroArtista.nombreVisible)}
+              </span>
+            )}
 
-          <div className="min-w-0">
-            <p className="truncate text-sm font-black text-white">
-              {otroArtista.nombreVisible}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-black text-white">
+                {otroArtista.nombreVisible}
+              </p>
+              <p className="mt-1 text-[10px] font-semibold text-emerald-300">
+                {colaboraciones.length} colaboración
+                {colaboraciones.length === 1 ? "" : "es"} activa
+                {colaboraciones.length === 1 ? "" : "s"}
+              </p>
+            </div>
+          </div>
+
+          {otroArtista.nombreUsuario && (
+            <Link
+              href={`/artistas/${encodeURIComponent(otroArtista.nombreUsuario)}`}
+              className="mt-3 block text-[10px] font-bold text-violet-300 transition hover:text-violet-200"
+            >
+              Ver perfil del artista →
+            </Link>
+          )}
+        </div>
+
+        <div className="border-t border-white/10 px-3 pb-3 pt-2">
+          <div className="mb-2 flex items-center gap-2 px-1">
+            <span className="text-violet-300">
+              <IconoColaboracion />
+            </span>
+            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-zinc-500">
+              Colaboraciones
             </p>
-            <p className="mt-1 text-[10px] font-semibold text-emerald-300">
-              Propuesta aceptada
-            </p>
+          </div>
+
+          <div className="max-h-[52dvh] space-y-2 overflow-y-auto pr-0.5 [scrollbar-width:thin]">
+            {colaboraciones.map((colaboracion, indice) => (
+              <details
+                key={colaboracion.propuestaId}
+                open={indice === 0}
+                className="group overflow-hidden rounded-xl border border-white/10 bg-white/[0.025]"
+              >
+                <summary className="cursor-pointer list-none px-3 py-2.5 [&::-webkit-details-marker]:hidden">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-[11px] font-black text-zinc-100">
+                        {colaboracion.ideaTitulo}
+                      </p>
+                      <p className="mt-0.5 truncate text-[8px] font-semibold text-zinc-600">
+                        {colaboracion.bpm} BPM · {colaboracion.tonalidad} ·{" "}
+                        {formatearFechaCorta(colaboracion.aceptadaEn)}
+                      </p>
+                    </div>
+                    <span className="shrink-0 text-[10px] text-zinc-600 transition group-open:rotate-180">
+                      ▾
+                    </span>
+                  </div>
+                </summary>
+
+                <div className="border-t border-white/[0.07] p-2.5">
+                  {colaboracion.audioUrl ? (
+                    <>
+                      <ReproductorAudio
+                        id={`chat-propuesta-${colaboracion.propuestaId}`}
+                        src={colaboracion.audioUrl}
+                        titulo="Audio aceptado"
+                        bpm={colaboracion.bpm}
+                        tonalidad={colaboracion.tonalidad}
+                        duracionSegundos={colaboracion.duracionSegundos}
+                        numero={indice + 1}
+                        className="!border-white/[0.07] !bg-black/20 !p-2"
+                      />
+                      <a
+                        href={`/api/propuestas/${colaboracion.propuestaId}/descargar`}
+                        className="mt-2 flex items-center justify-center rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-2 text-[9px] font-black text-sky-200 transition hover:bg-sky-500/20"
+                      >
+                        Descargar MP3
+                      </a>
+                    </>
+                  ) : (
+                    <p className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[9px] text-zinc-500">
+                      El audio aceptado no está disponible.
+                    </p>
+                  )}
+
+                  {colaboracion.mensaje && (
+                    <p className="mt-2 whitespace-pre-wrap rounded-lg border border-white/[0.07] bg-black/20 px-2.5 py-2 text-[9px] leading-4 text-zinc-500">
+                      {colaboracion.mensaje}
+                    </p>
+                  )}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
 
-        {otroArtista.nombreUsuario && (
-          <Link
-            href={`/artistas/${encodeURIComponent(otroArtista.nombreUsuario)}`}
-            className="mt-3 block text-[10px] font-bold text-violet-300 transition hover:text-violet-200"
-          >
-            Ver perfil del artista →
-          </Link>
-        )}
-
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <p className="text-[8px] font-black uppercase tracking-[0.16em] text-zinc-600">
-            Idea musical
-          </p>
-          <p className="mt-1 text-xs font-black text-zinc-100">{ideaTitulo}</p>
-        </div>
-
-        {audioUrl ? (
-          <>
-            <ReproductorAudio
-              id={`chat-propuesta-${propuestaId}`}
-              src={audioUrl}
-              titulo="Audio de la propuesta aceptada"
-              duracionSegundos={duracionSegundos}
-              numero={1}
-              className="mt-3"
-            />
-            <a
-              href={`/api/propuestas/${propuestaId}/descargar`}
-              className="mt-3 flex items-center justify-center rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-2 text-[10px] font-black text-sky-200 transition hover:bg-sky-500/20"
-            >
-              Descargar MP3
-            </a>
-          </>
-        ) : (
-          <p className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[10px] text-zinc-500">
-            El audio aceptado no está disponible.
-          </p>
-        )}
-
-        <p className="mt-4 text-[9px] leading-4 text-zinc-600">
-          Este chat es privado y solo puede ser abierto por los dos artistas de
-          la colaboración.
+        <p className="border-t border-white/10 px-4 py-3 text-[9px] leading-4 text-zinc-600">
+          Este chat es único para ustedes dos. Las nuevas propuestas aceptadas
+          entre ambos aparecerán en la lista de colaboraciones.
         </p>
       </aside>
 
@@ -344,7 +433,7 @@ export default function ChatClient({
             Conversación con {otroArtista.nombreVisible}
           </p>
           <p className="mt-1 text-[9px] font-medium text-zinc-600">
-            Los mensajes se sincronizan automáticamente cada pocos segundos.
+            Un solo chat para todas las colaboraciones entre ustedes.
           </p>
         </div>
 
@@ -356,8 +445,8 @@ export default function ChatClient({
                   Ya pueden comenzar a conversar
                 </p>
                 <p className="mt-2 text-[10px] leading-4 text-zinc-600">
-                  Hablen sobre la idea, acuerden cómo trabajarán y compartan los
-                  siguientes pasos de la colaboración.
+                  Hablen sobre las ideas aceptadas, acuerden cómo trabajarán y
+                  compartan los siguientes pasos.
                 </p>
               </div>
             </div>
