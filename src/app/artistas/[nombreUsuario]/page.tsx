@@ -245,6 +245,8 @@ export default async function PerfilPublicoPage({
       spotifyUrl: true,
       youtubeUrl: true,
       instagramUrl: true,
+      distribuidoraPreferida: true,
+      softwarePreferido: true,
       creadoEn: true,
       ideas: {
         where: {
@@ -292,6 +294,23 @@ export default async function PerfilPublicoPage({
   ].filter(
     (red): red is { nombre: string; url: string } =>
       typeof red.url === "string" && red.url.length > 0,
+  );
+  const preferenciasMusicales = [
+    {
+      etiqueta: "Distribuidora preferida",
+      valor: artista.distribuidoraPreferida?.trim(),
+    },
+    {
+      etiqueta: "Software preferido",
+      valor: artista.softwarePreferido?.trim(),
+    },
+  ].filter(
+    (
+      preferencia,
+    ): preferencia is {
+      etiqueta: string;
+      valor: string;
+    } => Boolean(preferencia.valor),
   );
 
   return (
@@ -362,17 +381,34 @@ export default async function PerfilPublicoPage({
             </div>
 
             <div className="flex items-start gap-3.5 lg:flex-col lg:items-center lg:text-center">
-              {artista.fotoPerfil ? (
-                <img
-                  src={artista.fotoPerfil}
-                  alt={`Foto de ${nombreArtistico}`}
-                  className="h-20 w-20 shrink-0 rounded-2xl border border-white/10 object-cover sm:h-24 sm:w-24 lg:h-28 lg:w-28"
-                />
-              ) : (
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-500/10 text-2xl font-black text-violet-200 sm:h-24 sm:w-24 sm:text-3xl lg:h-28 lg:w-28">
-                  {iniciales(nombreArtistico)}
-                </div>
-              )}
+              <div className="flex w-20 shrink-0 flex-col gap-1.5 sm:w-24 lg:w-28">
+                {artista.fotoPerfil ? (
+                  <img
+                    src={artista.fotoPerfil}
+                    alt={`Foto de ${nombreArtistico}`}
+                    className="h-20 w-full rounded-2xl border border-white/10 object-cover sm:h-24 lg:h-28"
+                  />
+                ) : (
+                  <div className="flex h-20 w-full items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-500/10 text-2xl font-black text-violet-200 sm:h-24 sm:text-3xl lg:h-28">
+                    {iniciales(nombreArtistico)}
+                  </div>
+                )}
+
+                {preferenciasMusicales.length > 0 && (
+                  <div className="grid gap-1.5 lg:hidden">
+                    {preferenciasMusicales.map((preferencia) => (
+                      <span
+                        key={preferencia.etiqueta}
+                        title={`${preferencia.etiqueta}: ${preferencia.valor}`}
+                        aria-label={`${preferencia.etiqueta}: ${preferencia.valor}`}
+                        className="flex min-h-7 w-full items-center justify-center rounded-lg border border-violet-400/20 bg-violet-500/[0.08] px-1.5 py-1 text-center text-[8px] font-bold leading-tight text-violet-200"
+                      >
+                        {preferencia.valor}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <div className="min-w-0 flex-1 pr-12 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
                 <h1 className="break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4">
@@ -410,12 +446,12 @@ export default async function PerfilPublicoPage({
 
           </aside>
 
-          <section className="min-w-0 rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm lg:p-5">
-            <div className="flex items-center justify-between gap-4">
-              <h2 className="text-base font-black text-white sm:text-lg">
+          <section className="min-w-0 p-0 lg:rounded-2xl lg:border lg:border-white/10 lg:bg-black/35 lg:p-5 lg:backdrop-blur-sm">
+            <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
+              <h2 className="text-sm font-black text-white sm:text-base lg:text-lg">
                 Ideas activas
               </h2>
-              <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-xs font-bold text-violet-200">
+              <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-0.5 text-[10px] font-bold text-violet-200 sm:px-3 sm:py-1 sm:text-xs">
                 {artista.ideas.length}
               </span>
             </div>
@@ -427,40 +463,49 @@ export default async function PerfilPublicoPage({
                 </p>
               </div>
             ) : (
-              <div className="mt-5 grid gap-3">
+              <div className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
                 {artista.ideas.map((idea, indice) => (
                   <article
                     key={idea.id}
-                    className="rounded-xl border border-white/10 bg-white/[0.025] p-4"
+                    className="overflow-hidden rounded-xl border border-white/10 bg-black/25 transition hover:border-violet-400/20"
                   >
-                    <p className="mb-3 whitespace-pre-wrap text-xs leading-5 text-zinc-400">
-                      {idea.descripcion}
-                    </p>
+                    <div className="p-2.5 sm:p-3">
+                      <ReproductorAudio
+                        id={`perfil-${idea.id}`}
+                        src={idea.audioUrl}
+                        titulo={idea.titulo}
+                        bpm={idea.bpm}
+                        tonalidad={idea.tonalidad}
+                        duracionSegundos={idea.duracionSegundos}
+                        numero={indice + 1}
+                        className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-1.5"
+                      />
 
-                    <ReproductorAudio
-                      id={`perfil-${idea.id}`}
-                      src={idea.audioUrl}
-                      titulo={idea.titulo}
-                      bpm={idea.bpm}
-                      tonalidad={idea.tonalidad}
-                      duracionSegundos={idea.duracionSegundos}
-                      numero={indice + 1}
-                    />
+                      <div className="mt-2 border-t border-white/[0.07] pt-2">
+                        <p className="whitespace-pre-wrap text-[10px] leading-4 text-zinc-400 sm:text-[11px] sm:leading-[1.15rem]">
+                          {idea.descripcion}
+                        </p>
+                      </div>
+                    </div>
 
-                    <EnviarPropuesta
-                      ideaId={idea.id}
-                      sesionActiva={Boolean(sesion)}
-                      esPropietario={sesion?.usuarioId === artista.id}
-                      propuestasActuales={idea.propuestas.length}
-                      estadoPropuestaUsuario={
-                        sesion
-                          ? idea.propuestas.find(
-                              (propuesta) =>
-                                propuesta.remitenteId === sesion.usuarioId,
-                            )?.estado ?? null
-                          : null
-                      }
-                    />
+                    <div className="border-t border-white/[0.07] bg-white/[0.018] px-2.5 py-1.5 sm:px-3">
+                      <div className="[&>div]:mt-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent [&>div]:px-0 [&>div]:py-0">
+                        <EnviarPropuesta
+                          ideaId={idea.id}
+                          sesionActiva={Boolean(sesion)}
+                          esPropietario={sesion?.usuarioId === artista.id}
+                          propuestasActuales={idea.propuestas.length}
+                          estadoPropuestaUsuario={
+                            sesion
+                              ? idea.propuestas.find(
+                                  (propuesta) =>
+                                    propuesta.remitenteId === sesion.usuarioId,
+                                )?.estado ?? null
+                              : null
+                          }
+                        />
+                      </div>
+                    </div>
                   </article>
                 ))}
               </div>
