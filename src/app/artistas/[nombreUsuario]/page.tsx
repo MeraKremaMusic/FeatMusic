@@ -10,6 +10,75 @@ import EnviarPropuesta from "./components/EnviarPropuesta";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const CODIGOS_ISO_PAIS = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(" ");
+
+function normalizarNombrePais(valor: string) {
+  return valor
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLocaleLowerCase("es");
+}
+
+function crearMapaCodigosPais() {
+  const mapa = new Map<string, string>();
+  const idiomas = ["es", "en", "pt"] as const;
+
+  for (const idioma of idiomas) {
+    const nombresPaises = new Intl.DisplayNames([idioma], { type: "region" });
+
+    for (const codigo of CODIGOS_ISO_PAIS) {
+      const nombre = nombresPaises.of(codigo);
+
+      if (nombre && nombre !== codigo) {
+        mapa.set(normalizarNombrePais(nombre), codigo);
+      }
+    }
+  }
+
+  const alias: Record<string, string> = {
+    "ee uu": "US",
+    "e e u u": "US",
+    usa: "US",
+    "estados unidos de america": "US",
+    "gran bretana": "GB",
+    inglaterra: "GB",
+    "republica checa": "CZ",
+    "corea del sur": "KR",
+    "corea del norte": "KP",
+    rusia: "RU",
+    bolivia: "BO",
+    venezuela: "VE",
+    moldavia: "MD",
+    palestina: "PS",
+    "costa de marfil": "CI",
+    "cabo verde": "CV",
+    "republica democratica del congo": "CD",
+    "republica del congo": "CG",
+    taiwan: "TW",
+  };
+
+  for (const [nombre, codigo] of Object.entries(alias)) {
+    mapa.set(normalizarNombrePais(nombre), codigo);
+  }
+
+  return mapa;
+}
+
+const CODIGOS_PAIS_POR_NOMBRE = crearMapaCodigosPais();
+
+function resolverCodigoPais(nombrePais: string) {
+  const paisLimpio = nombrePais.trim();
+
+  if (/^[a-z]{2}$/i.test(paisLimpio)) {
+    return paisLimpio.toUpperCase();
+  }
+
+  return (
+    CODIGOS_PAIS_POR_NOMBRE.get(normalizarNombrePais(paisLimpio)) ?? ""
+  );
+}
+
 type PerfilPublicoPageProps = {
   params: Promise<{
     nombreUsuario: string;
@@ -73,7 +142,39 @@ function IconoUbicacion({ className = "h-3.5 w-3.5" }: { className?: string }) {
   );
 }
 
-function IconoEnlace({ className = "h-3.5 w-3.5" }: { className?: string }) {
+function IconoRedSocial({
+  nombre,
+  className = "h-4 w-4",
+}: {
+  nombre: string;
+  className?: string;
+}) {
+  if (nombre === "Spotify") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className={className}
+        fill="currentColor"
+      >
+        <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm4.58 14.43a.62.62 0 0 1-.85.2c-2.33-1.43-5.27-1.75-8.73-.96a.62.62 0 1 1-.28-1.2c3.79-.87 7.05-.5 9.66 1.1a.62.62 0 0 1 .2.86Zm1.21-2.69a.78.78 0 0 1-1.07.26c-2.67-1.64-6.75-2.11-9.91-1.16a.78.78 0 1 1-.45-1.49c3.62-1.09 8.12-.56 11.17 1.31a.78.78 0 0 1 .26 1.08Zm.1-2.8C14.68 9.03 9.39 8.85 6.33 9.78a.94.94 0 1 1-.54-1.8c3.51-1.06 9.36-.85 13.06 1.35a.94.94 0 0 1-.96 1.61Z" />
+      </svg>
+    );
+  }
+
+  if (nombre === "YouTube") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className={className}
+        fill="currentColor"
+      >
+        <path d="M23.5 6.19a3.02 3.02 0 0 0-2.13-2.14C19.5 3.54 12 3.54 12 3.54s-7.5 0-9.37.51A3.02 3.02 0 0 0 .5 6.19 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.13 2.14c1.87.51 9.37.51 9.37.51s7.5 0 9.37-.51a3.02 3.02 0 0 0 2.13-2.14A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.81ZM9.6 15.6V8.4L15.84 12 9.6 15.6Z" />
+      </svg>
+    );
+  }
+
   return (
     <svg
       aria-hidden="true"
@@ -81,13 +182,13 @@ function IconoEnlace({ className = "h-3.5 w-3.5" }: { className?: string }) {
       className={className}
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.8}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M15 3h6v6" />
-      <path d="m10 14 11-11" />
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -183,6 +284,7 @@ export default async function PerfilPublicoPage({
   const ubicacion =
     [artista.ciudad, artista.pais].filter(Boolean).join(", ") ||
     "Ubicación sin completar";
+  const codigoPais = resolverCodigoPais(artista.pais ?? "");
   const redes = [
     { nombre: "Spotify", url: artista.spotifyUrl },
     { nombre: "YouTube", url: artista.youtubeUrl },
@@ -226,89 +328,93 @@ export default async function PerfilPublicoPage({
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1180px] px-4 py-5 md:py-8">
-        <div className="grid gap-4 lg:grid-cols-[310px_minmax(0,1fr)]">
-          <aside className="rounded-2xl border border-white/10 bg-black/35 p-5 backdrop-blur-sm">
-            <div className="flex flex-col items-center text-center">
+      <div className="mx-auto max-w-[1180px] px-3 py-3 sm:px-4 sm:py-5 md:py-8">
+        <div className="grid gap-3 sm:gap-4 lg:grid-cols-[310px_minmax(0,1fr)]">
+          <aside className="relative rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm sm:p-5">
+            <div className="absolute right-3 top-3 flex flex-col items-center gap-2 sm:right-4 sm:top-4">
+              {codigoPais && (
+                <img
+                  src={`https://flagcdn.com/w40/${codigoPais.toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w80/${codigoPais.toLowerCase()}.png 2x`}
+                  width={28}
+                  height={20}
+                  alt={`Bandera de ${artista.pais ?? ""}`}
+                  title={artista.pais ?? ""}
+                  className="h-5 w-7 object-contain"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
+              )}
+
+              {redes.map((red) => (
+                <a
+                  key={red.nombre}
+                  href={red.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Abrir ${red.nombre}`}
+                  title={red.nombre}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.025] text-zinc-300 transition hover:border-violet-400/30 hover:bg-violet-500/10 hover:text-violet-200"
+                >
+                  <IconoRedSocial nombre={red.nombre} className="h-3.5 w-3.5" />
+                </a>
+              ))}
+            </div>
+
+            <div className="flex items-start gap-3.5 lg:flex-col lg:items-center lg:text-center">
               {artista.fotoPerfil ? (
                 <img
                   src={artista.fotoPerfil}
                   alt={`Foto de ${nombreArtistico}`}
-                  className="h-28 w-28 rounded-full border border-white/10 object-cover"
+                  className="h-20 w-20 shrink-0 rounded-2xl border border-white/10 object-cover sm:h-24 sm:w-24 lg:h-28 lg:w-28"
                 />
               ) : (
-                <div className="flex h-28 w-28 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-3xl font-black text-violet-200">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-500/10 text-2xl font-black text-violet-200 sm:h-24 sm:w-24 sm:text-3xl lg:h-28 lg:w-28">
                   {iniciales(nombreArtistico)}
                 </div>
               )}
 
-              <h1 className="mt-4 break-words text-2xl font-black">
-                {nombreArtistico}
-              </h1>
-              <p className="mt-1 break-all text-xs font-semibold text-violet-300">
-                @{usuarioVisible}
-              </p>
+              <div className="min-w-0 flex-1 pr-12 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
+                <h1 className="break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4">
+                  {nombreArtistico}
+                </h1>
+                <p className="mt-1 break-all text-[11px] font-semibold text-violet-300 sm:text-xs">
+                  @{usuarioVisible}
+                </p>
 
-              <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-zinc-400">
-                <IconoUbicacion />
-                {ubicacion}
-              </p>
-            </div>
+                <p className="mt-2 flex items-center gap-1.5 text-[11px] text-zinc-400 lg:justify-center">
+                  <IconoUbicacion className="h-3 w-3 shrink-0" />
+                  <span className="min-w-0 truncate">{ubicacion}</span>
+                </p>
 
-            <div className="mt-4 flex flex-wrap justify-center gap-1.5">
-              <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-semibold text-violet-200">
-                {formatearRol(artista.rolPrincipal)}
-              </span>
-              {generos.map((genero) => (
-                <span
-                  key={genero}
-                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-zinc-300"
-                >
-                  {genero}
-                </span>
-              ))}
-            </div>
+                <div className="mt-2.5 flex flex-wrap gap-1.5 lg:justify-center">
+                  <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[9px] font-semibold text-violet-200 sm:text-[10px]">
+                    {formatearRol(artista.rolPrincipal)}
+                  </span>
+                  {generos.map((genero) => (
+                    <span
+                      key={genero}
+                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[9px] text-zinc-300 sm:text-[10px]"
+                    >
+                      {genero}
+                    </span>
+                  ))}
+                </div>
 
-            <p className="mt-5 whitespace-pre-wrap text-center text-xs leading-5 text-zinc-400">
-              {artista.biografia?.trim() ||
-                "Este artista todavía no ha agregado una biografía."}
-            </p>
-
-            {redes.length > 0 && (
-              <div className="mt-5 grid gap-2">
-                {redes.map((red) => (
-                  <a
-                    key={red.nombre}
-                    href={red.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5 text-xs font-semibold text-zinc-300 transition hover:border-violet-400/25 hover:text-violet-200"
-                  >
-                    {red.nombre}
-                    <IconoEnlace />
-                  </a>
-                ))}
+                <p className="mt-2.5 whitespace-pre-wrap text-[11px] leading-[1.45] text-zinc-400 sm:text-xs sm:leading-5 lg:text-center">
+                  {artista.biografia?.trim() ||
+                    "Este artista todavía no ha agregado una biografía."}
+                </p>
               </div>
-            )}
+            </div>
 
-            <Link
-              href="/artistas"
-              className="mt-5 inline-flex w-full items-center justify-center rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-300/50 hover:bg-violet-500/20"
-            >
-              Volver a explorar
-            </Link>
           </aside>
 
           <section className="min-w-0 rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm lg:p-5">
             <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold text-violet-300">
-                  Ideas activas
-                </p>
-                <h2 className="mt-1 text-xl font-black">
-                  Publicaciones de {nombreArtistico}
-                </h2>
-              </div>
+              <h2 className="text-base font-black text-white sm:text-lg">
+                Ideas activas
+              </h2>
               <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-xs font-bold text-violet-200">
                 {artista.ideas.length}
               </span>
