@@ -355,6 +355,46 @@ export default async function PanelPage() {
     creadoEn: propuesta.creadoEn.toISOString(),
   }));
 
+  const propuestasEnviadasGuardadas = await prisma.propuesta.findMany({
+    where: {
+      remitenteId: sesion.usuarioId,
+    },
+    orderBy: {
+      creadoEn: "desc",
+    },
+    take: 30,
+    select: {
+      id: true,
+      mensaje: true,
+      audioUrl: true,
+      duracionSegundos: true,
+      estado: true,
+      creadoEn: true,
+      idea: {
+        select: {
+          id: true,
+          titulo: true,
+          usuario: {
+            select: {
+              id: true,
+              nombre: true,
+              nombreArtistico: true,
+              nombreUsuario: true,
+              fotoPerfil: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const propuestasEnviadasIniciales = propuestasEnviadasGuardadas.map(
+    (propuesta) => ({
+      ...propuesta,
+      creadoEn: propuesta.creadoEn.toISOString(),
+    }),
+  );
+
   return (
     <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
@@ -434,6 +474,7 @@ export default async function PanelPage() {
           >
             <PropuestasRecibidasCard
               propuestasIniciales={propuestasIniciales}
+            propuestasEnviadasIniciales={propuestasEnviadasIniciales}
             />
           </section>
         </div>
