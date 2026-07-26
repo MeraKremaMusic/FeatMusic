@@ -23,6 +23,7 @@ type PropuestaBase = {
   duracionSegundos: number;
   estado: EstadoPropuesta | string;
   creadoEn: string;
+  conversacionId: number | null;
 };
 
 export type PropuestaPanel = PropuestaBase & {
@@ -48,6 +49,7 @@ type RespuestaActualizacion = {
     id: number;
     estado: string;
     audioUrl: string | null;
+    conversacionId: number | null;
   };
 };
 
@@ -273,6 +275,8 @@ export default function PropuestasRecibidasCard({
                   estado === "RECHAZADA"
                     ? null
                     : data.propuesta?.audioUrl ?? propuesta.audioUrl,
+                conversacionId:
+                  data.propuesta?.conversacionId ?? propuesta.conversacionId,
               }
             : propuesta,
         ),
@@ -455,14 +459,29 @@ export default function PropuestasRecibidasCard({
                         {procesando ? "Procesando…" : "Aceptar"}
                       </button>
                     </div>
-                  ) : propuesta.estado === "ACEPTADA" && propuesta.audioUrl ? (
-                    <div className="mt-3 flex justify-end">
-                      <a
-                        href={`/api/propuestas/${propuesta.id}/descargar`}
-                        className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20"
-                      >
-                        Descargar MP3
-                      </a>
+                  ) : propuesta.estado === "ACEPTADA" ? (
+                    <div className="mt-3 flex flex-wrap justify-end gap-2">
+                      {propuesta.audioUrl && (
+                        <a
+                          href={`/api/propuestas/${propuesta.id}/descargar`}
+                          className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20"
+                        >
+                          Descargar MP3
+                        </a>
+                      )}
+
+                      {propuesta.conversacionId ? (
+                        <Link
+                          href={`/mensajes/${propuesta.conversacionId}`}
+                          className="rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
+                        >
+                          Abrir chat
+                        </Link>
+                      ) : (
+                        <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-semibold text-zinc-500">
+                          Preparando chat…
+                        </span>
+                      )}
                     </div>
                   ) : null}
                 </article>
@@ -557,6 +576,32 @@ export default function PropuestasRecibidasCard({
                 >
                   {textoEstadoEnviado(propuesta.estado)}
                 </p>
+
+                {propuesta.estado === "ACEPTADA" && (
+                  <div className="mt-3 flex flex-wrap justify-end gap-2">
+                    {propuesta.audioUrl && (
+                      <a
+                        href={`/api/propuestas/${propuesta.id}/descargar`}
+                        className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20"
+                      >
+                        Descargar MP3
+                      </a>
+                    )}
+
+                    {propuesta.conversacionId ? (
+                      <Link
+                        href={`/mensajes/${propuesta.conversacionId}`}
+                        className="rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
+                      >
+                        Abrir chat
+                      </Link>
+                    ) : (
+                      <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-semibold text-zinc-500">
+                        Preparando chat…
+                      </span>
+                    )}
+                  </div>
+                )}
               </article>
             );
           })}

@@ -104,39 +104,66 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
 
   try {
     if (resultado.data.estado === "ACEPTADA") {
-      const resultadoActualizacion = await prisma.propuesta.updateMany({
-        where: {
-          id: propuesta.id,
-          estado: "PENDIENTE",
-        },
-        data: {
-          estado: "ACEPTADA",
-        },
+      const resultadoAceptacion = await prisma.$transaction(async (tx) => {
+        const actualizacion = await tx.propuesta.updateMany({
+          where: {
+            id: propuesta.id,
+            estado: "PENDIENTE",
+          },
+          data: {
+            estado: "ACEPTADA",
+          },
+        });
+
+        if (actualizacion.count === 0) {
+          return null;
+        }
+
+        const conversacion = await tx.conversacion.upsert({
+          where: {
+            propuestaId: propuesta.id,
+          },
+          update: {},
+          create: {
+            propuestaId: propuesta.id,
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        const actualizada = await tx.propuesta.findUniqueOrThrow({
+          where: { id: propuesta.id },
+          select: {
+            id: true,
+            estado: true,
+            audioUrl: true,
+            actualizadoEn: true,
+          },
+        });
+
+        return {
+          actualizada,
+          conversacionId: conversacion.id,
+        };
       });
 
-      if (resultadoActualizacion.count === 0) {
+      if (!resultadoAceptacion) {
         return respuestaError(
           "La propuesta ya fue respondida desde otra sesión. Actualiza la página.",
           409,
         );
       }
 
-      const actualizada = await prisma.propuesta.findUniqueOrThrow({
-        where: { id: propuesta.id },
-        select: {
-          id: true,
-          estado: true,
-          audioUrl: true,
-          actualizadoEn: true,
-        },
-      });
-
       return NextResponse.json({
         ok: true,
-        mensaje: "Propuesta aceptada. El audio se conservará para la colaboración.",
+        mensaje:
+          "Propuesta aceptada. Se creó un chat privado para continuar la colaboración.",
         propuesta: {
-          ...actualizada,
-          actualizadoEn: actualizada.actualizadoEn.toISOString(),
+          ...resultadoAceptacion.actualizada,
+          conversacionId: resultadoAceptacion.conversacionId,
+          actualizadoEn:
+            resultadoAceptacion.actualizada.actualizadoEn.toISOString(),
         },
       });
     }
@@ -216,6 +243,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
             : "La idea terminó mientras se procesaba la propuesta. El archivo MP3 fue eliminado.",
         propuesta: {
           ...actualizada,
+          conversacionId: null,
           actualizadoEn: actualizada.actualizadoEn.toISOString(),
         },
       });

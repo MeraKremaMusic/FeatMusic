@@ -61,9 +61,16 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
     where: {
       id: propuestaId,
       estado: "ACEPTADA",
-      idea: {
-        usuarioId: sesion.usuarioId,
-      },
+      OR: [
+        {
+          idea: {
+            usuarioId: sesion.usuarioId,
+          },
+        },
+        {
+          remitenteId: sesion.usuarioId,
+        },
+      ],
     },
     select: {
       audioUrl: true,
@@ -85,7 +92,7 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
 
   if (!propuesta) {
     return respuestaError(
-      "Acepta la propuesta antes de descargar su audio.",
+      "No se encontró un audio aceptado disponible para tu cuenta.",
       404,
     );
   }

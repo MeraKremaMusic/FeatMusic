@@ -330,6 +330,11 @@ export default async function PanelPage() {
       duracionSegundos: true,
       estado: true,
       creadoEn: true,
+      conversacion: {
+        select: {
+          id: true,
+        },
+      },
       idea: {
         select: {
           id: true,
@@ -348,10 +353,15 @@ export default async function PanelPage() {
     },
   });
 
-  const propuestasIniciales = propuestasGuardadas.map((propuesta) => ({
-    ...propuesta,
-    creadoEn: propuesta.creadoEn.toISOString(),
-  }));
+  const propuestasIniciales = propuestasGuardadas.map((propuesta) => {
+    const { conversacion, ...datosPropuesta } = propuesta;
+
+    return {
+      ...datosPropuesta,
+      conversacionId: conversacion?.id ?? null,
+      creadoEn: propuesta.creadoEn.toISOString(),
+    };
+  });
 
   const propuestasEnviadasGuardadas = await prisma.propuesta.findMany({
     where: {
@@ -368,6 +378,11 @@ export default async function PanelPage() {
       duracionSegundos: true,
       estado: true,
       creadoEn: true,
+      conversacion: {
+        select: {
+          id: true,
+        },
+      },
       idea: {
         select: {
           id: true,
@@ -387,10 +402,15 @@ export default async function PanelPage() {
   });
 
   const propuestasEnviadasIniciales = propuestasEnviadasGuardadas.map(
-    (propuesta) => ({
-      ...propuesta,
-      creadoEn: propuesta.creadoEn.toISOString(),
-    }),
+    (propuesta) => {
+      const { conversacion, ...datosPropuesta } = propuesta;
+
+      return {
+        ...datosPropuesta,
+        conversacionId: conversacion?.id ?? null,
+        creadoEn: propuesta.creadoEn.toISOString(),
+      };
+    },
   );
 
   return (
