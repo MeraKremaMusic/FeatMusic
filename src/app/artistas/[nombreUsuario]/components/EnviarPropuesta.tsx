@@ -257,7 +257,7 @@ export default function EnviarPropuesta({
       setVistaModal({
         alto: Math.round(vistaVisual?.height ?? window.innerHeight),
         desplazamientoSuperior: Math.round(vistaVisual?.offsetTop ?? 0),
-        esMovil: window.matchMedia("(max-width: 639px)").matches,
+        esMovil: window.matchMedia("(max-width: 1023px)").matches,
       });
 
       if (document.activeElement === mensajeRef.current) {
@@ -501,7 +501,7 @@ export default function EnviarPropuesta({
             role="dialog"
             aria-modal="true"
             aria-labelledby={`titulo-propuesta-${ideaId}`}
-            className="fixed inset-x-0 z-40 flex items-stretch justify-center bg-[#09070d] sm:z-[9999] sm:items-center sm:bg-black/80 sm:p-4 sm:backdrop-blur-sm"
+            className="fixed inset-x-0 z-40 flex items-stretch justify-center bg-[#09070d] lg:z-[9999] lg:items-center lg:bg-black/80 lg:p-4 lg:backdrop-blur-sm"
             style={
               vistaModal?.esMovil
                 ? {
@@ -521,16 +521,16 @@ export default function EnviarPropuesta({
           >
             <form
               onSubmit={enviarPropuesta}
-              className="flex h-full w-full flex-col overflow-hidden rounded-b-3xl border-b border-white/10 bg-[#120e18] shadow-2xl shadow-black/60 sm:h-auto sm:max-h-[90dvh] sm:max-w-lg sm:rounded-2xl sm:border"
+              className="flex h-full w-full flex-col overflow-hidden rounded-b-3xl border-b border-white/10 bg-[#120e18] shadow-2xl shadow-black/60 lg:h-auto lg:max-h-[90dvh] lg:max-w-lg lg:rounded-2xl lg:border"
             >
-              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#120e18]/95 px-4 py-3.5 backdrop-blur sm:px-5 sm:py-4">
+              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#120e18]/95 px-4 py-3.5 backdrop-blur lg:px-5 lg:py-4">
                 <div className="min-w-0">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 sm:text-xs sm:normal-case sm:tracking-normal">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 lg:text-xs lg:normal-case lg:tracking-normal">
                     Colaborar con esta idea
                   </p>
                   <h3
                     id={`titulo-propuesta-${ideaId}`}
-                    className="mt-1 text-lg font-black text-white sm:text-xl"
+                    className="mt-1 text-lg font-black text-white lg:text-xl"
                   >
                     Enviar propuesta
                   </h3>
@@ -548,7 +548,7 @@ export default function EnviarPropuesta({
 
               <div
                 ref={contenidoModalRef}
-                className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-6 sm:px-5"
+                className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-6 lg:px-5"
                 style={{
                   scrollPaddingTop: "1rem",
                   scrollPaddingBottom: "1.5rem",
@@ -658,19 +658,19 @@ export default function EnviarPropuesta({
                 )}
               </div>
 
-              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#120e18]/95 px-4 py-3 backdrop-blur sm:flex sm:justify-end sm:px-5 sm:pb-4 sm:pt-3">
+              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#120e18]/95 px-4 py-3 backdrop-blur lg:flex lg:justify-end lg:px-5 lg:pb-4 lg:pt-3">
                 <button
                   type="button"
                   onClick={cerrarModal}
                   disabled={enviando}
-                  className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-xs font-bold text-zinc-300 transition hover:bg-white/5 disabled:opacity-40 sm:px-4"
+                  className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-xs font-bold text-zinc-300 transition hover:bg-white/5 disabled:opacity-40 lg:px-4"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={enviando || !archivo}
-                  className="min-h-11 rounded-xl border border-violet-300/30 bg-violet-500 px-3 py-2.5 text-xs font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-45 sm:px-4"
+                  className="min-h-11 rounded-xl border border-violet-300/30 bg-violet-500 px-3 py-2.5 text-xs font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-45 lg:px-4"
                 >
                   {enviando ? "Enviando…" : "Enviar propuesta"}
                 </button>
