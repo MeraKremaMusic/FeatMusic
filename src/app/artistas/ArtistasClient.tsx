@@ -417,7 +417,9 @@ function TarjetaArtista({
         descripcionAbiertaEnTarjeta ? "z-40" : "z-0 hover:z-20"
       }`}
     >
-      <div className="pointer-events-none absolute -right-14 -top-16 h-32 w-32 rounded-full bg-violet-500/[0.08] blur-3xl transition duration-300 group-hover:bg-violet-500/[0.12]" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+        <div className="absolute -right-14 -top-16 h-32 w-32 rounded-full bg-violet-500/[0.08] blur-3xl transition duration-300 group-hover:bg-violet-500/[0.12]" />
+      </div>
 
       <div className="relative p-3.5 sm:p-4">
         <div className="flex items-start gap-3">
@@ -711,7 +713,7 @@ export default function ArtistasClient({
   const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
 
   return (
-    <main className="min-h-screen bg-[#09070d] pb-20 text-white lg:pb-0">
+    <main className="min-h-screen w-full max-w-full overflow-x-clip bg-[#09070d] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <Link
@@ -747,7 +749,7 @@ export default function ArtistasClient({
       {cargando ? (
         <CargandoArtistas />
       ) : (
-        <div className="mx-auto max-w-[1280px] px-4 py-4 md:py-5">
+        <div className="mx-auto w-full min-w-0 max-w-[1280px] overflow-x-clip px-4 py-4 md:py-5">
           <section className="grid grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-black/35 backdrop-blur-sm">
             <TarjetaEstadistica
               titulo="Artistas en FeatMusic"
@@ -887,7 +889,7 @@ export default function ArtistasClient({
               </button>
             </section>
           ) : (
-            <section className="mt-3 grid items-stretch gap-3.5 sm:grid-cols-2 lg:gap-4 xl:grid-cols-3">
+            <section className="mt-3 grid min-w-0 items-stretch gap-3.5 sm:grid-cols-2 lg:gap-4 xl:grid-cols-3">
               {artistasPagina.map((artista) => (
                 <TarjetaArtista
                   key={artista.id}

@@ -106,11 +106,11 @@ export default function MenuMovilPanel({
   return (
     <nav
       aria-label="Menú principal móvil"
-      className={`fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
+      className={`fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
         ocultarDesde === "md" ? "md:hidden" : "lg:hidden"
       }`}
     >
-      <div className="mx-auto grid max-w-md grid-cols-5 items-end">
+      <div className="mx-auto grid w-full min-w-0 max-w-md grid-cols-5 items-end">
         <Link
           href="/panel"
           aria-label="Ir al panel"
