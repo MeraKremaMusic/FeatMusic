@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -149,6 +150,9 @@ export default function EnviarPropuesta({
 }: EnviarPropuestaProps) {
   const router = useRouter();
   const inputArchivoRef = useRef<HTMLInputElement>(null);
+  const contenidoModalRef = useRef<HTMLDivElement>(null);
+  const mensajeRef = useRef<HTMLTextAreaElement>(null);
+  const temporizadoresAjusteRef = useRef<number[]>([]);
   const enviandoRef = useRef(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [archivo, setArchivo] = useState<File | null>(null);
@@ -161,11 +165,63 @@ export default function EnviarPropuesta({
   const [vistaModal, setVistaModal] = useState<{
     alto: number;
     desplazamientoSuperior: number;
+    esMovil: boolean;
   } | null>(null);
   const [totalPropuestas, setTotalPropuestas] = useState(propuestasActuales);
   const [estadoPropio, setEstadoPropio] = useState(
     estadoPropuestaUsuario,
   );
+
+  const cancelarAjustesMensaje = useCallback(() => {
+    temporizadoresAjusteRef.current.forEach((temporizador) => {
+      window.clearTimeout(temporizador);
+    });
+    temporizadoresAjusteRef.current = [];
+  }, []);
+
+  const asegurarMensajeVisible = useCallback(
+    (comportamiento: ScrollBehavior = "smooth") => {
+      const contenedor = contenidoModalRef.current;
+      const textarea = mensajeRef.current;
+
+      if (!contenedor || !textarea) return;
+
+      window.requestAnimationFrame(() => {
+        const limiteContenedor = contenedor.getBoundingClientRect();
+        const limiteTextarea = textarea.getBoundingClientRect();
+        const margen = 16;
+
+        const estaVisible =
+          limiteTextarea.top >= limiteContenedor.top + margen &&
+          limiteTextarea.bottom <= limiteContenedor.bottom - margen;
+
+        if (estaVisible) return;
+
+        const centroContenedor =
+          limiteContenedor.top + limiteContenedor.height / 2;
+        const centroTextarea = limiteTextarea.top + limiteTextarea.height / 2;
+        const destino =
+          contenedor.scrollTop + (centroTextarea - centroContenedor);
+
+        contenedor.scrollTo({
+          top: Math.max(0, destino),
+          behavior: comportamiento,
+        });
+      });
+    },
+    [],
+  );
+
+  const programarAjusteMensaje = useCallback(() => {
+    cancelarAjustesMensaje();
+
+    const retrasos = [0, 180, 420];
+    temporizadoresAjusteRef.current = retrasos.map((retraso, indice) =>
+      window.setTimeout(() => {
+        asegurarMensajeVisible(indice === 0 ? "auto" : "smooth");
+      }, retraso),
+    );
+  }, [asegurarMensajeVisible, cancelarAjustesMensaje]);
 
   useEffect(() => {
     return () => {
@@ -201,7 +257,12 @@ export default function EnviarPropuesta({
       setVistaModal({
         alto: Math.round(vistaVisual?.height ?? window.innerHeight),
         desplazamientoSuperior: Math.round(vistaVisual?.offsetTop ?? 0),
+        esMovil: window.matchMedia("(max-width: 639px)").matches,
       });
+
+      if (document.activeElement === mensajeRef.current) {
+        programarAjusteMensaje();
+      }
     };
 
     const cerrarConEscape = (evento: KeyboardEvent) => {
@@ -227,6 +288,7 @@ export default function EnviarPropuesta({
       window.removeEventListener("keydown", cerrarConEscape);
       window.visualViewport?.removeEventListener("resize", actualizarVistaModal);
       window.visualViewport?.removeEventListener("scroll", actualizarVistaModal);
+      cancelarAjustesMensaje();
 
       cuerpo.style.overflow = estilosAnteriores.overflow;
       cuerpo.style.position = estilosAnteriores.position;
@@ -235,7 +297,7 @@ export default function EnviarPropuesta({
       documento.style.overscrollBehavior = estilosAnteriores.overscrollBehavior;
       window.scrollTo(0, desplazamientoAnterior);
     };
-  }, [modalAbierto]);
+  }, [modalAbierto, cancelarAjustesMensaje, programarAjusteMensaje]);
 
   function limpiarArchivo() {
     if (vistaPrevia) {
@@ -439,11 +501,18 @@ export default function EnviarPropuesta({
             role="dialog"
             aria-modal="true"
             aria-labelledby={`titulo-propuesta-${ideaId}`}
-            className="fixed inset-x-0 z-[9999] flex items-end justify-center bg-black/80 px-2 pt-2 backdrop-blur-sm sm:items-center sm:p-4"
-            style={{
-              top: vistaModal?.desplazamientoSuperior ?? 0,
-              height: vistaModal ? `${vistaModal.alto}px` : "100dvh",
-            }}
+            className="fixed inset-x-0 z-40 flex items-stretch justify-center bg-[#09070d] sm:z-[9999] sm:items-center sm:bg-black/80 sm:p-4 sm:backdrop-blur-sm"
+            style={
+              vistaModal?.esMovil
+                ? {
+                    top: `${vistaModal.desplazamientoSuperior + 48}px`,
+                    height: `calc(${vistaModal.alto}px - 48px - 5rem - env(safe-area-inset-bottom))`,
+                  }
+                : {
+                    top: vistaModal?.desplazamientoSuperior ?? 0,
+                    height: vistaModal ? `${vistaModal.alto}px` : "100dvh",
+                  }
+            }
             onPointerDown={(evento) => {
               if (evento.target === evento.currentTarget) {
                 cerrarModal();
@@ -452,9 +521,9 @@ export default function EnviarPropuesta({
           >
             <form
               onSubmit={enviarPropuesta}
-              className="flex max-h-[calc(100%-0.5rem)] w-full flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-[#120e18] shadow-2xl shadow-black/60 sm:max-h-[90dvh] sm:max-w-lg sm:rounded-2xl"
+              className="flex h-full w-full flex-col overflow-hidden rounded-b-3xl border-b border-white/10 bg-[#120e18] shadow-2xl shadow-black/60 sm:h-auto sm:max-h-[90dvh] sm:max-w-lg sm:rounded-2xl sm:border"
             >
-              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 px-4 py-4 sm:px-5">
+              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#120e18]/95 px-4 py-3.5 backdrop-blur sm:px-5 sm:py-4">
                 <div className="min-w-0">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 sm:text-xs sm:normal-case sm:tracking-normal">
                     Colaborar con esta idea
@@ -477,7 +546,14 @@ export default function EnviarPropuesta({
                 </button>
               </div>
 
-              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
+              <div
+                ref={contenidoModalRef}
+                className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-6 sm:px-5"
+                style={{
+                  scrollPaddingTop: "1rem",
+                  scrollPaddingBottom: "1.5rem",
+                }}
+              >
                 <div>
                   <label className="text-xs font-bold text-zinc-200">
                     Audio de la propuesta
@@ -540,14 +616,17 @@ export default function EnviarPropuesta({
                     </span>
                   </div>
                   <textarea
+                    ref={mensajeRef}
                     id={`mensaje-propuesta-${ideaId}`}
                     value={mensaje}
                     onChange={(evento) => setMensaje(evento.target.value)}
+                    onFocus={programarAjusteMensaje}
+                    onClick={programarAjusteMensaje}
                     maxLength={500}
                     rows={4}
                     disabled={enviando}
                     placeholder="Cuéntale al artista qué agregaste o cómo imaginas la colaboración."
-                    className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
+                    className="mt-2 w-full scroll-mt-4 scroll-mb-6 resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
                   />
                 </div>
 
@@ -579,7 +658,7 @@ export default function EnviarPropuesta({
                 )}
               </div>
 
-              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#120e18]/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:flex sm:justify-end sm:px-5 sm:pb-4">
+              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#120e18]/95 px-4 py-3 backdrop-blur sm:flex sm:justify-end sm:px-5 sm:pb-4 sm:pt-3">
                 <button
                   type="button"
                   onClick={cerrarModal}
