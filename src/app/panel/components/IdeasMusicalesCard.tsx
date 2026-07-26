@@ -540,132 +540,163 @@ export default function IdeasMusicalesCard({
 
   return (
     <>
-      <div className="flex h-full min-h-0 w-full flex-col rounded-2xl border border-white/10 bg-black/30 p-4 shadow-xl shadow-black/20 backdrop-blur-sm">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300">
-              Mis publicaciones
-            </p>
-            <h2 className="mt-1 text-lg font-black text-white">
-              Ideas musicales
-            </h2>
+      <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-violet-500/[0.08] blur-3xl" />
+
+        <div className="relative flex items-center justify-between gap-3 border-b border-white/[0.07] px-3.5 py-3 sm:px-4">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+              <Icono tipo="musica" className="h-4 w-4" />
+            </span>
+
+            <div className="min-w-0">
+              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300">
+                Mis publicaciones
+              </p>
+              <h2 className="mt-0.5 truncate text-base font-black text-white sm:text-lg">
+                Ideas musicales
+              </h2>
+            </div>
           </div>
 
-          <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-[10px] font-black text-violet-200">
-            {ideas.length}/{MAX_ACTIVE_IDEAS} activas
+          <span className="shrink-0 rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2.5 py-1 text-[9px] font-black tabular-nums text-violet-200 sm:text-[10px]">
+            {ideas.length} de {MAX_ACTIVE_IDEAS}
           </span>
         </div>
 
         {ideas.length === 0 ? (
-          <div className="flex min-h-0 flex-1 items-center justify-center">
+          <div className="relative flex min-h-0 flex-1 items-center justify-center px-5 py-8">
             <div className="max-w-xs text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300 shadow-lg shadow-violet-950/30">
-                <Icono tipo="musica" className="h-6 w-6" />
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+                <Icono tipo="musica" className="h-5 w-5" />
               </div>
-              <p className="mt-4 text-sm font-bold text-zinc-100">
+              <p className="mt-3 text-sm font-black text-zinc-100">
                 Publica tu primera idea
               </p>
-              <p className="mt-2 text-[11px] leading-5 text-zinc-500">
-                Sube una maqueta. Se convertirá automáticamente a un único MP3
-                liviano para escuchar y descargar.
+              <p className="mt-1.5 text-[10px] leading-5 text-zinc-500 sm:text-[11px]">
+                Sube una maqueta. FeatMusic la optimizará automáticamente como
+                un MP3 liviano para escuchar y descargar.
               </p>
               <button
                 type="button"
                 onClick={abrirModal}
-                className="mt-5 inline-flex items-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/15 px-5 py-2.5 text-xs font-bold text-violet-100 transition hover:border-violet-300/50 hover:bg-violet-500/25 focus:outline-none focus:ring-2 focus:ring-violet-400/50"
+                className="mt-4 inline-flex items-center gap-2 rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-[11px] font-bold text-violet-100 transition hover:border-violet-300/40 hover:bg-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-400/40"
               >
-                <Icono tipo="mas" />
+                <Icono tipo="mas" className="h-3.5 w-3.5" />
                 Publicar una idea
               </button>
             </div>
           </div>
         ) : (
           <>
-            <div className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1 [scrollbar-width:thin]">
-              {ideas.map((idea, indice) => (
-                <section
-                  key={idea.id}
-                  className="rounded-2xl border border-white/10 bg-black/25 p-3.5 shadow-lg shadow-black/15"
-                >
-                  <p className="mb-3 line-clamp-3 text-[11px] leading-5 text-zinc-400">
-                    {idea.descripcion}
-                  </p>
+            <div className="relative min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
+              <div className="divide-y divide-white/[0.07]">
+                {ideas.map((idea, indice) => {
+                  const tamanoFormateado = formatearTamano(idea.tamanoBytes);
 
-                  <ReproductorAudio
-                    id={`panel-${idea.id}`}
-                    src={idea.audioUrl}
-                    titulo={idea.titulo}
-                    bpm={idea.bpm}
-                    tonalidad={idea.tonalidad}
-                    duracionSegundos={idea.duracionSegundos}
-                    numero={indice + 1}
-                  />
+                  return (
+                    <section
+                      key={idea.id}
+                      className="px-3.5 py-3 transition hover:bg-white/[0.018] sm:px-4 sm:py-3.5"
+                    >
+                      <ReproductorAudio
+                        id={`panel-${idea.id}`}
+                        src={idea.audioUrl}
+                        titulo={idea.titulo}
+                        bpm={idea.bpm}
+                        tonalidad={idea.tonalidad}
+                        duracionSegundos={idea.duracionSegundos}
+                        numero={indice + 1}
+                        className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                      />
 
-                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex flex-wrap items-center gap-2 text-[9px] text-zinc-500">
-                      <span className="inline-flex items-center gap-1">
-                        <Icono tipo="reloj" className="h-3 w-3" />
-                        Publicada {formatearFecha(idea.creadoEn)}
-                      </span>
-                      <span>Hasta {formatearFecha(idea.expiraEn)}</span>
-                      {idea.formato && (
-                        <span className="font-semibold uppercase">
-                          {idea.formato}
-                        </span>
+                      {idea.descripcion.trim() && (
+                        <p className="mt-2 whitespace-pre-wrap text-[10px] leading-4 text-zinc-500 sm:text-[11px] sm:leading-[1.15rem]">
+                          {idea.descripcion}
+                        </p>
                       )}
-                      {formatearTamano(idea.tamanoBytes) && (
-                        <span>{formatearTamano(idea.tamanoBytes)}</span>
-                      )}
-                    </div>
 
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={idea.audioUrl}
-                        download
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.035] px-2.5 text-[9px] font-bold text-zinc-300 transition hover:bg-white/[0.07]"
-                      >
-                        <Icono tipo="descargar" className="h-3 w-3" />
-                        MP3
-                      </a>
+                      <div className="mt-2.5 flex items-end justify-between gap-3 border-t border-white/[0.06] pt-2.5">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[8px] font-medium text-zinc-600 sm:text-[9px]">
+                            <span className="inline-flex items-center gap-1">
+                              <Icono tipo="reloj" className="h-2.5 w-2.5" />
+                              {formatearFecha(idea.creadoEn)}
+                            </span>
+                            <span className="text-zinc-700">•</span>
+                            <span>Vence {formatearFecha(idea.expiraEn)}</span>
+                          </div>
 
-                      <button
-                        type="button"
-                        onClick={() => eliminarIdea(idea)}
-                        disabled={eliminandoId !== null}
-                        aria-label={`Eliminar ${idea.titulo}`}
-                        className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-red-400/20 bg-red-500/[0.07] text-red-300 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        {eliminandoId === idea.id ? (
-                          <span className="h-3 w-3 animate-spin rounded-full border border-red-300/30 border-t-red-200" />
-                        ) : (
-                          <Icono tipo="eliminar" className="h-3 w-3" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </section>
-              ))}
+                          {(idea.formato || tamanoFormateado) && (
+                            <div className="mt-1 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wide text-zinc-600 sm:text-[9px]">
+                              {idea.formato && <span>{idea.formato}</span>}
+                              {idea.formato && tamanoFormateado && (
+                                <span className="text-zinc-700">•</span>
+                              )}
+                              {tamanoFormateado && (
+                                <span className="normal-case tracking-normal">
+                                  {tamanoFormateado}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex shrink-0 items-center gap-1.5">
+                          <a
+                            href={idea.audioUrl}
+                            download
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`Descargar ${idea.titulo}`}
+                            title="Descargar MP3"
+                            className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.03] px-2.5 text-[8px] font-black text-zinc-400 transition hover:border-violet-400/20 hover:bg-violet-500/[0.08] hover:text-violet-200 sm:text-[9px]"
+                          >
+                            <Icono tipo="descargar" className="h-3 w-3" />
+                            MP3
+                          </a>
+
+                          <button
+                            type="button"
+                            onClick={() => eliminarIdea(idea)}
+                            disabled={eliminandoId !== null}
+                            aria-label={`Eliminar ${idea.titulo}`}
+                            title="Eliminar idea"
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-red-400/15 bg-red-500/[0.055] text-red-300/80 transition hover:border-red-400/25 hover:bg-red-500/12 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {eliminandoId === idea.id ? (
+                              <span className="h-3 w-3 animate-spin rounded-full border border-red-300/30 border-t-red-200" />
+                            ) : (
+                              <Icono tipo="eliminar" className="h-3 w-3" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
             </div>
 
             {error && !modalAbierto && (
-              <p className="mt-3 rounded-xl border border-red-400/20 bg-red-500/[0.06] px-3 py-2 text-[10px] text-red-200">
+              <p className="relative mx-3.5 mb-2 rounded-xl border border-red-400/20 bg-red-500/[0.06] px-3 py-2 text-[10px] text-red-200 sm:mx-4">
                 {error}
               </p>
             )}
 
-            <button
-              type="button"
-              onClick={abrirModal}
-              disabled={limiteAlcanzado}
-              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-300/40 hover:bg-violet-500/20 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.025] disabled:text-zinc-600"
-            >
-              <Icono tipo="mas" />
-              {limiteAlcanzado
-                ? "Límite de ideas alcanzado"
-                : "Publicar otra idea"}
-            </button>
+            <div className="relative border-t border-white/[0.07] bg-white/[0.012] p-3">
+              <button
+                type="button"
+                onClick={abrirModal}
+                disabled={limiteAlcanzado}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-violet-400/20 bg-violet-500/[0.08] px-4 py-2.5 text-[10px] font-black text-violet-200 transition hover:border-violet-300/35 hover:bg-violet-500/15 disabled:cursor-not-allowed disabled:border-white/[0.07] disabled:bg-white/[0.02] disabled:text-zinc-600 sm:text-[11px]"
+              >
+                <Icono tipo="mas" className="h-3.5 w-3.5" />
+                {limiteAlcanzado
+                  ? "Límite de ideas alcanzado"
+                  : "Publicar otra idea"}
+              </button>
+            </div>
           </>
         )}
       </div>
