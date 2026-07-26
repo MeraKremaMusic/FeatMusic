@@ -267,7 +267,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
         ok: true,
         mensaje:
           actualizada.estado === "RECHAZADA"
-            ? "Propuesta rechazada. El archivo MP3 fue eliminado."
+            ? "Propuesta rechazada. El archivo MP3 fue eliminado y el cupo quedó disponible para otro artista."
             : "La idea terminó mientras se procesaba la propuesta. El archivo MP3 fue eliminado.",
         propuesta: {
           ...actualizada,

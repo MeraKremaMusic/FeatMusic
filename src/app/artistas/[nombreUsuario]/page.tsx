@@ -10,6 +10,12 @@ import EnviarPropuesta from "./components/EnviarPropuesta";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const ESTADOS_QUE_OCUPAN_CUPO = [
+  "PENDIENTE",
+  "ACEPTADA",
+  "RECHAZANDO",
+];
+
 const CODIGOS_ISO_PAIS = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(" ");
 
 function normalizarNombrePais(valor: string) {
@@ -329,11 +335,25 @@ export default async function PerfilPublicoPage({
           audioUrl: true,
           duracionSegundos: true,
           expiraEn: true,
-          propuestas: {
+          _count: {
             select: {
-              remitenteId: true,
+              propuestas: {
+                where: {
+                  estado: {
+                    in: ESTADOS_QUE_OCUPAN_CUPO,
+                  },
+                },
+              },
+            },
+          },
+          propuestas: {
+            where: {
+              remitenteId: sesion?.usuarioId ?? -1,
+            },
+            select: {
               estado: true,
             },
+            take: 1,
           },
         },
       },
@@ -583,14 +603,9 @@ export default async function PerfilPublicoPage({
                             ideaId={idea.id}
                             sesionActiva={Boolean(sesion)}
                             esPropietario={sesion?.usuarioId === artista.id}
-                            propuestasActuales={idea.propuestas.length}
+                            propuestasActuales={idea._count.propuestas}
                             estadoPropuestaUsuario={
-                              sesion
-                                ? idea.propuestas.find(
-                                    (propuesta) =>
-                                      propuesta.remitenteId === sesion.usuarioId,
-                                  )?.estado ?? null
-                                : null
+                              idea.propuestas[0]?.estado ?? null
                             }
                           />
                         </div>

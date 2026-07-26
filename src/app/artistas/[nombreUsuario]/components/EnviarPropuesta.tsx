@@ -172,6 +172,14 @@ export default function EnviarPropuesta({
     estadoPropuestaUsuario,
   );
 
+  useEffect(() => {
+    setTotalPropuestas(propuestasActuales);
+  }, [propuestasActuales]);
+
+  useEffect(() => {
+    setEstadoPropio(estadoPropuestaUsuario);
+  }, [estadoPropuestaUsuario]);
+
   const cancelarAjustesMensaje = useCallback(() => {
     temporizadoresAjusteRef.current.forEach((temporizador) => {
       window.clearTimeout(temporizador);
@@ -428,7 +436,7 @@ export default function EnviarPropuesta({
           Esta publicación es tuya.
         </p>
         <span className="text-[10px] font-bold text-zinc-400">
-          {totalPropuestas}/{MAX_PROPUESTAS} propuestas
+          {totalPropuestas}/{MAX_PROPUESTAS} cupos ocupados
         </span>
       </div>
     );
@@ -445,7 +453,7 @@ export default function EnviarPropuesta({
           {etiquetaEstado(estadoPropio)}
         </span>
         <span className="text-[10px] font-bold text-zinc-500">
-          {totalPropuestas}/{MAX_PROPUESTAS} propuestas
+          {totalPropuestas}/{MAX_PROPUESTAS} cupos ocupados
         </span>
       </div>
     );
@@ -474,7 +482,7 @@ export default function EnviarPropuesta({
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5">
         <p className="text-[10px] font-medium text-zinc-500">
           {cuposCompletos
-            ? "Esta idea ya completó sus propuestas."
+            ? "Esta idea ya tiene sus 3 cupos ocupados."
             : `${MAX_PROPUESTAS - totalPropuestas} cupo${
                 MAX_PROPUESTAS - totalPropuestas === 1 ? "" : "s"
               } disponible${

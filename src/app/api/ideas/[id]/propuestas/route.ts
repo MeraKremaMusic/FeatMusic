@@ -15,6 +15,11 @@ export const dynamic = "force-dynamic";
 const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
 const MAX_AUDIO_DURATION = 240;
 const MAX_PROPUESTAS_POR_IDEA = 3;
+const ESTADOS_QUE_OCUPAN_CUPO = [
+  "PENDIENTE",
+  "ACEPTADA",
+  "RECHAZANDO",
+];
 
 const AUDIO_TYPES = new Set([
   "audio/mpeg",
@@ -162,15 +167,18 @@ async function crearPropuestaConCupo(
             );
           }
 
-          const totalPropuestas = await tx.propuesta.count({
+          const cuposOcupados = await tx.propuesta.count({
             where: {
               ideaId,
+              estado: {
+                in: ESTADOS_QUE_OCUPAN_CUPO,
+              },
             },
           });
 
-          if (totalPropuestas >= MAX_PROPUESTAS_POR_IDEA) {
+          if (cuposOcupados >= MAX_PROPUESTAS_POR_IDEA) {
             throw new ErrorPropuesta(
-              "Esta idea ya completó sus 3 propuestas.",
+              "Esta idea ya tiene sus 3 cupos ocupados.",
               409,
             );
           }
@@ -276,7 +284,13 @@ export async function POST(request: Request, contexto: ContextoRuta) {
         usuarioId: true,
         _count: {
           select: {
-            propuestas: true,
+            propuestas: {
+              where: {
+                estado: {
+                  in: ESTADOS_QUE_OCUPAN_CUPO,
+                },
+              },
+            },
           },
         },
         propuestas: {
@@ -314,7 +328,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
 
     if (idea._count.propuestas >= MAX_PROPUESTAS_POR_IDEA) {
       return respuestaError(
-        "Esta idea ya completó sus 3 propuestas.",
+        "Esta idea ya tiene sus 3 cupos ocupados.",
         409,
       );
     }
