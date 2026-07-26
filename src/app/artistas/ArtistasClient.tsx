@@ -21,6 +21,7 @@ export type ArtistaExplorar = {
   ideasRecientes: Array<{
     id: number;
     titulo: string;
+    descripcion: string | null;
     audioUrl: string;
     duracionSegundos: number;
     bpm: number;
@@ -210,6 +211,29 @@ function IconoAudio({ className = "h-3.5 w-3.5" }: { className?: string }) {
   );
 }
 
+function IconoDescripcion({
+  className = "h-3.5 w-3.5",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 5.5h16v10H9l-5 4v-14Z" />
+      <path d="M8 9h8" />
+      <path d="M8 12h5" />
+    </svg>
+  );
+}
+
 function IconoFlechaDerecha({
   className = "h-3.5 w-3.5",
 }: {
@@ -369,15 +393,30 @@ function BanderaPais({
   );
 }
 
-function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
+function TarjetaArtista({
+  artista,
+  descripcionAbiertaId,
+  onCambiarDescripcion,
+}: {
+  artista: ArtistaExplorar;
+  descripcionAbiertaId: number | null;
+  onCambiarDescripcion: (ideaId: number | null) => void;
+}) {
   const ubicacion =
     [artista.ciudad, artista.pais].filter(Boolean).join(", ") ||
     "Ubicación sin completar";
   const ideasAdicionales =
     artista.ideasActivas - artista.ideasRecientes.length;
+  const descripcionAbiertaEnTarjeta = artista.ideasRecientes.some(
+    (idea) => idea.id === descripcionAbiertaId,
+  );
 
   return (
-    <article className="group relative flex h-full min-h-[290px] flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
+    <article
+      className={`group relative flex h-full min-h-[290px] flex-col overflow-visible rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)] ${
+        descripcionAbiertaEnTarjeta ? "z-40" : "z-0 hover:z-20"
+      }`}
+    >
       <div className="pointer-events-none absolute -right-14 -top-16 h-32 w-32 rounded-full bg-violet-500/[0.08] blur-3xl transition duration-300 group-hover:bg-violet-500/[0.12]" />
 
       <div className="relative p-3.5 sm:p-4">
@@ -448,20 +487,86 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
 
         {artista.ideasRecientes.length > 0 ? (
           <div className="flex-1 divide-y divide-white/[0.06] border-t border-white/[0.06] px-3.5 sm:px-4">
-            {artista.ideasRecientes.map((idea, indice) => (
-              <div key={idea.id} className="py-2.5">
-                <ReproductorAudio
-                  id={`explorar-${idea.id}`}
-                  src={idea.audioUrl}
-                  titulo={idea.titulo}
-                  bpm={idea.bpm}
-                  tonalidad={idea.tonalidad}
-                  duracionSegundos={idea.duracionSegundos}
-                  numero={indice + 1}
-                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
-                />
-              </div>
-            ))}
+            {artista.ideasRecientes.map((idea, indice) => {
+              const descripcion = idea.descripcion?.trim() ?? "";
+              const descripcionAbierta = descripcionAbiertaId === idea.id;
+
+              return (
+                <div key={idea.id} className="relative py-2.5">
+                  <ReproductorAudio
+                    id={`explorar-${idea.id}`}
+                    src={idea.audioUrl}
+                    titulo={idea.titulo}
+                    bpm={idea.bpm}
+                    tonalidad={idea.tonalidad}
+                    duracionSegundos={idea.duracionSegundos}
+                    numero={indice + 1}
+                    className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
+                  />
+
+                  {descripcion && (
+                    <div
+                      data-descripcion-idea
+                      className="absolute right-0 top-[31px] z-30"
+                      onMouseEnter={() => onCambiarDescripcion(idea.id)}
+                      onMouseLeave={() => onCambiarDescripcion(null)}
+                    >
+                      <button
+                        type="button"
+                        aria-label={`Ver descripción de ${idea.titulo}`}
+                        aria-expanded={descripcionAbierta}
+                        aria-controls={`descripcion-idea-${idea.id}`}
+                        title="Ver descripción"
+                        onClick={() =>
+                          onCambiarDescripcion(
+                            descripcionAbierta ? null : idea.id,
+                          )
+                        }
+                        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-violet-400/40 sm:text-[8px] ${
+                          descripcionAbierta
+                            ? "border-violet-300/35 bg-violet-500/20 text-violet-100"
+                            : "border-white/[0.08] bg-[#0d0a12]/90 text-zinc-500 hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-violet-200"
+                        }`}
+                      >
+                        <IconoDescripcion className="h-2.5 w-2.5" />
+                        <span>Descripción</span>
+                      </button>
+
+                      {descripcionAbierta && (
+                        <div
+                          id={`descripcion-idea-${idea.id}`}
+                          role="dialog"
+                          aria-label={`Descripción de ${idea.titulo}`}
+                          className="absolute bottom-7 right-0 z-50 w-[min(245px,calc(100vw-4rem))] rounded-xl border border-violet-400/20 bg-[#110d18]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+                        >
+                          <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-violet-400/20 bg-[#110d18]" />
+
+                          <div className="relative">
+                            <div className="flex items-center gap-2">
+                              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300">
+                                <IconoDescripcion className="h-3.5 w-3.5" />
+                              </span>
+                              <div className="min-w-0">
+                                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-violet-300">
+                                  Descripción
+                                </p>
+                                <p className="truncate text-[10px] font-bold text-zinc-200">
+                                  {idea.titulo}
+                                </p>
+                              </div>
+                            </div>
+
+                            <p className="mt-2.5 max-h-28 overflow-y-auto whitespace-pre-wrap pr-1 text-[10px] leading-4 text-zinc-400 [scrollbar-width:thin] sm:text-[11px] sm:leading-[1.15rem]">
+                              {descripcion}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
 
             {ideasAdicionales > 0 && (
               <p className="py-2 text-center text-[9px] font-semibold text-zinc-600">
@@ -480,7 +585,7 @@ function TarjetaArtista({ artista }: { artista: ArtistaExplorar }) {
 
       <Link
         href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-        className="relative flex items-center justify-between border-t border-white/[0.07] bg-white/[0.018] px-4 py-3 text-[11px] font-bold text-zinc-300 transition hover:bg-violet-500/[0.08] hover:text-violet-100"
+        className="relative flex items-center justify-between rounded-b-2xl border-t border-white/[0.07] bg-white/[0.018] px-4 py-3 text-[11px] font-bold text-zinc-300 transition hover:bg-violet-500/[0.08] hover:text-violet-100"
       >
         <span>Ver perfil completo</span>
         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.035] text-zinc-500 transition group-hover:border-violet-400/20 group-hover:text-violet-300">
@@ -506,6 +611,38 @@ export default function ArtistasClient({
   const [rol, setRol] = useState("");
   const [soloConIdeas, setSoloConIdeas] = useState(true);
   const [pagina, setPagina] = useState(1);
+  const [descripcionAbiertaId, setDescripcionAbiertaId] = useState<number | null>(
+    null,
+  );
+
+  useEffect(() => {
+    function cerrarDescripcionFuera(evento: PointerEvent) {
+      const objetivo = evento.target;
+
+      if (
+        objetivo instanceof Element &&
+        objetivo.closest("[data-descripcion-idea]")
+      ) {
+        return;
+      }
+
+      setDescripcionAbiertaId(null);
+    }
+
+    function cerrarDescripcionConEscape(evento: KeyboardEvent) {
+      if (evento.key === "Escape") {
+        setDescripcionAbiertaId(null);
+      }
+    }
+
+    document.addEventListener("pointerdown", cerrarDescripcionFuera);
+    document.addEventListener("keydown", cerrarDescripcionConEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", cerrarDescripcionFuera);
+      document.removeEventListener("keydown", cerrarDescripcionConEscape);
+    };
+  }, []);
 
   useEffect(() => {
     const temporizador = window.setTimeout(() => setCargando(false), 700);
@@ -514,6 +651,7 @@ export default function ArtistasClient({
 
   useEffect(() => {
     setPagina(1);
+    setDescripcionAbiertaId(null);
   }, [busqueda, pais, ciudad, genero, rol, soloConIdeas]);
 
   const artistasFiltrados = useMemo(() => {
@@ -751,7 +889,12 @@ export default function ArtistasClient({
           ) : (
             <section className="mt-3 grid items-stretch gap-3.5 sm:grid-cols-2 lg:gap-4 xl:grid-cols-3">
               {artistasPagina.map((artista) => (
-                <TarjetaArtista key={artista.id} artista={artista} />
+                <TarjetaArtista
+                  key={artista.id}
+                  artista={artista}
+                  descripcionAbiertaId={descripcionAbiertaId}
+                  onCambiarDescripcion={setDescripcionAbiertaId}
+                />
               ))}
             </section>
           )}
