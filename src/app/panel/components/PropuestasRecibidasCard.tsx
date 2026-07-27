@@ -191,6 +191,73 @@ function sumarMensajesConversacionesUnicas(
   );
 }
 
+function IconoMensaje({
+  className = "h-3 w-3",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 5h16v11H8l-4 4V5Z" />
+      <path d="M8 9h8" />
+      <path d="M8 12h5" />
+    </svg>
+  );
+}
+
+function IconoDescargar({
+  className = "h-3 w-3",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3v12" />
+      <path d="m7 10 5 5 5-5" />
+      <path d="M5 20h14" />
+    </svg>
+  );
+}
+
+function IconoChat({
+  className = "h-3 w-3",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 5h16v11H8l-4 4V5Z" />
+    </svg>
+  );
+}
+
 function IconoPropuestas() {
   return (
     <svg
@@ -211,35 +278,51 @@ function IconoPropuestas() {
   );
 }
 
-function AvatarArtista({ artista, nombre }: { artista: ArtistaResumen; nombre: string }) {
+function AvatarArtista({
+  artista,
+  nombre,
+}: {
+  artista: ArtistaResumen;
+  nombre: string;
+}) {
   if (artista.fotoPerfil) {
     return (
       <img
         src={artista.fotoPerfil}
         alt={`Foto de ${nombre}`}
-        className="h-9 w-9 shrink-0 rounded-full object-cover"
+        className="h-10 w-10 shrink-0 rounded-xl border border-white/[0.09] object-cover shadow-[0_8px_20px_rgba(0,0,0,0.22)]"
       />
     );
   }
 
   return (
-    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-[10px] font-black text-violet-200">
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-[10px] font-black text-violet-200 shadow-[0_8px_20px_rgba(0,0,0,0.18)]">
       {iniciales(nombre)}
     </span>
   );
 }
 
-function NombreConEnlace({ artista, nombre }: { artista: ArtistaResumen; nombre: string }) {
+function NombreConEnlace({
+  artista,
+  nombre,
+}: {
+  artista: ArtistaResumen;
+  nombre: string;
+}) {
   const usuario = artista.nombreUsuario?.trim();
 
   if (!usuario) {
-    return <p className="truncate text-xs font-black text-zinc-100">{nombre}</p>;
+    return (
+      <p className="truncate text-[11px] font-black text-zinc-100 sm:text-xs">
+        {nombre}
+      </p>
+    );
   }
 
   return (
     <Link
       href={`/artistas/${encodeURIComponent(usuario)}`}
-      className="block truncate text-xs font-black text-zinc-100 transition hover:text-violet-200"
+      className="block truncate text-[11px] font-black text-zinc-100 transition hover:text-violet-200 sm:text-xs"
     >
       {nombre}
     </Link>
@@ -430,10 +513,14 @@ export default function PropuestasRecibidasCard({
   }
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/35 shadow-xl shadow-black/20 backdrop-blur-sm">
-      <div className="flex shrink-0 items-center justify-between gap-3 px-4 pb-3 pt-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+    <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+        <div className="absolute -right-16 -top-20 h-40 w-40 rounded-full bg-violet-500/[0.08] blur-3xl" />
+      </div>
+
+      <div className="relative flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.07] px-3.5 py-3 sm:px-4">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
             <IconoPropuestas />
             {mensajesNoLeidos > 0 && (
               <span className="absolute -right-2 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#100d15] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
@@ -441,61 +528,62 @@ export default function PropuestasRecibidasCard({
               </span>
             )}
           </span>
+
           <div className="min-w-0">
-            <p className="truncate text-sm font-black text-white">Propuestas</p>
-            <p className="mt-0.5 text-[10px] font-medium text-zinc-500">
-              {pendientesActivas} pendiente{pendientesActivas === 1 ? "" : "s"} ·{" "}
-              {cantidadActiva} total
-              {mensajesNoLeidos > 0 && (
-                <>
-                  {" "}· {mensajesNoLeidos} mensaje
-                  {mensajesNoLeidos === 1 ? "" : "s"} sin leer
-                </>
-              )}
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300">
+              Colaboraciones
             </p>
+            <h2 className="mt-0.5 truncate text-base font-black text-white">
+              Propuestas
+            </h2>
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5">
           <Link
             href="/mensajes"
-            className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-[9px] font-black text-zinc-300 transition hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-violet-200"
+            className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.025] px-2.5 text-[8px] font-black text-zinc-400 transition hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-violet-200 sm:text-[9px]"
           >
+            <IconoChat />
             Mensajes
           </Link>
-          <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-black text-violet-200">
+
+          <span className="rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2 py-1 text-[8px] font-black tabular-nums text-violet-200 sm:text-[9px]">
             {cantidadActiva}
           </span>
         </div>
       </div>
 
-      <div className="grid shrink-0 grid-cols-2 gap-1 border-b border-t border-white/10 bg-black/20 p-1.5">
+      <div className="relative grid shrink-0 grid-cols-2 border-b border-white/[0.07]">
         <button
           type="button"
           onClick={() => {
             setPestana("RECIBIDAS");
             setError("");
           }}
-          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-[10px] font-black transition ${
+          className={`relative flex min-h-10 items-center justify-center gap-1.5 px-3 text-[9px] font-black transition sm:text-[10px] ${
             mostrandoRecibidas
-              ? "bg-violet-500/15 text-violet-100 shadow-sm"
-              : "text-zinc-500 hover:bg-white/5 hover:text-zinc-300"
+              ? "text-violet-100"
+              : "text-zinc-600 hover:text-zinc-300"
           }`}
         >
           Recibidas
           <span
-            className={`rounded-full px-1.5 py-0.5 text-[8px] ${
+            className={`rounded-full px-1.5 py-0.5 text-[7px] ${
               mostrandoRecibidas
-                ? "bg-violet-400/20 text-violet-100"
-                : "bg-white/5 text-zinc-500"
+                ? "bg-violet-500/15 text-violet-200"
+                : "bg-white/[0.04] text-zinc-600"
             }`}
           >
             {propuestas.length}
           </span>
           {mensajesNoLeidosRecibidos > 0 && (
-            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] text-white">
+            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
               {etiquetaCantidad(mensajesNoLeidosRecibidos)}
             </span>
+          )}
+          {mostrandoRecibidas && (
+            <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-violet-400" />
           )}
         </button>
 
@@ -505,78 +593,321 @@ export default function PropuestasRecibidasCard({
             setPestana("ENVIADAS");
             setError("");
           }}
-          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-[10px] font-black transition ${
+          className={`relative flex min-h-10 items-center justify-center gap-1.5 px-3 text-[9px] font-black transition sm:text-[10px] ${
             !mostrandoRecibidas
-              ? "bg-violet-500/15 text-violet-100 shadow-sm"
-              : "text-zinc-500 hover:bg-white/5 hover:text-zinc-300"
+              ? "text-violet-100"
+              : "text-zinc-600 hover:text-zinc-300"
           }`}
         >
           Enviadas
           <span
-            className={`rounded-full px-1.5 py-0.5 text-[8px] ${
+            className={`rounded-full px-1.5 py-0.5 text-[7px] ${
               !mostrandoRecibidas
-                ? "bg-violet-400/20 text-violet-100"
-                : "bg-white/5 text-zinc-500"
+                ? "bg-violet-500/15 text-violet-200"
+                : "bg-white/[0.04] text-zinc-600"
             }`}
           >
             {propuestasEnviadasIniciales.length}
           </span>
           {mensajesNoLeidosEnviados > 0 && (
-            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] text-white">
+            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
               {etiquetaCantidad(mensajesNoLeidosEnviados)}
             </span>
+          )}
+          {!mostrandoRecibidas && (
+            <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-violet-400" />
           )}
         </button>
       </div>
 
+      <div className="relative flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.05] px-3.5 py-2 sm:px-4">
+        <p className="text-[8px] font-semibold text-zinc-600 sm:text-[9px]">
+          {pendientesActivas} pendiente{pendientesActivas === 1 ? "" : "s"} ·{" "}
+          {cantidadActiva} total
+        </p>
+
+        {mensajesNoLeidos > 0 && (
+          <p className="text-[8px] font-bold text-red-300 sm:text-[9px]">
+            {mensajesNoLeidos} mensaje
+            {mensajesNoLeidos === 1 ? "" : "s"} sin leer
+          </p>
+        )}
+      </div>
+
       {error && mostrandoRecibidas && (
-        <p className="mx-3 mt-3 shrink-0 rounded-lg border border-red-400/20 bg-red-500/10 px-3 py-2 text-[10px] text-red-200">
+        <p className="relative mx-3.5 mt-2.5 shrink-0 rounded-xl border border-red-400/20 bg-red-500/[0.07] px-3 py-2 text-[9px] text-red-200 sm:mx-4 sm:text-[10px]">
           {error}
         </p>
       )}
 
       {mostrandoRecibidas ? (
         propuestas.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center p-5">
+          <div className="relative flex flex-1 items-center justify-center px-5 py-8">
             <div className="flex max-w-xs flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-violet-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
                 <IconoPropuestas />
               </div>
-              <p className="mt-4 text-sm font-semibold text-zinc-200">
-                No has recibido ninguna propuesta
+              <p className="mt-4 text-sm font-black text-zinc-200">
+                No has recibido propuestas
               </p>
               <p className="mt-2 text-[10px] leading-4 text-zinc-500">
-                Cuando otro artista envíe un audio a una de tus ideas, aparecerá
-                aquí para que puedas escucharlo.
+                Cuando otro artista envíe un audio a una de tus ideas,
+                aparecerá aquí para que puedas escucharlo.
               </p>
             </div>
           </div>
         ) : (
-          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 [scrollbar-width:thin]">
-            {propuestas.map((propuesta, indice) => {
-              const nombre = nombreArtista(propuesta.remitente);
-              const procesando = procesandoId === propuesta.id;
+          <div className="relative min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
+            <div className="divide-y divide-white/[0.07]">
+              {propuestas.map((propuesta, indice) => {
+                const nombre = nombreArtista(propuesta.remitente);
+                const procesando = procesandoId === propuesta.id;
+                const mensajesPendientes = propuesta.conversacionId
+                  ? porConversacion[propuesta.conversacionId] ?? 0
+                  : 0;
+
+                return (
+                  <article
+                    key={propuesta.id}
+                    className={`relative px-3.5 py-3.5 transition sm:px-4 ${
+                      mensajesPendientes > 0
+                        ? "bg-violet-500/[0.045]"
+                        : "hover:bg-white/[0.012]"
+                    }`}
+                  >
+                    {mensajesPendientes > 0 && (
+                      <span className="absolute bottom-3 left-0 top-3 w-0.5 rounded-r-full bg-violet-400" />
+                    )}
+
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <AvatarArtista
+                          artista={propuesta.remitente}
+                          nombre={nombre}
+                        />
+
+                        <div className="min-w-0">
+                          <NombreConEnlace
+                            artista={propuesta.remitente}
+                            nombre={nombre}
+                          />
+                          <p className="mt-0.5 truncate text-[8px] font-medium text-zinc-600 sm:text-[9px]">
+                            Para “{propuesta.idea.titulo}”
+                          </p>
+                          <p className="mt-0.5 truncate text-[8px] text-zinc-700 sm:text-[9px]">
+                            {formatearFecha(propuesta.creadoEn)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex shrink-0 flex-col items-end gap-1">
+                        <span
+                          className={`rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
+                            propuesta.estado,
+                          )}`}
+                        >
+                          {etiquetaEstado(propuesta.estado)}
+                        </span>
+
+                        {mensajesPendientes > 0 && (
+                          <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                            {mensajesPendientes} nuevo
+                            {mensajesPendientes === 1 ? "" : "s"}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {propuesta.mensaje && (
+                      <div className="mt-2.5 flex items-start gap-2">
+                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white/[0.025] text-zinc-600">
+                          <IconoMensaje />
+                        </span>
+                        <p className="min-w-0 flex-1 whitespace-pre-wrap text-[9px] leading-4 text-zinc-500 sm:text-[10px]">
+                          {propuesta.mensaje}
+                        </p>
+                      </div>
+                    )}
+
+                    {propuesta.motivoDecision &&
+                      propuesta.estado !== "PENDIENTE" && (
+                        <div className="mt-2.5 border-l-2 border-sky-400/35 pl-2.5">
+                          <p className="text-[7px] font-black uppercase tracking-[0.14em] text-sky-300/70">
+                            Motivo enviado
+                          </p>
+                          <p className="mt-1 whitespace-pre-wrap text-[9px] leading-4 text-zinc-500 sm:text-[10px]">
+                            {propuesta.motivoDecision}
+                          </p>
+                        </div>
+                      )}
+
+                    <div className="mt-2.5 border-t border-white/[0.06] pt-2.5">
+                      {propuesta.audioUrl ? (
+                        <ReproductorAudio
+                          id={`propuesta-recibida-${propuesta.id}`}
+                          src={propuesta.audioUrl}
+                          titulo={`Propuesta de ${nombre}`}
+                          duracionSegundos={propuesta.duracionSegundos}
+                          numero={indice + 1}
+                          className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                        />
+                      ) : (
+                        <p className="text-[8px] font-semibold leading-4 text-zinc-600 sm:text-[9px]">
+                          {textoAudioNoDisponible(propuesta.estado)}
+                        </p>
+                      )}
+                    </div>
+
+                    {propuesta.estado === "PENDIENTE" ? (
+                      <div className="mt-2.5 flex flex-wrap items-center justify-end gap-1.5 border-t border-white/[0.06] pt-2.5">
+                        <button
+                          type="button"
+                          disabled={procesando}
+                          onClick={() =>
+                            abrirModalDecision(
+                              propuesta.id,
+                              "RECHAZAR",
+                              propuesta.numeroIntento,
+                            )
+                          }
+                          className="rounded-lg border border-red-400/20 bg-red-500/[0.06] px-2.5 py-1.5 text-[8px] font-bold text-red-200 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-40 sm:text-[9px]"
+                        >
+                          Rechazar
+                        </button>
+
+                        {propuesta.numeroIntento < 2 && (
+                          <button
+                            type="button"
+                            disabled={procesando}
+                            onClick={() =>
+                              abrirModalDecision(
+                                propuesta.id,
+                                "SOLICITAR_CAMBIOS",
+                                propuesta.numeroIntento,
+                              )
+                            }
+                            className="rounded-lg border border-sky-400/20 bg-sky-500/[0.06] px-2.5 py-1.5 text-[8px] font-bold text-sky-200 transition hover:bg-sky-500/15 disabled:cursor-not-allowed disabled:opacity-40 sm:text-[9px]"
+                          >
+                            Solicitar cambios
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          disabled={procesando}
+                          onClick={() =>
+                            enviarDecision(propuesta.id, {
+                              accion: "ACEPTAR",
+                            })
+                          }
+                          className="rounded-lg border border-emerald-400/20 bg-emerald-500/[0.07] px-2.5 py-1.5 text-[8px] font-bold text-emerald-200 transition hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-40 sm:text-[9px]"
+                        >
+                          {procesando ? "Procesando…" : "Aceptar"}
+                        </button>
+                      </div>
+                    ) : propuesta.estado === "ACEPTADA" ? (
+                      <div className="mt-2.5 flex flex-wrap justify-end gap-1.5 border-t border-white/[0.06] pt-2.5">
+                        {propuesta.audioUrl && (
+                          <a
+                            href={`/api/propuestas/${propuesta.id}/descargar`}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-sky-400/20 bg-sky-500/[0.06] px-2.5 py-1.5 text-[8px] font-bold text-sky-200 transition hover:bg-sky-500/15 sm:text-[9px]"
+                          >
+                            <IconoDescargar />
+                            Descargar MP3
+                          </a>
+                        )}
+
+                        {propuesta.conversacionId ? (
+                          <Link
+                            href={`/mensajes/${propuesta.conversacionId}`}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/25 bg-violet-500/10 px-2.5 py-1.5 text-[8px] font-black text-violet-100 transition hover:bg-violet-500/20 sm:text-[9px]"
+                          >
+                            <IconoChat />
+                            Abrir chat
+                            {mensajesPendientes > 0 && (
+                              <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] leading-none text-white">
+                                {etiquetaCantidad(mensajesPendientes)}
+                              </span>
+                            )}
+                          </Link>
+                        ) : (
+                          <span className="rounded-lg border border-white/[0.08] bg-white/[0.025] px-2.5 py-1.5 text-[8px] font-semibold text-zinc-600 sm:text-[9px]">
+                            Preparando chat…
+                          </span>
+                        )}
+                      </div>
+                    ) : null}
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        )
+      ) : propuestasEnviadasIniciales.length === 0 ? (
+        <div className="relative flex flex-1 items-center justify-center px-5 py-8">
+          <div className="flex max-w-xs flex-col items-center text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+              <IconoPropuestas />
+            </div>
+            <p className="mt-4 text-sm font-black text-zinc-200">
+              No has enviado propuestas
+            </p>
+            <p className="mt-2 text-[10px] leading-4 text-zinc-500">
+              Explora las ideas de otros artistas y envía tu audio para
+              comenzar una colaboración.
+            </p>
+            <Link
+              href="/artistas"
+              className="mt-4 rounded-xl border border-violet-400/25 bg-violet-500/10 px-3.5 py-2 text-[10px] font-black text-violet-200 transition hover:bg-violet-500/20"
+            >
+              Explorar artistas
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <div className="relative min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
+          <div className="divide-y divide-white/[0.07]">
+            {propuestasEnviadasIniciales.map((propuesta, indice) => {
+              const destinatario = propuesta.idea.usuario;
+              const nombre = nombreArtista(destinatario);
               const mensajesPendientes = propuesta.conversacionId
                 ? porConversacion[propuesta.conversacionId] ?? 0
                 : 0;
+              const rutaIdea = destinatario.nombreUsuario?.trim()
+                ? `/artistas/${encodeURIComponent(
+                    destinatario.nombreUsuario.trim(),
+                  )}#idea-${propuesta.idea.id}`
+                : null;
 
               return (
                 <article
                   key={propuesta.id}
-                  className={`rounded-xl border p-3 transition ${
+                  className={`relative px-3.5 py-3.5 transition sm:px-4 ${
                     mensajesPendientes > 0
-                      ? "border-violet-400/35 bg-violet-500/[0.07] shadow-[0_0_24px_rgba(139,92,246,0.08)]"
-                      : "border-white/10 bg-white/[0.025]"
+                      ? "bg-violet-500/[0.045]"
+                      : "hover:bg-white/[0.012]"
                   }`}
                 >
+                  {mensajesPendientes > 0 && (
+                    <span className="absolute bottom-3 left-0 top-3 w-0.5 rounded-r-full bg-violet-400" />
+                  )}
+
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2.5">
-                      <AvatarArtista artista={propuesta.remitente} nombre={nombre} />
+                      <AvatarArtista
+                        artista={destinatario}
+                        nombre={nombre}
+                      />
 
                       <div className="min-w-0">
-                        <NombreConEnlace artista={propuesta.remitente} nombre={nombre} />
-                        <p className="mt-0.5 truncate text-[9px] font-medium text-zinc-500">
-                          Para “{propuesta.idea.titulo}” ·{" "}
+                        <NombreConEnlace
+                          artista={destinatario}
+                          nombre={nombre}
+                        />
+                        <p className="mt-0.5 truncate text-[8px] font-medium text-zinc-600 sm:text-[9px]">
+                          Para “{propuesta.idea.titulo}”
+                        </p>
+                        <p className="mt-0.5 truncate text-[8px] text-zinc-700 sm:text-[9px]">
                           {formatearFecha(propuesta.creadoEn)}
                         </p>
                       </div>
@@ -584,14 +915,15 @@ export default function PropuestasRecibidasCard({
 
                     <div className="flex shrink-0 flex-col items-end gap-1">
                       <span
-                        className={`rounded-full border px-2 py-1 text-[9px] font-bold ${claseEstado(
+                        className={`rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
                           propuesta.estado,
                         )}`}
                       >
                         {etiquetaEstado(propuesta.estado)}
                       </span>
+
                       {mensajesPendientes > 0 && (
-                        <span className="rounded-full bg-red-500 px-2 py-1 text-[8px] font-black text-white">
+                        <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
                           {mensajesPendientes} nuevo
                           {mensajesPendientes === 1 ? "" : "s"}
                         </span>
@@ -600,110 +932,124 @@ export default function PropuestasRecibidasCard({
                   </div>
 
                   {propuesta.mensaje && (
-                    <p className="mt-3 whitespace-pre-wrap rounded-lg border border-white/5 bg-black/20 px-3 py-2 text-[10px] leading-4 text-zinc-400">
-                      {propuesta.mensaje}
-                    </p>
+                    <div className="mt-2.5 flex items-start gap-2">
+                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white/[0.025] text-zinc-600">
+                        <IconoMensaje />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[7px] font-black uppercase tracking-[0.14em] text-zinc-700">
+                          Tu mensaje
+                        </p>
+                        <p className="mt-0.5 whitespace-pre-wrap text-[9px] leading-4 text-zinc-500 sm:text-[10px]">
+                          {propuesta.mensaje}
+                        </p>
+                      </div>
+                    </div>
                   )}
 
                   {propuesta.motivoDecision &&
                     propuesta.estado !== "PENDIENTE" && (
-                      <div className="mt-3 rounded-lg border border-sky-400/15 bg-sky-500/[0.06] px-3 py-2">
-                        <p className="text-[8px] font-black uppercase tracking-[0.14em] text-sky-300/70">
-                          Motivo enviado
+                      <div className="mt-2.5 border-l-2 border-sky-400/35 pl-2.5">
+                        <p className="text-[7px] font-black uppercase tracking-[0.14em] text-sky-300/70">
+                          Motivo del artista
                         </p>
-                        <p className="mt-1 whitespace-pre-wrap text-[10px] leading-4 text-zinc-400">
+                        <p className="mt-1 whitespace-pre-wrap text-[9px] leading-4 text-zinc-500 sm:text-[10px]">
                           {propuesta.motivoDecision}
                         </p>
                       </div>
                     )}
 
-                  {propuesta.audioUrl ? (
-                    <ReproductorAudio
-                      id={`propuesta-recibida-${propuesta.id}`}
-                      src={propuesta.audioUrl}
-                      titulo={`Propuesta de ${nombre}`}
-                      duracionSegundos={propuesta.duracionSegundos}
-                      numero={indice + 1}
-                      className="mt-3"
+                  <div className="mt-2.5 border-t border-white/[0.06] pt-2.5">
+                    {propuesta.audioUrl ? (
+                      <ReproductorAudio
+                        id={`propuesta-enviada-${propuesta.id}`}
+                        src={propuesta.audioUrl}
+                        titulo={`Tu propuesta para ${propuesta.idea.titulo}`}
+                        duracionSegundos={propuesta.duracionSegundos}
+                        numero={indice + 1}
+                        className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                      />
+                    ) : (
+                      <p className="text-[8px] font-semibold leading-4 text-zinc-600 sm:text-[9px]">
+                        {textoAudioNoDisponible(propuesta.estado)}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mt-2.5 flex items-start gap-2 border-t border-white/[0.06] pt-2.5">
+                    <span
+                      className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${
+                        propuesta.estado === "ACEPTADA"
+                          ? "bg-emerald-400"
+                          : propuesta.estado === "CAMBIOS_SOLICITADOS"
+                            ? "bg-sky-400"
+                            : propuesta.estado === "PENDIENTE"
+                              ? "bg-amber-400"
+                              : "bg-red-400"
+                      }`}
                     />
-                  ) : (
-                    <p className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[9px] font-semibold text-zinc-500">
-                      {textoAudioNoDisponible(propuesta.estado)}
+                    <p className="min-w-0 flex-1 text-[8px] font-semibold leading-4 text-zinc-500 sm:text-[9px]">
+                      {textoEstadoEnviado(propuesta.estado)}
+                      {propuesta.estado === "RECHAZADA" &&
+                        propuesta.permiteReintento && (
+                          <> Puedes participar otra vez si todavía hay cupos.</>
+                        )}
                     </p>
-                  )}
+                  </div>
 
-                  {propuesta.estado === "PENDIENTE" ? (
-                    <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        disabled={procesando}
-                        onClick={() =>
-                          abrirModalDecision(
-                            propuesta.id,
-                            "RECHAZAR",
-                            propuesta.numeroIntento,
-                          )
-                        }
-                        className="rounded-lg border border-red-400/25 bg-red-500/10 px-3 py-1.5 text-[9px] font-bold text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        Rechazar
-                      </button>
+                  {(rutaIdea &&
+                    propuesta.numeroIntento < 2 &&
+                    (propuesta.estado === "CAMBIOS_SOLICITADOS" ||
+                      (propuesta.estado === "RECHAZADA" &&
+                        propuesta.permiteReintento))) ||
+                  propuesta.estado === "ACEPTADA" ? (
+                    <div className="mt-2.5 flex flex-wrap justify-end gap-1.5 border-t border-white/[0.06] pt-2.5">
+                      {rutaIdea &&
+                        propuesta.numeroIntento < 2 &&
+                        (propuesta.estado === "CAMBIOS_SOLICITADOS" ||
+                          (propuesta.estado === "RECHAZADA" &&
+                            propuesta.permiteReintento)) && (
+                          <Link
+                            href={rutaIdea}
+                            className="rounded-lg border border-violet-400/25 bg-violet-500/10 px-2.5 py-1.5 text-[8px] font-black text-violet-100 transition hover:bg-violet-500/20 sm:text-[9px]"
+                          >
+                            {propuesta.estado === "CAMBIOS_SOLICITADOS"
+                              ? "Enviar corrección"
+                              : "Intentar nuevamente"}
+                          </Link>
+                        )}
 
-                      {propuesta.numeroIntento < 2 && (
-                        <button
-                          type="button"
-                          disabled={procesando}
-                          onClick={() =>
-                            abrirModalDecision(
-                              propuesta.id,
-                              "SOLICITAR_CAMBIOS",
-                              propuesta.numeroIntento,
-                            )
-                          }
-                          className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20 disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          Solicitar cambios
-                        </button>
-                      )}
+                      {propuesta.estado === "ACEPTADA" && (
+                        <>
+                          {propuesta.audioUrl && (
+                            <a
+                              href={`/api/propuestas/${propuesta.id}/descargar`}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-sky-400/20 bg-sky-500/[0.06] px-2.5 py-1.5 text-[8px] font-bold text-sky-200 transition hover:bg-sky-500/15 sm:text-[9px]"
+                            >
+                              <IconoDescargar />
+                              Descargar MP3
+                            </a>
+                          )}
 
-                      <button
-                        type="button"
-                        disabled={procesando}
-                        onClick={() =>
-                          enviarDecision(propuesta.id, { accion: "ACEPTAR" })
-                        }
-                        className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-3 py-1.5 text-[9px] font-bold text-emerald-200 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        {procesando ? "Procesando…" : "Aceptar"}
-                      </button>
-                    </div>
-                  ) : propuesta.estado === "ACEPTADA" ? (
-                    <div className="mt-3 flex flex-wrap justify-end gap-2">
-                      {propuesta.audioUrl && (
-                        <a
-                          href={`/api/propuestas/${propuesta.id}/descargar`}
-                          className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20"
-                        >
-                          Descargar MP3
-                        </a>
-                      )}
-
-                      {propuesta.conversacionId ? (
-                        <Link
-                          href={`/mensajes/${propuesta.conversacionId}`}
-                          className="flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
-                        >
-                          Abrir chat
-                          {mensajesPendientes > 0 && (
-                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] leading-none text-white">
-                              {etiquetaCantidad(mensajesPendientes)}
+                          {propuesta.conversacionId ? (
+                            <Link
+                              href={`/mensajes/${propuesta.conversacionId}`}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/25 bg-violet-500/10 px-2.5 py-1.5 text-[8px] font-black text-violet-100 transition hover:bg-violet-500/20 sm:text-[9px]"
+                            >
+                              <IconoChat />
+                              Abrir chat
+                              {mensajesPendientes > 0 && (
+                                <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] leading-none text-white">
+                                  {etiquetaCantidad(mensajesPendientes)}
+                                </span>
+                              )}
+                            </Link>
+                          ) : (
+                            <span className="rounded-lg border border-white/[0.08] bg-white/[0.025] px-2.5 py-1.5 text-[8px] font-semibold text-zinc-600 sm:text-[9px]">
+                              Preparando chat…
                             </span>
                           )}
-                        </Link>
-                      ) : (
-                        <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-semibold text-zinc-500">
-                          Preparando chat…
-                        </span>
+                        </>
                       )}
                     </div>
                   ) : null}
@@ -711,181 +1057,6 @@ export default function PropuestasRecibidasCard({
               );
             })}
           </div>
-        )
-      ) : propuestasEnviadasIniciales.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center p-5">
-          <div className="flex max-w-xs flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 text-violet-300">
-              <IconoPropuestas />
-            </div>
-            <p className="mt-4 text-sm font-semibold text-zinc-200">
-              No has enviado ninguna propuesta
-            </p>
-            <p className="mt-2 text-[10px] leading-4 text-zinc-500">
-              Explora las ideas de otros artistas y envía tu audio para comenzar
-              una colaboración.
-            </p>
-            <Link
-              href="/artistas"
-              className="mt-4 rounded-lg border border-violet-400/25 bg-violet-500/10 px-3 py-2 text-[10px] font-black text-violet-200 transition hover:bg-violet-500/20"
-            >
-              Explorar artistas
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 [scrollbar-width:thin]">
-          {propuestasEnviadasIniciales.map((propuesta, indice) => {
-            const destinatario = propuesta.idea.usuario;
-            const nombre = nombreArtista(destinatario);
-            const mensajesPendientes = propuesta.conversacionId
-              ? porConversacion[propuesta.conversacionId] ?? 0
-              : 0;
-            const rutaIdea = destinatario.nombreUsuario?.trim()
-              ? `/artistas/${encodeURIComponent(
-                  destinatario.nombreUsuario.trim(),
-                )}#idea-${propuesta.idea.id}`
-              : null;
-
-            return (
-              <article
-                key={propuesta.id}
-                className={`rounded-xl border p-3 transition ${
-                  mensajesPendientes > 0
-                    ? "border-violet-400/35 bg-violet-500/[0.07] shadow-[0_0_24px_rgba(139,92,246,0.08)]"
-                    : "border-white/10 bg-white/[0.025]"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-2.5">
-                    <AvatarArtista artista={destinatario} nombre={nombre} />
-
-                    <div className="min-w-0">
-                      <NombreConEnlace artista={destinatario} nombre={nombre} />
-                      <p className="mt-0.5 truncate text-[9px] font-medium text-zinc-500">
-                        Para “{propuesta.idea.titulo}” ·{" "}
-                        {formatearFecha(propuesta.creadoEn)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex shrink-0 flex-col items-end gap-1">
-                    <span
-                      className={`rounded-full border px-2 py-1 text-[9px] font-bold ${claseEstado(
-                        propuesta.estado,
-                      )}`}
-                    >
-                      {etiquetaEstado(propuesta.estado)}
-                    </span>
-                    {mensajesPendientes > 0 && (
-                      <span className="rounded-full bg-red-500 px-2 py-1 text-[8px] font-black text-white">
-                        {mensajesPendientes} nuevo
-                        {mensajesPendientes === 1 ? "" : "s"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {propuesta.mensaje && (
-                  <div className="mt-3 rounded-lg border border-white/5 bg-black/20 px-3 py-2">
-                    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-zinc-600">
-                      Tu mensaje
-                    </p>
-                    <p className="mt-1 whitespace-pre-wrap text-[10px] leading-4 text-zinc-400">
-                      {propuesta.mensaje}
-                    </p>
-                  </div>
-                )}
-
-                {propuesta.motivoDecision &&
-                  propuesta.estado !== "PENDIENTE" && (
-                    <div className="mt-3 rounded-lg border border-sky-400/20 bg-sky-500/[0.07] px-3 py-2">
-                      <p className="text-[8px] font-black uppercase tracking-[0.14em] text-sky-300/80">
-                        Motivo del artista
-                      </p>
-                      <p className="mt-1 whitespace-pre-wrap text-[10px] leading-4 text-zinc-300">
-                        {propuesta.motivoDecision}
-                      </p>
-                    </div>
-                  )}
-
-                {propuesta.audioUrl ? (
-                  <ReproductorAudio
-                    id={`propuesta-enviada-${propuesta.id}`}
-                    src={propuesta.audioUrl}
-                    titulo={`Tu propuesta para ${propuesta.idea.titulo}`}
-                    duracionSegundos={propuesta.duracionSegundos}
-                    numero={indice + 1}
-                    className="mt-3"
-                  />
-                ) : (
-                  <p className="mt-3 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[9px] font-semibold text-zinc-500">
-                    {textoAudioNoDisponible(propuesta.estado)}
-                  </p>
-                )}
-
-                <p
-                  className={`mt-3 rounded-lg border px-3 py-2 text-[9px] font-semibold ${claseEstado(
-                    propuesta.estado,
-                  )}`}
-                >
-                  {textoEstadoEnviado(propuesta.estado)}
-                  {propuesta.estado === "RECHAZADA" &&
-                    propuesta.permiteReintento && (
-                      <> Puedes participar otra vez si todavía hay cupos.</>
-                    )}
-                </p>
-
-                {rutaIdea &&
-                  propuesta.numeroIntento < 2 &&
-                  (propuesta.estado === "CAMBIOS_SOLICITADOS" ||
-                    (propuesta.estado === "RECHAZADA" &&
-                      propuesta.permiteReintento)) && (
-                    <div className="mt-3 flex justify-end">
-                      <Link
-                        href={rutaIdea}
-                        className="rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
-                      >
-                        {propuesta.estado === "CAMBIOS_SOLICITADOS"
-                          ? "Enviar corrección"
-                          : "Intentar nuevamente"}
-                      </Link>
-                    </div>
-                  )}
-
-                {propuesta.estado === "ACEPTADA" && (
-                  <div className="mt-3 flex flex-wrap justify-end gap-2">
-                    {propuesta.audioUrl && (
-                      <a
-                        href={`/api/propuestas/${propuesta.id}/descargar`}
-                        className="rounded-lg border border-sky-400/25 bg-sky-500/10 px-3 py-1.5 text-[9px] font-bold text-sky-200 transition hover:bg-sky-500/20"
-                      >
-                        Descargar MP3
-                      </a>
-                    )}
-
-                    {propuesta.conversacionId ? (
-                      <Link
-                        href={`/mensajes/${propuesta.conversacionId}`}
-                        className="flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-500/15 px-3 py-1.5 text-[9px] font-black text-violet-100 transition hover:bg-violet-500/25"
-                      >
-                        Abrir chat
-                        {mensajesPendientes > 0 && (
-                          <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] leading-none text-white">
-                            {etiquetaCantidad(mensajesPendientes)}
-                          </span>
-                        )}
-                      </Link>
-                    ) : (
-                      <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-semibold text-zinc-500">
-                        Preparando chat…
-                      </span>
-                    )}
-                  </div>
-                )}
-              </article>
-            );
-          })}
         </div>
       )}
 

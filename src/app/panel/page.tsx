@@ -498,7 +498,7 @@ export default async function PanelPage() {
 
           <section
             id="panel-card-3"
-            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden p-4 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-3"
+            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden p-2.5 sm:p-3 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-2"
           >
             <PropuestasRecibidasCard
               propuestasIniciales={propuestasIniciales}
