@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useNotificaciones } from "@/app/components/useNotificaciones";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
 type IconoTipo =
@@ -94,8 +95,13 @@ export default function MenuMovilPanel({
 }: MenuMovilPanelProps) {
   const pathname = usePathname();
   const { total: mensajesNoLeidos } = useNotificacionesChat();
+  const { totalNoLeidas: notificacionesNoLeidas } = useNotificaciones();
   const etiquetaMensajes =
     mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
+  const etiquetaPerfil =
+    notificacionesNoLeidas > 99
+      ? "99+"
+      : String(notificacionesNoLeidas);
 
   const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
   const estaEnExplorar =
@@ -167,10 +173,23 @@ export default function MenuMovilPanel({
 
         <Link
           href="/panel#panel-card-1"
-          aria-label="Ir al perfil"
+          aria-label={
+            notificacionesNoLeidas > 0
+              ? `Ir al perfil. ${notificacionesNoLeidas} notificación${
+                  notificacionesNoLeidas === 1 ? "" : "es"
+                } sin leer`
+              : "Ir al perfil"
+          }
           className={claseOpcion(false)}
         >
-          <Icono tipo="perfil" />
+          <span className="relative flex">
+            <Icono tipo="perfil" />
+            {notificacionesNoLeidas > 0 && (
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#0b0810] bg-violet-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-violet-950/50">
+                {etiquetaPerfil}
+              </span>
+            )}
+          </span>
           <span className="truncate text-[9px] font-semibold">Perfil</span>
         </Link>
       </div>

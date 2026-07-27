@@ -9,33 +9,13 @@ import {
   useState,
 } from "react";
 
-type ActorNotificacion = {
-  id: number;
-  nombreVisible: string;
-  nombreUsuario: string | null;
-  fotoPerfil: string | null;
-};
-
-type NotificacionCentro = {
-  id: number;
-  tipo: string;
-  titulo: string;
-  mensaje: string;
-  enlace: string | null;
-  entidadTipo: string | null;
-  entidadId: number | null;
-  conversacionId: number | null;
-  leidaEn: string | null;
-  creadoEn: string;
-  actor: ActorNotificacion | null;
-};
-
-type RespuestaNotificaciones = {
-  ok: boolean;
-  mensaje?: string;
-  totalNoLeidas?: number;
-  notificaciones?: NotificacionCentro[];
-};
+import {
+  actualizarNotificaciones,
+  marcarNotificacionLeida,
+  marcarTodasNotificacionesLeidas,
+  type NotificacionCentro,
+  useNotificaciones,
+} from "@/app/components/useNotificaciones";
 
 function IconoCampana({
   className = "h-4 w-4",
@@ -205,58 +185,19 @@ function iniciales(nombre: string) {
 
 export default function CentroNotificaciones() {
   const botonRef = useRef<HTMLButtonElement | null>(null);
-  const consultaEnCursoRef = useRef(false);
   const [montado, setMontado] = useState(false);
   const [abierto, setAbierto] = useState(false);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState("");
   const [soloNoLeidas, setSoloNoLeidas] = useState(false);
-  const [notificaciones, setNotificaciones] = useState<NotificacionCentro[]>([]);
-  const [totalNoLeidas, setTotalNoLeidas] = useState(0);
+  const {
+    cargando,
+    error,
+    notificaciones,
+    totalNoLeidas,
+  } = useNotificaciones();
   const [posicionEscritorio, setPosicionEscritorio] = useState({
     top: 64,
     left: 16,
   });
-
-  const cargarNotificaciones = useCallback(async () => {
-    if (consultaEnCursoRef.current) {
-      return;
-    }
-
-    consultaEnCursoRef.current = true;
-
-    try {
-      const respuesta = await fetch("/api/notificaciones", {
-        method: "GET",
-        cache: "no-store",
-        credentials: "same-origin",
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      const datos = (await respuesta.json()) as RespuestaNotificaciones;
-
-      if (!respuesta.ok || !datos.ok) {
-        throw new Error(
-          datos.mensaje ?? "No se pudieron cargar las notificaciones.",
-        );
-      }
-
-      setNotificaciones(datos.notificaciones ?? []);
-      setTotalNoLeidas(Math.max(0, datos.totalNoLeidas ?? 0));
-      setError("");
-    } catch (errorCarga) {
-      setError(
-        errorCarga instanceof Error
-          ? errorCarga.message
-          : "No se pudieron cargar las notificaciones.",
-      );
-    } finally {
-      setCargando(false);
-      consultaEnCursoRef.current = false;
-    }
-  }, []);
 
   const actualizarPosicion = useCallback(() => {
     const boton = botonRef.current;
@@ -284,37 +225,12 @@ export default function CentroNotificaciones() {
   }, []);
 
   useEffect(() => {
-    void cargarNotificaciones();
-
-    const intervalo = window.setInterval(() => {
-      if (document.visibilityState === "visible") {
-        void cargarNotificaciones();
-      }
-    }, 15000);
-
-    const actualizarAlVolver = () => {
-      if (document.visibilityState === "visible") {
-        void cargarNotificaciones();
-      }
-    };
-
-    window.addEventListener("focus", actualizarAlVolver);
-    document.addEventListener("visibilitychange", actualizarAlVolver);
-
-    return () => {
-      window.clearInterval(intervalo);
-      window.removeEventListener("focus", actualizarAlVolver);
-      document.removeEventListener("visibilitychange", actualizarAlVolver);
-    };
-  }, [cargarNotificaciones]);
-
-  useEffect(() => {
     if (!abierto) {
       return;
     }
 
     actualizarPosicion();
-    void cargarNotificaciones();
+    void actualizarNotificaciones();
 
     window.addEventListener("resize", actualizarPosicion);
     window.addEventListener("scroll", actualizarPosicion, true);
@@ -323,7 +239,7 @@ export default function CentroNotificaciones() {
       window.removeEventListener("resize", actualizarPosicion);
       window.removeEventListener("scroll", actualizarPosicion, true);
     };
-  }, [abierto, actualizarPosicion, cargarNotificaciones]);
+  }, [abierto, actualizarPosicion]);
 
   useEffect(() => {
     if (!abierto) {
@@ -352,71 +268,11 @@ export default function CentroNotificaciones() {
   );
 
   async function marcarLeida(id: number) {
-    const notificacion = notificaciones.find((item) => item.id === id);
-
-    if (!notificacion || notificacion.leidaEn) {
-      return;
-    }
-
-    const ahora = new Date().toISOString();
-
-    setNotificaciones((actuales) =>
-      actuales.map((item) =>
-        item.id === id ? { ...item, leidaEn: ahora } : item,
-      ),
-    );
-    setTotalNoLeidas((actual) => Math.max(0, actual - 1));
-
-    try {
-      await fetch("/api/notificaciones", {
-        method: "PATCH",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accion: "MARCAR_LEIDA",
-          id,
-        }),
-      });
-    } catch {
-      void cargarNotificaciones();
-    }
+    await marcarNotificacionLeida(id);
   }
 
   async function marcarTodas() {
-    if (totalNoLeidas === 0) {
-      return;
-    }
-
-    const ahora = new Date().toISOString();
-
-    setNotificaciones((actuales) =>
-      actuales.map((item) => ({
-        ...item,
-        leidaEn: item.leidaEn ?? ahora,
-      })),
-    );
-    setTotalNoLeidas(0);
-
-    try {
-      const respuesta = await fetch("/api/notificaciones", {
-        method: "PATCH",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accion: "MARCAR_TODAS",
-        }),
-      });
-
-      if (!respuesta.ok) {
-        throw new Error("No se pudieron marcar las notificaciones.");
-      }
-    } catch {
-      void cargarNotificaciones();
-    }
+    await marcarTodasNotificacionesLeidas();
   }
 
   async function abrirNotificacion(notificacion: NotificacionCentro) {
@@ -456,7 +312,7 @@ export default function CentroNotificaciones() {
           soloNoLeidas={soloNoLeidas}
           onSoloNoLeidas={setSoloNoLeidas}
           onCerrar={() => setAbierto(false)}
-          onRecargar={() => void cargarNotificaciones()}
+          onRecargar={() => void actualizarNotificaciones()}
           onMarcarTodas={() => void marcarTodas()}
           onAbrir={(notificacion) => void abrirNotificacion(notificacion)}
         />
@@ -482,7 +338,7 @@ export default function CentroNotificaciones() {
           soloNoLeidas={soloNoLeidas}
           onSoloNoLeidas={setSoloNoLeidas}
           onCerrar={() => setAbierto(false)}
-          onRecargar={() => void cargarNotificaciones()}
+          onRecargar={() => void actualizarNotificaciones()}
           onMarcarTodas={() => void marcarTodas()}
           onAbrir={(notificacion) => void abrirNotificacion(notificacion)}
         />
@@ -497,7 +353,6 @@ export default function CentroNotificaciones() {
         type="button"
         onClick={() => {
           setAbierto((actual) => !actual);
-          setError("");
         }}
         title="Notificaciones"
         aria-label={
