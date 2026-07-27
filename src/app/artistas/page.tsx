@@ -6,11 +6,24 @@ import ArtistasClient, {
   type EstadisticasExplorar,
   type OpcionesFiltros,
 } from "./ArtistasClient";
+import type {
+  OportunidadMusical,
+  OpcionesFiltrosOportunidades,
+} from "./OportunidadesMusicales";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const CODIGOS_ISO_PAIS = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(" ");
+const ESTADOS_QUE_OCUPAN_CUPO = [
+  "PENDIENTE",
+  "CAMBIOS_SOLICITADOS",
+  "ACEPTADA",
+  "RECHAZANDO",
+];
+
+const CODIGOS_ISO_PAIS = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(
+  " ",
+);
 
 function obtenerGeneros(generos: unknown): string[] {
   if (!Array.isArray(generos)) {
@@ -79,7 +92,6 @@ function crearMapaCodigosPais() {
     }
   }
 
-  // Alias frecuentes para perfiles antiguos o nombres escritos manualmente.
   const alias: Record<string, string> = {
     "ee uu": "US",
     "e e u u": "US",
@@ -118,9 +130,7 @@ function resolverCodigoPais(nombrePais: string) {
     return paisLimpio.toUpperCase();
   }
 
-  return (
-    CODIGOS_PAIS_POR_NOMBRE.get(normalizarNombrePais(paisLimpio)) ?? ""
-  );
+  return CODIGOS_PAIS_POR_NOMBRE.get(normalizarNombrePais(paisLimpio)) ?? "";
 }
 
 function valoresUnicos(valores: Array<string | null | undefined>) {
@@ -138,6 +148,7 @@ export default async function ArtistasPage() {
   const ahora = new Date();
 
   let artistas: ArtistaExplorar[] = [];
+  let oportunidades: OportunidadMusical[] = [];
   let estadisticas: EstadisticasExplorar = {
     artistas: 0,
     ideas: 0,
@@ -149,63 +160,131 @@ export default async function ArtistasPage() {
     generos: [],
     roles: [],
   };
+  let opcionesOportunidades: OpcionesFiltrosOportunidades = {
+    roles: [],
+    generos: [],
+    idiomas: [],
+    modalidades: [],
+    acuerdos: [],
+    paises: [],
+    ciudades: [],
+  };
   let errorCarga = false;
 
   try {
-    const usuarios = await prisma.usuario.findMany({
-      // Este primer filtro evita cargar cuentas que ni siquiera han terminado
-      // el formulario inicial. Después se hace una validación más estricta.
-      where: { perfilCompleto: true },
-      orderBy: { creadoEn: "desc" },
-      select: {
-        id: true,
-        nombreArtistico: true,
-        nombreUsuario: true,
-        fotoPerfil: true,
-        ciudad: true,
-        pais: true,
-        rolPrincipal: true,
-        generos: true,
-        creadoEn: true,
-        ideas: {
-          where: {
-            estado: "ACTIVA",
-            expiraEn: { gt: ahora },
+    const [usuarios, ideasActivas, totalPropuestas] = await Promise.all([
+      prisma.usuario.findMany({
+        where: { perfilCompleto: true },
+        orderBy: { creadoEn: "desc" },
+        select: {
+          id: true,
+          nombreArtistico: true,
+          nombreUsuario: true,
+          fotoPerfil: true,
+          ciudad: true,
+          pais: true,
+          rolPrincipal: true,
+          generos: true,
+          creadoEn: true,
+          ideas: {
+            where: {
+              estado: "ACTIVA",
+              expiraEn: { gt: ahora },
+            },
+            orderBy: { creadoEn: "desc" },
+            take: 2,
+            select: {
+              id: true,
+              titulo: true,
+              descripcion: true,
+              audioUrl: true,
+              duracionSegundos: true,
+              bpm: true,
+              tonalidad: true,
+              rolBuscado: true,
+              generoMusical: true,
+              idiomaBuscado: true,
+              modalidadColaboracion: true,
+              paisPreferido: true,
+              departamentoPreferido: true,
+              ciudadPreferida: true,
+              tipoAcuerdo: true,
+            },
           },
-          orderBy: { creadoEn: "desc" },
-          take: 2,
-          select: {
-            id: true,
-            titulo: true,
-            descripcion: true,
-            audioUrl: true,
-            duracionSegundos: true,
-            bpm: true,
-            tonalidad: true,
-            rolBuscado: true,
-            generoMusical: true,
-            idiomaBuscado: true,
-            modalidadColaboracion: true,
-            paisPreferido: true,
-            departamentoPreferido: true,
-            ciudadPreferida: true,
-            tipoAcuerdo: true,
-          },
-        },
-        _count: {
-          select: {
-            ideas: {
-              where: {
-                estado: "ACTIVA",
-                expiraEn: { gt: ahora },
+          _count: {
+            select: {
+              ideas: {
+                where: {
+                  estado: "ACTIVA",
+                  expiraEn: { gt: ahora },
+                },
               },
             },
           },
         },
-      },
-    });
-
-    const totalPropuestas = await prisma.propuesta.count();
+      }),
+      prisma.idea.findMany({
+        where: {
+          estado: "ACTIVA",
+          expiraEn: { gt: ahora },
+          usuario: { perfilCompleto: true },
+        },
+        orderBy: { creadoEn: "desc" },
+        select: {
+          id: true,
+          titulo: true,
+          descripcion: true,
+          audioUrl: true,
+          duracionSegundos: true,
+          bpm: true,
+          tonalidad: true,
+          rolBuscado: true,
+          generoMusical: true,
+          idiomaBuscado: true,
+          modalidadColaboracion: true,
+          paisPreferido: true,
+          departamentoPreferido: true,
+          ciudadPreferida: true,
+          tipoAcuerdo: true,
+          creadoEn: true,
+          expiraEn: true,
+          usuario: {
+            select: {
+              id: true,
+              nombreArtistico: true,
+              nombreUsuario: true,
+              fotoPerfil: true,
+              ciudad: true,
+              pais: true,
+              rolPrincipal: true,
+              generos: true,
+            },
+          },
+          _count: {
+            select: {
+              propuestas: {
+                where: {
+                  estado: { in: ESTADOS_QUE_OCUPAN_CUPO },
+                },
+              },
+            },
+          },
+          propuestas: {
+            where: {
+              remitenteId: sesion?.usuarioId ?? -1,
+            },
+            select: {
+              estado: true,
+              motivoDecision: true,
+              permiteReintento: true,
+              numeroIntento: true,
+            },
+            take: 1,
+          },
+        },
+      }),
+      prisma.propuesta.count(),
+    ]);
 
     const usuariosPublicables = usuarios.filter(perfilEsPublicable);
 
@@ -229,19 +308,47 @@ export default async function ArtistasPage() {
           return b.ideasActivas - a.ideasActivas;
         }
 
-        return (
-          new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime()
-        );
+        return new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime();
       });
+
+    oportunidades = ideasActivas
+      .filter((idea) => perfilEsPublicable(idea.usuario))
+      .map((idea) => ({
+        id: idea.id,
+        titulo: idea.titulo,
+        descripcion: idea.descripcion,
+        audioUrl: idea.audioUrl,
+        duracionSegundos: idea.duracionSegundos,
+        bpm: idea.bpm,
+        tonalidad: idea.tonalidad,
+        rolBuscado: idea.rolBuscado,
+        generoMusical: idea.generoMusical,
+        idiomaBuscado: idea.idiomaBuscado,
+        modalidadColaboracion: idea.modalidadColaboracion,
+        paisPreferido: idea.paisPreferido,
+        departamentoPreferido: idea.departamentoPreferido,
+        ciudadPreferida: idea.ciudadPreferida,
+        tipoAcuerdo: idea.tipoAcuerdo,
+        creadoEn: idea.creadoEn.toISOString(),
+        expiraEn: idea.expiraEn.toISOString(),
+        propuestasActuales: idea._count.propuestas,
+        propuestaUsuario: idea.propuestas[0] ?? null,
+        artista: {
+          id: idea.usuario.id,
+          nombreArtistico: idea.usuario.nombreArtistico!.trim(),
+          nombreUsuario: idea.usuario.nombreUsuario!.trim(),
+          fotoPerfil: idea.usuario.fotoPerfil,
+          ciudad: idea.usuario.ciudad!.trim(),
+          pais: idea.usuario.pais!.trim(),
+          codigoPais: resolverCodigoPais(idea.usuario.pais!),
+          rol: idea.usuario.rolPrincipal,
+          generos: obtenerGeneros(idea.usuario.generos),
+        },
+      }));
 
     estadisticas = {
       artistas: artistas.length,
-      // Solo cuenta las ideas pertenecientes a artistas que realmente se
-      // muestran en Explorar.
-      ideas: artistas.reduce(
-        (total, artista) => total + artista.ideasActivas,
-        0,
-      ),
+      ideas: oportunidades.length,
       propuestas: totalPropuestas,
     };
 
@@ -249,21 +356,46 @@ export default async function ArtistasPage() {
       paises: valoresUnicos(artistas.map((artista) => artista.pais)),
       ciudades: valoresUnicos(artistas.map((artista) => artista.ciudad)),
       roles: valoresUnicos(artistas.map((artista) => artista.rol)),
+      generos: valoresUnicos(artistas.flatMap((artista) => artista.generos)),
+    };
+
+    opcionesOportunidades = {
+      roles: valoresUnicos(
+        oportunidades.map((oportunidad) => oportunidad.rolBuscado),
+      ),
       generos: valoresUnicos(
-        artistas.flatMap((artista) => artista.generos),
+        oportunidades.map((oportunidad) => oportunidad.generoMusical),
+      ),
+      idiomas: valoresUnicos(
+        oportunidades.map((oportunidad) => oportunidad.idiomaBuscado),
+      ),
+      modalidades: valoresUnicos(
+        oportunidades.map((oportunidad) => oportunidad.modalidadColaboracion),
+      ),
+      acuerdos: valoresUnicos(
+        oportunidades.map((oportunidad) => oportunidad.tipoAcuerdo),
+      ),
+      paises: valoresUnicos(
+        oportunidades.map((oportunidad) => oportunidad.paisPreferido),
+      ),
+      ciudades: valoresUnicos(
+        oportunidades.map((oportunidad) => oportunidad.ciudadPreferida),
       ),
     };
   } catch (error) {
     errorCarga = true;
-    console.error("No se pudo cargar el explorador de artistas.", error);
+    console.error("No se pudo cargar el explorador de FeatMusic.", error);
   }
 
   return (
     <ArtistasClient
       sesionActiva={Boolean(sesion)}
+      usuarioActualId={sesion?.usuarioId ?? null}
       artistasIniciales={artistas}
+      oportunidadesIniciales={oportunidades}
       estadisticas={estadisticas}
       opciones={opciones}
+      opcionesOportunidades={opcionesOportunidades}
       errorCarga={errorCarga}
     />
   );

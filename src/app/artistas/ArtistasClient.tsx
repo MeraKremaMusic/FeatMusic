@@ -7,6 +7,10 @@ import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import ReproductorAudio from "../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../panel/components/MenuMovilPanel";
+import OportunidadesMusicales, {
+  type OportunidadMusical,
+  type OpcionesFiltrosOportunidades,
+} from "./OportunidadesMusicales";
 
 export type ArtistaExplorar = {
   id: number;
@@ -54,9 +58,12 @@ export type OpcionesFiltros = {
 
 type ArtistasClientProps = {
   sesionActiva: boolean;
+  usuarioActualId: number | null;
   artistasIniciales: ArtistaExplorar[];
+  oportunidadesIniciales: OportunidadMusical[];
   estadisticas: EstadisticasExplorar;
   opciones: OpcionesFiltros;
+  opcionesOportunidades: OpcionesFiltrosOportunidades;
   errorCarga: boolean;
 };
 
@@ -74,6 +81,7 @@ function formatearRol(rol: string) {
   const roles: Record<string, string> = {
     CANTANTE: "Cantante",
     COMPOSITOR: "Compositor",
+    PRODUCTOR: "Productor",
     BEATMAKER: "Beatmaker",
   };
 
@@ -622,12 +630,16 @@ function TarjetaArtista({
 
 export default function ArtistasClient({
   sesionActiva,
+  usuarioActualId,
   artistasIniciales,
+  oportunidadesIniciales,
   estadisticas,
   opciones,
+  opcionesOportunidades,
   errorCarga,
 }: ArtistasClientProps) {
   const [cargando, setCargando] = useState(true);
+  const [vista, setVista] = useState<"artistas" | "oportunidades">("artistas");
   const [busqueda, setBusqueda] = useState("");
   const [pais, setPais] = useState("");
   const [ciudad, setCiudad] = useState("");
@@ -677,6 +689,10 @@ export default function ArtistasClient({
     setPagina(1);
     setDescripcionAbiertaId(null);
   }, [busqueda, pais, ciudad, genero, rol, soloConIdeas]);
+
+  useEffect(() => {
+    setDescripcionAbiertaId(null);
+  }, [vista]);
 
   const artistasFiltrados = useMemo(() => {
     const termino = normalizar(busqueda);
@@ -793,7 +809,43 @@ export default function ArtistasClient({
             />
           </section>
 
-          <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
+          <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-1.5 backdrop-blur-sm">
+            <div className="grid grid-cols-2 gap-1.5" role="tablist" aria-label="Explorar FeatMusic">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={vista === "artistas"}
+                onClick={() => setVista("artistas")}
+                className={`rounded-lg px-3 py-2.5 text-xs font-black transition ${
+                  vista === "artistas"
+                    ? "border border-violet-400/25 bg-violet-500/15 text-violet-100 shadow-[0_8px_25px_rgba(139,92,246,0.08)]"
+                    : "border border-transparent text-zinc-500 hover:bg-white/[0.035] hover:text-zinc-200"
+                }`}
+              >
+                Artistas
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={vista === "oportunidades"}
+                onClick={() => setVista("oportunidades")}
+                className={`rounded-lg px-3 py-2.5 text-xs font-black transition ${
+                  vista === "oportunidades"
+                    ? "border border-violet-400/25 bg-violet-500/15 text-violet-100 shadow-[0_8px_25px_rgba(139,92,246,0.08)]"
+                    : "border border-transparent text-zinc-500 hover:bg-white/[0.035] hover:text-zinc-200"
+                }`}
+              >
+                Oportunidades
+                <span className="ml-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-1.5 py-0.5 text-[8px] text-violet-200">
+                  {oportunidadesIniciales.length}
+                </span>
+              </button>
+            </div>
+          </section>
+
+          {vista === "artistas" ? (
+            <>
+              <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
             <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
               <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#100d15] px-3 py-2 focus-within:border-violet-400/40 lg:w-[320px] lg:flex-none">
                 <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
@@ -943,6 +995,16 @@ export default function ArtistasClient({
                 Siguiente
               </button>
             </div>
+          )}
+            </>
+          ) : (
+            <OportunidadesMusicales
+              sesionActiva={sesionActiva}
+              usuarioActualId={usuarioActualId}
+              oportunidadesIniciales={oportunidadesIniciales}
+              opciones={opcionesOportunidades}
+              errorCarga={errorCarga}
+            />
           )}
         </div>
       )}
