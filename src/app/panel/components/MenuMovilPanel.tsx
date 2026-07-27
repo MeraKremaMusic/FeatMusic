@@ -103,6 +103,7 @@ export default function MenuMovilPanel({
       ? "99+"
       : String(notificacionesNoLeidas);
 
+  const estaEnInicio = pathname === "/inicio" || pathname.startsWith("/inicio/");
   const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
   const estaEnExplorar =
     pathname === "/artistas" || pathname.startsWith("/artistas/");
@@ -118,10 +119,10 @@ export default function MenuMovilPanel({
     >
       <div className="mx-auto grid w-full min-w-0 max-w-md grid-cols-5 items-end">
         <Link
-          href="/panel"
-          aria-label="Ir al panel"
-          aria-current={estaEnPanel ? "page" : undefined}
-          className={claseOpcion(estaEnPanel)}
+          href="/inicio"
+          aria-label="Ir al feed de inicio"
+          aria-current={estaEnInicio ? "page" : undefined}
+          className={claseOpcion(estaEnInicio)}
         >
           <Icono tipo="inicio" />
           <span className="truncate text-[9px] font-semibold">Inicio</span>
@@ -180,7 +181,8 @@ export default function MenuMovilPanel({
                 } sin leer`
               : "Ir al perfil"
           }
-          className={claseOpcion(false)}
+          aria-current={estaEnPanel ? "page" : undefined}
+          className={claseOpcion(estaEnPanel)}
         >
           <span className="relative flex">
             <Icono tipo="perfil" />

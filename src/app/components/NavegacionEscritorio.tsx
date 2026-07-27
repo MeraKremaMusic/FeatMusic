@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
-type IconoTipo = "planes" | "explorar" | "mensajes" | "perfil";
+type IconoTipo = "inicio" | "explorar" | "mensajes" | "perfil";
 
 function Icono({
   tipo,
@@ -25,11 +25,12 @@ function Icono({
     strokeLinejoin: "round" as const,
   };
 
-  if (tipo === "planes") {
+  if (tipo === "inicio") {
     return (
       <svg {...props}>
-        <path d="m3 8 4 3 5-7 5 7 4-3-2 11H5L3 8Z" />
-        <path d="M5 19h14" />
+        <path d="M3 10.5 12 3l9 7.5" />
+        <path d="M5.5 9.5V21h13V9.5" />
+        <path d="M9.5 21v-6h5v6" />
       </svg>
     );
   }
@@ -84,9 +85,12 @@ export default function NavegacionEscritorio({
   const etiquetaMensajes =
     mensajesNoLeidos > 99 ? "99+" : String(mensajesNoLeidos);
 
+  const viendoInicio =
+    pathname === "/inicio" || pathname.startsWith("/inicio/");
   const explorando =
     pathname === "/artistas" || pathname.startsWith("/artistas/");
-  const viendoPerfil = pathname === "/panel";
+  const viendoPerfil =
+    pathname === "/panel" || pathname.startsWith("/panel/");
   const viendoMensajes =
     pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
@@ -97,14 +101,16 @@ export default function NavegacionEscritorio({
         mostrarDesde === "md" ? "md:flex" : "lg:flex"
       }`}
     >
-      <button
-        type="button"
-        title="Próximamente"
-        className={`${claseBase} cursor-default text-zinc-500`}
+      <Link
+        href="/inicio"
+        aria-current={viendoInicio ? "page" : undefined}
+        className={`${claseBase} ${
+          viendoInicio ? claseActiva : claseInactiva
+        }`}
       >
-        <Icono tipo="planes" />
-        Planes
-      </button>
+        <Icono tipo="inicio" />
+        Inicio
+      </Link>
 
       <Link
         href="/artistas"
