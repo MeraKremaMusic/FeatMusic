@@ -54,3 +54,5 @@ next-env.d.ts
 # generated prisma
 
 /src/generated/prisma
+*.zip
+dev-server.log

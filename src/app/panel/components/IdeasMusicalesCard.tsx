@@ -3,7 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+
+import {
+  OPCIONES_GENERO_MUSICAL,
+  OPCIONES_IDIOMA_BUSCADO,
+  OPCIONES_MODALIDAD_COLABORACION,
+  OPCIONES_ROL_BUSCADO,
+  OPCIONES_TIPO_ACUERDO,
+} from "@/lib/colaboracion-ideas";
 import ReproductorAudio from "../../components/ReproductorAudio";
+import ResumenColaboracionIdea from "../../components/ResumenColaboracionIdea";
+import SelectorUbicacionIdea, {
+  type UbicacionIdeaSeleccionada,
+} from "./SelectorUbicacionIdea";
 
 export type IdeaPanel = {
   id: number;
@@ -11,6 +23,14 @@ export type IdeaPanel = {
   descripcion: string;
   bpm: number;
   tonalidad: string;
+  rolBuscado: string | null;
+  generoMusical: string | null;
+  idiomaBuscado: string | null;
+  modalidadColaboracion: string | null;
+  paisPreferido: string | null;
+  departamentoPreferido: string | null;
+  ciudadPreferida: string | null;
+  tipoAcuerdo: string | null;
   audioUrl: string;
   duracionSegundos: number;
   formato: string | null;
@@ -36,6 +56,14 @@ type RespuestaCrearIdea = {
 const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
 const MAX_AUDIO_DURATION = 240;
 const MAX_ACTIVE_IDEAS = 3;
+
+const UBICACION_VACIA: UbicacionIdeaSeleccionada = {
+  paisCodigo: "",
+  paisNombre: "",
+  departamentoCodigo: "",
+  departamentoNombre: "",
+  ciudad: "",
+};
 
 const AUDIO_EXTENSIONS = new Set([
   "mp3",
@@ -299,6 +327,13 @@ export default function IdeasMusicalesCard({
   const [descripcion, setDescripcion] = useState("");
   const [bpm, setBpm] = useState("");
   const [tonalidad, setTonalidad] = useState("");
+  const [rolBuscado, setRolBuscado] = useState("");
+  const [generoMusical, setGeneroMusical] = useState("");
+  const [idiomaBuscado, setIdiomaBuscado] = useState("");
+  const [modalidadColaboracion, setModalidadColaboracion] = useState("");
+  const [tipoAcuerdo, setTipoAcuerdo] = useState("");
+  const [ubicacionPreferida, setUbicacionPreferida] =
+    useState<UbicacionIdeaSeleccionada>(UBICACION_VACIA);
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(null);
   const [duracionSegundos, setDuracionSegundos] = useState<number | null>(null);
@@ -351,6 +386,12 @@ export default function IdeasMusicalesCard({
     setDescripcion("");
     setBpm("");
     setTonalidad("");
+    setRolBuscado("");
+    setGeneroMusical("");
+    setIdiomaBuscado("");
+    setModalidadColaboracion("");
+    setTipoAcuerdo("");
+    setUbicacionPreferida(UBICACION_VACIA);
     setArchivo(null);
     setVistaPrevia(null);
     setDuracionSegundos(null);
@@ -460,6 +501,54 @@ export default function IdeasMusicalesCard({
       return;
     }
 
+    if (!rolBuscado) {
+      setError("Selecciona qué rol buscas para esta idea.");
+      return;
+    }
+
+    if (!generoMusical) {
+      setError("Selecciona el género musical de la colaboración.");
+      return;
+    }
+
+    if (!idiomaBuscado) {
+      setError("Selecciona el idioma de la colaboración.");
+      return;
+    }
+
+    if (!modalidadColaboracion) {
+      setError("Selecciona si la colaboración será remota o presencial.");
+      return;
+    }
+
+    if (!tipoAcuerdo) {
+      setError("Selecciona el tipo de acuerdo de la colaboración.");
+      return;
+    }
+
+    const valoresUbicacion = [
+      ubicacionPreferida.paisCodigo,
+      ubicacionPreferida.departamentoCodigo,
+      ubicacionPreferida.ciudad,
+    ];
+    const tieneAlgunDatoUbicacion = valoresUbicacion.some(Boolean);
+    const tieneUbicacionCompleta = valoresUbicacion.every(Boolean);
+
+    if (
+      modalidadColaboracion === "PRESENCIAL" &&
+      !tieneUbicacionCompleta
+    ) {
+      setError(
+        "Para una colaboración presencial, selecciona país, departamento y ciudad.",
+      );
+      return;
+    }
+
+    if (tieneAlgunDatoUbicacion && !tieneUbicacionCompleta) {
+      setError("Completa toda la ubicación preferida o déjala vacía.");
+      return;
+    }
+
     if (!archivo) {
       setError("Selecciona un archivo de audio válido.");
       return;
@@ -470,6 +559,17 @@ export default function IdeasMusicalesCard({
     formData.set("descripcion", descripcionLimpia);
     formData.set("bpm", String(bpmNumero));
     formData.set("tonalidad", tonalidad);
+    formData.set("rolBuscado", rolBuscado);
+    formData.set("generoMusical", generoMusical);
+    formData.set("idiomaBuscado", idiomaBuscado);
+    formData.set("modalidadColaboracion", modalidadColaboracion);
+    formData.set("tipoAcuerdo", tipoAcuerdo);
+    formData.set("paisCodigoPreferido", ubicacionPreferida.paisCodigo);
+    formData.set(
+      "departamentoCodigoPreferido",
+      ubicacionPreferida.departamentoCodigo,
+    );
+    formData.set("ciudadPreferida", ubicacionPreferida.ciudad.trim());
     formData.set("audio", archivo);
 
     try {
@@ -615,6 +715,18 @@ export default function IdeasMusicalesCard({
                           {idea.descripcion}
                         </p>
                       )}
+
+                      <ResumenColaboracionIdea
+                        rolBuscado={idea.rolBuscado}
+                        generoMusical={idea.generoMusical}
+                        idiomaBuscado={idea.idiomaBuscado}
+                        modalidadColaboracion={idea.modalidadColaboracion}
+                        paisPreferido={idea.paisPreferido}
+                        departamentoPreferido={idea.departamentoPreferido}
+                        ciudadPreferida={idea.ciudadPreferida}
+                        tipoAcuerdo={idea.tipoAcuerdo}
+                        compacta
+                      />
 
                       <div className="mt-2.5 flex items-end justify-between gap-3 border-t border-white/[0.06] pt-2.5">
                         <div className="min-w-0 flex-1">
@@ -836,16 +948,137 @@ export default function IdeasMusicalesCard({
                 <textarea
                   value={descripcion}
                   onChange={(event) => setDescripcion(event.target.value)}
-                  maxLength={500}
+                  maxLength={300}
                   rows={4}
                   disabled={guardando}
                   placeholder="Explica qué colaboración buscas y qué te gustaría recibir."
                   className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
                 />
                 <span className="mt-1 block text-right text-[9px] text-zinc-600">
-                  {descripcion.length}/500
+                  {descripcion.length}/300
                 </span>
               </label>
+
+
+              <div className="md:col-span-2 rounded-2xl border border-violet-400/15 bg-violet-500/[0.035] p-3.5 sm:p-4">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-violet-300">
+                    Colaboración que buscas
+                  </p>
+                  <p className="mt-1 text-[10px] leading-4 text-zinc-500">
+                    Esta información ayudará a que los artistas adecuados entiendan
+                    rápidamente tu propuesta.
+                  </p>
+                </div>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <label>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      Rol buscado
+                    </span>
+                    <select
+                      value={rolBuscado}
+                      onChange={(event) => setRolBuscado(event.target.value)}
+                      disabled={guardando}
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                    >
+                      <option value="">Selecciona un rol</option>
+                      {OPCIONES_ROL_BUSCADO.map(([valor, etiqueta]) => (
+                        <option key={valor} value={valor}>
+                          {etiqueta}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      Género musical
+                    </span>
+                    <select
+                      value={generoMusical}
+                      onChange={(event) => setGeneroMusical(event.target.value)}
+                      disabled={guardando}
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                    >
+                      <option value="">Selecciona un género</option>
+                      {OPCIONES_GENERO_MUSICAL.map((opcion) => (
+                        <option key={opcion} value={opcion}>
+                          {opcion}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      Idioma
+                    </span>
+                    <select
+                      value={idiomaBuscado}
+                      onChange={(event) => setIdiomaBuscado(event.target.value)}
+                      disabled={guardando}
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                    >
+                      <option value="">Selecciona un idioma</option>
+                      {OPCIONES_IDIOMA_BUSCADO.map(([valor, etiqueta]) => (
+                        <option key={valor} value={valor}>
+                          {etiqueta}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      Modalidad
+                    </span>
+                    <select
+                      value={modalidadColaboracion}
+                      onChange={(event) =>
+                        setModalidadColaboracion(event.target.value)
+                      }
+                      disabled={guardando}
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                    >
+                      <option value="">Selecciona una modalidad</option>
+                      {OPCIONES_MODALIDAD_COLABORACION.map(
+                        ([valor, etiqueta]) => (
+                          <option key={valor} value={valor}>
+                            {etiqueta}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </label>
+
+                  <label className="md:col-span-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      Tipo de acuerdo
+                    </span>
+                    <select
+                      value={tipoAcuerdo}
+                      onChange={(event) => setTipoAcuerdo(event.target.value)}
+                      disabled={guardando}
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                    >
+                      <option value="">Selecciona un acuerdo</option>
+                      {OPCIONES_TIPO_ACUERDO.map(([valor, etiqueta]) => (
+                        <option key={valor} value={valor}>
+                          {etiqueta}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <SelectorUbicacionIdea
+                    valor={ubicacionPreferida}
+                    onChange={setUbicacionPreferida}
+                    requerida={modalidadColaboracion === "PRESENCIAL"}
+                    disabled={guardando}
+                  />
+                </div>
+              </div>
             </div>
 
             {error && (

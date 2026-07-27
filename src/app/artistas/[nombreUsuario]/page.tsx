@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import NavegacionEscritorio from "../../components/NavegacionEscritorio";
 import ReproductorAudio from "../../components/ReproductorAudio";
+import ResumenColaboracionIdea from "../../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
 import EnviarPropuesta from "./components/EnviarPropuesta";
 
@@ -333,6 +334,14 @@ export default async function PerfilPublicoPage({
           descripcion: true,
           bpm: true,
           tonalidad: true,
+          rolBuscado: true,
+          generoMusical: true,
+          idiomaBuscado: true,
+          modalidadColaboracion: true,
+          paisPreferido: true,
+          departamentoPreferido: true,
+          ciudadPreferida: true,
+          tipoAcuerdo: true,
           audioUrl: true,
           duracionSegundos: true,
           expiraEn: true,
@@ -595,6 +604,18 @@ export default async function PerfilPublicoPage({
                           {idea.descripcion}
                         </p>
                       </div>
+
+
+                      <ResumenColaboracionIdea
+                        rolBuscado={idea.rolBuscado}
+                        generoMusical={idea.generoMusical}
+                        idiomaBuscado={idea.idiomaBuscado}
+                        modalidadColaboracion={idea.modalidadColaboracion}
+                        paisPreferido={idea.paisPreferido}
+                        departamentoPreferido={idea.departamentoPreferido}
+                        ciudadPreferida={idea.ciudadPreferida}
+                        tipoAcuerdo={idea.tipoAcuerdo}
+                      />
                     </div>
 
                     <div className="border-t border-white/[0.07] bg-white/[0.018] px-2.5 py-1.5 sm:px-3">

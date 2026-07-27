@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import ReproductorAudio from "../components/ReproductorAudio";
+import ResumenColaboracionIdea from "../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../panel/components/MenuMovilPanel";
 
 export type ArtistaExplorar = {
@@ -26,6 +27,14 @@ export type ArtistaExplorar = {
     duracionSegundos: number;
     bpm: number;
     tonalidad: string;
+    rolBuscado: string | null;
+    generoMusical: string | null;
+    idiomaBuscado: string | null;
+    modalidadColaboracion: string | null;
+    paisPreferido: string | null;
+    departamentoPreferido: string | null;
+    ciudadPreferida: string | null;
+    tipoAcuerdo: string | null;
   }>;
   creadoEn: string;
 };
@@ -504,6 +513,19 @@ function TarjetaArtista({
                     duracionSegundos={idea.duracionSegundos}
                     numero={indice + 1}
                     className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
+                  />
+
+                  <ResumenColaboracionIdea
+                    rolBuscado={idea.rolBuscado}
+                    generoMusical={idea.generoMusical}
+                    idiomaBuscado={idea.idiomaBuscado}
+                    modalidadColaboracion={idea.modalidadColaboracion}
+                    paisPreferido={idea.paisPreferido}
+                    departamentoPreferido={idea.departamentoPreferido}
+                    ciudadPreferida={idea.ciudadPreferida}
+                    tipoAcuerdo={idea.tipoAcuerdo}
+                    compacta
+                    className="pr-20"
                   />
 
                   {descripcion && (

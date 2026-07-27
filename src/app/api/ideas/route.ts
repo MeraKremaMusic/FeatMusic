@@ -5,6 +5,7 @@ import { eliminarAudioIdea, subirAudioIdea } from "@/lib/cloudinary";
 import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import { validarUbicacion } from "@/lib/ubicaciones";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -64,6 +65,23 @@ const ideaSchema = z.object({
     .trim()
     .min(1, "Selecciona la tonalidad de la canción.")
     .max(30, "La tonalidad no puede superar 30 caracteres."),
+  rolBuscado: z.enum(["CANTANTE", "COMPOSITOR", "PRODUCTOR", "BEATMAKER"]),
+  generoMusical: z
+    .string()
+    .trim()
+    .min(2, "Selecciona el género musical.")
+    .max(60, "El género musical no puede superar 60 caracteres."),
+  idiomaBuscado: z.enum(["ESPANOL", "INGLES", "PORTUGUES", "CUALQUIERA"]),
+  modalidadColaboracion: z.enum(["REMOTA", "PRESENCIAL"]),
+  tipoAcuerdo: z.enum(["GRATUITA", "REGALIAS", "PAGADO"]),
+  paisCodigoPreferido: z.string().trim().max(2).optional().default(""),
+  departamentoCodigoPreferido: z
+    .string()
+    .trim()
+    .max(30)
+    .optional()
+    .default(""),
+  ciudadPreferida: z.string().trim().max(120).optional().default(""),
 });
 
 function respuestaError(mensaje: string, status: number) {
@@ -100,12 +118,63 @@ export async function POST(request: Request) {
       descripcion: formData.get("descripcion"),
       bpm: formData.get("bpm"),
       tonalidad: formData.get("tonalidad"),
+      rolBuscado: formData.get("rolBuscado"),
+      generoMusical: formData.get("generoMusical"),
+      idiomaBuscado: formData.get("idiomaBuscado"),
+      modalidadColaboracion: formData.get("modalidadColaboracion"),
+      tipoAcuerdo: formData.get("tipoAcuerdo"),
+      paisCodigoPreferido: String(
+        formData.get("paisCodigoPreferido") ?? "",
+      ).toUpperCase(),
+      departamentoCodigoPreferido: String(
+        formData.get("departamentoCodigoPreferido") ?? "",
+      ).toUpperCase(),
+      ciudadPreferida: formData.get("ciudadPreferida") ?? "",
     });
 
     if (!resultado.success) {
       return respuestaError(
         resultado.error.issues[0]?.message ??
           "Los datos enviados no son válidos.",
+        400,
+      );
+    }
+
+    const datosUbicacion = {
+      paisCodigo: resultado.data.paisCodigoPreferido,
+      departamentoCodigo: resultado.data.departamentoCodigoPreferido,
+      ciudad: resultado.data.ciudadPreferida,
+    };
+    const valoresUbicacion = Object.values(datosUbicacion).map((valor) =>
+      valor.trim(),
+    );
+    const tieneAlgunDatoUbicacion = valoresUbicacion.some(Boolean);
+    const tieneUbicacionCompleta = valoresUbicacion.every(Boolean);
+
+    if (
+      resultado.data.modalidadColaboracion === "PRESENCIAL" &&
+      !tieneUbicacionCompleta
+    ) {
+      return respuestaError(
+        "Para una colaboración presencial, selecciona país, departamento y ciudad.",
+        400,
+      );
+    }
+
+    if (tieneAlgunDatoUbicacion && !tieneUbicacionCompleta) {
+      return respuestaError(
+        "Completa toda la ubicación preferida o déjala vacía.",
+        400,
+      );
+    }
+
+    const ubicacionPreferida = tieneUbicacionCompleta
+      ? await validarUbicacion(datosUbicacion)
+      : null;
+
+    if (tieneUbicacionCompleta && !ubicacionPreferida) {
+      return respuestaError(
+        "La ubicación preferida no es válida. Selecciónala nuevamente.",
         400,
       );
     }
@@ -205,6 +274,14 @@ export async function POST(request: Request) {
         descripcion: resultado.data.descripcion,
         bpm: resultado.data.bpm,
         tonalidad: resultado.data.tonalidad,
+        rolBuscado: resultado.data.rolBuscado,
+        generoMusical: resultado.data.generoMusical,
+        idiomaBuscado: resultado.data.idiomaBuscado,
+        modalidadColaboracion: resultado.data.modalidadColaboracion,
+        paisPreferido: ubicacionPreferida?.pais ?? null,
+        departamentoPreferido: ubicacionPreferida?.departamento ?? null,
+        ciudadPreferida: ubicacionPreferida?.ciudad ?? null,
+        tipoAcuerdo: resultado.data.tipoAcuerdo,
         audioUrl: audioSubido.url,
         audioPublicId: audioSubido.publicId,
         duracionSegundos: audioSubido.duracionSegundos,
@@ -218,6 +295,14 @@ export async function POST(request: Request) {
         descripcion: true,
         bpm: true,
         tonalidad: true,
+        rolBuscado: true,
+        generoMusical: true,
+        idiomaBuscado: true,
+        modalidadColaboracion: true,
+        paisPreferido: true,
+        departamentoPreferido: true,
+        ciudadPreferida: true,
+        tipoAcuerdo: true,
         audioUrl: true,
         duracionSegundos: true,
         formato: true,
