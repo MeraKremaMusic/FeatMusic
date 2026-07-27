@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent, ReactNode } from "react";
 
+import ContadoresSeguimiento from "@/app/components/ContadoresSeguimiento";
+
 import CentroNotificaciones from "./CentroNotificaciones";
 
 type PerfilActualizado = {
@@ -27,6 +29,8 @@ type PerfilArtistaCardProps = PerfilActualizado & {
   idiomaPrincipal: string;
   fechaRegistro: string;
   correoVerificado: boolean;
+  seguidores: number;
+  siguiendo: number;
 };
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -180,6 +184,8 @@ export default function PerfilArtistaCard({
   idiomaPrincipal,
   fechaRegistro,
   correoVerificado,
+  seguidores,
+  siguiendo,
 }: PerfilArtistaCardProps) {
   const [perfil, setPerfil] = useState<PerfilActualizado>({
     nombreArtistico: nombreInicial,
@@ -530,7 +536,14 @@ export default function PerfilArtistaCard({
           </div>
         </div>
 
-        <div className="mt-5 rounded-xl bg-white/[0.025] p-3.5">
+        <ContadoresSeguimiento
+          nombreUsuario={usuarioVisible}
+          seguidores={seguidores}
+          siguiendo={siguiendo}
+          className="mt-4"
+        />
+
+        <div className="mt-3 rounded-xl bg-white/[0.025] p-3.5">
           <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-zinc-500">
             Biografía
           </p>

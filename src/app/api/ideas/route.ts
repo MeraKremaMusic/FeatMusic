@@ -5,6 +5,7 @@ import { eliminarAudioIdea, subirAudioIdea } from "@/lib/cloudinary";
 import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import { notificarSeguidoresNuevaIdea } from "@/lib/seguimientos";
 import { validarUbicacion } from "@/lib/ubicaciones";
 
 export const runtime = "nodejs";
@@ -314,6 +315,12 @@ export async function POST(request: Request) {
     });
 
     audioPublicId = null;
+
+    await notificarSeguidoresNuevaIdea({
+      artistaId: sesion.usuarioId,
+      ideaId: idea.id,
+      tituloIdea: idea.titulo,
+    });
 
     return NextResponse.json(
       {

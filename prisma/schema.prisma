@@ -43,8 +43,25 @@ model Usuario {
   conversacionesComoB    Conversacion[] @relation("ConversacionUsuarioB")
   notificacionesRecibidas Notificacion[] @relation("NotificacionesUsuario")
   notificacionesGeneradas Notificacion[] @relation("NotificacionesActor")
+  siguiendo               Seguimiento[] @relation("UsuarioSiguiendo")
+  seguidores              Seguimiento[] @relation("UsuarioSeguidores")
 
   @@map("usuarios")
+}
+
+
+model Seguimiento {
+  id         Int      @id @default(autoincrement())
+  seguidorId Int      @map("seguidor_id")
+  seguidoId  Int      @map("seguido_id")
+  creadoEn   DateTime @default(now()) @map("creado_en")
+  seguidor   Usuario  @relation("UsuarioSiguiendo", fields: [seguidorId], references: [id], onDelete: Cascade)
+  seguido    Usuario  @relation("UsuarioSeguidores", fields: [seguidoId], references: [id], onDelete: Cascade)
+
+  @@unique([seguidorId, seguidoId])
+  @@index([seguidorId, creadoEn])
+  @@index([seguidoId, creadoEn])
+  @@map("seguimientos")
 }
 
 model Idea {

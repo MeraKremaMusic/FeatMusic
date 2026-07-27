@@ -17,6 +17,7 @@ function formatearRol(rol: string) {
   const roles: Record<string, string> = {
     CANTANTE: "Cantante",
     COMPOSITOR: "Compositor",
+    PRODUCTOR: "Productor",
     BEATMAKER: "Beatmaker",
   };
 
@@ -246,6 +247,14 @@ export default async function PanelPage() {
 
   const usuario = await prisma.usuario.findUnique({
     where: { id: sesion.usuarioId },
+    include: {
+      _count: {
+        select: {
+          seguidores: true,
+          siguiendo: true,
+        },
+      },
+    },
   });
 
   if (!usuario) {
@@ -494,6 +503,8 @@ export default async function PanelPage() {
               idiomaPrincipal={idiomaPrincipal}
               fechaRegistro={fechaRegistro}
               correoVerificado={usuario.correoVerificado}
+              seguidores={usuario._count.seguidores}
+              siguiendo={usuario._count.siguiendo}
 />
           </section>
 

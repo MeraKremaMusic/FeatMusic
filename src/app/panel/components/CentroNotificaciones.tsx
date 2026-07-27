@@ -57,6 +57,26 @@ function IconoTipo({
     strokeLinejoin: "round" as const,
   };
 
+  if (tipo === "NUEVO_SEGUIDOR") {
+    return (
+      <svg {...props}>
+        <circle cx="9" cy="8" r="3" />
+        <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+        <path d="M18 8v6M15 11h6" />
+      </svg>
+    );
+  }
+
+  if (tipo === "NUEVA_IDEA_SEGUIDO") {
+    return (
+      <svg {...props}>
+        <path d="M9 18V5l10-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="16" cy="16" r="3" />
+      </svg>
+    );
+  }
+
   if (tipo === "PROPUESTA_ACEPTADA") {
     return (
       <svg {...props}>
@@ -103,6 +123,14 @@ function IconoTipo({
 }
 
 function claseTipo(tipo: string) {
+  if (tipo === "NUEVO_SEGUIDOR") {
+    return "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300";
+  }
+
+  if (tipo === "NUEVA_IDEA_SEGUIDO") {
+    return "border-violet-400/20 bg-violet-500/10 text-violet-300";
+  }
+
   if (tipo === "PROPUESTA_ACEPTADA") {
     return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
   }

@@ -7,6 +7,7 @@ import ReproductorAudio from "../../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
 import EnviarPropuesta from "./components/EnviarPropuesta";
+import SeguimientoPerfil from "./components/SeguimientoPerfil";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -107,6 +108,7 @@ function formatearRol(rol: string) {
   const roles: Record<string, string> = {
     CANTANTE: "Cantante",
     COMPOSITOR: "Compositor",
+    PRODUCTOR: "Productor",
     BEATMAKER: "Beatmaker",
   };
 
@@ -322,6 +324,19 @@ export default async function PerfilPublicoPage({
       distribuidoraPreferida: true,
       softwarePreferido: true,
       creadoEn: true,
+      _count: {
+        select: {
+          seguidores: true,
+          siguiendo: true,
+        },
+      },
+      seguidores: {
+        where: {
+          seguidorId: sesion?.usuarioId ?? -1,
+        },
+        select: { id: true },
+        take: 1,
+      },
       ideas: {
         where: {
           estado: "ACTIVA",
@@ -544,6 +559,16 @@ export default async function PerfilPublicoPage({
                     ))}
                   </div>
                 )}
+
+                <SeguimientoPerfil
+                  artistaId={artista.id}
+                  nombreUsuario={usuarioVisible}
+                  sesionActiva={Boolean(sesion)}
+                  esPerfilPropio={sesion?.usuarioId === artista.id}
+                  siguiendoInicial={artista.seguidores.length > 0}
+                  seguidoresIniciales={artista._count.seguidores}
+                  siguiendoCantidad={artista._count.siguiendo}
+                />
 
                 <p className="mt-2.5 whitespace-pre-wrap text-[11px] leading-[1.45] text-zinc-400 sm:text-xs sm:leading-5 lg:text-center">
                   {artista.biografia?.trim() ||
