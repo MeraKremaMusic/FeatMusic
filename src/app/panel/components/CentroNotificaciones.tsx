@@ -57,15 +57,6 @@ function IconoTipo({
     strokeLinejoin: "round" as const,
   };
 
-  if (tipo === "MENSAJE_NUEVO") {
-    return (
-      <svg {...props}>
-        <path d="M4 5h16v11H8l-4 4V5Z" />
-        <path d="M8 9h8M8 12h5" />
-      </svg>
-    );
-  }
-
   if (tipo === "PROPUESTA_ACEPTADA") {
     return (
       <svg {...props}>
@@ -126,10 +117,6 @@ function claseTipo(tipo: string) {
 
   if (tipo === "REINTENTO_PERMITIDO") {
     return "border-sky-400/20 bg-sky-500/10 text-sky-300";
-  }
-
-  if (tipo === "MENSAJE_NUEVO") {
-    return "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300";
   }
 
   return "border-violet-400/20 bg-violet-500/10 text-violet-300";

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { notificarMensajeNuevoSeguro } from "@/lib/notificaciones";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
@@ -135,19 +134,6 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       });
 
       return mensaje;
-    });
-
-    const destinatarioId =
-      conversacion.usuarioAId === sesion.usuarioId
-        ? conversacion.usuarioBId
-        : conversacion.usuarioAId;
-
-    await notificarMensajeNuevoSeguro({
-      usuarioId: destinatarioId,
-      actorId: sesion.usuarioId,
-      conversacionId,
-      mensajeId: nuevoMensaje.id,
-      contenido: nuevoMensaje.contenido,
     });
 
     return respuestaJson({

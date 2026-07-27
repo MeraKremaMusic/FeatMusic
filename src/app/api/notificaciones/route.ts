@@ -64,6 +64,9 @@ export async function GET() {
       prisma.notificacion.findMany({
         where: {
           usuarioId: sesion.usuarioId,
+          tipo: {
+            not: "MENSAJE_NUEVO",
+          },
         },
         orderBy: {
           creadoEn: "desc",
@@ -94,6 +97,9 @@ export async function GET() {
       prisma.notificacion.count({
         where: {
           usuarioId: sesion.usuarioId,
+          tipo: {
+            not: "MENSAJE_NUEVO",
+          },
           leidaEn: null,
         },
       }),
@@ -177,6 +183,9 @@ export async function PATCH(request: Request) {
       const actualizadas = await prisma.notificacion.updateMany({
         where: {
           usuarioId: sesion.usuarioId,
+          tipo: {
+            not: "MENSAJE_NUEVO",
+          },
           leidaEn: null,
         },
         data: {
@@ -195,6 +204,9 @@ export async function PATCH(request: Request) {
       where: {
         id: resultado.data.id,
         usuarioId: sesion.usuarioId,
+        tipo: {
+          not: "MENSAJE_NUEVO",
+        },
         leidaEn: null,
       },
       data: {
