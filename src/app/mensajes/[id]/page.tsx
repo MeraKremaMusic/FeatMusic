@@ -120,6 +120,8 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
     notFound();
   }
 
+  const ahora = new Date();
+
   await prisma.mensaje.updateMany({
     where: {
       conversacionId: conversacion.id,
@@ -129,9 +131,28 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
       leidoEn: null,
     },
     data: {
-      leidoEn: new Date(),
+      leidoEn: ahora,
     },
   });
+
+  await prisma.notificacion
+    .updateMany({
+      where: {
+        usuarioId: sesion.usuarioId,
+        tipo: "MENSAJE_NUEVO",
+        conversacionId: conversacion.id,
+        leidaEn: null,
+      },
+      data: {
+        leidaEn: ahora,
+      },
+    })
+    .catch((error) => {
+      console.error(
+        "No se pudieron marcar como leídas las notificaciones del chat.",
+        error,
+      );
+    });
 
   const otroArtista =
     conversacion.usuarioAId === sesion.usuarioId

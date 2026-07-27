@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { eliminarAudioIdea } from "@/lib/cloudinary";
+import { crearNotificacionSegura } from "@/lib/notificaciones";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
@@ -115,6 +116,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       idea: {
         select: {
           usuarioId: true,
+          titulo: true,
         },
       },
     },
@@ -234,6 +236,18 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
         );
       }
 
+      await crearNotificacionSegura({
+        usuarioId: propuesta.remitenteId,
+        actorId: sesion.usuarioId,
+        tipo: "PROPUESTA_ACEPTADA",
+        titulo: "Tu propuesta fue aceptada",
+        mensaje: `Aceptaron tu propuesta para “${propuesta.idea.titulo}”. Ya puedes continuar en el chat.`,
+        enlace: `/mensajes/${resultadoAceptacion.conversacionId}`,
+        entidadTipo: "PROPUESTA",
+        entidadId: propuesta.id,
+        conversacionId: resultadoAceptacion.conversacionId,
+      });
+
       return NextResponse.json({
         ok: true,
         mensaje:
@@ -286,6 +300,17 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           decisionEn: true,
           actualizadoEn: true,
         },
+      });
+
+      await crearNotificacionSegura({
+        usuarioId: propuesta.remitenteId,
+        actorId: sesion.usuarioId,
+        tipo: "CAMBIOS_SOLICITADOS",
+        titulo: "Solicitaron cambios",
+        mensaje: `Para “${propuesta.idea.titulo}”: ${resultado.data.motivo}`,
+        enlace: "/panel#panel-card-3",
+        entidadTipo: "PROPUESTA",
+        entidadId: propuesta.id,
       });
 
       return NextResponse.json({
@@ -377,6 +402,23 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
           decisionEn: true,
           actualizadoEn: true,
         },
+      });
+
+      await crearNotificacionSegura({
+        usuarioId: propuesta.remitenteId,
+        actorId: sesion.usuarioId,
+        tipo: actualizada.permiteReintento
+          ? "REINTENTO_PERMITIDO"
+          : "PROPUESTA_RECHAZADA",
+        titulo: actualizada.permiteReintento
+          ? "Puedes intentarlo nuevamente"
+          : "Propuesta rechazada",
+        mensaje: actualizada.permiteReintento
+          ? `Rechazaron tu propuesta para “${propuesta.idea.titulo}”, pero puedes enviar otro intento si hay un cupo disponible. Motivo: ${resultado.data.motivo}`
+          : `Rechazaron definitivamente tu propuesta para “${propuesta.idea.titulo}”. Motivo: ${resultado.data.motivo}`,
+        enlace: "/panel#panel-card-3",
+        entidadTipo: "PROPUESTA",
+        entidadId: propuesta.id,
       });
 
       return NextResponse.json({

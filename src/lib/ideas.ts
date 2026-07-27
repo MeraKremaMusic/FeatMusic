@@ -1,4 +1,5 @@
 import { eliminarAudioIdea } from "@/lib/cloudinary";
+import { crearNotificacionSegura } from "@/lib/notificaciones";
 import { prisma } from "@/lib/prisma";
 
 const MAX_IDEAS_POR_USUARIO = 20;
@@ -7,9 +8,11 @@ const MAX_IDEAS_POR_TAREA = 100;
 type IdeaParaLimpiar = {
   id: number;
   usuarioId: number;
+  titulo: string;
   audioPublicId: string;
   propuestas: Array<{
     id: number;
+    remitenteId: number;
     estado: string;
     audioPublicId: string | null;
   }>;
@@ -78,6 +81,45 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
       });
 
       eliminadas += resultado.count;
+
+      if (resultado.count > 0) {
+        await crearNotificacionSegura({
+          usuarioId: idea.usuarioId,
+          tipo: "IDEA_EXPIRADA",
+          titulo: "Tu idea expiró",
+          mensaje: `“${idea.titulo}” terminó su periodo activo.`,
+          enlace: "/panel#panel-card-2",
+          entidadTipo: "IDEA",
+          entidadId: idea.id,
+        });
+
+        const remitentesAfectados = Array.from(
+          new Set(
+            propuestasNoAceptadas
+              .filter((propuesta) =>
+                ["PENDIENTE", "CAMBIOS_SOLICITADOS", "RECHAZANDO"].includes(
+                  propuesta.estado,
+                ),
+              )
+              .map((propuesta) => propuesta.remitenteId),
+          ),
+        );
+
+        await Promise.all(
+          remitentesAfectados.map((remitenteId) =>
+            crearNotificacionSegura({
+              usuarioId: remitenteId,
+              actorId: idea.usuarioId,
+              tipo: "PROPUESTA_EXPIRADA",
+              titulo: "La convocatoria terminó",
+              mensaje: `La idea “${idea.titulo}” expiró antes de que tu propuesta fuera aceptada.`,
+              enlace: "/panel#panel-card-3",
+              entidadTipo: "IDEA",
+              entidadId: idea.id,
+            }),
+          ),
+        );
+      }
     } catch (error) {
       fallidas += 1;
       console.error(`No se pudo limpiar la idea expirada ${idea.id}.`, error);
@@ -94,10 +136,12 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
 const seleccionLimpieza = {
   id: true,
   usuarioId: true,
+  titulo: true,
   audioPublicId: true,
   propuestas: {
     select: {
       id: true,
+      remitenteId: true,
       estado: true,
       audioPublicId: true,
     },

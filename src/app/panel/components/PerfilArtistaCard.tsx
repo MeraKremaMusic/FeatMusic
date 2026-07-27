@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent, ReactNode } from "react";
 
+import CentroNotificaciones from "./CentroNotificaciones";
+
 type PerfilActualizado = {
   nombreArtistico: string | null;
   nombreUsuario: string | null;
@@ -501,27 +503,31 @@ export default function PerfilArtistaCard({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={abrirModal}
-            title="Editar perfil"
-            aria-label="Editar perfil"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-violet-300 transition hover:bg-violet-500/15 hover:text-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-          >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="flex shrink-0 items-center gap-2">
+            <CentroNotificaciones />
+
+            <button
+              type="button"
+              onClick={abrirModal}
+              title="Editar perfil"
+              aria-label="Editar perfil"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-violet-300 transition hover:bg-violet-500/15 hover:text-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
             >
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
-            </svg>
-          </button>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="mt-5 rounded-xl bg-white/[0.025] p-3.5">

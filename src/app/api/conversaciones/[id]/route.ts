@@ -103,6 +103,8 @@ export async function GET(request: Request, contexto: ContextoRuta) {
     },
   });
 
+  const ahora = new Date();
+
   await prisma.mensaje.updateMany({
     where: {
       conversacionId,
@@ -112,9 +114,28 @@ export async function GET(request: Request, contexto: ContextoRuta) {
       leidoEn: null,
     },
     data: {
-      leidoEn: new Date(),
+      leidoEn: ahora,
     },
   });
+
+  await prisma.notificacion
+    .updateMany({
+      where: {
+        usuarioId: sesion.usuarioId,
+        tipo: "MENSAJE_NUEVO",
+        conversacionId,
+        leidaEn: null,
+      },
+      data: {
+        leidaEn: ahora,
+      },
+    })
+    .catch((error) => {
+      console.error(
+        "No se pudieron marcar como leídas las notificaciones del chat.",
+        error,
+      );
+    });
 
   return respuestaJson({
     ok: true,

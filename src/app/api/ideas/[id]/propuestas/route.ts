@@ -6,6 +6,7 @@ import {
   eliminarAudioIdea,
   subirAudioPropuesta,
 } from "@/lib/cloudinary";
+import { crearNotificacionSegura } from "@/lib/notificaciones";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
@@ -444,6 +445,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       },
       select: {
         usuarioId: true,
+        titulo: true,
         _count: {
           select: {
             propuestas: {
@@ -559,6 +561,33 @@ export async function POST(request: Request, contexto: ContextoRuta) {
         },
       );
     }
+
+    const tiposNotificacion: Record<ModoEnvio, string> = {
+      NUEVA: "PROPUESTA_RECIBIDA",
+      CORRECCION: "PROPUESTA_CORREGIDA",
+      REINTENTO: "PROPUESTA_REENVIADA",
+    };
+    const titulosNotificacion: Record<ModoEnvio, string> = {
+      NUEVA: "Nueva propuesta recibida",
+      CORRECCION: "Nueva versión recibida",
+      REINTENTO: "Nuevo intento recibido",
+    };
+    const mensajesNotificacion: Record<ModoEnvio, string> = {
+      NUEVA: `Enviaron una propuesta para “${idea.titulo}”.`,
+      CORRECCION: `Enviaron la corrección solicitada para “${idea.titulo}”.`,
+      REINTENTO: `Volvieron a participar en “${idea.titulo}”.`,
+    };
+
+    await crearNotificacionSegura({
+      usuarioId: idea.usuarioId,
+      actorId: sesion.usuarioId,
+      tipo: tiposNotificacion[resultadoGuardado.modo],
+      titulo: titulosNotificacion[resultadoGuardado.modo],
+      mensaje: mensajesNotificacion[resultadoGuardado.modo],
+      enlace: "/panel#panel-card-3",
+      entidadTipo: "PROPUESTA",
+      entidadId: resultadoGuardado.propuesta.id,
+    });
 
     const mensajes: Record<ModoEnvio, string> = {
       NUEVA: "Tu propuesta fue enviada correctamente.",
