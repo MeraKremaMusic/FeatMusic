@@ -18,6 +18,8 @@ export type ArtistaExplorar = {
   nombreArtistico: string;
   nombreUsuario: string;
   fotoPerfil: string | null;
+  biografia: string | null;
+  siguiendoInicial: boolean;
   ciudad: string;
   pais: string;
   codigoPais: string;
@@ -213,23 +215,6 @@ function IconoUbicacion({ className = "h-3.5 w-3.5" }: { className?: string }) {
   );
 }
 
-function IconoAudio({ className = "h-3.5 w-3.5" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 13h2l2.2-5 3.2 10 2.5-7 1.8 4H20" />
-    </svg>
-  );
-}
-
 function IconoDescripcion({
   className = "h-3.5 w-3.5",
 }: {
@@ -390,6 +375,113 @@ function BanderaPais({
   );
 }
 
+type RespuestaSeguimiento = {
+  ok: boolean;
+  mensaje?: string;
+  siguiendo?: boolean;
+};
+
+function BotonSeguirArtista({
+  artistaId,
+  nombreArtistico,
+  sesionActiva,
+  esPerfilPropio,
+  siguiendoInicial,
+}: {
+  artistaId: number;
+  nombreArtistico: string;
+  sesionActiva: boolean;
+  esPerfilPropio: boolean;
+  siguiendoInicial: boolean;
+}) {
+  const [siguiendo, setSiguiendo] = useState(siguiendoInicial);
+  const [procesando, setProcesando] = useState(false);
+  const [error, setError] = useState("");
+
+  if (esPerfilPropio) {
+    return null;
+  }
+
+  async function alternarSeguimiento() {
+    if (procesando) {
+      return;
+    }
+
+    if (!sesionActiva) {
+      window.location.assign("/iniciar-sesion");
+      return;
+    }
+
+    const estadoAnterior = siguiendo;
+    const nuevoEstado = !estadoAnterior;
+
+    setError("");
+    setProcesando(true);
+    setSiguiendo(nuevoEstado);
+
+    try {
+      const respuesta = await fetch(`/api/artistas/${artistaId}/seguir`, {
+        method: nuevoEstado ? "POST" : "DELETE",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const datos = (await respuesta.json()) as RespuestaSeguimiento;
+
+      if (!respuesta.ok || !datos.ok) {
+        throw new Error(datos.mensaje ?? "No se pudo actualizar el seguimiento.");
+      }
+
+      setSiguiendo(Boolean(datos.siguiendo));
+    } catch (errorSeguimiento) {
+      setSiguiendo(estadoAnterior);
+      setError(
+        errorSeguimiento instanceof Error
+          ? errorSeguimiento.message
+          : "No se pudo actualizar el seguimiento.",
+      );
+    } finally {
+      setProcesando(false);
+    }
+  }
+
+  return (
+    <div className="relative shrink-0">
+      <button
+        type="button"
+        onClick={() => void alternarSeguimiento()}
+        disabled={procesando}
+        aria-pressed={siguiendo}
+        aria-label={
+          siguiendo
+            ? `Dejar de seguir a ${nombreArtistico}`
+            : `Seguir a ${nombreArtistico}`
+        }
+        title={siguiendo ? "Dejar de seguir" : "Seguir artista"}
+        className={`inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border px-2 text-[9px] font-black transition focus:outline-none focus:ring-2 focus:ring-violet-500/40 disabled:cursor-wait disabled:opacity-65 ${
+          siguiendo
+            ? "border-violet-300/30 bg-violet-500/10 text-violet-200 hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-300"
+            : "border-violet-500 bg-violet-600 text-white shadow-[0_6px_16px_rgba(124,58,237,0.22)] hover:bg-violet-700"
+        }`}
+      >
+        <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>
+        {procesando ? "..." : siguiendo ? "Siguiendo" : "Seguir"}
+      </button>
+
+      {error && (
+        <span
+          role="alert"
+          className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-red-400/20 bg-[#181015]/95 px-2.5 py-2 text-[9px] font-semibold leading-3.5 text-red-200 shadow-xl backdrop-blur"
+        >
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function TarjetaArtista({
   artista,
   descripcionAbiertaId,
@@ -437,10 +529,19 @@ function TarjetaArtista({
                 </p>
               </div>
 
-              <BanderaPais
-                codigoPais={artista.codigoPais}
-                pais={artista.pais}
-              />
+              <div className="flex shrink-0 items-center gap-2">
+                <BotonSeguirArtista
+                  artistaId={artista.id}
+                  nombreArtistico={artista.nombreArtistico}
+                  sesionActiva={sesionActiva}
+                  esPerfilPropio={usuarioActualId === artista.id}
+                  siguiendoInicial={artista.siguiendoInicial}
+                />
+                <BanderaPais
+                  codigoPais={artista.codigoPais}
+                  pais={artista.pais}
+                />
+              </div>
             </div>
 
             <p className="mt-2 flex min-w-0 items-center gap-1.5 text-[10px] text-zinc-500 sm:text-[11px]">
@@ -470,26 +571,16 @@ function TarjetaArtista({
             </span>
           )}
         </div>
+
+        <p className="mt-3 [display:-webkit-box] overflow-hidden [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-[10px] leading-4 text-zinc-500 sm:text-[11px]">
+          {artista.biografia?.trim() ||
+            "Este artista todavía no ha agregado una descripción."}
+        </p>
       </div>
 
       <div className="relative flex flex-1 flex-col border-t border-white/[0.07]">
-        <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-violet-500/[0.09] text-violet-300">
-              <IconoAudio />
-            </span>
-            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Ideas activas
-            </p>
-          </div>
-
-          <span className="rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2 py-0.5 text-[9px] font-black tabular-nums text-violet-200">
-            {artista.ideasActivas}
-          </span>
-        </div>
-
         {artista.ideasRecientes.length > 0 ? (
-          <div className="flex-1 divide-y divide-white/[0.06] border-t border-white/[0.06] px-3.5 sm:px-4">
+          <div className="flex-1 divide-y divide-white/[0.06] px-3.5 sm:px-4">
             {artista.ideasRecientes.map((idea, indice) => {
               const descripcion = idea.descripcion?.trim() ?? "";
               const hayDatosColaboracion = [
@@ -632,7 +723,7 @@ function TarjetaArtista({
             )}
           </div>
         ) : (
-          <div className="flex flex-1 items-center justify-center border-t border-white/[0.06] px-4 py-8">
+          <div className="flex flex-1 items-center justify-center px-4 py-8">
             <p className="text-center text-[10px] leading-5 text-zinc-600">
               Sin ideas publicadas actualmente
             </p>

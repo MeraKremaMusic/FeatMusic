@@ -181,11 +181,19 @@ export default async function ArtistasPage() {
           nombreArtistico: true,
           nombreUsuario: true,
           fotoPerfil: true,
+          biografia: true,
           ciudad: true,
           pais: true,
           rolPrincipal: true,
           generos: true,
           creadoEn: true,
+          seguidores: {
+            where: {
+              seguidorId: sesion?.usuarioId ?? -1,
+            },
+            select: { id: true },
+            take: 1,
+          },
           ideas: {
             where: {
               estado: "ACTIVA",
@@ -307,6 +315,8 @@ export default async function ArtistasPage() {
         nombreArtistico: usuario.nombreArtistico!.trim(),
         nombreUsuario: usuario.nombreUsuario!.trim(),
         fotoPerfil: usuario.fotoPerfil,
+        biografia: usuario.biografia,
+        siguiendoInicial: usuario.seguidores.length > 0,
         ciudad: usuario.ciudad!.trim(),
         pais: usuario.pais!.trim(),
         codigoPais: resolverCodigoPais(usuario.pais!),
