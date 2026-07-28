@@ -777,7 +777,7 @@ export default function ArtistasClient({
   const [ciudad, setCiudad] = useState("");
   const [genero, setGenero] = useState("");
   const [rol, setRol] = useState("");
-  const [soloConIdeas, setSoloConIdeas] = useState(true);
+  const [soloConIdeas, setSoloConIdeas] = useState(false);
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
   const [pagina, setPagina] = useState(1);
   const [descripcionAbiertaId, setDescripcionAbiertaId] = useState<number | null>(
@@ -907,6 +907,7 @@ export default function ArtistasClient({
     setCiudad("");
     setGenero("");
     setRol("");
+    setSoloConIdeas(false);
     setPagina(1);
   }
 
@@ -915,16 +916,17 @@ export default function ArtistasClient({
     setCiudad("");
     setGenero("");
     setRol("");
-    setSoloConIdeas(true);
+    setSoloConIdeas(false);
     setPagina(1);
   }
 
-  const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
+  const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol || soloConIdeas);
   const cantidadFiltrosActivos =
     Number(Boolean(pais)) +
     Number(Boolean(ciudad)) +
     Number(Boolean(genero)) +
-    Number(Boolean(rol));
+    Number(Boolean(rol)) +
+    Number(soloConIdeas);
 
   return (
     <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
