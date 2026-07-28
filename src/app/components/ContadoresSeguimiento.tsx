@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+// FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
+
 function formatearCantidad(cantidad: number) {
   const segura = Math.max(0, Math.trunc(cantidad));
 
@@ -28,28 +30,28 @@ export default function ContadoresSeguimiento({
 
   return (
     <div
-      className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-zinc-400 ${className}`}
+      className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-500 ${className}`}
       aria-label={`${seguidores} seguidores y ${siguiendo} siguiendo`}
     >
       <Link
         href={`/artistas/${usuarioCodificado}/seguidores`}
-        className="group rounded-md outline-none transition hover:text-emerald-200 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+        className="group rounded-md outline-none transition hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
       >
-        <span className="font-black text-zinc-100 transition group-hover:text-emerald-200">
+        <span className="font-black text-slate-900 transition group-hover:text-emerald-700">
           {formatearCantidad(seguidores)}
         </span>{" "}
         {seguidores === 1 ? "seguidor" : "seguidores"}
       </Link>
 
-      <span aria-hidden="true" className="text-zinc-700">
+      <span aria-hidden="true" className="text-slate-300">
         ·
       </span>
 
       <Link
         href={`/artistas/${usuarioCodificado}/siguiendo`}
-        className="group rounded-md outline-none transition hover:text-emerald-200 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+        className="group rounded-md outline-none transition hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
       >
-        <span className="font-black text-zinc-100 transition group-hover:text-emerald-200">
+        <span className="font-black text-slate-900 transition group-hover:text-emerald-700">
           {formatearCantidad(siguiendo)}
         </span>{" "}
         siguiendo
