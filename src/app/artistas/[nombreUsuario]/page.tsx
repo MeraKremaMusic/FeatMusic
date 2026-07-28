@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import BotonGuardarIdea from "../../components/BotonGuardarIdea";
 import ContadorVistasIdea from "../../components/ContadorVistasIdea";
 import NavegacionEscritorio from "../../components/NavegacionEscritorio";
 import RegistrarVistaIdea from "../../components/RegistrarVistaIdea";
@@ -386,6 +387,13 @@ export default async function PerfilPublicoPage({
             },
             take: 1,
           },
+          guardadas: {
+            where: {
+              usuarioId: sesion?.usuarioId ?? -1,
+            },
+            select: { id: true },
+            take: 1,
+          },
         },
       },
     },
@@ -653,12 +661,21 @@ export default async function PerfilPublicoPage({
                     </div>
 
                     <div className="border-t border-white/[0.07] bg-white/[0.018] px-2.5 py-1.5 sm:px-3">
-                      <ContadorVistasIdea
-                        ideaId={idea.id}
-                        totalInicial={idea._count.vistas}
-                        esPropietario={sesion?.usuarioId === artista.id}
-                        className="mb-1.5"
-                      />
+                      <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+                        <ContadorVistasIdea
+                          ideaId={idea.id}
+                          totalInicial={idea._count.vistas}
+                          esPropietario={sesion?.usuarioId === artista.id}
+                        />
+                        <BotonGuardarIdea
+                          ideaId={idea.id}
+                          guardadaInicial={idea.guardadas.length > 0}
+                          sesionActiva={Boolean(sesion)}
+                          esPropietario={sesion?.usuarioId === artista.id}
+                          disponible={idea._count.propuestas < 3}
+                          variante="compacta"
+                        />
+                      </div>
                       <div className="flex items-center gap-2">
                         <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-violet-400/15 bg-violet-500/[0.07] text-violet-300">
                           <IconoColaboracion />

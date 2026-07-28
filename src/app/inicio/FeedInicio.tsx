@@ -10,6 +10,10 @@ import {
 } from "react";
 
 import EnviarPropuesta from "@/app/artistas/[nombreUsuario]/components/EnviarPropuesta";
+import BotonGuardarIdea, {
+  EVENTO_CAMBIO_IDEA_GUARDADA,
+  type DetalleCambioIdeaGuardada,
+} from "@/app/components/BotonGuardarIdea";
 import ContadorVistasIdea from "@/app/components/ContadorVistasIdea";
 import RegistrarVistaIdea from "@/app/components/RegistrarVistaIdea";
 import ReproductorAudio from "@/app/components/ReproductorAudio";
@@ -19,7 +23,7 @@ import type { OportunidadFeed } from "@/lib/feed-inicio";
 const MAX_PROPUESTAS = 3;
 const EVENTO_REPRODUCCION = "featmusic:reproducir-audio";
 
-type VistaFeed = "para-ti" | "siguiendo" | "recientes";
+type VistaFeed = "para-ti" | "siguiendo" | "recientes" | "guardadas";
 
 type FeedInicioProps = {
   oportunidadesIniciales: OportunidadFeed[];
@@ -216,17 +220,27 @@ function TarjetaFeed({
               </p>
             </div>
 
-            <span
-              className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-black ${
-                cuposDisponibles > 0
-                  ? "border-emerald-300/20 bg-emerald-500/10 text-emerald-200"
-                  : "border-white/10 bg-white/5 text-zinc-500"
-              }`}
-            >
-              {cuposDisponibles > 0
-                ? `${cuposDisponibles} ${cuposDisponibles === 1 ? "cupo" : "cupos"}`
-                : "Completa"}
-            </span>
+            <div className="flex shrink-0 items-center gap-1.5">
+              <BotonGuardarIdea
+                ideaId={oportunidad.id}
+                guardadaInicial={oportunidad.guardada}
+                sesionActiva
+                esPropietario={usuarioActualId === artista.id}
+                disponible={cuposDisponibles > 0}
+                variante="icono"
+              />
+              <span
+                className={`rounded-full border px-2.5 py-1 text-[9px] font-black ${
+                  cuposDisponibles > 0
+                    ? "border-emerald-300/20 bg-emerald-500/10 text-emerald-200"
+                    : "border-white/10 bg-white/5 text-zinc-500"
+                }`}
+              >
+                {cuposDisponibles > 0
+                  ? `${cuposDisponibles} ${cuposDisponibles === 1 ? "cupo" : "cupos"}`
+                  : "Completa"}
+              </span>
+            </div>
           </div>
 
           <div className="mt-4">
@@ -355,6 +369,27 @@ function TarjetaFeed({
 }
 
 function EstadoVacio({ vista }: { vista: VistaFeed }) {
+  if (vista === "guardadas") {
+    return (
+      <div className="flex h-full min-h-full snap-start items-center justify-center px-6 text-center">
+        <section className="max-w-sm rounded-3xl border border-white/10 bg-black/35 p-7 shadow-2xl shadow-black/30">
+          <h2 className="text-lg font-black text-white">
+            Todavía no guardaste oportunidades
+          </h2>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            Guarda las ideas que te interesen para escucharlas o preparar tu propuesta después.
+          </p>
+          <Link
+            href="/artistas"
+            className="mt-5 inline-flex rounded-xl border border-violet-300/30 bg-violet-500/15 px-4 py-2.5 text-xs font-black text-violet-100"
+          >
+            Explorar oportunidades
+          </Link>
+        </section>
+      </div>
+    );
+  }
+
   if (vista === "siguiendo") {
     return (
       <div className="flex h-full min-h-full snap-start items-center justify-center px-6 text-center">
@@ -452,10 +487,54 @@ export default function FeedInicio({
   usuarioActualId,
 }: FeedInicioProps) {
   const [vista, setVista] = useState<VistaFeed>("para-ti");
+  const [guardadasIds, setGuardadasIds] = useState<Set<number>>(
+    () =>
+      new Set(
+        oportunidadesIniciales
+          .filter((oportunidad) => oportunidad.guardada)
+          .map((oportunidad) => oportunidad.id),
+      ),
+  );
   const contenedorRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setGuardadasIds(
+      new Set(
+        oportunidadesIniciales
+          .filter((oportunidad) => oportunidad.guardada)
+          .map((oportunidad) => oportunidad.id),
+      ),
+    );
+  }, [oportunidadesIniciales]);
+
+  useEffect(() => {
+    function actualizarGuardadas(evento: Event) {
+      const detalle = (evento as CustomEvent<DetalleCambioIdeaGuardada>).detail;
+      if (!detalle) return;
+
+      setGuardadasIds((actuales) => {
+        const siguientes = new Set(actuales);
+        if (detalle.guardada) siguientes.add(detalle.ideaId);
+        else siguientes.delete(detalle.ideaId);
+        return siguientes;
+      });
+    }
+
+    window.addEventListener(EVENTO_CAMBIO_IDEA_GUARDADA, actualizarGuardadas);
+    return () =>
+      window.removeEventListener(
+        EVENTO_CAMBIO_IDEA_GUARDADA,
+        actualizarGuardadas,
+      );
+  }, []);
+
   const oportunidades = useMemo(() => {
-    const recientes = [...oportunidadesIniciales].sort(
+    const recientes = oportunidadesIniciales
+      .map((oportunidad) => ({
+        ...oportunidad,
+        guardada: guardadasIds.has(oportunidad.id),
+      }))
+      .sort(
       (a, b) =>
         new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime(),
     );
@@ -463,6 +542,12 @@ export default function FeedInicio({
     if (vista === "recientes") return recientes;
     if (vista === "siguiendo") {
       return recientes.filter((oportunidad) => oportunidad.esSeguido);
+    }
+    if (vista === "guardadas") {
+      return recientes.filter(
+        (oportunidad) =>
+          oportunidad.guardada && oportunidad.propuestasActuales < MAX_PROPUESTAS,
+      );
     }
 
     const recomendadas = recientes.filter(
@@ -481,7 +566,7 @@ export default function FeedInicio({
 
       return new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime();
     });
-  }, [oportunidadesIniciales, vista]);
+  }, [guardadasIds, oportunidadesIniciales, vista]);
 
   const ids = useMemo(
     () => oportunidades.map((oportunidad) => oportunidad.id),
@@ -509,6 +594,7 @@ export default function FeedInicio({
     { id: "para-ti", etiqueta: "Para ti" },
     { id: "siguiendo", etiqueta: "Siguiendo" },
     { id: "recientes", etiqueta: "Recientes" },
+    { id: "guardadas", etiqueta: "Guardadas" },
   ];
 
   return (
@@ -518,7 +604,7 @@ export default function FeedInicio({
       <div className="relative z-20 shrink-0 border-b border-white/[0.08] bg-[#09070d]/92 px-3 py-2 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[720px] items-center gap-2">
           <div
-            className="grid min-w-0 flex-1 grid-cols-3 gap-1 rounded-xl border border-white/10 bg-black/30 p-1"
+            className="grid min-w-0 flex-1 grid-cols-4 gap-1 rounded-xl border border-white/10 bg-black/30 p-1"
             role="tablist"
             aria-label="Feed de oportunidades"
           >

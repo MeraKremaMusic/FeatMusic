@@ -287,6 +287,13 @@ export default async function ArtistasPage() {
             },
             take: 1,
           },
+          guardadas: {
+            where: {
+              usuarioId: sesion?.usuarioId ?? -1,
+            },
+            select: { id: true },
+            take: 1,
+          },
         },
       }),
       prisma.propuesta.count(),
@@ -346,6 +353,7 @@ export default async function ArtistasPage() {
         expiraEn: idea.expiraEn.toISOString(),
         propuestasActuales: idea._count.propuestas,
         vistasUnicas: idea._count.vistas,
+        guardada: idea.guardadas.length > 0,
         propuestaUsuario: idea.propuestas[0] ?? null,
         artista: {
           id: idea.usuario.id,

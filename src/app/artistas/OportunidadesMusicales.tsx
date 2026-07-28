@@ -9,6 +9,7 @@ import {
   formatearTipoAcuerdo,
   formatearUbicacionPreferida,
 } from "@/lib/colaboracion-ideas";
+import BotonGuardarIdea from "../components/BotonGuardarIdea";
 import ContadorVistasIdea from "../components/ContadorVistasIdea";
 import RegistrarVistaIdea from "../components/RegistrarVistaIdea";
 import ReproductorAudio from "../components/ReproductorAudio";
@@ -42,6 +43,7 @@ export type OportunidadMusical = {
   expiraEn: string;
   propuestasActuales: number;
   vistasUnicas: number;
+  guardada: boolean;
   propuestaUsuario: PropuestaOportunidad | null;
   artista: {
     id: number;
@@ -317,17 +319,27 @@ function TarjetaOportunidad({
             </h2>
           </div>
 
-          <span
-            className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-black ${
-              cuposDisponibles > 0
-                ? "border-emerald-400/20 bg-emerald-500/[0.08] text-emerald-200"
-                : "border-zinc-400/15 bg-white/[0.04] text-zinc-500"
-            }`}
-          >
-            {cuposDisponibles > 0
-              ? `${cuposDisponibles} ${cuposDisponibles === 1 ? "cupo" : "cupos"}`
-              : "Completa"}
-          </span>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <BotonGuardarIdea
+              ideaId={oportunidad.id}
+              guardadaInicial={oportunidad.guardada}
+              sesionActiva={sesionActiva}
+              esPropietario={usuarioActualId === artista.id}
+              disponible={cuposDisponibles > 0}
+              variante="icono"
+            />
+            <span
+              className={`rounded-full border px-2.5 py-1 text-[9px] font-black ${
+                cuposDisponibles > 0
+                  ? "border-emerald-400/20 bg-emerald-500/[0.08] text-emerald-200"
+                  : "border-zinc-400/15 bg-white/[0.04] text-zinc-500"
+              }`}
+            >
+              {cuposDisponibles > 0
+                ? `${cuposDisponibles} ${cuposDisponibles === 1 ? "cupo" : "cupos"}`
+                : "Completa"}
+            </span>
+          </div>
         </div>
 
         <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-[10px] leading-[1.05rem] text-zinc-400 sm:text-[11px] sm:leading-[1.15rem]">

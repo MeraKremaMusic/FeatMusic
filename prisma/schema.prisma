@@ -46,6 +46,7 @@ model Usuario {
   siguiendo               Seguimiento[] @relation("UsuarioSiguiendo")
   seguidores              Seguimiento[] @relation("UsuarioSeguidores")
   vistasIdeas              VistaIdea[]
+  ideasGuardadas           IdeaGuardada[]
 
   @@map("usuarios")
 }
@@ -92,11 +93,26 @@ model Idea {
   usuario          Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   propuestas       Propuesta[]
   vistas            VistaIdea[]
+  guardadas         IdeaGuardada[]
 
   @@index([usuarioId, estado, expiraEn])
   @@map("ideas")
 }
 
+
+model IdeaGuardada {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int      @map("usuario_id")
+  ideaId    Int      @map("idea_id")
+  creadoEn  DateTime @default(now()) @map("creado_en")
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, ideaId])
+  @@index([usuarioId, creadoEn])
+  @@index([ideaId])
+  @@map("ideas_guardadas")
+}
 
 model VistaIdea {
   id        Int      @id @default(autoincrement())

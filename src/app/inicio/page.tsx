@@ -149,6 +149,11 @@ export default async function InicioPage() {
           },
           take: 1,
         },
+        guardadas: {
+          where: { usuarioId: sesion.usuarioId },
+          select: { id: true },
+          take: 1,
+        },
       },
     }),
   ]);
@@ -195,6 +200,7 @@ export default async function InicioPage() {
       expiraEn: idea.expiraEn.toISOString(),
       propuestasActuales: idea._count.propuestas,
       vistasUnicas: idea._count.vistas,
+      guardada: idea.guardadas.length > 0,
       propuestaUsuario: idea.propuestas[0] ?? null,
       esSeguido: idsSeguidos.has(idea.usuario.id),
       compatibilidad: calcularCompatibilidad(perfilCompatibilidad, idea),
