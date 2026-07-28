@@ -1057,23 +1057,33 @@ export default function ArtistasClient({
                 </div>
 
                 {filtrosAbiertos && (
-                  <div
+                  <>
+                    <button
+                      type="button"
+                      tabIndex={-1}
+                      aria-label="Cerrar filtros de artistas"
+                      onClick={() => setFiltrosAbiertos(false)}
+                      className="fixed inset-x-0 bottom-20 top-12 z-30 cursor-default bg-slate-950/10 backdrop-blur-[3px] lg:bottom-0"
+                    />
+
+                    <div
                     id="panel-filtros-artistas"
                     role="dialog"
+                    aria-modal="true"
                     aria-label="Filtros de artistas"
-                    className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-full rounded-xl border border-emerald-400/20 bg-[#07120d]/95 p-3 shadow-[0_22px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:w-[520px]"
+                    className="absolute right-0 top-[calc(100%+0.5rem)] z-40 max-h-[calc(100vh-8rem)] w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white/95 p-3 text-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.22)] backdrop-blur-xl [scrollbar-width:thin] sm:w-[520px]"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div>
-                        <p className="text-[11px] font-black text-zinc-100">
+                        <p className="text-[11px] font-black text-slate-900">
                           Filtrar artistas
                         </p>
-                        <p className="mt-0.5 text-[9px] text-zinc-500">
+                        <p className="mt-0.5 text-[9px] text-slate-500">
                           Refina los resultados sin ocupar espacio en la página.
                         </p>
                       </div>
                       {cantidadFiltrosActivos > 0 && (
-                        <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-1 text-[8px] font-black text-emerald-200">
+                        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[8px] font-black text-emerald-700">
                           {cantidadFiltrosActivos} activos
                         </span>
                       )}
@@ -1084,7 +1094,7 @@ export default function ArtistasClient({
                         value={pais}
                         onChange={(evento) => setPais(evento.target.value)}
                         aria-label="Filtrar por país"
-                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                        className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                       >
                         <option value="">Todos los países</option>
                         {opciones.paises.map((opcion) => (
@@ -1096,7 +1106,7 @@ export default function ArtistasClient({
                         value={ciudad}
                         onChange={(evento) => setCiudad(evento.target.value)}
                         aria-label="Filtrar por ciudad"
-                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                        className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                       >
                         <option value="">Todas las ciudades</option>
                         {opciones.ciudades.map((opcion) => (
@@ -1108,7 +1118,7 @@ export default function ArtistasClient({
                         value={genero}
                         onChange={(evento) => setGenero(evento.target.value)}
                         aria-label="Filtrar por género"
-                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                        className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                       >
                         <option value="">Todos los géneros</option>
                         {opciones.generos.map((opcion) => (
@@ -1120,7 +1130,7 @@ export default function ArtistasClient({
                         value={rol}
                         onChange={(evento) => setRol(evento.target.value)}
                         aria-label="Filtrar por rol"
-                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                        className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                       >
                         <option value="">Todos los roles</option>
                         {opciones.roles.map((opcion) => (
@@ -1129,34 +1139,35 @@ export default function ArtistasClient({
                       </select>
                     </div>
 
-                    <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-white/[0.08] bg-white/[0.025] px-3 py-2.5 text-[10px] font-semibold text-zinc-300 transition hover:border-emerald-400/20 hover:bg-emerald-500/[0.05]">
+                    <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[10px] font-semibold text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50/60">
                       <span>Mostrar solo artistas con ideas</span>
                       <input
                         type="checkbox"
                         checked={soloConIdeas}
                         onChange={(evento) => setSoloConIdeas(evento.target.checked)}
-                        className="h-4 w-4 cursor-pointer rounded border-white/20 bg-[#08140f] accent-emerald-500"
+                        className="h-4 w-4 cursor-pointer rounded border-slate-300 bg-white accent-emerald-500"
                       />
                     </label>
 
-                    <div className="mt-3 flex items-center justify-end gap-2 border-t border-white/[0.07] pt-3">
+                    <div className="mt-3 flex items-center justify-end gap-2 border-t border-slate-200 pt-3">
                       <button
                         type="button"
                         onClick={limpiarFiltrosAvanzados}
                         disabled={cantidadFiltrosActivos === 0}
-                        className="rounded-lg border border-white/10 px-3 py-2 text-[10px] font-bold text-zinc-400 transition hover:bg-white/5 hover:text-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         Limpiar filtros
                       </button>
                       <button
                         type="button"
                         onClick={() => setFiltrosAbiertos(false)}
-                        className="rounded-lg border border-emerald-400/25 bg-emerald-500/15 px-3 py-2 text-[10px] font-black text-emerald-100 transition hover:bg-emerald-500/25"
+                        className="rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-[10px] font-black text-white shadow-sm transition hover:bg-emerald-700"
                       >
                         Listo
                       </button>
                     </div>
                   </div>
+                  </>
                 )}
               </section>
 

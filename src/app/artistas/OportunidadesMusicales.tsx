@@ -582,7 +582,7 @@ export default function OportunidadesMusicales({
   }
 
   const claseSelect =
-    "w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40";
+    "w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100";
 
   return (
     <div className="min-w-0">
@@ -626,24 +626,34 @@ export default function OportunidadesMusicales({
         </div>
 
         {filtrosAbiertos && (
-          <div
+          <>
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Cerrar filtros de oportunidades"
+              onClick={() => setFiltrosAbiertos(false)}
+              className="fixed inset-x-0 bottom-20 top-12 z-30 cursor-default bg-slate-950/10 backdrop-blur-[3px] lg:bottom-0"
+            />
+
+            <div
             id="filtros-oportunidades"
             role="dialog"
+            aria-modal="true"
             aria-label="Filtros de oportunidades"
-            className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-full overflow-hidden rounded-2xl border border-emerald-400/20 bg-[#07110d]/95 shadow-[0_22px_65px_rgba(0,0,0,0.5)] backdrop-blur-xl md:w-[680px]"
+            className="absolute right-0 top-[calc(100%+0.5rem)] z-40 max-h-[calc(100vh-8rem)] w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white/95 text-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.22)] backdrop-blur-xl [scrollbar-width:thin] md:w-[680px]"
           >
-            <div className="flex items-center justify-between gap-4 border-b border-white/[0.07] px-4 py-3">
+            <div className="flex items-center justify-between gap-4 border-b border-slate-200 px-4 py-3">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-300">
+                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-700">
                   Filtros
                 </p>
-                <p className="mt-0.5 text-[10px] text-zinc-500">
+                <p className="mt-0.5 text-[10px] text-slate-500">
                   Encuentra oportunidades que encajen contigo
                 </p>
               </div>
 
               {cantidadFiltrosActivos > 0 && (
-                <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-1 text-[9px] font-bold text-emerald-200">
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[9px] font-bold text-emerald-700">
                   {cantidadFiltrosActivos} activos
                 </span>
               )}
@@ -749,24 +759,25 @@ export default function OportunidadesMusicales({
               </select>
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-white/[0.07] px-3 py-3">
+            <div className="flex items-center justify-end gap-2 border-t border-slate-200 px-3 py-3">
               <button
                 type="button"
                 onClick={limpiarFiltros}
                 disabled={!hayFiltros}
-                className="rounded-lg border border-white/10 px-3 py-2 text-[10px] font-bold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Limpiar filtros
               </button>
               <button
                 type="button"
                 onClick={() => setFiltrosAbiertos(false)}
-                className="rounded-lg border border-emerald-400/30 bg-emerald-500 px-4 py-2 text-[10px] font-black text-white transition hover:bg-emerald-600"
+                className="rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-[10px] font-black text-white shadow-sm transition hover:bg-emerald-700"
               >
                 Listo
               </button>
             </div>
           </div>
+          </>
         )}
       </section>
 
