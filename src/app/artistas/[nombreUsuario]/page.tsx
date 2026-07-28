@@ -10,9 +10,12 @@ import ReproductorAudio from "../../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
 import EnviarPropuesta from "./components/EnviarPropuesta";
+import DescripcionIdea from "./components/DescripcionIdea";
 import SeguimientoPerfil from "./components/SeguimientoPerfil";
 
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
+// FEATMUSIC_DESCRIPCION_IDEA_PERFIL_V1
+// FEATMUSIC_DESCRIPCION_IDEA_POSICIONADA_V2
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -172,29 +175,6 @@ function IconoIdea({ className = "h-3.5 w-3.5" }: { className?: string }) {
       <path d="M9 18V5l10-2v13" />
       <circle cx="6" cy="18" r="3" />
       <circle cx="16" cy="16" r="3" />
-    </svg>
-  );
-}
-
-function IconoDescripcion({
-  className = "h-3 w-3",
-}: {
-  className?: string;
-}) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 5h16v11H8l-4 4V5Z" />
-      <path d="M8 9h8" />
-      <path d="M8 12h5" />
     </svg>
   );
 }
@@ -621,7 +601,7 @@ export default async function PerfilPublicoPage({
                     id={`idea-${idea.id}`}
                     key={idea.id}
                     data-vista-idea
-                    className="scroll-mt-16 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
+                    className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-slate-50 transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
                   >
                     <RegistrarVistaIdea
                       ideaId={idea.id}
@@ -629,26 +609,23 @@ export default async function PerfilPublicoPage({
                       esPropietario={sesion?.usuarioId === artista.id}
                     />
                     <div className="p-2.5 sm:p-3">
-                      <ReproductorAudio
-                        id={`perfil-${idea.id}`}
-                        src={idea.audioUrl}
-                        titulo={idea.titulo}
-                        bpm={idea.bpm}
-                        tonalidad={idea.tonalidad}
-                        duracionSegundos={idea.duracionSegundos}
-                        numero={indice + 1}
-                        className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-1.5"
-                      />
+                      <div className="relative">
+                        <ReproductorAudio
+                          id={`perfil-${idea.id}`}
+                          src={idea.audioUrl}
+                          titulo={idea.titulo}
+                          bpm={idea.bpm}
+                          tonalidad={idea.tonalidad}
+                          duracionSegundos={idea.duracionSegundos}
+                          numero={indice + 1}
+                          className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
+                        />
 
-                      <div className="mt-2 flex items-start gap-2 border-t border-slate-200 pt-2">
-                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white text-slate-500 shadow-sm">
-                          <IconoDescripcion />
-                        </span>
-                        <p className="min-w-0 flex-1 whitespace-pre-wrap text-[10px] leading-4 text-slate-600 sm:text-[11px] sm:leading-[1.15rem]">
-                          {idea.descripcion}
-                        </p>
+                        <DescripcionIdea
+                          titulo={idea.titulo}
+                          descripcion={idea.descripcion}
+                        />
                       </div>
-
 
                       <ResumenColaboracionIdea
                         rolBuscado={idea.rolBuscado}
