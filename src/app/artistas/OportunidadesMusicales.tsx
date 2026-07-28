@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   formatearIdiomaBuscado,
   formatearModalidadColaboracion,
@@ -137,6 +137,25 @@ function IconoBuscar({ className = "h-4 w-4" }: { className?: string }) {
     >
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}
+
+function IconoFiltro({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 6h16" />
+      <path d="M7 12h10" />
+      <path d="M10 18h4" />
     </svg>
   );
 }
@@ -431,10 +450,41 @@ export default function OportunidadesMusicales({
   const [pais, setPais] = useState("");
   const [ciudad, setCiudad] = useState("");
   const [pagina, setPagina] = useState(1);
+  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
+  const contenedorFiltrosRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setPagina(1);
   }, [busqueda, rol, genero, idioma, modalidad, acuerdo, pais, ciudad]);
+
+  useEffect(() => {
+    function cerrarFiltrosFuera(evento: PointerEvent) {
+      const objetivo = evento.target;
+
+      if (
+        objetivo instanceof Node &&
+        contenedorFiltrosRef.current?.contains(objetivo)
+      ) {
+        return;
+      }
+
+      setFiltrosAbiertos(false);
+    }
+
+    function cerrarFiltrosConEscape(evento: KeyboardEvent) {
+      if (evento.key === "Escape") {
+        setFiltrosAbiertos(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", cerrarFiltrosFuera);
+    document.addEventListener("keydown", cerrarFiltrosConEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", cerrarFiltrosFuera);
+      document.removeEventListener("keydown", cerrarFiltrosConEscape);
+    };
+  }, []);
 
   const oportunidadesFiltradas = useMemo(() => {
     const termino = normalizar(busqueda);
@@ -509,6 +559,15 @@ export default function OportunidadesMusicales({
   const hayFiltros = Boolean(
     busqueda || rol || genero || idioma || modalidad || acuerdo || pais || ciudad,
   );
+  const cantidadFiltrosActivos = [
+    rol,
+    genero,
+    idioma,
+    modalidad,
+    acuerdo,
+    pais,
+    ciudad,
+  ].filter(Boolean).length;
 
   function limpiarFiltros() {
     setBusqueda("");
@@ -527,130 +586,188 @@ export default function OportunidadesMusicales({
 
   return (
     <div className="min-w-0">
-      <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
-        <div className="flex flex-col gap-2.5 xl:flex-row xl:items-start">
-          <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#08140f] px-3 py-2 focus-within:border-emerald-400/40 xl:w-[330px] xl:flex-none">
+      <section
+        ref={contenedorFiltrosRef}
+        className="relative mt-3"
+      >
+        <div className="flex min-w-0 items-center rounded-xl border border-white/10 bg-black/35 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-sm transition focus-within:border-emerald-400/35">
+          <div className="flex min-w-0 flex-1 items-center gap-2 px-2.5">
             <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
             <input
               value={busqueda}
               onChange={(evento) => setBusqueda(evento.target.value)}
-              placeholder="Canción, artista, género o ciudad"
-              className="min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
+              placeholder="Buscar por canción, artista, género o ciudad"
+              aria-label="Buscar oportunidades"
+              className="h-9 min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
             />
-          </label>
+          </div>
 
-          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2 md:grid-cols-4">
-            <select
-              value={rol}
-              onChange={(evento) => setRol(evento.target.value)}
-              aria-label="Filtrar oportunidades por rol buscado"
-              className={claseSelect}
-            >
-              <option value="">Cualquier rol</option>
-              {opciones.roles.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {formatearRolBuscado(opcion)}
-                </option>
-              ))}
-            </select>
+          <button
+            type="button"
+            aria-label="Abrir filtros de oportunidades"
+            aria-expanded={filtrosAbiertos}
+            aria-controls="filtros-oportunidades"
+            title="Filtros"
+            onClick={() => setFiltrosAbiertos((abiertos) => !abiertos)}
+            className={`relative inline-flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-emerald-400/40 ${
+              filtrosAbiertos || cantidadFiltrosActivos > 0
+                ? "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
+                : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200"
+            }`}
+          >
+            <IconoFiltro className="h-4 w-4" />
 
-            <select
-              value={genero}
-              onChange={(evento) => setGenero(evento.target.value)}
-              aria-label="Filtrar oportunidades por género"
-              className={claseSelect}
-            >
-              <option value="">Cualquier género</option>
-              {opciones.generos.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {opcion}
-                </option>
-              ))}
-            </select>
+            {cantidadFiltrosActivos > 0 && (
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white">
+                {cantidadFiltrosActivos}
+              </span>
+            )}
+          </button>
+        </div>
 
-            <select
-              value={idioma}
-              onChange={(evento) => setIdioma(evento.target.value)}
-              aria-label="Filtrar oportunidades por idioma"
-              className={claseSelect}
-            >
-              <option value="">Cualquier idioma</option>
-              {opciones.idiomas.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {formatearIdiomaBuscado(opcion)}
-                </option>
-              ))}
-            </select>
+        {filtrosAbiertos && (
+          <div
+            id="filtros-oportunidades"
+            role="dialog"
+            aria-label="Filtros de oportunidades"
+            className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-full overflow-hidden rounded-2xl border border-emerald-400/20 bg-[#07110d]/95 shadow-[0_22px_65px_rgba(0,0,0,0.5)] backdrop-blur-xl md:w-[680px]"
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-white/[0.07] px-4 py-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-300">
+                  Filtros
+                </p>
+                <p className="mt-0.5 text-[10px] text-zinc-500">
+                  Encuentra oportunidades que encajen contigo
+                </p>
+              </div>
 
-            <select
-              value={modalidad}
-              onChange={(evento) => setModalidad(evento.target.value)}
-              aria-label="Filtrar oportunidades por modalidad"
-              className={claseSelect}
-            >
-              <option value="">Cualquier modalidad</option>
-              {opciones.modalidades.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {formatearModalidadColaboracion(opcion)}
-                </option>
-              ))}
-            </select>
+              {cantidadFiltrosActivos > 0 && (
+                <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-1 text-[9px] font-bold text-emerald-200">
+                  {cantidadFiltrosActivos} activos
+                </span>
+              )}
+            </div>
 
-            <select
-              value={acuerdo}
-              onChange={(evento) => setAcuerdo(evento.target.value)}
-              aria-label="Filtrar oportunidades por tipo de acuerdo"
-              className={claseSelect}
-            >
-              <option value="">Cualquier acuerdo</option>
-              {opciones.acuerdos.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {formatearTipoAcuerdo(opcion)}
-                </option>
-              ))}
-            </select>
+            <div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-3 md:grid-cols-4">
+              <select
+                value={rol}
+                onChange={(evento) => setRol(evento.target.value)}
+                aria-label="Filtrar oportunidades por rol buscado"
+                className={claseSelect}
+              >
+                <option value="">Cualquier rol</option>
+                {opciones.roles.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {formatearRolBuscado(opcion)}
+                  </option>
+                ))}
+              </select>
 
-            <select
-              value={pais}
-              onChange={(evento) => setPais(evento.target.value)}
-              aria-label="Filtrar oportunidades por país preferido"
-              className={claseSelect}
-            >
-              <option value="">Cualquier país</option>
-              {opciones.paises.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {opcion}
-                </option>
-              ))}
-            </select>
+              <select
+                value={genero}
+                onChange={(evento) => setGenero(evento.target.value)}
+                aria-label="Filtrar oportunidades por género"
+                className={claseSelect}
+              >
+                <option value="">Cualquier género</option>
+                {opciones.generos.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {opcion}
+                  </option>
+                ))}
+              </select>
 
-            <select
-              value={ciudad}
-              onChange={(evento) => setCiudad(evento.target.value)}
-              aria-label="Filtrar oportunidades por ciudad preferida"
-              className={claseSelect}
-            >
-              <option value="">Cualquier ciudad</option>
-              {opciones.ciudades.map((opcion) => (
-                <option key={opcion} value={opcion}>
-                  {opcion}
-                </option>
-              ))}
-            </select>
+              <select
+                value={idioma}
+                onChange={(evento) => setIdioma(evento.target.value)}
+                aria-label="Filtrar oportunidades por idioma"
+                className={claseSelect}
+              >
+                <option value="">Cualquier idioma</option>
+                {opciones.idiomas.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {formatearIdiomaBuscado(opcion)}
+                  </option>
+                ))}
+              </select>
 
-            {hayFiltros ? (
+              <select
+                value={modalidad}
+                onChange={(evento) => setModalidad(evento.target.value)}
+                aria-label="Filtrar oportunidades por modalidad"
+                className={claseSelect}
+              >
+                <option value="">Cualquier modalidad</option>
+                {opciones.modalidades.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {formatearModalidadColaboracion(opcion)}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={acuerdo}
+                onChange={(evento) => setAcuerdo(evento.target.value)}
+                aria-label="Filtrar oportunidades por tipo de acuerdo"
+                className={claseSelect}
+              >
+                <option value="">Cualquier acuerdo</option>
+                {opciones.acuerdos.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {formatearTipoAcuerdo(opcion)}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={pais}
+                onChange={(evento) => setPais(evento.target.value)}
+                aria-label="Filtrar oportunidades por país preferido"
+                className={claseSelect}
+              >
+                <option value="">Cualquier país</option>
+                {opciones.paises.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {opcion}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={ciudad}
+                onChange={(evento) => setCiudad(evento.target.value)}
+                aria-label="Filtrar oportunidades por ciudad preferida"
+                className={claseSelect}
+              >
+                <option value="">Cualquier ciudad</option>
+                {opciones.ciudades.map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {opcion}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-white/[0.07] px-3 py-3">
               <button
                 type="button"
                 onClick={limpiarFiltros}
-                className="rounded-lg border border-white/10 px-3 py-2 text-[11px] font-bold text-zinc-300 transition hover:bg-white/5"
+                disabled={!hayFiltros}
+                className="rounded-lg border border-white/10 px-3 py-2 text-[10px] font-bold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Limpiar filtros
               </button>
-            ) : (
-              <div className="hidden md:block" aria-hidden="true" />
-            )}
+              <button
+                type="button"
+                onClick={() => setFiltrosAbiertos(false)}
+                className="rounded-lg border border-emerald-400/30 bg-emerald-500 px-4 py-2 text-[10px] font-black text-white transition hover:bg-emerald-600"
+              >
+                Listo
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <div className="mt-4 flex items-center justify-between gap-4">
