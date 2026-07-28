@@ -217,7 +217,7 @@ export default async function InicioPage() {
     }));
 
   return (
-    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
+    <main className="featmusic-app-light h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="relative z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <Link href="/inicio" className="text-lg font-black tracking-tight">

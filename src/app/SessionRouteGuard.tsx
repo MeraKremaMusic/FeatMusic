@@ -91,7 +91,7 @@ export default function SessionRouteGuard({
 
   if (esRutaPublica && comprobando) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-black text-white">
+      <main className="featmusic-app-light flex min-h-screen items-center justify-center bg-black text-white">
         <p className="text-sm text-zinc-400">
           Comprobando sesión...
         </p>

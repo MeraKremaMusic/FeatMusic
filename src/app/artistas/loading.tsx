@@ -94,7 +94,7 @@ function Icono({
 
 export default function Loading() {
   return (
-    <main className="relative flex h-[100dvh] min-h-[100dvh] flex-col overflow-hidden bg-[#09070d] text-white">
+    <main className="featmusic-app-light relative flex h-[100dvh] min-h-[100dvh] flex-col overflow-hidden bg-[#09070d] text-white">
       <header className="relative z-20 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
@@ -159,7 +159,7 @@ export default function Loading() {
 
       <nav
         aria-label="Menú principal móvil"
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
+        className="featmusic-dark-chrome fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
       >
         <div className="mx-auto grid max-w-md grid-cols-5 items-end">
           <Link

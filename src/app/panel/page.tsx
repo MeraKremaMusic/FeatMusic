@@ -451,7 +451,7 @@ export default async function PanelPage() {
   );
 
   return (
-    <main className="h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
+    <main className="featmusic-app-light h-[100dvh] overflow-hidden bg-[#09070d] text-white lg:h-screen">
       <header className="border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
@@ -474,7 +474,7 @@ export default async function PanelPage() {
 
       <div className="relative h-[calc(100dvh-48px)] overflow-hidden lg:h-[calc(100vh-48px)]">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-violet-200/55 to-transparent" />
 
         <div
           id="panel-carrusel"

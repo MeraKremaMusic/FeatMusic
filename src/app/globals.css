@@ -1724,3 +1724,370 @@ body {
     display: none;
   }
 }
+
+/* FEATMUSIC_TEMA_CLARO_V1_INICIO */
+
+/*
+  Tema claro de FeatMusic.
+  Solo se aplica dentro de .featmusic-app-light para conservar oscura la
+  página pública y mantener la identidad musical de la marca.
+*/
+.featmusic-app-light {
+  --fm-app-bg: #f4f6fa;
+  --fm-card: #ffffff;
+  --fm-card-soft: #f8fafc;
+  --fm-card-violet: #f5f3ff;
+  --fm-text: #172033;
+  --fm-text-soft: #64748b;
+  --fm-text-muted: #94a3b8;
+  --fm-border: #e2e8f0;
+  --fm-violet: #7c3aed;
+  --fm-violet-deep: #6d28d9;
+  --fm-sky: #0ea5e9;
+  --fm-night: #111827;
+  --fm-success: #047857;
+  --fm-warning: #b45309;
+  --fm-danger: #dc2626;
+
+  color-scheme: light;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(124, 58, 237, 0.09), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(14, 165, 233, 0.07), transparent 24rem),
+    var(--fm-app-bg) !important;
+  color: var(--fm-text) !important;
+}
+
+/* Cabeceras y navegación: conservan el carácter oscuro de FeatMusic. */
+.featmusic-app-light > header,
+.featmusic-app-light .featmusic-dark-chrome {
+  color-scheme: dark;
+  background: rgba(17, 24, 39, 0.97) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.16) !important;
+}
+
+.featmusic-app-light > header [class~="text-white"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+.featmusic-app-light > header [class~="text-zinc-200"],
+.featmusic-app-light > header [class~="text-zinc-300"],
+.featmusic-app-light > header [class~="text-zinc-400"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-200"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-300"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-400"] {
+  color: #cbd5e1 !important;
+}
+
+.featmusic-app-light > header [class~="text-zinc-500"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-500"] {
+  color: #94a3b8 !important;
+}
+
+.featmusic-app-light > header [class~="text-violet-100"],
+.featmusic-app-light > header [class~="text-violet-200"],
+.featmusic-app-light > header [class~="text-violet-300"],
+.featmusic-app-light > header [class~="text-violet-400"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-100"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-200"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-300"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-400"] {
+  color: #c4b5fd !important;
+}
+
+.featmusic-app-light > header [class~="text-red-300"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-red-300"] {
+  color: #fca5a5 !important;
+}
+
+.featmusic-app-light > header [class~="border-white/10"],
+.featmusic-app-light .featmusic-dark-chrome [class~="border-white/10"],
+.featmusic-app-light .featmusic-dark-chrome [class~="border-white/15"],
+.featmusic-app-light .featmusic-dark-chrome [class~="border-white/20"] {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Superficies principales y tarjetas. */
+.featmusic-app-light [class~="bg-black"],
+.featmusic-app-light [class~="bg-black/15"],
+.featmusic-app-light [class~="bg-black/20"],
+.featmusic-app-light [class~="bg-black/25"],
+.featmusic-app-light [class~="bg-black/30"],
+.featmusic-app-light [class~="bg-black/35"],
+.featmusic-app-light [class~="bg-black/40"],
+.featmusic-app-light [class~="bg-black/45"],
+.featmusic-app-light [class~="bg-zinc-950"],
+.featmusic-app-light [class~="bg-[#0d0913]/95"],
+.featmusic-app-light [class~="bg-[#0d0913]/98"],
+.featmusic-app-light [class~="bg-[#0d0a12]/90"],
+.featmusic-app-light [class~="bg-[#100c16]"],
+.featmusic-app-light [class~="bg-[#100d15]"],
+.featmusic-app-light [class~="bg-[#110d18]"],
+.featmusic-app-light [class~="bg-[#110d18]/95"],
+.featmusic-app-light [class~="bg-[#120e18]"],
+.featmusic-app-light [class~="bg-[#120e18]/95"] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07) !important;
+}
+
+.featmusic-app-light [class~="bg-[#09070d]/92"] {
+  background-color: rgba(244, 246, 250, 0.94) !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05) !important;
+}
+
+.featmusic-app-light [class~="bg-white/5"],
+.featmusic-app-light [class~="bg-white/[0.012]"],
+.featmusic-app-light [class~="bg-white/[0.018]"],
+.featmusic-app-light [class~="bg-white/[0.02]"],
+.featmusic-app-light [class~="bg-white/[0.025]"],
+.featmusic-app-light [class~="bg-white/[0.03]"],
+.featmusic-app-light [class~="bg-white/[0.035]"],
+.featmusic-app-light [class~="bg-white/[0.04]"],
+.featmusic-app-light [class~="bg-white/[0.045]"],
+.featmusic-app-light [class~="bg-white/[0.05]"],
+.featmusic-app-light [class~="bg-white/[0.055]"],
+.featmusic-app-light [class~="bg-white/[0.06]"] {
+  background-color: #f8fafc !important;
+}
+
+.featmusic-app-light [class~="bg-white/10"],
+.featmusic-app-light [class~="bg-white/15"] {
+  background-color: #eef2f7 !important;
+}
+
+/* Gradientes oscuros de cards convertidos en superficies claras con profundidad. */
+.featmusic-app-light [class~="bg-[linear-gradient(155deg,rgba(139,92,246,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))]"],
+.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(139,92,246,0.035))]"],
+.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(139,92,246,0.035))]"],
+.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(139,92,246,0.045))]"] {
+  background: linear-gradient(145deg, #ffffff 0%, #fbfdff 58%, #f5f3ff 100%) !important;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.09) !important;
+}
+
+/* Bordes claros y separación visual. */
+.featmusic-app-light [class~="border-white/5"],
+.featmusic-app-light [class~="border-white/10"],
+.featmusic-app-light [class~="border-white/12"],
+.featmusic-app-light [class~="border-white/15"],
+.featmusic-app-light [class~="border-white/20"],
+.featmusic-app-light [class~="border-white/[0.05]"],
+.featmusic-app-light [class~="border-white/[0.06]"],
+.featmusic-app-light [class~="border-white/[0.07]"],
+.featmusic-app-light [class~="border-white/[0.08]"],
+.featmusic-app-light [class~="border-white/[0.09]"],
+.featmusic-app-light [class~="border-zinc-800"] {
+  border-color: var(--fm-border) !important;
+}
+
+.featmusic-app-light [class~="divide-white/10"] > :not(:last-child),
+.featmusic-app-light [class~="divide-white/[0.06]"] > :not(:last-child),
+.featmusic-app-light [class~="divide-white/[0.07]"] > :not(:last-child) {
+  border-color: var(--fm-border) !important;
+}
+
+/* Jerarquía tipográfica de alto contraste. */
+.featmusic-app-light [class~="text-white"],
+.featmusic-app-light [class~="text-zinc-100"] {
+  color: var(--fm-text) !important;
+}
+
+.featmusic-app-light [class~="text-zinc-200"],
+.featmusic-app-light [class~="text-zinc-300"],
+.featmusic-app-light [class~="text-zinc-300/80"] {
+  color: #334155 !important;
+}
+
+.featmusic-app-light [class~="text-zinc-400"],
+.featmusic-app-light [class~="text-zinc-500"] {
+  color: var(--fm-text-soft) !important;
+}
+
+.featmusic-app-light [class~="text-zinc-600"],
+.featmusic-app-light [class~="text-zinc-700"] {
+  color: var(--fm-text-muted) !important;
+}
+
+.featmusic-app-light [class~="text-violet-100"],
+.featmusic-app-light [class~="text-violet-100/70"],
+.featmusic-app-light [class~="text-violet-100/80"],
+.featmusic-app-light [class~="text-violet-100/90"],
+.featmusic-app-light [class~="text-violet-200"],
+.featmusic-app-light [class~="text-violet-200/55"],
+.featmusic-app-light [class~="text-violet-200/85"],
+.featmusic-app-light [class~="text-violet-300"],
+.featmusic-app-light [class~="text-violet-300/70"],
+.featmusic-app-light [class~="text-violet-300/80"],
+.featmusic-app-light [class~="text-violet-400"] {
+  color: var(--fm-violet-deep) !important;
+}
+
+.featmusic-app-light [class~="text-red-100"],
+.featmusic-app-light [class~="text-red-200"],
+.featmusic-app-light [class~="text-red-200/60"],
+.featmusic-app-light [class~="text-red-300"],
+.featmusic-app-light [class~="text-red-300/80"],
+.featmusic-app-light [class~="text-red-400"] {
+  color: #b91c1c !important;
+}
+
+.featmusic-app-light [class~="text-emerald-200"],
+.featmusic-app-light [class~="text-emerald-300"] {
+  color: var(--fm-success) !important;
+}
+
+.featmusic-app-light [class~="text-sky-100"],
+.featmusic-app-light [class~="text-sky-200"],
+.featmusic-app-light [class~="text-sky-300"],
+.featmusic-app-light [class~="text-sky-300/70"] {
+  color: #0369a1 !important;
+}
+
+.featmusic-app-light [class~="text-amber-200"],
+.featmusic-app-light [class~="text-amber-300"] {
+  color: var(--fm-warning) !important;
+}
+
+.featmusic-app-light [class~="text-fuchsia-300"] {
+  color: #a21caf !important;
+}
+
+/* Botones sólidos, avatares y mensajes enviados mantienen texto blanco. */
+.featmusic-app-light [class~="bg-violet-500"][class~="text-white"],
+.featmusic-app-light [class~="bg-violet-600"][class~="text-white"],
+.featmusic-app-light [class~="bg-red-400"][class~="text-white"],
+.featmusic-app-light [class~="bg-red-500"][class~="text-white"],
+.featmusic-app-light [class~="bg-emerald-400"][class~="text-white"],
+.featmusic-app-light [class~="bg-sky-400"][class~="text-white"],
+.featmusic-app-light [class~="from-violet-700"],
+.featmusic-app-light [class~="to-fuchsia-600"] {
+  color: #ffffff !important;
+}
+
+.featmusic-app-light [class~="bg-violet-500"] [class~="text-violet-100/70"] {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Campos y controles. */
+.featmusic-app-light input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+.featmusic-app-light textarea,
+.featmusic-app-light select {
+  background-color: #ffffff;
+  border-color: var(--fm-border);
+  color: var(--fm-text);
+}
+
+.featmusic-app-light input::placeholder,
+.featmusic-app-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.featmusic-app-light select option {
+  background: #ffffff;
+  color: var(--fm-text);
+}
+
+.featmusic-app-light input[type="range"] {
+  accent-color: var(--fm-violet);
+}
+
+.featmusic-app-light input[type="checkbox"],
+.featmusic-app-light input[type="radio"] {
+  accent-color: var(--fm-violet);
+}
+
+/* Estados y acentos con fondos suaves. */
+.featmusic-app-light [class~="bg-violet-500/5"],
+.featmusic-app-light [class~="bg-violet-500/10"],
+.featmusic-app-light [class~="bg-violet-500/12"],
+.featmusic-app-light [class~="bg-violet-500/15"],
+.featmusic-app-light [class~="bg-violet-500/20"],
+.featmusic-app-light [class~="bg-violet-500/[0.035]"],
+.featmusic-app-light [class~="bg-violet-500/[0.045]"],
+.featmusic-app-light [class~="bg-violet-500/[0.05]"],
+.featmusic-app-light [class~="bg-violet-500/[0.06]"],
+.featmusic-app-light [class~="bg-violet-500/[0.065]"],
+.featmusic-app-light [class~="bg-violet-500/[0.07]"],
+.featmusic-app-light [class~="bg-violet-500/[0.08]"],
+.featmusic-app-light [class~="bg-violet-500/[0.09]"] {
+  background-color: #f3e8ff !important;
+}
+
+.featmusic-app-light [class~="bg-sky-500/10"],
+.featmusic-app-light [class~="bg-sky-500/15"],
+.featmusic-app-light [class~="bg-sky-500/[0.06]"] {
+  background-color: #e0f2fe !important;
+}
+
+.featmusic-app-light [class~="bg-emerald-500/10"],
+.featmusic-app-light [class~="bg-emerald-500/[0.07]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.08]"] {
+  background-color: #ecfdf5 !important;
+}
+
+.featmusic-app-light [class~="bg-amber-500/10"] {
+  background-color: #fff7ed !important;
+}
+
+.featmusic-app-light [class~="bg-red-500/10"],
+.featmusic-app-light [class~="bg-red-500/15"],
+.featmusic-app-light [class~="bg-red-500/[0.04]"],
+.featmusic-app-light [class~="bg-red-500/[0.05]"],
+.featmusic-app-light [class~="bg-red-500/[0.055]"],
+.featmusic-app-light [class~="bg-red-500/[0.06]"],
+.featmusic-app-light [class~="bg-red-500/[0.07]"] {
+  background-color: #fef2f2 !important;
+}
+
+/* Hover más limpio sobre superficies claras. */
+.featmusic-app-light [class~="hover:bg-white/5"]:hover,
+.featmusic-app-light [class~="hover:bg-white/10"]:hover,
+.featmusic-app-light [class~="hover:bg-white/[0.012]"]:hover,
+.featmusic-app-light [class~="hover:bg-white/[0.018]"]:hover,
+.featmusic-app-light [class~="hover:bg-white/[0.025]"]:hover,
+.featmusic-app-light [class~="hover:bg-white/[0.035]"]:hover,
+.featmusic-app-light [class~="hover:bg-white/[0.08]"]:hover {
+  background-color: #eef2ff !important;
+}
+
+.featmusic-app-light [class~="hover:text-white"]:hover,
+.featmusic-app-light [class~="hover:text-zinc-200"]:hover,
+.featmusic-app-light [class~="hover:text-zinc-300"]:hover {
+  color: var(--fm-violet-deep) !important;
+}
+
+.featmusic-app-light > header [class~="hover:text-white"]:hover,
+.featmusic-app-light .featmusic-dark-chrome [class~="hover:text-white"]:hover,
+.featmusic-app-light .featmusic-dark-chrome [class~="hover:text-zinc-200"]:hover {
+  color: #ffffff !important;
+}
+
+/* Modales claros conservando el velo oscuro de fondo. */
+.featmusic-app-light [role="dialog"] {
+  color-scheme: light;
+}
+
+.featmusic-app-light [role="dialog"]:not([class~="bg-transparent"]) {
+  border-color: var(--fm-border) !important;
+}
+
+/* Sombras y scrollbars suaves. */
+.featmusic-app-light [class~="shadow-2xl"]:not([role="dialog"]),
+.featmusic-app-light [class~="shadow-xl"]:not([role="dialog"]) {
+  --tw-shadow-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+.featmusic-app-light * {
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+@media (max-width: 640px) {
+  .featmusic-app-light {
+    background:
+      radial-gradient(circle at 50% -5%, rgba(124, 58, 237, 0.08), transparent 18rem),
+      var(--fm-app-bg) !important;
+  }
+}
+
+/* FEATMUSIC_TEMA_CLARO_V1_FIN */

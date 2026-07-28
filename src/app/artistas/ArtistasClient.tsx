@@ -775,7 +775,7 @@ export default function ArtistasClient({
   const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
 
   return (
-    <main className="min-h-screen w-full max-w-full overflow-x-clip bg-[#09070d] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#09070d] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <Link

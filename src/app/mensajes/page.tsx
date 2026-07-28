@@ -181,7 +181,7 @@ export default async function MensajesPage() {
   });
 
   return (
-    <main className="min-h-[100dvh] bg-[#09070d] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light min-h-[100dvh] bg-[#09070d] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
