@@ -388,8 +388,8 @@ function FaqCarousel({
               onClick={() => showSlide(indice)}
               className={`h-2 rounded-full transition-all ${
                 activeIndex === indice
-                  ? "w-8 bg-indigo-300"
-                  : "w-2 bg-indigo-100/20 hover:bg-indigo-100/40"
+                  ? "w-8 bg-teal-300"
+                  : "w-2 bg-teal-100/20 hover:bg-teal-100/40"
               }`}
             />
           ))}
@@ -401,7 +401,7 @@ function FaqCarousel({
             aria-label={labels.previous}
             disabled={activeIndex === 0}
             onClick={() => showSlide(activeIndex - 1)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-indigo-100/15 bg-black/25 text-indigo-100 transition hover:border-indigo-300/40 hover:bg-indigo-400/10 disabled:cursor-not-allowed disabled:opacity-30"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-teal-100/15 bg-black/25 text-teal-100 transition hover:border-teal-300/40 hover:bg-teal-400/10 disabled:cursor-not-allowed disabled:opacity-30"
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
               <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -412,7 +412,7 @@ function FaqCarousel({
             aria-label={labels.next}
             disabled={activeIndex === items.length - 1}
             onClick={() => showSlide(activeIndex + 1)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-indigo-100/15 bg-black/25 text-indigo-100 transition hover:border-indigo-300/40 hover:bg-indigo-400/10 disabled:cursor-not-allowed disabled:opacity-30"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-teal-100/15 bg-black/25 text-teal-100 transition hover:border-teal-300/40 hover:bg-teal-400/10 disabled:cursor-not-allowed disabled:opacity-30"
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
               <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -766,7 +766,7 @@ export default function Home() {
             onClick={refreshFromLogo}
             className="text-xl font-bold tracking-tight sm:text-[1.35rem]"
           >
-            Feat<span className="text-violet-400">Music</span>
+            Feat<span className="text-emerald-400">Music</span>
           </Link>
 
           <nav
@@ -798,11 +798,11 @@ export default function Home() {
               <summary
                 aria-label={`${copy.header.language}: ${activeLanguage.label}`}
                 title={copy.header.language}
-                className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-white/15 bg-black/25 px-3 py-2 text-xs font-semibold text-zinc-100 backdrop-blur-md transition hover:border-violet-300/40 hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 [&::-webkit-details-marker]:hidden"
+                className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-white/15 bg-black/25 px-3 py-2 text-xs font-semibold text-zinc-100 backdrop-blur-md transition hover:border-emerald-300/40 hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 [&::-webkit-details-marker]:hidden"
               >
                 <GraphicIcon
                   name="globe"
-                  className="h-4 w-4 text-violet-300"
+                  className="h-4 w-4 text-emerald-300"
                 />
                 <span>{activeLanguage.shortLabel}</span>
                 <svg
@@ -819,7 +819,7 @@ export default function Home() {
                 </svg>
               </summary>
 
-              <div className="absolute right-0 top-[calc(100%+0.65rem)] z-50 w-48 overflow-hidden rounded-2xl border border-white/15 bg-[#0b0712]/95 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl">
+              <div className="absolute right-0 top-[calc(100%+0.65rem)] z-50 w-48 overflow-hidden rounded-2xl border border-white/15 bg-[#06110d]/95 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl">
                 <p className="px-3 pb-2 pt-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-zinc-500">
                   {copy.header.language}
                 </p>
@@ -835,7 +835,7 @@ export default function Home() {
                       onClick={() => changeLanguage(option.code)}
                       className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition ${
                         isActive
-                          ? "bg-violet-500/15 text-violet-200"
+                          ? "bg-emerald-500/15 text-emerald-200"
                           : "text-zinc-300 hover:bg-white/5 hover:text-white"
                       }`}
                     >
@@ -848,7 +848,7 @@ export default function Home() {
                       {isActive ? (
                         <GraphicIcon
                           name="check"
-                          className="h-4 w-4 text-violet-300"
+                          className="h-4 w-4 text-emerald-300"
                         />
                       ) : null}
                     </button>
@@ -892,7 +892,7 @@ export default function Home() {
           <h1 className="max-w-5xl text-4xl font-bold leading-[1.08] tracking-tight drop-shadow-2xl sm:text-5xl md:text-7xl">
             <span className="hero-title-enter block">{copy.hero.titleOne}</span>
             <span className="hero-title-enter hero-title-enter-delay block">
-              <span className="animated-gradient-text bg-gradient-to-r from-violet-300 via-violet-400 to-fuchsia-300 bg-clip-text text-transparent">
+              <span className="animated-gradient-text bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-300 bg-clip-text text-transparent">
                 {copy.hero.titleTwo}
               </span>
             </span>
@@ -905,7 +905,7 @@ export default function Home() {
           <div className="hero-actions-enter mt-6 flex w-full max-w-sm flex-col gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row sm:gap-4">
             <Link
               href="/registro"
-              className="rounded-full bg-violet-600 px-8 py-4 font-semibold shadow-[0_12px_40px_rgba(124,58,237,0.35)] transition hover:-translate-y-0.5 hover:bg-violet-500"
+              className="rounded-full bg-emerald-600 px-8 py-4 font-semibold shadow-[0_12px_40px_rgba(5,150,105,0.35)] transition hover:-translate-y-0.5 hover:bg-emerald-500"
             >
               {copy.hero.primaryAction}
             </Link>
@@ -943,7 +943,7 @@ export default function Home() {
             >
               {copy.genres.items.map((genero) => (
                 <span key={`${grupo}-${genero}`} className="marquee-item">
-                  <span className="text-violet-400">✦</span>
+                  <span className="text-emerald-400">✦</span>
                   {genero}
                 </span>
               ))}
@@ -955,11 +955,11 @@ export default function Home() {
       <section
         id="descubrir"
         data-home-section
-        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-violet-300/10 bg-[#140323]"
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-emerald-300/10 bg-[#03251a]"
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_22%,rgba(168,85,247,0.36),transparent_32%),radial-gradient(circle_at_84%_74%,rgba(99,102,241,0.3),transparent_34%),linear-gradient(135deg,#1d0634_0%,#10021d_48%,#21063a_100%)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_22%,rgba(16,185,129,0.36),transparent_32%),radial-gradient(circle_at_84%_74%,rgba(20,184,166,0.3),transparent_34%),linear-gradient(135deg,#064e3b_0%,#022c22_48%,#065f46_100%)]"
         />
         <div
           aria-hidden="true"
@@ -969,13 +969,13 @@ export default function Home() {
         <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-16 lg:py-6">
           <div className="mobile-demo-layout grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
             <div className="mobile-demo-intro reveal-on-scroll max-w-xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-300">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
                 {copy.demo.eyebrow}
               </p>
               <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
                 {copy.demo.title}
               </h2>
-              <p className="mt-5 max-w-xl text-lg leading-8 text-violet-100/70 lg:text-base lg:leading-7">
+              <p className="mt-5 max-w-xl text-lg leading-8 text-emerald-100/70 lg:text-base lg:leading-7">
                 {copy.demo.body}
               </p>
 
@@ -983,11 +983,11 @@ export default function Home() {
                 {copy.demo.benefits.map((benefit, index) => (
                   <span
                     key={benefit}
-                    className="inline-flex items-center gap-2 rounded-full border border-violet-200/15 bg-black/25 px-4 py-2 text-sm text-violet-100/80"
+                    className="inline-flex items-center gap-2 rounded-full border border-emerald-200/15 bg-black/25 px-4 py-2 text-sm text-emerald-100/80"
                   >
                     <GraphicIcon
                       name={index === 0 ? "check" : "chat"}
-                      className="h-4 w-4 text-violet-300"
+                      className="h-4 w-4 text-emerald-300"
                     />
                     {benefit}
                   </span>
@@ -997,27 +997,27 @@ export default function Home() {
               <div className="mobile-demo-extras mt-6 flex flex-wrap gap-3">
                 <Link
                   href="/registro"
-                  className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-violet-950 transition hover:-translate-y-0.5 hover:bg-violet-100"
+                  className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-emerald-950 transition hover:-translate-y-0.5 hover:bg-emerald-100"
                 >
                   {copy.demo.primaryAction}
                 </Link>
                 <Link
                   href="/artistas"
-                  className="rounded-full border border-violet-200/20 bg-black/20 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-violet-200/45"
+                  className="rounded-full border border-emerald-200/20 bg-black/20 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-emerald-200/45"
                 >
                   {copy.demo.secondaryAction}
                 </Link>
               </div>
             </div>
 
-            <div className="mobile-product-demo product-demo-shell reveal-on-scroll-right overflow-hidden rounded-[2rem] border border-violet-200/20 bg-[#09060f]/90 shadow-[0_32px_100px_rgba(76,29,149,0.45)] backdrop-blur-xl">
+            <div className="mobile-product-demo product-demo-shell reveal-on-scroll-right overflow-hidden rounded-[2rem] border border-emerald-200/20 bg-[#06110d]/90 shadow-[0_32px_100px_rgba(4,120,87,0.45)] backdrop-blur-xl">
               <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.035] px-5 py-4 sm:px-6 xl:py-3">
                 <div className="flex items-center gap-2" aria-hidden="true">
                   <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
                   <span className="h-2.5 w-2.5 rounded-full bg-amber-300/80" />
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
                 </div>
-                <span className="rounded-full border border-violet-200/15 bg-violet-500/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-violet-200">
+                <span className="rounded-full border border-emerald-200/15 bg-emerald-500/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-emerald-200">
                   {copy.demo.previewLabel}
                 </span>
               </div>
@@ -1029,13 +1029,13 @@ export default function Home() {
                 <div className="mobile-demo-page mobile-demo-idea p-5 sm:p-7 xl:p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-700 text-sm font-bold shadow-lg xl:h-10 xl:w-10">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-sm font-bold shadow-lg xl:h-10 xl:w-10">
                         LR
                       </span>
                       <div>
                         <p className="font-semibold text-white">{copy.demo.artistName}</p>
                         <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400">
-                          <GraphicIcon name="globe" className="h-3.5 w-3.5 text-violet-300" />
+                          <GraphicIcon name="globe" className="h-3.5 w-3.5 text-emerald-300" />
                           {copy.demo.location}
                         </p>
                       </div>
@@ -1046,7 +1046,7 @@ export default function Home() {
                   </div>
 
                   <div className="mt-7 xl:mt-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-300/75">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/75">
                       {copy.demo.ideaLabel}
                     </p>
                     <h3 className="mt-2 text-2xl font-semibold xl:text-xl">{copy.demo.ideaTitle}</h3>
@@ -1077,7 +1077,7 @@ export default function Home() {
                         aria-label={demoPlaying ? copy.demo.pause : copy.demo.play}
                         aria-pressed={demoPlaying}
                         onClick={() => setDemoPlaying((playing) => !playing)}
-                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white shadow-[0_8px_28px_rgba(124,58,237,0.45)] transition hover:scale-105 hover:bg-violet-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 xl:h-10 xl:w-10"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-[0_8px_28px_rgba(5,150,105,0.45)] transition hover:scale-105 hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 xl:h-10 xl:w-10"
                       >
                         <GraphicIcon
                           name={demoPlaying ? "pause" : "play"}
@@ -1088,7 +1088,7 @@ export default function Home() {
                         {demoWaveform.map((height, index) => (
                           <span
                             key={`${height}-${index}`}
-                            className="demo-wave-bar min-w-[2px] flex-1 rounded-full bg-gradient-to-t from-violet-700 to-fuchsia-300"
+                            className="demo-wave-bar min-w-[2px] flex-1 rounded-full bg-gradient-to-t from-emerald-700 to-emerald-300"
                             style={{
                               height: `${height}%`,
                               animationDelay: `${index * 42}ms`,
@@ -1100,9 +1100,9 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-violet-200/10 bg-violet-500/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between xl:mt-4 xl:p-3">
+                  <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-emerald-200/10 bg-emerald-500/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between xl:mt-4 xl:p-3">
                     <div>
-                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-violet-300/70">
+                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-emerald-300/70">
                         {copy.demo.seekingLabel}
                       </p>
                       <p className="mt-1 font-semibold">{copy.demo.seekingValue}</p>
@@ -1124,10 +1124,10 @@ export default function Home() {
                     {copy.demo.proposals.map((proposal, index) => (
                       <article
                         key={proposal.name}
-                        className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-violet-300/25 hover:bg-violet-500/[0.06] xl:p-3"
+                        className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-emerald-300/25 hover:bg-emerald-500/[0.06] xl:p-3"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-violet-200/15 bg-violet-500/15 text-xs font-bold text-violet-200">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-emerald-200/15 bg-emerald-500/15 text-xs font-bold text-emerald-200">
                             {proposal.initial}
                           </span>
                           <div className="min-w-0 flex-1">
@@ -1136,7 +1136,7 @@ export default function Home() {
                           </div>
                           <span
                             aria-hidden="true"
-                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 text-violet-200"
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 text-emerald-200"
                           >
                             <GraphicIcon name="play" className="h-4 w-4" />
                           </span>
@@ -1145,12 +1145,12 @@ export default function Home() {
                           {proposalWaveforms[index].map((height, barIndex) => (
                             <span
                               key={`${height}-${barIndex}`}
-                              className="flex-1 rounded-full bg-violet-300/30 transition group-hover:bg-violet-300/55"
+                              className="flex-1 rounded-full bg-emerald-300/30 transition group-hover:bg-emerald-300/55"
                               style={{ height: `${height}px` }}
                             />
                           ))}
                         </div>
-                        <p className="mt-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-violet-300/55 xl:mt-1">
+                        <p className="mt-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-emerald-300/55 xl:mt-1">
                           {proposal.style}
                         </p>
                       </article>
@@ -1180,7 +1180,7 @@ export default function Home() {
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_75%_25%,rgba(14,165,233,0.22),transparent_30%),radial-gradient(circle_at_15%_80%,rgba(99,102,241,0.26),transparent_34%),linear-gradient(145deg,#07182a,#080c1d_60%,#111338)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_75%_25%,rgba(14,165,233,0.22),transparent_30%),radial-gradient(circle_at_15%_80%,rgba(20,184,166,0.26),transparent_34%),linear-gradient(145deg,#07182a,#080c1d_60%,#111338)]"
         />
         <div
           aria-hidden="true"
@@ -1243,7 +1243,7 @@ export default function Home() {
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_12%_18%,rgba(244,63,94,0.2),transparent_30%),radial-gradient(circle_at_88%_75%,rgba(168,85,247,0.24),transparent_32%),linear-gradient(120deg,#210d1a,#120914_55%,#24102f)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_12%_18%,rgba(244,63,94,0.2),transparent_30%),radial-gradient(circle_at_88%_75%,rgba(16,185,129,0.24),transparent_32%),linear-gradient(120deg,#210d1a,#120914_55%,#24102f)]"
         />
         <div
           aria-hidden="true"
@@ -1266,10 +1266,10 @@ export default function Home() {
                 <span className="rounded-full border border-rose-200/15 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 sm:text-sm">
                   {copy.global.origin}
                 </span>
-                <span className="h-px flex-1 bg-gradient-to-r from-rose-400 via-fuchsia-300 to-violet-400" />
-                <GraphicIcon name="globe" className="h-5 w-5 shrink-0 text-fuchsia-300" />
-                <span className="h-px flex-1 bg-gradient-to-r from-violet-400 via-fuchsia-300 to-rose-400" />
-                <span className="rounded-full border border-rose-200/15 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 sm:text-sm">
+                <span className="h-px flex-1 bg-gradient-to-r from-rose-400 via-emerald-300 to-emerald-400" />
+                <GraphicIcon name="globe" className="h-5 w-5 shrink-0 text-emerald-300" />
+                <span className="h-px flex-1 bg-gradient-to-r from-emerald-400 via-emerald-300 to-rose-400" />
+                <span className="rounded-full border border-rose-200/15 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 sm:text-sm">
                   {copy.global.destination}
                 </span>
               </div>
@@ -1431,13 +1431,13 @@ export default function Home() {
                     ? "border-amber-200/20 bg-[linear-gradient(145deg,rgba(36,24,5,0.9),rgba(10,8,5,0.82))] hover:border-amber-300/45"
                     : index === 1
                       ? "reveal-delay-1 border-amber-300/35 bg-[linear-gradient(145deg,rgba(52,31,5,0.94),rgba(17,10,8,0.88))] shadow-[0_22px_70px_rgba(245,158,11,0.13)] hover:border-amber-200/65"
-                      : "reveal-delay-2 border-fuchsia-200/20 bg-[linear-gradient(145deg,rgba(22,12,20,0.9),rgba(30,15,40,0.84))] hover:border-fuchsia-300/45"
+                      : "reveal-delay-2 border-emerald-200/20 bg-[linear-gradient(145deg,rgba(22,12,20,0.9),rgba(30,15,40,0.84))] hover:border-emerald-300/45"
                 }`}
               >
                 <span
                   aria-hidden="true"
                   className={`absolute -right-10 -top-12 h-36 w-36 rounded-full blur-3xl transition duration-500 group-hover:scale-125 ${
-                    index === 2 ? "bg-fuchsia-500/15" : "bg-amber-400/15"
+                    index === 2 ? "bg-emerald-500/15" : "bg-amber-400/15"
                   }`}
                 />
                 <div className="relative flex items-center gap-4">
@@ -1479,7 +1479,7 @@ export default function Home() {
                 <span
                   aria-hidden="true"
                   className={`absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent ${
-                    index === 2 ? "via-fuchsia-300/55" : "via-amber-300/55"
+                    index === 2 ? "via-emerald-300/55" : "via-amber-300/55"
                   } to-transparent opacity-0 transition duration-500 group-hover:opacity-100`}
                 />
               </article>
@@ -1506,21 +1506,21 @@ export default function Home() {
       <section
         id="preguntas"
         data-home-section
-        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-indigo-200/10 bg-[#0b0b20]"
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden border-b border-teal-200/10 bg-[#06251f]"
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_25%,rgba(99,102,241,0.22),transparent_30%),radial-gradient(circle_at_90%_80%,rgba(139,92,246,0.2),transparent_30%),linear-gradient(150deg,#0e0e2d,#090916_58%,#151034)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_25%,rgba(20,184,166,0.22),transparent_30%),radial-gradient(circle_at_90%_80%,rgba(16,185,129,0.2),transparent_30%),linear-gradient(150deg,#07332b,#090916_58%,#0b3b33)]"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 opacity-15 [background-image:linear-gradient(rgba(199,210,254,0.15)_1px,transparent_1px)] [background-size:100%_36px]"
+          className="absolute inset-0 -z-10 opacity-15 [background-image:linear-gradient(rgba(153,246,228,0.15)_1px,transparent_1px)] [background-size:100%_36px]"
         />
 
         <div className="mobile-section-content mx-auto w-full max-w-7xl px-6 py-14 lg:py-5">
           <div className="mobile-faq-heading flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="reveal-on-scroll-left max-w-2xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-300">
                 {copy.faq.eyebrow}
               </p>
               <h2 className="section-title-reveal mt-4 text-3xl font-bold tracking-tight sm:text-5xl xl:text-[2.65rem] xl:leading-[1.08]">
@@ -1528,7 +1528,7 @@ export default function Home() {
               </h2>
             </div>
             <div className="faq-clarity-card mobile-faq-decoration reveal-on-scroll-right relative w-full max-w-sm overflow-hidden border p-5 xl:p-4">
-              <div className="faq-clarity-header flex items-center gap-3 text-indigo-200">
+              <div className="faq-clarity-header flex items-center gap-3 text-teal-200">
                 <span className="visual-icon visual-icon-indigo visual-icon-compact">
                   <GraphicIcon name="chat" />
                 </span>
@@ -1536,7 +1536,7 @@ export default function Home() {
                   <p className="font-semibold text-white">
                     {copy.faq.clarityTitle}
                   </p>
-                  <p className="text-sm text-indigo-100/55">
+                  <p className="text-sm text-teal-100/55">
                     {copy.faq.clarityBody}
                   </p>
                 </div>
@@ -1549,7 +1549,7 @@ export default function Home() {
                   (altura, indice) => (
                     <span
                       key={`${altura}-${indice}`}
-                      className="faq-wave-bar flex-1 rounded-t-full bg-gradient-to-t from-indigo-600/40 to-indigo-300"
+                      className="faq-wave-bar flex-1 rounded-t-full bg-gradient-to-t from-teal-600/40 to-teal-300"
                       style={{ height: `${altura}px` }}
                     />
                   ),
@@ -1575,11 +1575,11 @@ export default function Home() {
       <section
         id="empezar"
         data-home-section
-        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden bg-[#23053d] px-6 py-20 text-center"
+        className="home-scroll-section relative isolate flex min-h-[calc(100svh-4.25rem)] scroll-mt-24 items-center overflow-hidden bg-[#052e24] px-6 py-20 text-center"
       >
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_50%_120%,rgba(236,72,153,0.38),transparent_40%),radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.4),transparent_38%),linear-gradient(135deg,#260746,#160229_55%,#310953)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_50%_120%,rgba(236,72,153,0.38),transparent_40%),radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.4),transparent_38%),linear-gradient(135deg,#064e3b,#022c22_55%,#065f46)]"
         />
         <div
           aria-hidden="true"
@@ -1589,33 +1589,33 @@ export default function Home() {
         <div className="mobile-cta-content reveal-on-scroll mx-auto w-full max-w-3xl">
           <div className="mb-8 flex items-center justify-center -space-x-3" aria-hidden="true">
             {[
-              ["microphone", "from-violet-400 to-fuchsia-600"],
-              ["sliders", "from-fuchsia-400 to-rose-600"],
-              ["note", "from-indigo-400 to-violet-600"],
+              ["microphone", "from-emerald-400 to-emerald-600"],
+              ["sliders", "from-emerald-400 to-rose-600"],
+              ["note", "from-teal-400 to-emerald-600"],
             ].map(([icono, color], indice) => (
               <span
                 key={icono}
-                className={`cta-icon-float flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#260746] bg-gradient-to-br ${color} shadow-xl`}
+                className={`cta-icon-float flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#064e3b] bg-gradient-to-br ${color} shadow-xl`}
                 style={{ animationDelay: `${indice * 180}ms` }}
               >
                 <GraphicIcon name={icono as GraphicIconName} className="h-6 w-6" />
               </span>
             ))}
           </div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-200">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-200">
             {copy.cta.eyebrow}
           </p>
           <h2 className="section-title-reveal mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
-            <span className="animated-gradient-text block bg-gradient-to-r from-white via-violet-100 to-fuchsia-200 bg-clip-text text-transparent">
+            <span className="animated-gradient-text block bg-gradient-to-r from-white via-emerald-100 to-emerald-200 bg-clip-text text-transparent">
               {copy.cta.title}
             </span>
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-violet-100/75">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-emerald-100/75">
             {copy.cta.body}
           </p>
           <Link
             href="/registro"
-            className="mt-10 inline-flex rounded-full bg-white px-8 py-4 font-semibold text-violet-950 shadow-2xl transition hover:-translate-y-0.5 hover:bg-violet-100"
+            className="mt-10 inline-flex rounded-full bg-white px-8 py-4 font-semibold text-emerald-950 shadow-2xl transition hover:-translate-y-0.5 hover:bg-emerald-100"
           >
             {copy.cta.action}
           </Link>
@@ -1626,7 +1626,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <Link href="/" className="text-xl font-bold tracking-tight text-white">
-              Feat<span className="text-violet-400">Music</span>
+              Feat<span className="text-emerald-400">Music</span>
             </Link>
             <p className="mt-3 max-w-md text-sm leading-6">{copy.footer.tagline}</p>
           </div>

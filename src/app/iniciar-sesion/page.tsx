@@ -31,7 +31,7 @@ export default async function IniciarSesionPage({
           ← Volver a FeatMusic
         </Link>
 
-        <p className="mt-8 text-sm font-semibold text-violet-400">
+        <p className="mt-8 text-sm font-semibold text-emerald-400">
           Bienvenido de nuevo
         </p>
 
@@ -64,7 +64,7 @@ export default async function IniciarSesionPage({
               type="email"
               name="correo"
               placeholder="artista@correo.com"
-              className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none focus:border-violet-500"
+              className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none focus:border-emerald-500"
             />
           </label>
 
@@ -78,27 +78,27 @@ export default async function IniciarSesionPage({
               type="password"
               name="password"
               placeholder="Tu contraseña"
-              className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none focus:border-violet-500"
+              className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none focus:border-emerald-500"
             />
           </label>
 
           <button
             type="submit"
-            className="w-full rounded-full bg-violet-600 px-6 py-4 font-semibold hover:bg-violet-500"
+            className="w-full rounded-full bg-emerald-600 px-6 py-4 font-semibold hover:bg-emerald-500"
           >
             Entrar
           </button>
         </form>
 
         <p className="mt-5 text-right text-sm">
-          <Link href="/recuperar-contrasena" className="text-violet-400 hover:text-violet-300">
+          <Link href="/recuperar-contrasena" className="text-emerald-400 hover:text-emerald-300">
             ¿Olvidaste tu contraseña?
           </Link>
         </p>
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           ¿Todavía no tienes cuenta?{" "}
-          <Link href="/registro" className="text-violet-400 hover:text-violet-300">
+          <Link href="/registro" className="text-emerald-400 hover:text-emerald-300">
             Regístrate
           </Link>
         </p>

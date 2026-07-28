@@ -201,7 +201,7 @@ function FotoOportunidad({ oportunidad }: { oportunidad: OportunidadMusical }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-violet-400/25 bg-violet-500/10 text-xs font-black text-violet-200">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-xs font-black text-emerald-200">
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -261,8 +261,8 @@ function TarjetaOportunidad({
   const perfilHref = `/artistas/${encodeURIComponent(artista.nombreUsuario)}`;
 
   return (
-    <article data-vista-idea className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(139,92,246,0.045))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
-      <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-violet-500/[0.08] blur-3xl transition group-hover:bg-violet-500/[0.13]" />
+    <article data-vista-idea className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(16,185,129,0.045))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-emerald-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
+      <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-emerald-500/[0.08] blur-3xl transition group-hover:bg-emerald-500/[0.13]" />
       <RegistrarVistaIdea
         ideaId={oportunidad.id}
         sesionActiva={sesionActiva}
@@ -280,11 +280,11 @@ function TarjetaOportunidad({
               <div className="min-w-0">
                 <Link
                   href={perfilHref}
-                  className="block truncate text-sm font-black text-white transition hover:text-violet-200"
+                  className="block truncate text-sm font-black text-white transition hover:text-emerald-200"
                 >
                   {artista.nombreArtistico}
                 </Link>
-                <p className="mt-0.5 truncate text-[10px] font-semibold text-violet-300">
+                <p className="mt-0.5 truncate text-[10px] font-semibold text-emerald-300">
                   @{artista.nombreUsuario}
                 </p>
               </div>
@@ -311,7 +311,7 @@ function TarjetaOportunidad({
       <div className="relative flex flex-1 flex-col p-3.5 sm:p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300/80">
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-300/80">
               Oportunidad musical
             </p>
             <h2 className="mt-1 break-words text-base font-black leading-tight text-white sm:text-[17px]">
@@ -393,7 +393,7 @@ function TarjetaOportunidad({
           <div className="mt-2.5 flex items-center justify-end">
             <Link
               href={`${perfilHref}#idea-${oportunidad.id}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.025] px-3 py-1.5 text-[10px] font-bold text-zinc-300 transition hover:border-violet-400/25 hover:bg-violet-500/[0.08] hover:text-violet-100"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.025] px-3 py-1.5 text-[10px] font-bold text-zinc-300 transition hover:border-emerald-400/25 hover:bg-emerald-500/[0.08] hover:text-emerald-100"
             >
               Ver artista
               <IconoFlecha className="h-3 w-3" />
@@ -523,13 +523,13 @@ export default function OportunidadesMusicales({
   }
 
   const claseSelect =
-    "w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40";
+    "w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40";
 
   return (
     <div className="min-w-0">
       <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
         <div className="flex flex-col gap-2.5 xl:flex-row xl:items-start">
-          <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#100d15] px-3 py-2 focus-within:border-violet-400/40 xl:w-[330px] xl:flex-none">
+          <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#08140f] px-3 py-2 focus-within:border-emerald-400/40 xl:w-[330px] xl:flex-none">
             <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
             <input
               value={busqueda}
@@ -693,7 +693,7 @@ export default function OportunidadesMusicales({
           <button
             type="button"
             onClick={limpiarFiltros}
-            className="mt-4 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2 text-xs font-bold text-violet-200"
+            className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-200"
           >
             Limpiar búsqueda
           </button>

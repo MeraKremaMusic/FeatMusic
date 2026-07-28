@@ -124,11 +124,11 @@ function IconoTipo({
 
 function claseTipo(tipo: string) {
   if (tipo === "NUEVO_SEGUIDOR") {
-    return "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300";
+    return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
   }
 
   if (tipo === "NUEVA_IDEA_SEGUIDO") {
-    return "border-violet-400/20 bg-violet-500/10 text-violet-300";
+    return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
   }
 
   if (tipo === "PROPUESTA_ACEPTADA") {
@@ -147,7 +147,7 @@ function claseTipo(tipo: string) {
     return "border-sky-400/20 bg-sky-500/10 text-sky-300";
   }
 
-  return "border-violet-400/20 bg-violet-500/10 text-violet-300";
+  return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
 }
 
 function formatearTiempo(fecha: string) {
@@ -316,7 +316,7 @@ export default function CentroNotificaciones() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo"
-        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-white/10 bg-[#0d0913]/98 shadow-[0_-24px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-white/10 bg-[#07110d]/98 shadow-[0_-24px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:hidden"
       >
         <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-white/15" />
         <ContenidoCentro
@@ -337,7 +337,7 @@ export default function CentroNotificaciones() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo-escritorio"
-        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0913]/98 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:flex"
+        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#07110d]/98 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:flex"
         style={{
           top: posicionEscritorio.top,
           left: posicionEscritorio.left,
@@ -376,12 +376,12 @@ export default function CentroNotificaciones() {
             : "Notificaciones"
         }
         aria-expanded={abierto}
-        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-violet-500/15 hover:text-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-emerald-500/15 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
       >
         <IconoCampana />
 
         {totalNoLeidas > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#0d0913] bg-violet-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-violet-950/40">
+          <span className="absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#07110d] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-emerald-950/40">
             {totalNoLeidas > 99 ? "99+" : totalNoLeidas}
           </span>
         )}
@@ -422,7 +422,7 @@ function ContenidoCentro({
       <header className="flex items-start justify-between gap-4 border-b border-white/[0.08] px-4 pb-3 pt-4 sm:px-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
               <IconoCampana />
             </span>
             <div>
@@ -461,7 +461,7 @@ function ContenidoCentro({
             type="checkbox"
             checked={soloNoLeidas}
             onChange={(evento) => onSoloNoLeidas(evento.target.checked)}
-            className="h-3.5 w-3.5 rounded border-white/20 bg-black accent-violet-500"
+            className="h-3.5 w-3.5 rounded border-white/20 bg-black accent-emerald-500"
           />
           Solo no leídas
         </label>
@@ -470,7 +470,7 @@ function ContenidoCentro({
           type="button"
           onClick={onMarcarTodas}
           disabled={totalNoLeidas === 0}
-          className="text-[10px] font-bold text-violet-300 transition hover:text-violet-200 disabled:cursor-not-allowed disabled:text-zinc-700"
+          className="text-[10px] font-bold text-emerald-300 transition hover:text-emerald-200 disabled:cursor-not-allowed disabled:text-zinc-700"
         >
           Marcar todas como leídas
         </button>
@@ -499,7 +499,7 @@ function ContenidoCentro({
           </div>
         ) : notificaciones.length === 0 ? (
           <div className="px-5 py-14 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/15 bg-violet-500/[0.06] text-violet-300/70">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/15 bg-emerald-500/[0.06] text-emerald-300/70">
               <IconoCampana className="h-5 w-5" />
             </div>
             <p className="mt-3 text-xs font-bold text-zinc-300">
@@ -523,12 +523,12 @@ function ContenidoCentro({
                   onClick={() => onAbrir(notificacion)}
                   className={`relative flex w-full items-start gap-3 px-4 py-3.5 text-left transition sm:px-5 ${
                     noLeida
-                      ? "bg-violet-500/[0.045] hover:bg-violet-500/[0.075]"
+                      ? "bg-emerald-500/[0.045] hover:bg-emerald-500/[0.075]"
                       : "hover:bg-white/[0.025]"
                   }`}
                 >
                   {noLeida && (
-                    <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-violet-400" />
+                    <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-emerald-400" />
                   )}
 
                   {notificacion.actor?.fotoPerfil ? (
@@ -538,7 +538,7 @@ function ContenidoCentro({
                       className="h-9 w-9 shrink-0 rounded-xl border border-white/10 object-cover"
                     />
                   ) : notificacion.actor ? (
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-400/15 bg-violet-500/[0.07] text-[10px] font-black text-violet-200">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-500/[0.07] text-[10px] font-black text-emerald-200">
                       {iniciales(notificacion.actor.nombreVisible)}
                     </span>
                   ) : (
@@ -571,7 +571,7 @@ function ContenidoCentro({
                     </span>
 
                     {notificacion.actor && (
-                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-violet-300/80">
+                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-emerald-300/80">
                         {notificacion.actor.nombreVisible}
                       </span>
                     )}

@@ -194,14 +194,14 @@ export default async function PaginaListaSeguimientos({
   }));
 
   return (
-    <main className="featmusic-app-light min-h-screen bg-[#09070d] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light min-h-screen bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
             href={sesion ? "/panel" : "/"}
             className="text-lg font-black tracking-tight"
           >
-            Feat<span className="text-violet-400">Music</span>
+            Feat<span className="text-emerald-400">Music</span>
           </Link>
 
           <NavegacionEscritorio />
@@ -219,7 +219,7 @@ export default async function PaginaListaSeguimientos({
           ) : (
             <Link
               href="/iniciar-sesion"
-              className="rounded-lg border border-violet-400/50 px-3 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/10"
+              className="rounded-lg border border-emerald-400/50 px-3 py-1.5 text-[10px] font-bold text-emerald-200 transition hover:bg-emerald-500/10"
             >
               Iniciar sesión
             </Link>

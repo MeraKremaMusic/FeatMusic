@@ -239,11 +239,11 @@ export default function ListaArtistasVieronIdea({
         role="dialog"
         aria-modal="true"
         aria-labelledby={`titulo-vistas-${ideaId}`}
-        className="flex max-h-[88dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-[#100c16] shadow-[0_30px_100px_rgba(0,0,0,0.65)] sm:rounded-3xl"
+        className="flex max-h-[88dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-[#08140f] shadow-[0_30px_100px_rgba(0,0,0,0.65)] sm:rounded-3xl"
       >
         <header className="flex items-start justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
           <div className="min-w-0">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-violet-300">
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-300">
               Alcance real
             </p>
             <h2
@@ -280,7 +280,7 @@ export default function ListaArtistasVieronIdea({
         <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3 [scrollbar-width:thin] sm:px-4">
           {cargando ? (
             <div className="flex min-h-52 items-center justify-center">
-              <span className="h-7 w-7 animate-spin rounded-full border-2 border-violet-300/20 border-t-violet-300" />
+              <span className="h-7 w-7 animate-spin rounded-full border-2 border-emerald-300/20 border-t-emerald-300" />
             </div>
           ) : artistas.length === 0 ? (
             <div className="flex min-h-52 items-center justify-center px-6 text-center">
@@ -311,7 +311,7 @@ export default function ListaArtistasVieronIdea({
                     <Link
                       href={perfilHref}
                       onClick={onCerrar}
-                      className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-violet-500/10 text-sm font-black text-violet-200"
+                      className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-emerald-500/10 text-sm font-black text-emerald-200"
                     >
                       {artista.fotoPerfil ? (
                         <img
@@ -332,7 +332,7 @@ export default function ListaArtistasVieronIdea({
                       <h3 className="truncate text-sm font-black text-white">
                         {artista.nombreArtistico}
                       </h3>
-                      <p className="truncate text-[10px] font-semibold text-violet-300">
+                      <p className="truncate text-[10px] font-semibold text-emerald-300">
                         @{artista.nombreUsuario}
                       </p>
                       <p className="mt-0.5 truncate text-[9px] text-zinc-500">
@@ -352,7 +352,7 @@ export default function ListaArtistasVieronIdea({
                       className={`shrink-0 rounded-lg border px-2.5 py-1.5 text-[9px] font-black transition disabled:cursor-wait disabled:opacity-60 ${
                         artista.siguiendo
                           ? "border-white/12 bg-white/[0.045] text-zinc-300 hover:border-red-400/20 hover:text-red-200"
-                          : "border-violet-400/30 bg-violet-500/12 text-violet-100 hover:bg-violet-500/20"
+                          : "border-emerald-400/30 bg-emerald-500/12 text-emerald-100 hover:bg-emerald-500/20"
                       }`}
                     >
                       {procesandoId === artista.id
@@ -374,7 +374,7 @@ export default function ListaArtistasVieronIdea({
               type="button"
               disabled={cargandoMas}
               onClick={() => void cargar(pagina + 1, false)}
-              className="w-full rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-[11px] font-black text-violet-100 transition hover:bg-violet-500/18 disabled:cursor-wait disabled:opacity-60"
+              className="w-full rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-2.5 text-[11px] font-black text-emerald-100 transition hover:bg-emerald-500/18 disabled:cursor-wait disabled:opacity-60"
             >
               {cargandoMas ? "Cargando..." : "Ver más artistas"}
             </button>

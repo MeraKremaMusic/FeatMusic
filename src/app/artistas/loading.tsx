@@ -94,11 +94,11 @@ function Icono({
 
 export default function Loading() {
   return (
-    <main className="featmusic-app-light relative flex h-[100dvh] min-h-[100dvh] flex-col overflow-hidden bg-[#09070d] text-white">
+    <main className="featmusic-app-light relative flex h-[100dvh] min-h-[100dvh] flex-col overflow-hidden bg-[#06100c] text-white">
       <header className="relative z-20 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
-            Feat<span className="text-violet-400">Music</span>
+            Feat<span className="text-emerald-400">Music</span>
           </Link>
 
           <nav
@@ -113,7 +113,7 @@ export default function Loading() {
               Planes
             </button>
 
-            <span className="flex items-center gap-2 rounded-lg bg-violet-500/10 px-3 py-1.5 text-[11px] font-semibold text-violet-300">
+            <span className="flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-300">
               <Icono tipo="explorar" className="h-3.5 w-3.5" />
               Explorar
             </span>
@@ -131,8 +131,8 @@ export default function Loading() {
         </div>
       </header>
 
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
-      <div className="pointer-events-none absolute inset-x-0 top-12 h-72 bg-gradient-to-b from-violet-950/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.045)_1px,transparent_1px)] bg-[size:30px_30px]" />
+      <div className="pointer-events-none absolute inset-x-0 top-12 h-72 bg-gradient-to-b from-emerald-950/30 to-transparent" />
 
       <div
         className="relative z-10 flex flex-1 items-center justify-center px-6 pb-20 lg:pb-0"
@@ -141,10 +141,10 @@ export default function Loading() {
       >
         <div className="flex flex-col items-center text-center">
           <div className="relative flex h-20 w-20 items-center justify-center">
-            <span className="absolute inset-0 rounded-full border border-violet-400/20 bg-violet-500/5 animate-ping" />
-            <span className="absolute inset-2 rounded-full border-2 border-zinc-800 border-t-violet-400 animate-spin" />
-            <span className="absolute inset-5 rounded-full border border-violet-300/30 bg-violet-500/10 animate-pulse" />
-            <Icono tipo="explorar" className="relative h-6 w-6 text-violet-300" />
+            <span className="absolute inset-0 rounded-full border border-emerald-400/20 bg-emerald-500/5 animate-ping" />
+            <span className="absolute inset-2 rounded-full border-2 border-zinc-800 border-t-emerald-400 animate-spin" />
+            <span className="absolute inset-5 rounded-full border border-emerald-300/30 bg-emerald-500/10 animate-pulse" />
+            <Icono tipo="explorar" className="relative h-6 w-6 text-emerald-300" />
           </div>
 
           <p className="mt-5 text-sm font-bold text-zinc-100">
@@ -159,7 +159,7 @@ export default function Loading() {
 
       <nav
         aria-label="Menú principal móvil"
-        className="featmusic-dark-chrome fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
+        className="featmusic-dark-chrome fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#06100c]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:hidden"
       >
         <div className="mx-auto grid max-w-md grid-cols-5 items-end">
           <Link
@@ -170,7 +170,7 @@ export default function Loading() {
             <span className="truncate text-[9px] font-semibold">Inicio</span>
           </Link>
 
-          <span className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-violet-300">
+          <span className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-emerald-300">
             <Icono tipo="explorar" />
             <span className="truncate text-[9px] font-semibold">Explorar</span>
           </span>
@@ -179,7 +179,7 @@ export default function Loading() {
             href="/panel#panel-card-2"
             className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-500 text-white shadow-lg shadow-emerald-950/60">
               <Icono tipo="mas" className="h-6 w-6" />
             </span>
             <span className="truncate text-[9px] font-semibold">Publicar</span>

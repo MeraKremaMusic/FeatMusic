@@ -81,7 +81,7 @@ function claseOpcion(activa: boolean) {
   return [
     "flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 transition",
     activa
-      ? "text-violet-300"
+      ? "text-emerald-300"
       : "text-zinc-500 hover:text-zinc-200",
   ].join(" ");
 }
@@ -113,7 +113,7 @@ export default function MenuMovilPanel({
   return (
     <nav
       aria-label="Menú principal móvil"
-      className={`featmusic-dark-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible border-t border-white/10 bg-[#0b0810]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
+      className={`featmusic-dark-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible border-t border-white/10 bg-[#06100c]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
         ocultarDesde === "md" ? "md:hidden" : "lg:hidden"
       }`}
     >
@@ -143,7 +143,7 @@ export default function MenuMovilPanel({
           aria-label="Ir a publicar una idea"
           className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/40 bg-violet-500 text-white shadow-lg shadow-violet-950/60 transition group-hover:scale-105 group-hover:bg-violet-400">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-500 text-white shadow-lg shadow-emerald-950/60 transition group-hover:scale-105 group-hover:bg-emerald-400">
             <Icono tipo="mas" className="h-6 w-6" />
           </span>
           <span className="truncate text-[9px] font-semibold">Publicar</span>
@@ -164,7 +164,7 @@ export default function MenuMovilPanel({
           <span className="relative flex">
             <Icono tipo="mensajes" />
             {mensajesNoLeidos > 0 && (
-              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#0b0810] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
                 {etiquetaMensajes}
               </span>
             )}
@@ -187,7 +187,7 @@ export default function MenuMovilPanel({
           <span className="relative flex">
             <Icono tipo="perfil" />
             {notificacionesNoLeidas > 0 && (
-              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#0b0810] bg-violet-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-violet-950/50">
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-emerald-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-emerald-950/50">
                 {etiquetaPerfil}
               </span>
             )}

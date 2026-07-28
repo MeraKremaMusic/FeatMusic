@@ -296,7 +296,7 @@ function AvatarArtista({
   }
 
   return (
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-[10px] font-black text-violet-200 shadow-[0_8px_20px_rgba(0,0,0,0.18)]">
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-[10px] font-black text-emerald-200 shadow-[0_8px_20px_rgba(0,0,0,0.18)]">
       {iniciales(nombre)}
     </span>
   );
@@ -322,7 +322,7 @@ function NombreConEnlace({
   return (
     <Link
       href={`/artistas/${encodeURIComponent(usuario)}`}
-      className="block truncate text-[11px] font-black text-zinc-100 transition hover:text-violet-200 sm:text-xs"
+      className="block truncate text-[11px] font-black text-zinc-100 transition hover:text-emerald-200 sm:text-xs"
     >
       {nombre}
     </Link>
@@ -513,24 +513,24 @@ export default function PropuestasRecibidasCard({
   }
 
   return (
-    <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
+    <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(16,185,129,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
       <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
-        <div className="absolute -right-16 -top-20 h-40 w-40 rounded-full bg-violet-500/[0.08] blur-3xl" />
+        <div className="absolute -right-16 -top-20 h-40 w-40 rounded-full bg-emerald-500/[0.08] blur-3xl" />
       </div>
 
       <div className="relative flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.07] px-3.5 py-3 sm:px-4">
         <div className="flex min-w-0 items-center gap-2.5">
-          <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+          <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
             <IconoPropuestas />
             {mensajesNoLeidos > 0 && (
-              <span className="absolute -right-2 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#100d15] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+              <span className="absolute -right-2 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#08140f] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
                 {etiquetaCantidad(mensajesNoLeidos)}
               </span>
             )}
           </span>
 
           <div className="min-w-0">
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300">
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-300">
               Colaboraciones
             </p>
             <h2 className="mt-0.5 truncate text-base font-black text-white">
@@ -542,13 +542,13 @@ export default function PropuestasRecibidasCard({
         <div className="flex shrink-0 items-center gap-1.5">
           <Link
             href="/mensajes"
-            className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.025] px-2.5 text-[8px] font-black text-zinc-400 transition hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-violet-200 sm:text-[9px]"
+            className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.025] px-2.5 text-[8px] font-black text-zinc-400 transition hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200 sm:text-[9px]"
           >
             <IconoChat />
             Mensajes
           </Link>
 
-          <span className="rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2 py-1 text-[8px] font-black tabular-nums text-violet-200 sm:text-[9px]">
+          <span className="rounded-full border border-emerald-400/20 bg-emerald-500/[0.09] px-2 py-1 text-[8px] font-black tabular-nums text-emerald-200 sm:text-[9px]">
             {cantidadActiva}
           </span>
         </div>
@@ -563,7 +563,7 @@ export default function PropuestasRecibidasCard({
           }}
           className={`relative flex min-h-10 items-center justify-center gap-1.5 px-3 text-[9px] font-black transition sm:text-[10px] ${
             mostrandoRecibidas
-              ? "text-violet-100"
+              ? "text-emerald-100"
               : "text-zinc-600 hover:text-zinc-300"
           }`}
         >
@@ -571,7 +571,7 @@ export default function PropuestasRecibidasCard({
           <span
             className={`rounded-full px-1.5 py-0.5 text-[7px] ${
               mostrandoRecibidas
-                ? "bg-violet-500/15 text-violet-200"
+                ? "bg-emerald-500/15 text-emerald-200"
                 : "bg-white/[0.04] text-zinc-600"
             }`}
           >
@@ -583,7 +583,7 @@ export default function PropuestasRecibidasCard({
             </span>
           )}
           {mostrandoRecibidas && (
-            <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-violet-400" />
+            <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-emerald-400" />
           )}
         </button>
 
@@ -595,7 +595,7 @@ export default function PropuestasRecibidasCard({
           }}
           className={`relative flex min-h-10 items-center justify-center gap-1.5 px-3 text-[9px] font-black transition sm:text-[10px] ${
             !mostrandoRecibidas
-              ? "text-violet-100"
+              ? "text-emerald-100"
               : "text-zinc-600 hover:text-zinc-300"
           }`}
         >
@@ -603,7 +603,7 @@ export default function PropuestasRecibidasCard({
           <span
             className={`rounded-full px-1.5 py-0.5 text-[7px] ${
               !mostrandoRecibidas
-                ? "bg-violet-500/15 text-violet-200"
+                ? "bg-emerald-500/15 text-emerald-200"
                 : "bg-white/[0.04] text-zinc-600"
             }`}
           >
@@ -615,7 +615,7 @@ export default function PropuestasRecibidasCard({
             </span>
           )}
           {!mostrandoRecibidas && (
-            <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-violet-400" />
+            <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-emerald-400" />
           )}
         </button>
       </div>
@@ -644,7 +644,7 @@ export default function PropuestasRecibidasCard({
         propuestas.length === 0 ? (
           <div className="relative flex flex-1 items-center justify-center px-5 py-8">
             <div className="flex max-w-xs flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
                 <IconoPropuestas />
               </div>
               <p className="mt-4 text-sm font-black text-zinc-200">
@@ -671,12 +671,12 @@ export default function PropuestasRecibidasCard({
                     key={propuesta.id}
                     className={`relative px-3.5 py-3.5 transition sm:px-4 ${
                       mensajesPendientes > 0
-                        ? "bg-violet-500/[0.045]"
+                        ? "bg-emerald-500/[0.045]"
                         : "hover:bg-white/[0.012]"
                     }`}
                   >
                     {mensajesPendientes > 0 && (
-                      <span className="absolute bottom-3 left-0 top-3 w-0.5 rounded-r-full bg-violet-400" />
+                      <span className="absolute bottom-3 left-0 top-3 w-0.5 rounded-r-full bg-emerald-400" />
                     )}
 
                     <div className="flex items-start justify-between gap-3">
@@ -820,7 +820,7 @@ export default function PropuestasRecibidasCard({
                         {propuesta.conversacionId ? (
                           <Link
                             href={`/mensajes/${propuesta.conversacionId}`}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/25 bg-violet-500/10 px-2.5 py-1.5 text-[8px] font-black text-violet-100 transition hover:bg-violet-500/20 sm:text-[9px]"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-2.5 py-1.5 text-[8px] font-black text-emerald-100 transition hover:bg-emerald-500/20 sm:text-[9px]"
                           >
                             <IconoChat />
                             Abrir chat
@@ -846,7 +846,7 @@ export default function PropuestasRecibidasCard({
       ) : propuestasEnviadasIniciales.length === 0 ? (
         <div className="relative flex flex-1 items-center justify-center px-5 py-8">
           <div className="flex max-w-xs flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
               <IconoPropuestas />
             </div>
             <p className="mt-4 text-sm font-black text-zinc-200">
@@ -858,7 +858,7 @@ export default function PropuestasRecibidasCard({
             </p>
             <Link
               href="/artistas"
-              className="mt-4 rounded-xl border border-violet-400/25 bg-violet-500/10 px-3.5 py-2 text-[10px] font-black text-violet-200 transition hover:bg-violet-500/20"
+              className="mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-3.5 py-2 text-[10px] font-black text-emerald-200 transition hover:bg-emerald-500/20"
             >
               Explorar artistas
             </Link>
@@ -884,12 +884,12 @@ export default function PropuestasRecibidasCard({
                   key={propuesta.id}
                   className={`relative px-3.5 py-3.5 transition sm:px-4 ${
                     mensajesPendientes > 0
-                      ? "bg-violet-500/[0.045]"
+                      ? "bg-emerald-500/[0.045]"
                       : "hover:bg-white/[0.012]"
                   }`}
                 >
                   {mensajesPendientes > 0 && (
-                    <span className="absolute bottom-3 left-0 top-3 w-0.5 rounded-r-full bg-violet-400" />
+                    <span className="absolute bottom-3 left-0 top-3 w-0.5 rounded-r-full bg-emerald-400" />
                   )}
 
                   <div className="flex items-start justify-between gap-3">
@@ -1011,7 +1011,7 @@ export default function PropuestasRecibidasCard({
                             propuesta.permiteReintento)) && (
                           <Link
                             href={rutaIdea}
-                            className="rounded-lg border border-violet-400/25 bg-violet-500/10 px-2.5 py-1.5 text-[8px] font-black text-violet-100 transition hover:bg-violet-500/20 sm:text-[9px]"
+                            className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-2.5 py-1.5 text-[8px] font-black text-emerald-100 transition hover:bg-emerald-500/20 sm:text-[9px]"
                           >
                             {propuesta.estado === "CAMBIOS_SOLICITADOS"
                               ? "Enviar corrección"
@@ -1034,7 +1034,7 @@ export default function PropuestasRecibidasCard({
                           {propuesta.conversacionId ? (
                             <Link
                               href={`/mensajes/${propuesta.conversacionId}`}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/25 bg-violet-500/10 px-2.5 py-1.5 text-[8px] font-black text-violet-100 transition hover:bg-violet-500/20 sm:text-[9px]"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-2.5 py-1.5 text-[8px] font-black text-emerald-100 transition hover:bg-emerald-500/20 sm:text-[9px]"
                             >
                               <IconoChat />
                               Abrir chat
@@ -1074,10 +1074,10 @@ export default function PropuestasRecibidasCard({
               }
             }}
           >
-            <div className="w-full rounded-t-2xl border border-white/10 bg-[#120e18] p-4 shadow-2xl shadow-black/70 sm:max-w-md sm:rounded-2xl sm:p-5">
+            <div className="w-full rounded-t-2xl border border-white/10 bg-[#091711] p-4 shadow-2xl shadow-black/70 sm:max-w-md sm:rounded-2xl sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-violet-300">
+                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-emerald-300">
                     Decisión de la propuesta
                   </p>
                   <h3
@@ -1133,7 +1133,7 @@ export default function PropuestasRecibidasCard({
                       ? "Explícale exactamente qué debe corregir en la nueva versión."
                       : "Explícale de forma respetuosa por qué la propuesta no fue elegida."
                   }
-                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
+                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-emerald-400/40"
                 />
               </div>
 
@@ -1146,7 +1146,7 @@ export default function PropuestasRecibidasCard({
                       checked={!permiteReintento}
                       onChange={() => setPermiteReintento(false)}
                       disabled={procesandoId !== null}
-                      className="mt-0.5 accent-violet-500"
+                      className="mt-0.5 accent-emerald-500"
                     />
                     <span>
                       <span className="block text-[10px] font-black text-zinc-200">
@@ -1159,17 +1159,17 @@ export default function PropuestasRecibidasCard({
                   </label>
 
                   {modalDecision.numeroIntento < 2 && (
-                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-violet-400/15 bg-violet-500/[0.05] p-3">
+                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-emerald-400/15 bg-emerald-500/[0.05] p-3">
                       <input
                         type="radio"
                         name="tipo-rechazo"
                         checked={permiteReintento}
                         onChange={() => setPermiteReintento(true)}
                         disabled={procesandoId !== null}
-                        className="mt-0.5 accent-violet-500"
+                        className="mt-0.5 accent-emerald-500"
                       />
                       <span>
-                        <span className="block text-[10px] font-black text-violet-200">
+                        <span className="block text-[10px] font-black text-emerald-200">
                           Permitir otro intento
                         </span>
                         <span className="mt-1 block text-[9px] leading-4 text-zinc-500">

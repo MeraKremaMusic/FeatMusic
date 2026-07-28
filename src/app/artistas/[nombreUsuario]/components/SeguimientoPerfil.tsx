@@ -94,10 +94,10 @@ export default function SeguimientoPerfil({
           onClick={() => void alternarSeguimiento()}
           disabled={procesando}
           aria-pressed={siguiendo}
-          className={`inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-[11px] font-black transition focus:outline-none focus:ring-2 focus:ring-violet-500/40 disabled:cursor-wait disabled:opacity-65 lg:w-auto lg:min-w-32 ${
+          className={`inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-[11px] font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 lg:w-auto lg:min-w-32 ${
             siguiendo
               ? "border-white/15 bg-white/[0.055] text-zinc-200 hover:border-red-400/25 hover:bg-red-500/[0.07] hover:text-red-200"
-              : "border-violet-400/35 bg-violet-500/15 text-violet-100 hover:border-violet-300/50 hover:bg-violet-500/25"
+              : "border-emerald-400/35 bg-emerald-500/15 text-emerald-100 hover:border-emerald-300/50 hover:bg-emerald-500/25"
           }`}
         >
           <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>

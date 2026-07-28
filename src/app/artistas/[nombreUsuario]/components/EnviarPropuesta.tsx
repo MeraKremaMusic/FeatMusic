@@ -525,13 +525,13 @@ export default function EnviarPropuesta({
 
   if (!sesionActiva) {
     return (
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-violet-400/15 bg-violet-500/[0.06] px-3 py-2.5">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-emerald-400/15 bg-emerald-500/[0.06] px-3 py-2.5">
         <p className="text-[10px] font-medium text-zinc-400">
           Inicia sesión para colaborar con esta idea.
         </p>
         <Link
           href="/iniciar-sesion"
-          className="rounded-lg border border-violet-400/30 bg-violet-500/10 px-3 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/20"
+          className="rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold text-emerald-200 transition hover:bg-emerald-500/20"
         >
           Iniciar sesión
         </Link>
@@ -580,7 +580,7 @@ export default function EnviarPropuesta({
                 setError("");
                 setModalAbierto(true);
               }}
-              className="rounded-lg border border-violet-400/35 bg-violet-500/15 px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:bg-violet-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
+              className="rounded-lg border border-emerald-400/35 bg-emerald-500/15 px-3 py-1.5 text-[10px] font-bold text-emerald-100 transition hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
             >
               {formularioBloqueado ? "Sin cupos" : tituloFormulario}
             </button>
@@ -604,7 +604,7 @@ export default function EnviarPropuesta({
               setError("");
               setModalAbierto(true);
             }}
-            className="rounded-lg border border-violet-400/35 bg-violet-500/15 px-3 py-1.5 text-[10px] font-bold text-violet-100 transition hover:bg-violet-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
+            className="rounded-lg border border-emerald-400/35 bg-emerald-500/15 px-3 py-1.5 text-[10px] font-bold text-emerald-100 transition hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-zinc-600"
           >
             {cuposCompletos ? "Cupos completos" : "Enviar propuesta"}
           </button>
@@ -618,7 +618,7 @@ export default function EnviarPropuesta({
             role="dialog"
             aria-modal="true"
             aria-labelledby={`titulo-propuesta-${ideaId}`}
-            className="fixed inset-x-0 z-40 flex items-stretch justify-center bg-[#09070d] lg:z-[9999] lg:items-center lg:bg-black/80 lg:p-4 lg:backdrop-blur-sm"
+            className="fixed inset-x-0 z-40 flex items-stretch justify-center bg-[#06100c] lg:z-[9999] lg:items-center lg:bg-black/80 lg:p-4 lg:backdrop-blur-sm"
             style={
               vistaModal?.esMovil
                 ? {
@@ -638,11 +638,11 @@ export default function EnviarPropuesta({
           >
             <form
               onSubmit={enviarPropuesta}
-              className="flex h-full w-full flex-col overflow-hidden rounded-b-3xl border-b border-white/10 bg-[#120e18] shadow-2xl shadow-black/60 lg:h-auto lg:max-h-[90dvh] lg:max-w-lg lg:rounded-2xl lg:border"
+              className="flex h-full w-full flex-col overflow-hidden rounded-b-3xl border-b border-white/10 bg-[#091711] shadow-2xl shadow-black/60 lg:h-auto lg:max-h-[90dvh] lg:max-w-lg lg:rounded-2xl lg:border"
             >
-              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#120e18]/95 px-4 py-3.5 backdrop-blur lg:px-5 lg:py-4">
+              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#091711]/95 px-4 py-3.5 backdrop-blur lg:px-5 lg:py-4">
                 <div className="min-w-0">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 lg:text-xs lg:normal-case lg:tracking-normal">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300 lg:text-xs lg:normal-case lg:tracking-normal">
                     {subtituloFormulario}
                   </p>
                   <h3
@@ -683,7 +683,7 @@ export default function EnviarPropuesta({
                     accept=".mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus,audio/*"
                     onChange={seleccionarAudio}
                     disabled={enviando}
-                    className="mt-2 block w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-300 file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-violet-200"
+                    className="mt-2 block w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-300 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-emerald-200"
                   />
                   <p className="mt-2 text-[10px] leading-4 text-zinc-500">
                     Máximo 50 MB y 4 minutos. Se guardará automáticamente como
@@ -751,7 +751,7 @@ export default function EnviarPropuesta({
                           ? "Explícale qué cambiaste para este nuevo intento."
                           : "Cuéntale al artista qué agregaste o cómo imaginas la colaboración."
                     }
-                    className="mt-2 w-full scroll-mt-4 scroll-mb-6 resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-violet-400/40"
+                    className="mt-2 w-full scroll-mt-4 scroll-mb-6 resize-none rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-600 focus:border-emerald-400/40"
                   />
                 </div>
 
@@ -775,7 +775,7 @@ export default function EnviarPropuesta({
                     </div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
                       <div
-                        className="h-full rounded-full bg-violet-400 transition-[width]"
+                        className="h-full rounded-full bg-emerald-400 transition-[width]"
                         style={{ width: `${progreso}%` }}
                       />
                     </div>
@@ -783,7 +783,7 @@ export default function EnviarPropuesta({
                 )}
               </div>
 
-              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#120e18]/95 px-4 py-3 backdrop-blur lg:flex lg:justify-end lg:px-5 lg:pb-4 lg:pt-3">
+              <div className="grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 bg-[#091711]/95 px-4 py-3 backdrop-blur lg:flex lg:justify-end lg:px-5 lg:pb-4 lg:pt-3">
                 <button
                   type="button"
                   onClick={cerrarModal}
@@ -795,7 +795,7 @@ export default function EnviarPropuesta({
                 <button
                   type="submit"
                   disabled={enviando || !archivo}
-                  className="min-h-11 rounded-xl border border-violet-300/30 bg-violet-500 px-3 py-2.5 text-xs font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-45 lg:px-4"
+                  className="min-h-11 rounded-xl border border-emerald-300/30 bg-emerald-500 px-3 py-2.5 text-xs font-black text-white transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-45 lg:px-4"
                 >
                   {enviando ? "Enviando…" : tituloFormulario}
                 </button>

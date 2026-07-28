@@ -20,7 +20,7 @@ type RespuestaUbicaciones = {
 };
 
 const claseSelector =
-  "w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 text-white outline-none transition focus:border-violet-500 disabled:cursor-not-allowed disabled:opacity-50";
+  "w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 text-white outline-none transition focus:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-50";
 
 function normalizar(valor: string) {
   return valor

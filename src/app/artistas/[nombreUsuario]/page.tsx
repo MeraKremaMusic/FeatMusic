@@ -439,14 +439,14 @@ export default async function PerfilPublicoPage({
   );
 
   return (
-    <main className="featmusic-app-light min-h-screen bg-[#09070d] pb-20 text-white lg:pb-0">
+    <main className="min-h-screen bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
             href={sesion ? "/panel" : "/"}
             className="text-lg font-black tracking-tight"
           >
-            Feat<span className="text-violet-400">Music</span>
+            Feat<span className="text-emerald-400">Music</span>
           </Link>
 
           <NavegacionEscritorio />
@@ -464,7 +464,7 @@ export default async function PerfilPublicoPage({
           ) : (
             <Link
               href="/iniciar-sesion"
-              className="rounded-lg border border-violet-400/50 px-3 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/10"
+              className="rounded-lg border border-emerald-400/50 px-3 py-1.5 text-[10px] font-bold text-emerald-200 transition hover:bg-emerald-500/10"
             >
               Iniciar sesión
             </Link>
@@ -498,7 +498,7 @@ export default async function PerfilPublicoPage({
                   rel="noreferrer"
                   aria-label={`Abrir ${red.nombre}`}
                   title={red.nombre}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.025] text-zinc-300 transition hover:border-violet-400/30 hover:bg-violet-500/10 hover:text-violet-200"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.025] text-zinc-300 transition hover:border-emerald-400/30 hover:bg-emerald-500/10 hover:text-emerald-200"
                 >
                   <IconoRedSocial nombre={red.nombre} className="h-3.5 w-3.5" />
                 </a>
@@ -514,7 +514,7 @@ export default async function PerfilPublicoPage({
                     className="h-20 w-full rounded-2xl border border-white/10 object-cover sm:h-24 lg:h-28"
                   />
                 ) : (
-                  <div className="flex h-20 w-full items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-500/10 text-2xl font-black text-violet-200 sm:h-24 sm:text-3xl lg:h-28">
+                  <div className="flex h-20 w-full items-center justify-center rounded-2xl border border-emerald-400/25 bg-emerald-500/10 text-2xl font-black text-emerald-200 sm:h-24 sm:text-3xl lg:h-28">
                     {iniciales(nombreArtistico)}
                   </div>
                 )}
@@ -523,7 +523,7 @@ export default async function PerfilPublicoPage({
                   <span
                     title={`Rol: ${formatearRol(artista.rolPrincipal)}`}
                     aria-label={`Rol: ${formatearRol(artista.rolPrincipal)}`}
-                    className="flex min-h-7 w-full items-center justify-center rounded-lg border border-violet-400/25 bg-violet-500/10 px-1.5 py-1 text-center text-[8px] font-black leading-tight text-violet-100"
+                    className="flex min-h-7 w-full items-center justify-center rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-1.5 py-1 text-center text-[8px] font-black leading-tight text-emerald-100"
                   >
                     {formatearRol(artista.rolPrincipal)}
                   </span>
@@ -535,7 +535,7 @@ export default async function PerfilPublicoPage({
                           key={preferencia.etiqueta}
                           title={`${preferencia.etiqueta}: ${preferencia.valor}`}
                           aria-label={`${preferencia.etiqueta}: ${preferencia.valor}`}
-                          className="flex min-h-7 w-full items-center justify-center rounded-lg border border-violet-400/20 bg-violet-500/[0.08] px-1.5 py-1 text-center text-[8px] font-bold leading-tight text-violet-200"
+                          className="flex min-h-7 w-full items-center justify-center rounded-lg border border-emerald-400/20 bg-emerald-500/[0.08] px-1.5 py-1 text-center text-[8px] font-bold leading-tight text-emerald-200"
                         >
                           {preferencia.valor}
                         </span>
@@ -549,7 +549,7 @@ export default async function PerfilPublicoPage({
                 <h1 className="break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4">
                   {nombreArtistico}
                 </h1>
-                <p className="mt-1 break-all text-[11px] font-semibold text-violet-300 sm:text-xs">
+                <p className="mt-1 break-all text-[11px] font-semibold text-emerald-300 sm:text-xs">
                   @{usuarioVisible}
                 </p>
 
@@ -593,7 +593,7 @@ export default async function PerfilPublicoPage({
           <section className="min-w-0 p-0 lg:rounded-2xl lg:border lg:border-white/10 lg:bg-black/35 lg:p-5 lg:backdrop-blur-sm">
             <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-violet-400/20 bg-violet-500/10 text-violet-300 sm:h-7 sm:w-7">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-400/20 bg-emerald-500/10 text-emerald-300 sm:h-7 sm:w-7">
                   <IconoIdea className="h-3.5 w-3.5" />
                 </span>
                 <h2 className="text-sm font-black text-white sm:text-base lg:text-lg">
@@ -601,7 +601,7 @@ export default async function PerfilPublicoPage({
                 </h2>
               </div>
 
-              <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-2.5 py-0.5 text-[10px] font-bold text-violet-200 sm:px-3 sm:py-1 sm:text-xs">
+              <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200 sm:px-3 sm:py-1 sm:text-xs">
                 {artista.ideas.length}
               </span>
             </div>
@@ -619,7 +619,7 @@ export default async function PerfilPublicoPage({
                     id={`idea-${idea.id}`}
                     key={idea.id}
                     data-vista-idea
-                    className="scroll-mt-16 overflow-hidden rounded-xl border border-white/10 bg-black/25 transition hover:border-violet-400/20"
+                    className="scroll-mt-16 overflow-hidden rounded-xl border border-white/10 bg-black/25 transition hover:border-emerald-400/20"
                   >
                     <RegistrarVistaIdea
                       ideaId={idea.id}
@@ -677,7 +677,7 @@ export default async function PerfilPublicoPage({
                         />
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-violet-400/15 bg-violet-500/[0.07] text-violet-300">
+                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-400/15 bg-emerald-500/[0.07] text-emerald-300">
                           <IconoColaboracion />
                         </span>
 

@@ -135,7 +135,7 @@ function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-violet-300/25 bg-violet-500/15 text-xs font-black text-violet-100 shadow-lg shadow-violet-950/30">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-300/25 bg-emerald-500/15 text-xs font-black text-emerald-100 shadow-lg shadow-emerald-950/30">
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -180,14 +180,14 @@ function TarjetaFeed({
     >
       <article
         data-vista-idea
-        className={`relative mx-auto flex h-full w-full max-w-[720px] flex-col overflow-hidden rounded-[26px] border bg-[linear-gradient(155deg,rgba(139,92,246,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.42)] transition duration-300 ${
+        className={`relative mx-auto flex h-full w-full max-w-[720px] flex-col overflow-hidden rounded-[26px] border bg-[linear-gradient(155deg,rgba(16,185,129,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.42)] transition duration-300 ${
           activa
-            ? "border-violet-300/30 ring-1 ring-violet-400/10"
+            ? "border-emerald-300/30 ring-1 ring-emerald-400/10"
             : "border-white/10"
         }`}
       >
-        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-28 h-64 w-64 rounded-full bg-fuchsia-500/[0.08] blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-28 h-64 w-64 rounded-full bg-emerald-500/[0.08] blur-3xl" />
         <RegistrarVistaIdea
           ideaId={oportunidad.id}
           sesionActiva
@@ -205,12 +205,12 @@ function TarjetaFeed({
               <div className="flex min-w-0 items-center gap-2">
                 <Link
                   href={perfilHref}
-                  className="truncate text-sm font-black text-white transition hover:text-violet-200"
+                  className="truncate text-sm font-black text-white transition hover:text-emerald-200"
                 >
                   {artista.nombreArtistico}
                 </Link>
                 {oportunidad.esSeguido && (
-                  <span className="shrink-0 rounded-full border border-violet-300/20 bg-violet-500/10 px-2 py-0.5 text-[8px] font-black text-violet-200">
+                  <span className="shrink-0 rounded-full border border-emerald-300/20 bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-200">
                     Siguiendo
                   </span>
                 )}
@@ -244,7 +244,7 @@ function TarjetaFeed({
           </div>
 
           <div className="mt-4">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-violet-300/80">
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-300/80">
               Oportunidad musical
             </p>
             <h1 className="mt-1.5 break-words text-xl font-black leading-[1.08] text-white sm:text-2xl">
@@ -256,19 +256,19 @@ function TarjetaFeed({
           </div>
 
           {vista === "para-ti" && (
-            <section className="mt-3 rounded-2xl border border-violet-300/20 bg-violet-500/[0.09] p-3">
+            <section className="mt-3 rounded-2xl border border-emerald-300/20 bg-emerald-500/[0.09] p-3">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-violet-200">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-200">
                     <IconoFuego />
                   </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-black text-violet-100">
+                    <p className="text-sm font-black text-emerald-100">
                       {oportunidad.compatibilidad.porcentaje >= 40
                         ? `${oportunidad.compatibilidad.porcentaje}% compatible contigo`
                         : "Puede interesarte"}
                     </p>
-                    <p className="text-[9px] font-semibold text-violet-200/55">
+                    <p className="text-[9px] font-semibold text-emerald-200/55">
                       {oportunidad.compatibilidad.porcentaje >= 40
                         ? etiquetaCompatibilidad(
                             oportunidad.compatibilidad.porcentaje,
@@ -284,7 +284,7 @@ function TarjetaFeed({
                   {razones.map((razon) => (
                     <span
                       key={razon}
-                      className="rounded-full border border-violet-300/15 bg-black/15 px-2 py-0.5 text-[8px] font-semibold text-violet-100/80"
+                      className="rounded-full border border-emerald-300/15 bg-black/15 px-2 py-0.5 text-[8px] font-semibold text-emerald-100/80"
                     >
                       ✓ {razon}
                     </span>
@@ -345,7 +345,7 @@ function TarjetaFeed({
             <div className="mt-2.5 flex justify-end">
               <Link
                 href={`${perfilHref}#idea-${oportunidad.id}`}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.035] px-3 py-1.5 text-[10px] font-bold text-zinc-300 transition hover:border-violet-300/25 hover:bg-violet-500/10 hover:text-violet-100"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.035] px-3 py-1.5 text-[10px] font-bold text-zinc-300 transition hover:border-emerald-300/25 hover:bg-emerald-500/10 hover:text-emerald-100"
               >
                 Ver artista
                 <IconoFlecha className="h-3 w-3" />
@@ -381,7 +381,7 @@ function EstadoVacio({ vista }: { vista: VistaFeed }) {
           </p>
           <Link
             href="/artistas"
-            className="mt-5 inline-flex rounded-xl border border-violet-300/30 bg-violet-500/15 px-4 py-2.5 text-xs font-black text-violet-100"
+            className="mt-5 inline-flex rounded-xl border border-emerald-300/30 bg-emerald-500/15 px-4 py-2.5 text-xs font-black text-emerald-100"
           >
             Explorar oportunidades
           </Link>
@@ -402,7 +402,7 @@ function EstadoVacio({ vista }: { vista: VistaFeed }) {
           </p>
           <Link
             href="/artistas"
-            className="mt-5 inline-flex rounded-xl border border-violet-300/30 bg-violet-500/15 px-4 py-2.5 text-xs font-black text-violet-100"
+            className="mt-5 inline-flex rounded-xl border border-emerald-300/30 bg-emerald-500/15 px-4 py-2.5 text-xs font-black text-emerald-100"
           >
             Explorar artistas
           </Link>
@@ -599,9 +599,9 @@ export default function FeedInicio({
 
   return (
     <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden pb-[calc(4.65rem+env(safe-area-inset-bottom))] lg:h-[calc(100vh-48px)] lg:pb-0">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.12),transparent_34%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.12),transparent_34%)]" />
 
-      <div className="relative z-20 shrink-0 border-b border-white/[0.08] bg-[#09070d]/92 px-3 py-2 backdrop-blur-xl">
+      <div className="relative z-20 shrink-0 border-b border-white/[0.08] bg-[#06100c]/92 px-3 py-2 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[720px] items-center gap-2">
           <div
             className="grid min-w-0 flex-1 grid-cols-4 gap-1 rounded-xl border border-white/10 bg-black/30 p-1"
@@ -617,7 +617,7 @@ export default function FeedInicio({
                 onClick={() => cambiarVista(pestana.id)}
                 className={`rounded-lg px-2 py-2 text-[11px] font-black transition sm:text-xs ${
                   vista === pestana.id
-                    ? "bg-violet-500/20 text-violet-100 ring-1 ring-inset ring-violet-300/25"
+                    ? "bg-emerald-500/20 text-emerald-100 ring-1 ring-inset ring-emerald-300/25"
                     : "text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
                 }`}
               >
@@ -658,7 +658,7 @@ export default function FeedInicio({
           <span className="rounded-full border border-white/10 bg-black/45 px-2 py-1 text-[8px] font-black text-zinc-400 backdrop-blur">
             Desliza
           </span>
-          <span className="text-base text-violet-300/70">↓</span>
+          <span className="text-base text-emerald-300/70">↓</span>
         </div>
       )}
     </div>

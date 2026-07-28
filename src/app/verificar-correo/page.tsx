@@ -38,7 +38,7 @@ export default async function VerificarCorreoPage({
           ← Corregir mi correo
         </Link>
 
-        <p className="mt-8 text-sm font-semibold text-violet-400">Paso 2 de 2</p>
+        <p className="mt-8 text-sm font-semibold text-emerald-400">Paso 2 de 2</p>
         <h1 className="mt-2 text-3xl font-bold">Verifica tu correo</h1>
         <p className="mt-3 text-zinc-400">
           Enviamos un código de 6 números a <strong className="text-zinc-200">{correo || "tu correo"}</strong>.
@@ -68,17 +68,17 @@ export default async function VerificarCorreoPage({
               name="codigo"
               pattern="[0-9]{6}"
               placeholder="000000"
-              className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-4 text-center text-2xl font-semibold tracking-[0.45em] outline-none transition placeholder:tracking-[0.25em] placeholder:text-zinc-700 focus:border-violet-500"
+              className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-4 text-center text-2xl font-semibold tracking-[0.45em] outline-none transition placeholder:tracking-[0.25em] placeholder:text-zinc-700 focus:border-emerald-500"
             />
           </label>
-          <button type="submit" className="w-full rounded-full bg-violet-600 px-6 py-4 font-semibold transition hover:bg-violet-500">
+          <button type="submit" className="w-full rounded-full bg-emerald-600 px-6 py-4 font-semibold transition hover:bg-emerald-500">
             Verificar y continuar
           </button>
         </form>
 
         <form action="/api/reenviar-codigo" method="post" className="mt-5 text-center">
           <input type="hidden" name="correo" value={correo} />
-          <button type="submit" className="text-sm font-medium text-violet-300 transition hover:text-violet-200">
+          <button type="submit" className="text-sm font-medium text-emerald-300 transition hover:text-emerald-200">
             Reenviar código
           </button>
           <p className="mt-2 text-xs text-zinc-500">Puedes solicitar un nuevo código después de 60 segundos.</p>

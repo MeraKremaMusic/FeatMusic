@@ -323,7 +323,7 @@ export default function ChatClient({
                 className="h-12 w-12 rounded-full object-cover"
               />
             ) : (
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-violet-400/25 bg-violet-500/10 text-xs font-black text-violet-200">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-emerald-400/25 bg-emerald-500/10 text-xs font-black text-emerald-200">
                 {iniciales(otroArtista.nombreVisible)}
               </span>
             )}
@@ -343,7 +343,7 @@ export default function ChatClient({
           {otroArtista.nombreUsuario && (
             <Link
               href={`/artistas/${encodeURIComponent(otroArtista.nombreUsuario)}`}
-              className="mt-3 block text-[10px] font-bold text-violet-300 transition hover:text-violet-200"
+              className="mt-3 block text-[10px] font-bold text-emerald-300 transition hover:text-emerald-200"
             >
               Ver perfil del artista →
             </Link>
@@ -352,7 +352,7 @@ export default function ChatClient({
 
         <div className="border-t border-white/10 px-3 pb-3 pt-2">
           <div className="mb-2 flex items-center gap-2 px-1">
-            <span className="text-violet-300">
+            <span className="text-emerald-300">
               <IconoColaboracion />
             </span>
             <p className="text-[9px] font-black uppercase tracking-[0.15em] text-zinc-500">
@@ -462,7 +462,7 @@ export default function ChatClient({
                   <div
                     className={`max-w-[85%] rounded-2xl px-3 py-2 sm:max-w-[72%] ${
                       propio
-                        ? "rounded-br-md bg-violet-500 text-white"
+                        ? "rounded-br-md bg-emerald-500 text-white"
                         : "rounded-bl-md border border-white/10 bg-white/[0.06] text-zinc-200"
                     }`}
                   >
@@ -471,7 +471,7 @@ export default function ChatClient({
                     </p>
                     <p
                       className={`mt-1 text-right text-[8px] ${
-                        propio ? "text-violet-100/70" : "text-zinc-600"
+                        propio ? "text-emerald-100/70" : "text-zinc-600"
                       }`}
                     >
                       {formatearHora(mensaje.creadoEn)}
@@ -502,13 +502,13 @@ export default function ChatClient({
               maxLength={2000}
               rows={1}
               placeholder="Escribe un mensaje…"
-              className="max-h-32 min-h-11 flex-1 resize-none rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-xs text-white outline-none transition placeholder:text-zinc-700 focus:border-violet-400/40"
+              className="max-h-32 min-h-11 flex-1 resize-none rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-xs text-white outline-none transition placeholder:text-zinc-700 focus:border-emerald-400/40"
             />
 
             <button
               type="submit"
               disabled={enviando || contenido.trim().length === 0}
-              className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-violet-500 px-4 text-[10px] font-black text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 px-4 text-[10px] font-black text-white transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {enviando ? "Enviando…" : "Enviar"}
             </button>

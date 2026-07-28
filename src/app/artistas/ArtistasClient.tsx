@@ -241,15 +241,15 @@ function IconoDescripcion({
 function CargandoArtistas() {
   return (
     <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/15 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-600/15 blur-3xl" />
 
       <div className="relative flex flex-col items-center text-center">
         <div className="relative flex h-20 w-20 items-center justify-center">
-          <span className="absolute inset-0 rounded-full border border-violet-400/20 bg-violet-500/5" />
-          <span className="absolute inset-1 animate-ping rounded-full border border-violet-400/30" />
-          <span className="absolute inset-3 animate-pulse rounded-full bg-violet-500/15" />
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-violet-300/30 bg-violet-500/15 text-violet-200 shadow-[0_0_35px_rgba(139,92,246,0.25)]">
+          <span className="absolute inset-0 rounded-full border border-emerald-400/20 bg-emerald-500/5" />
+          <span className="absolute inset-1 animate-ping rounded-full border border-emerald-400/30" />
+          <span className="absolute inset-3 animate-pulse rounded-full bg-emerald-500/15" />
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-emerald-300/30 bg-emerald-500/15 text-emerald-200 shadow-[0_0_35px_rgba(16,185,129,0.25)]">
             <IconoUsuarios className="h-7 w-7" />
           </div>
         </div>
@@ -261,9 +261,9 @@ function CargandoArtistas() {
           Preparando nuevas conexiones musicales
         </p>
         <div className="mt-5 flex items-center gap-1.5" aria-hidden="true">
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.3s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300 [animation-delay:-0.15s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-violet-300" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-300 [animation-delay:-0.3s]" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-300 [animation-delay:-0.15s]" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-300" />
         </div>
       </div>
     </section>
@@ -285,7 +285,7 @@ function TarjetaEstadistica({
 }) {
   return (
     <article className="flex min-w-0 items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-violet-400/20 bg-violet-500/10 text-violet-300 md:h-8 md:w-8">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-emerald-400/20 bg-emerald-500/10 text-emerald-300 md:h-8 md:w-8">
         {icono}
       </div>
 
@@ -302,7 +302,7 @@ function TarjetaEstadistica({
       </div>
 
       {nota && (
-        <span className="ml-auto hidden rounded-full border border-violet-400/15 bg-violet-500/[0.07] px-2 py-0.5 text-[8px] font-bold text-violet-300/70 xl:inline-flex">
+        <span className="ml-auto hidden rounded-full border border-emerald-400/15 bg-emerald-500/[0.07] px-2 py-0.5 text-[8px] font-bold text-emerald-300/70 xl:inline-flex">
           Próximamente
         </span>
       )}
@@ -315,7 +315,7 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-violet-400/25 bg-violet-500/10 text-sm font-black text-violet-200 shadow-[0_10px_25px_rgba(0,0,0,0.2)]">
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/25 bg-emerald-500/10 text-sm font-black text-emerald-200 shadow-[0_10px_25px_rgba(0,0,0,0.2)]">
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -460,10 +460,10 @@ function BotonSeguirArtista({
             : `Seguir a ${nombreArtistico}`
         }
         title={siguiendo ? "Dejar de seguir" : "Seguir artista"}
-        className={`inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border px-2 text-[9px] font-black transition focus:outline-none focus:ring-2 focus:ring-violet-500/40 disabled:cursor-wait disabled:opacity-65 ${
+        className={`inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border px-2 text-[9px] font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 ${
           siguiendo
-            ? "border-violet-300/30 bg-violet-500/10 text-violet-200 hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-300"
-            : "border-violet-500 bg-violet-600 text-white shadow-[0_6px_16px_rgba(124,58,237,0.22)] hover:bg-violet-700"
+            ? "border-emerald-300/30 bg-emerald-500/10 text-emerald-200 hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-300"
+            : "border-emerald-500 bg-emerald-600 text-white shadow-[0_6px_16px_rgba(5,150,105,0.22)] hover:bg-emerald-700"
         }`}
       >
         <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>
@@ -473,7 +473,7 @@ function BotonSeguirArtista({
       {error && (
         <span
           role="alert"
-          className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-red-400/20 bg-[#181015]/95 px-2.5 py-2 text-[9px] font-semibold leading-3.5 text-red-200 shadow-xl backdrop-blur"
+          className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-red-400/20 bg-[#0b1a14]/95 px-2.5 py-2 text-[9px] font-semibold leading-3.5 text-red-200 shadow-xl backdrop-blur"
         >
           {error}
         </span>
@@ -506,12 +506,12 @@ function TarjetaArtista({
 
   return (
     <article
-      className={`group relative flex h-full min-h-[290px] flex-col overflow-visible rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)] ${
+      className={`group relative flex h-full min-h-[290px] flex-col overflow-visible rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(16,185,129,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-emerald-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)] ${
         descripcionAbiertaEnTarjeta ? "z-40" : "z-0 hover:z-20"
       }`}
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
-        <div className="absolute -right-14 -top-16 h-32 w-32 rounded-full bg-violet-500/[0.08] blur-3xl transition duration-300 group-hover:bg-violet-500/[0.12]" />
+        <div className="absolute -right-14 -top-16 h-32 w-32 rounded-full bg-emerald-500/[0.08] blur-3xl transition duration-300 group-hover:bg-emerald-500/[0.12]" />
       </div>
 
       <div className="relative p-3.5 sm:p-4">
@@ -524,7 +524,7 @@ function TarjetaArtista({
                 <h2 className="truncate text-[15px] font-black leading-tight text-white sm:text-base">
                   {artista.nombreArtistico}
                 </h2>
-                <p className="mt-0.5 truncate text-[11px] font-semibold text-violet-300">
+                <p className="mt-0.5 truncate text-[11px] font-semibold text-emerald-300">
                   @{artista.nombreUsuario}
                 </p>
               </div>
@@ -552,7 +552,7 @@ function TarjetaArtista({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          <span className="rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2.5 py-1 text-[9px] font-bold text-violet-200">
+          <span className="rounded-full border border-emerald-400/20 bg-emerald-500/[0.09] px-2.5 py-1 text-[9px] font-bold text-emerald-200">
             {formatearRol(artista.rol)}
           </span>
 
@@ -640,10 +640,10 @@ function TarjetaArtista({
                             descripcionAbierta ? null : idea.id,
                           )
                         }
-                        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-violet-400/40 sm:text-[8px] ${
+                        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-400/40 sm:text-[8px] ${
                           descripcionAbierta
-                            ? "border-violet-300/35 bg-violet-500/20 text-violet-100"
-                            : "border-white/[0.08] bg-[#0d0a12]/90 text-zinc-500 hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-violet-200"
+                            ? "border-emerald-300/35 bg-emerald-500/20 text-emerald-100"
+                            : "border-white/[0.08] bg-[#07120e]/90 text-zinc-500 hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200"
                         }`}
                       >
                         <IconoDescripcion className="h-2.5 w-2.5" />
@@ -655,17 +655,17 @@ function TarjetaArtista({
                           id={`descripcion-idea-${idea.id}`}
                           role="dialog"
                           aria-label={`Descripción de ${idea.titulo}`}
-                          className="absolute bottom-7 right-0 z-50 max-h-[min(420px,70vh)] w-[min(300px,calc(100vw-3rem))] overflow-y-auto rounded-xl border border-violet-400/20 bg-[#110d18]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl [scrollbar-width:thin]"
+                          className="absolute bottom-7 right-0 z-50 max-h-[min(420px,70vh)] w-[min(300px,calc(100vw-3rem))] overflow-y-auto rounded-xl border border-emerald-400/20 bg-[#081712]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl [scrollbar-width:thin]"
                         >
-                          <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-violet-400/20 bg-[#110d18]" />
+                          <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-emerald-400/20 bg-[#081712]" />
 
                           <div className="relative">
                             <div className="flex items-center gap-2">
-                              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300">
+                              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-300">
                                 <IconoDescripcion className="h-3.5 w-3.5" />
                               </span>
                               <div className="min-w-0">
-                                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-violet-300">
+                                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-300">
                                   Descripción
                                 </p>
                                 <p className="truncate text-[10px] font-bold text-zinc-200">
@@ -686,7 +686,7 @@ function TarjetaArtista({
 
                             {hayDatosColaboracion && (
                               <div className="mt-3 border-t border-white/[0.08] pt-3">
-                                <p className="text-[8px] font-black uppercase tracking-[0.14em] text-violet-300">
+                                <p className="text-[8px] font-black uppercase tracking-[0.14em] text-emerald-300">
                                   Tipo de colaboración
                                 </p>
                                 <ResumenColaboracionIdea
@@ -733,7 +733,7 @@ function TarjetaArtista({
 
       <Link
         href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-        className="relative flex items-center justify-center rounded-b-2xl border-t border-violet-500/20 bg-violet-600 px-4 py-3 text-center text-[11px] font-black text-white transition hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
+        className="relative flex items-center justify-center rounded-b-2xl border-t border-emerald-500/20 bg-emerald-600 px-4 py-3 text-center text-[11px] font-black text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
       >
         <span>Ver perfil</span>
       </Link>
@@ -864,14 +864,14 @@ export default function ArtistasClient({
   const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
 
   return (
-    <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#09070d] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <Link
             href={sesionActiva ? "/panel" : "/"}
             className="text-lg font-black tracking-tight"
           >
-            Feat<span className="text-violet-400">Music</span>
+            Feat<span className="text-emerald-400">Music</span>
           </Link>
 
           <NavegacionEscritorio />
@@ -889,7 +889,7 @@ export default function ArtistasClient({
           ) : (
             <Link
               href="/iniciar-sesion"
-              className="rounded-lg border border-violet-400/50 px-3 py-1.5 text-[10px] font-bold text-violet-200 transition hover:bg-violet-500/10"
+              className="rounded-lg border border-emerald-400/50 px-3 py-1.5 text-[10px] font-bold text-emerald-200 transition hover:bg-emerald-500/10"
             >
               Iniciar sesión
             </Link>
@@ -931,7 +931,7 @@ export default function ArtistasClient({
                 onClick={() => setVista("artistas")}
                 className={`rounded-lg px-3 py-2.5 text-xs font-black transition ${
                   vista === "artistas"
-                    ? "border border-violet-400/25 bg-violet-500/15 text-violet-100 shadow-[0_8px_25px_rgba(139,92,246,0.08)]"
+                    ? "border border-emerald-400/25 bg-emerald-500/15 text-emerald-100 shadow-[0_8px_25px_rgba(16,185,129,0.08)]"
                     : "border border-transparent text-zinc-500 hover:bg-white/[0.035] hover:text-zinc-200"
                 }`}
               >
@@ -944,12 +944,12 @@ export default function ArtistasClient({
                 onClick={() => setVista("oportunidades")}
                 className={`rounded-lg px-3 py-2.5 text-xs font-black transition ${
                   vista === "oportunidades"
-                    ? "border border-violet-400/25 bg-violet-500/15 text-violet-100 shadow-[0_8px_25px_rgba(139,92,246,0.08)]"
+                    ? "border border-emerald-400/25 bg-emerald-500/15 text-emerald-100 shadow-[0_8px_25px_rgba(16,185,129,0.08)]"
                     : "border border-transparent text-zinc-500 hover:bg-white/[0.035] hover:text-zinc-200"
                 }`}
               >
                 Oportunidades
-                <span className="ml-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-1.5 py-0.5 text-[8px] text-violet-200">
+                <span className="ml-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-1.5 py-0.5 text-[8px] text-emerald-200">
                   {oportunidadesIniciales.length}
                 </span>
               </button>
@@ -960,7 +960,7 @@ export default function ArtistasClient({
             <>
               <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
             <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
-              <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#100d15] px-3 py-2 focus-within:border-violet-400/40 lg:w-[320px] lg:flex-none">
+              <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#08140f] px-3 py-2 focus-within:border-emerald-400/40 lg:w-[320px] lg:flex-none">
                 <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
                 <input
                   value={busqueda}
@@ -975,7 +975,7 @@ export default function ArtistasClient({
                   value={pais}
                   onChange={(evento) => setPais(evento.target.value)}
                   aria-label="Filtrar por país"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
                 >
                   <option value="">Todos los países</option>
                   {opciones.paises.map((opcion) => (
@@ -987,7 +987,7 @@ export default function ArtistasClient({
                   value={ciudad}
                   onChange={(evento) => setCiudad(evento.target.value)}
                   aria-label="Filtrar por ciudad"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
                 >
                   <option value="">Todas las ciudades</option>
                   {opciones.ciudades.map((opcion) => (
@@ -999,7 +999,7 @@ export default function ArtistasClient({
                   value={genero}
                   onChange={(evento) => setGenero(evento.target.value)}
                   aria-label="Filtrar por género"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
                 >
                   <option value="">Todos los géneros</option>
                   {opciones.generos.map((opcion) => (
@@ -1011,7 +1011,7 @@ export default function ArtistasClient({
                   value={rol}
                   onChange={(evento) => setRol(evento.target.value)}
                   aria-label="Filtrar por rol"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#100d15] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
                 >
                   <option value="">Todos los roles</option>
                   {opciones.roles.map((opcion) => (
@@ -1037,7 +1037,7 @@ export default function ArtistasClient({
                   type="checkbox"
                   checked={soloConIdeas}
                   onChange={(evento) => setSoloConIdeas(evento.target.checked)}
-                  className="h-3.5 w-3.5 cursor-pointer rounded border-white/20 bg-[#100d15] accent-violet-500"
+                  className="h-3.5 w-3.5 cursor-pointer rounded border-white/20 bg-[#08140f] accent-emerald-500"
                 />
                 <span>Mostrar solo artistas con ideas</span>
               </label>
@@ -1070,7 +1070,7 @@ export default function ArtistasClient({
               <button
                 type="button"
                 onClick={limpiarFiltros}
-                className="mt-4 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2 text-xs font-bold text-violet-200"
+                className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-200"
               >
                 Limpiar búsqueda
               </button>

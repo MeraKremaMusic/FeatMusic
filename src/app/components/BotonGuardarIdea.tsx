@@ -146,8 +146,8 @@ export default function BotonGuardarIdea({
         onClick={alternarGuardada}
         className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition disabled:cursor-not-allowed disabled:opacity-45 ${
           guardada
-            ? "border-violet-300/35 bg-violet-500/20 text-violet-100"
-            : "border-white/10 bg-black/20 text-zinc-400 hover:border-violet-300/25 hover:bg-violet-500/10 hover:text-violet-200"
+            ? "border-emerald-300/35 bg-emerald-500/20 text-emerald-100"
+            : "border-white/10 bg-black/20 text-zinc-400 hover:border-emerald-300/25 hover:bg-emerald-500/10 hover:text-emerald-200"
         } ${className}`}
       >
         <IconoMarcador guardada={guardada} />
@@ -168,8 +168,8 @@ export default function BotonGuardarIdea({
       onClick={alternarGuardada}
       className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[10px] font-black transition disabled:cursor-not-allowed disabled:opacity-45 ${
         guardada
-          ? "border-violet-300/30 bg-violet-500/15 text-violet-100"
-          : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-violet-300/25 hover:bg-violet-500/10 hover:text-violet-200"
+          ? "border-emerald-300/30 bg-emerald-500/15 text-emerald-100"
+          : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-emerald-300/25 hover:bg-emerald-500/10 hover:text-emerald-200"
       } ${className}`}
     >
       <IconoMarcador guardada={guardada} />

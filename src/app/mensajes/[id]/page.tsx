@@ -182,7 +182,7 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
   }));
 
   return (
-    <main className="featmusic-app-light min-h-[100dvh] bg-[#09070d] text-white">
+    <main className="featmusic-app-light min-h-[100dvh] bg-[#06100c] text-white">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <Link
@@ -193,7 +193,7 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
           </Link>
 
           <Link href="/panel" className="text-lg font-black tracking-tight">
-            Feat<span className="text-violet-400">Music</span>
+            Feat<span className="text-emerald-400">Music</span>
           </Link>
 
           <span className="hidden text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-600 sm:block">

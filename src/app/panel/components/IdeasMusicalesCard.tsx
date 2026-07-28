@@ -647,17 +647,17 @@ export default function IdeasMusicalesCard({
 
   return (
     <>
-      <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(139,92,246,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
-        <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-violet-500/[0.08] blur-3xl" />
+      <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(16,185,129,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-emerald-500/[0.08] blur-3xl" />
 
         <div className="relative flex items-center justify-between gap-3 border-b border-white/[0.07] px-3.5 py-3 sm:px-4">
           <div className="flex min-w-0 items-center gap-2.5">
-            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
               <Icono tipo="musica" className="h-4 w-4" />
             </span>
 
             <div className="min-w-0">
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300">
+              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-300">
                 Mis publicaciones
               </p>
               <h2 className="mt-0.5 truncate text-base font-black text-white sm:text-lg">
@@ -666,7 +666,7 @@ export default function IdeasMusicalesCard({
             </div>
           </div>
 
-          <span className="shrink-0 rounded-full border border-violet-400/20 bg-violet-500/[0.09] px-2.5 py-1 text-[9px] font-black tabular-nums text-violet-200 sm:text-[10px]">
+          <span className="shrink-0 rounded-full border border-emerald-400/20 bg-emerald-500/[0.09] px-2.5 py-1 text-[9px] font-black tabular-nums text-emerald-200 sm:text-[10px]">
             {ideas.length} de {MAX_ACTIVE_IDEAS}
           </span>
         </div>
@@ -674,7 +674,7 @@ export default function IdeasMusicalesCard({
         {ideas.length === 0 ? (
           <div className="relative flex min-h-0 flex-1 items-center justify-center px-5 py-8">
             <div className="max-w-xs text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
                 <Icono tipo="musica" className="h-5 w-5" />
               </div>
               <p className="mt-3 text-sm font-black text-zinc-100">
@@ -687,7 +687,7 @@ export default function IdeasMusicalesCard({
               <button
                 type="button"
                 onClick={abrirModal}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-[11px] font-bold text-violet-100 transition hover:border-violet-300/40 hover:bg-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-400/40"
+                className="mt-4 inline-flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-2.5 text-[11px] font-bold text-emerald-100 transition hover:border-emerald-300/40 hover:bg-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
               >
                 <Icono tipo="mas" className="h-3.5 w-3.5" />
                 Publicar una idea
@@ -777,7 +777,7 @@ export default function IdeasMusicalesCard({
                             rel="noreferrer"
                             aria-label={`Descargar ${idea.titulo}`}
                             title="Descargar MP3"
-                            className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.03] px-2.5 text-[8px] font-black text-zinc-400 transition hover:border-violet-400/20 hover:bg-violet-500/[0.08] hover:text-violet-200 sm:text-[9px]"
+                            className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/[0.09] bg-white/[0.03] px-2.5 text-[8px] font-black text-zinc-400 transition hover:border-emerald-400/20 hover:bg-emerald-500/[0.08] hover:text-emerald-200 sm:text-[9px]"
                           >
                             <Icono tipo="descargar" className="h-3 w-3" />
                             MP3
@@ -816,7 +816,7 @@ export default function IdeasMusicalesCard({
                 type="button"
                 onClick={abrirModal}
                 disabled={limiteAlcanzado}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-violet-400/20 bg-violet-500/[0.08] px-4 py-2.5 text-[10px] font-black text-violet-200 transition hover:border-violet-300/35 hover:bg-violet-500/15 disabled:cursor-not-allowed disabled:border-white/[0.07] disabled:bg-white/[0.02] disabled:text-zinc-600 sm:text-[11px]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.08] px-4 py-2.5 text-[10px] font-black text-emerald-200 transition hover:border-emerald-300/35 hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:border-white/[0.07] disabled:bg-white/[0.02] disabled:text-zinc-600 sm:text-[11px]"
               >
                 <Icono tipo="mas" className="h-3.5 w-3.5" />
                 {limiteAlcanzado
@@ -838,11 +838,11 @@ export default function IdeasMusicalesCard({
         >
           <form
             onSubmit={publicarIdea}
-            className="max-h-[94vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#100d15] p-4 shadow-2xl shadow-black/60 md:p-6"
+            className="max-h-[94vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#08140f] p-4 shadow-2xl shadow-black/60 md:p-6"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">
                   Nueva publicación
                 </p>
                 <h2 className="mt-1 text-xl font-black text-white">
@@ -876,7 +876,7 @@ export default function IdeasMusicalesCard({
                   accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus"
                   onChange={seleccionarAudio}
                   disabled={guardando}
-                  className="mt-2 block w-full rounded-xl border border-dashed border-violet-400/25 bg-violet-500/[0.05] p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-violet-200"
+                  className="mt-2 block w-full rounded-xl border border-dashed border-emerald-400/25 bg-emerald-500/[0.05] p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-emerald-200"
                 />
                 <span className="mt-1.5 block text-[9px] text-zinc-600">
                   50 MB · 4 minutos · MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u
@@ -895,7 +895,7 @@ export default function IdeasMusicalesCard({
                     duracionSegundos={duracionSegundos}
                   />
                   {leyendoAudio && (
-                    <p className="mt-2 text-[10px] text-violet-300">
+                    <p className="mt-2 text-[10px] text-emerald-300">
                       Leyendo duración del audio...
                     </p>
                   )}
@@ -917,7 +917,7 @@ export default function IdeasMusicalesCard({
                   maxLength={80}
                   disabled={guardando}
                   placeholder="Ej. Coro para reggaetón"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-emerald-400/40"
                 />
               </label>
 
@@ -933,7 +933,7 @@ export default function IdeasMusicalesCard({
                   onChange={(event) => setBpm(event.target.value)}
                   disabled={guardando}
                   placeholder="Ej. 92"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-emerald-400/40"
                 />
               </label>
 
@@ -945,7 +945,7 @@ export default function IdeasMusicalesCard({
                   value={tonalidad}
                   onChange={(event) => setTonalidad(event.target.value)}
                   disabled={guardando}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-emerald-400/40"
                 >
                   <option value="">Selecciona una tonalidad</option>
                   {TONALIDADES.map((opcion) => (
@@ -967,7 +967,7 @@ export default function IdeasMusicalesCard({
                   rows={4}
                   disabled={guardando}
                   placeholder="Explica qué colaboración buscas y qué te gustaría recibir."
-                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-violet-400/40"
+                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-700 focus:border-emerald-400/40"
                 />
                 <span className="mt-1 block text-right text-[9px] text-zinc-600">
                   {descripcion.length}/300
@@ -975,9 +975,9 @@ export default function IdeasMusicalesCard({
               </label>
 
 
-              <div className="md:col-span-2 rounded-2xl border border-violet-400/15 bg-violet-500/[0.035] p-3.5 sm:p-4">
+              <div className="md:col-span-2 rounded-2xl border border-emerald-400/15 bg-emerald-500/[0.035] p-3.5 sm:p-4">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-violet-300">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-300">
                     Colaboración que buscas
                   </p>
                   <p className="mt-1 text-[10px] leading-4 text-zinc-500">
@@ -995,7 +995,7 @@ export default function IdeasMusicalesCard({
                       value={rolBuscado}
                       onChange={(event) => setRolBuscado(event.target.value)}
                       disabled={guardando}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-emerald-400/40"
                     >
                       <option value="">Selecciona un rol</option>
                       {OPCIONES_ROL_BUSCADO.map(([valor, etiqueta]) => (
@@ -1014,7 +1014,7 @@ export default function IdeasMusicalesCard({
                       value={generoMusical}
                       onChange={(event) => setGeneroMusical(event.target.value)}
                       disabled={guardando}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-emerald-400/40"
                     >
                       <option value="">Selecciona un género</option>
                       {OPCIONES_GENERO_MUSICAL.map((opcion) => (
@@ -1033,7 +1033,7 @@ export default function IdeasMusicalesCard({
                       value={idiomaBuscado}
                       onChange={(event) => setIdiomaBuscado(event.target.value)}
                       disabled={guardando}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-emerald-400/40"
                     >
                       <option value="">Selecciona un idioma</option>
                       {OPCIONES_IDIOMA_BUSCADO.map(([valor, etiqueta]) => (
@@ -1054,7 +1054,7 @@ export default function IdeasMusicalesCard({
                         setModalidadColaboracion(event.target.value)
                       }
                       disabled={guardando}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-emerald-400/40"
                     >
                       <option value="">Selecciona una modalidad</option>
                       {OPCIONES_MODALIDAD_COLABORACION.map(
@@ -1075,7 +1075,7 @@ export default function IdeasMusicalesCard({
                       value={tipoAcuerdo}
                       onChange={(event) => setTipoAcuerdo(event.target.value)}
                       disabled={guardando}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-violet-400/40"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:border-emerald-400/40"
                     >
                       <option value="">Selecciona un acuerdo</option>
                       {OPCIONES_TIPO_ACUERDO.map(([valor, etiqueta]) => (
@@ -1103,14 +1103,14 @@ export default function IdeasMusicalesCard({
             )}
 
             {guardando && (
-              <div className="mt-4 rounded-xl border border-violet-400/20 bg-violet-500/[0.06] p-3">
-                <div className="flex items-center justify-between text-[10px] font-semibold text-violet-200">
+              <div className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.06] p-3">
+                <div className="flex items-center justify-between text-[10px] font-semibold text-emerald-200">
                   <span>Subiendo y procesando audio...</span>
                   <span>{progresoSubida}%</span>
                 </div>
                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">
                   <div
-                    className="h-full rounded-full bg-violet-400 transition-[width]"
+                    className="h-full rounded-full bg-emerald-400 transition-[width]"
                     style={{ width: `${progresoSubida}%` }}
                   />
                 </div>
@@ -1129,7 +1129,7 @@ export default function IdeasMusicalesCard({
               <button
                 type="submit"
                 disabled={guardando || leyendoAudio}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/20 px-5 py-2.5 text-xs font-bold text-violet-100 transition hover:border-violet-300/50 hover:bg-violet-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-500/20 px-5 py-2.5 text-xs font-bold text-emerald-100 transition hover:border-emerald-300/50 hover:bg-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icono tipo="subir" />
                 {guardando ? "Publicando..." : "Publicar idea"}

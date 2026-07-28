@@ -271,8 +271,8 @@ body {
   width: 0.22rem;
   height: 0.38rem;
   border-radius: 999px;
-  background: #c4b5fd;
-  box-shadow: 0 0 12px rgba(167, 139, 250, 0.7);
+  background: #6ee7b7;
+  box-shadow: 0 0 12px rgba(52,211,153, 0.7);
   transform: translateX(-50%);
   animation: scroll-hint-travel 1.8s ease-in-out infinite;
 }
@@ -351,7 +351,7 @@ body {
 
 .visual-icon-violet {
   color: rgb(216 180 254);
-  background: linear-gradient(145deg, rgba(139, 92, 246, 0.28), rgba(88, 28, 135, 0.16));
+  background: linear-gradient(145deg, rgba(16,185,129, 0.28), rgba(88, 28, 135, 0.16));
 }
 
 .visual-icon-sky {
@@ -617,8 +617,8 @@ body {
 }
 
 .visual-icon-indigo {
-  color: rgb(165 180 252);
-  background: linear-gradient(145deg, rgba(99, 102, 241, 0.28), rgba(67, 56, 202, 0.14));
+  color: rgb(94 234 212);
+  background: linear-gradient(145deg, rgba(20,184,166, 0.28), rgba(13,148,136, 0.14));
 }
 
 .steps-grid::before {
@@ -663,9 +663,9 @@ body {
 
 .faq-answer-card,
 .faq-clarity-card {
-  color: #f7f7ff;
-  background: #0b0b1c;
-  border-color: #34366c;
+  color: #f0fdfa;
+  background: #06251f;
+  border-color: #134e4a;
   border-radius: 0;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.025),
@@ -682,7 +682,7 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(129, 140, 248, 0.95),
+    rgba(45,212,191, 0.95),
     transparent
   );
 }
@@ -696,7 +696,7 @@ body {
 .faq-answer-header,
 .faq-clarity-header {
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid #2c2e5c;
+  border-bottom: 1px solid #134e4a;
 }
 
 .faq-question-label {
@@ -704,7 +704,7 @@ body {
   font-weight: 800;
   line-height: 1rem;
   letter-spacing: 0.16em;
-  color: #a5b4fc;
+  color: #5eead4;
   text-transform: uppercase;
 }
 
@@ -713,7 +713,7 @@ body {
   font-weight: 700;
   line-height: 1rem;
   letter-spacing: 0.12em;
-  color: #65699f;
+  color: #4f8f84;
 }
 
 .faq-answer-copy {
@@ -738,15 +738,15 @@ body {
   margin-top: 0.8rem;
   font-size: 1rem;
   line-height: 1.7rem;
-  color: #b7b9d1;
+  color: #b4c9c4;
 }
 
 .faq-clarity-card .visual-icon {
   width: 2.75rem;
   height: 2.75rem;
-  color: #aeb8ff;
-  background: #151633;
-  border-color: #404582;
+  color: #5eead4;
+  background: #0f2f2a;
+  border-color: #115e59;
   border-radius: 0.4rem;
   box-shadow: none;
 }
@@ -1736,13 +1736,13 @@ body {
   --fm-app-bg: #f4f6fa;
   --fm-card: #ffffff;
   --fm-card-soft: #f8fafc;
-  --fm-card-violet: #f5f3ff;
+  --fm-card-emerald: #ecfdf5;
   --fm-text: #172033;
   --fm-text-soft: #64748b;
   --fm-text-muted: #94a3b8;
   --fm-border: #e2e8f0;
-  --fm-violet: #7c3aed;
-  --fm-violet-deep: #6d28d9;
+  --fm-emerald: #10b981;
+  --fm-emerald-deep: #059669;
   --fm-sky: #0ea5e9;
   --fm-night: #111827;
   --fm-success: #047857;
@@ -1751,7 +1751,7 @@ body {
 
   color-scheme: light;
   background:
-    radial-gradient(circle at 8% 0%, rgba(124, 58, 237, 0.09), transparent 26rem),
+    radial-gradient(circle at 8% 0%, rgba(5,150,105, 0.09), transparent 26rem),
     radial-gradient(circle at 94% 18%, rgba(14, 165, 233, 0.07), transparent 24rem),
     var(--fm-app-bg) !important;
   color: var(--fm-text) !important;
@@ -1786,15 +1786,15 @@ body {
   color: #94a3b8 !important;
 }
 
-.featmusic-app-light > header [class~="text-violet-100"],
-.featmusic-app-light > header [class~="text-violet-200"],
-.featmusic-app-light > header [class~="text-violet-300"],
-.featmusic-app-light > header [class~="text-violet-400"],
-.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-100"],
-.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-200"],
-.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-300"],
-.featmusic-app-light .featmusic-dark-chrome [class~="text-violet-400"] {
-  color: #c4b5fd !important;
+.featmusic-app-light > header [class~="text-emerald-100"],
+.featmusic-app-light > header [class~="text-emerald-200"],
+.featmusic-app-light > header [class~="text-emerald-300"],
+.featmusic-app-light > header [class~="text-emerald-400"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-100"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-200"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-300"],
+.featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-400"] {
+  color: #6ee7b7 !important;
 }
 
 .featmusic-app-light > header [class~="text-red-300"],
@@ -1819,20 +1819,20 @@ body {
 .featmusic-app-light [class~="bg-black/40"],
 .featmusic-app-light [class~="bg-black/45"],
 .featmusic-app-light [class~="bg-zinc-950"],
-.featmusic-app-light [class~="bg-[#0d0913]/95"],
-.featmusic-app-light [class~="bg-[#0d0913]/98"],
-.featmusic-app-light [class~="bg-[#0d0a12]/90"],
-.featmusic-app-light [class~="bg-[#100c16]"],
-.featmusic-app-light [class~="bg-[#100d15]"],
-.featmusic-app-light [class~="bg-[#110d18]"],
-.featmusic-app-light [class~="bg-[#110d18]/95"],
-.featmusic-app-light [class~="bg-[#120e18]"],
-.featmusic-app-light [class~="bg-[#120e18]/95"] {
+.featmusic-app-light [class~="bg-[#07110d]/95"],
+.featmusic-app-light [class~="bg-[#07110d]/98"],
+.featmusic-app-light [class~="bg-[#07120e]/90"],
+.featmusic-app-light [class~="bg-[#08140f]"],
+.featmusic-app-light [class~="bg-[#08140f]"],
+.featmusic-app-light [class~="bg-[#081712]"],
+.featmusic-app-light [class~="bg-[#081712]/95"],
+.featmusic-app-light [class~="bg-[#091711]"],
+.featmusic-app-light [class~="bg-[#091711]/95"] {
   background-color: rgba(255, 255, 255, 0.96) !important;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07) !important;
 }
 
-.featmusic-app-light [class~="bg-[#09070d]/92"] {
+.featmusic-app-light [class~="bg-[#06100c]/92"] {
   background-color: rgba(244, 246, 250, 0.94) !important;
   box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05) !important;
 }
@@ -1858,11 +1858,11 @@ body {
 }
 
 /* Gradientes oscuros de cards convertidos en superficies claras con profundidad. */
-.featmusic-app-light [class~="bg-[linear-gradient(155deg,rgba(139,92,246,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))]"],
-.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(139,92,246,0.035))]"],
-.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(139,92,246,0.035))]"],
-.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(139,92,246,0.045))]"] {
-  background: linear-gradient(145deg, #ffffff 0%, #fbfdff 58%, #f5f3ff 100%) !important;
+.featmusic-app-light [class~="bg-[linear-gradient(155deg,rgba(16,185,129,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))]"],
+.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(16,185,129,0.035))]"],
+.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(16,185,129,0.035))]"],
+.featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(16,185,129,0.045))]"] {
+  background: linear-gradient(145deg, #ffffff 0%, #fbfdff 58%, #ecfdf5 100%) !important;
   box-shadow: 0 18px 48px rgba(15, 23, 42, 0.09) !important;
 }
 
@@ -1909,18 +1909,18 @@ body {
   color: var(--fm-text-muted) !important;
 }
 
-.featmusic-app-light [class~="text-violet-100"],
-.featmusic-app-light [class~="text-violet-100/70"],
-.featmusic-app-light [class~="text-violet-100/80"],
-.featmusic-app-light [class~="text-violet-100/90"],
-.featmusic-app-light [class~="text-violet-200"],
-.featmusic-app-light [class~="text-violet-200/55"],
-.featmusic-app-light [class~="text-violet-200/85"],
-.featmusic-app-light [class~="text-violet-300"],
-.featmusic-app-light [class~="text-violet-300/70"],
-.featmusic-app-light [class~="text-violet-300/80"],
-.featmusic-app-light [class~="text-violet-400"] {
-  color: var(--fm-violet-deep) !important;
+.featmusic-app-light [class~="text-emerald-100"],
+.featmusic-app-light [class~="text-emerald-100/70"],
+.featmusic-app-light [class~="text-emerald-100/80"],
+.featmusic-app-light [class~="text-emerald-100/90"],
+.featmusic-app-light [class~="text-emerald-200"],
+.featmusic-app-light [class~="text-emerald-200/55"],
+.featmusic-app-light [class~="text-emerald-200/85"],
+.featmusic-app-light [class~="text-emerald-300"],
+.featmusic-app-light [class~="text-emerald-300/70"],
+.featmusic-app-light [class~="text-emerald-300/80"],
+.featmusic-app-light [class~="text-emerald-400"] {
+  color: var(--fm-emerald-deep) !important;
 }
 
 .featmusic-app-light [class~="text-red-100"],
@@ -1949,23 +1949,23 @@ body {
   color: var(--fm-warning) !important;
 }
 
-.featmusic-app-light [class~="text-fuchsia-300"] {
-  color: #a21caf !important;
+.featmusic-app-light [class~="text-emerald-300"] {
+  color: #047857 !important;
 }
 
 /* Botones sólidos, avatares y mensajes enviados mantienen texto blanco. */
-.featmusic-app-light [class~="bg-violet-500"][class~="text-white"],
-.featmusic-app-light [class~="bg-violet-600"][class~="text-white"],
+.featmusic-app-light [class~="bg-emerald-500"][class~="text-white"],
+.featmusic-app-light [class~="bg-emerald-600"][class~="text-white"],
 .featmusic-app-light [class~="bg-red-400"][class~="text-white"],
 .featmusic-app-light [class~="bg-red-500"][class~="text-white"],
 .featmusic-app-light [class~="bg-emerald-400"][class~="text-white"],
 .featmusic-app-light [class~="bg-sky-400"][class~="text-white"],
-.featmusic-app-light [class~="from-violet-700"],
-.featmusic-app-light [class~="to-fuchsia-600"] {
+.featmusic-app-light [class~="from-emerald-700"],
+.featmusic-app-light [class~="to-emerald-600"] {
   color: #ffffff !important;
 }
 
-.featmusic-app-light [class~="bg-violet-500"] [class~="text-violet-100/70"] {
+.featmusic-app-light [class~="bg-emerald-500"] [class~="text-emerald-100/70"] {
   color: rgba(255, 255, 255, 0.72) !important;
 }
 
@@ -1989,29 +1989,29 @@ body {
 }
 
 .featmusic-app-light input[type="range"] {
-  accent-color: var(--fm-violet);
+  accent-color: var(--fm-emerald);
 }
 
 .featmusic-app-light input[type="checkbox"],
 .featmusic-app-light input[type="radio"] {
-  accent-color: var(--fm-violet);
+  accent-color: var(--fm-emerald);
 }
 
 /* Estados y acentos con fondos suaves. */
-.featmusic-app-light [class~="bg-violet-500/5"],
-.featmusic-app-light [class~="bg-violet-500/10"],
-.featmusic-app-light [class~="bg-violet-500/12"],
-.featmusic-app-light [class~="bg-violet-500/15"],
-.featmusic-app-light [class~="bg-violet-500/20"],
-.featmusic-app-light [class~="bg-violet-500/[0.035]"],
-.featmusic-app-light [class~="bg-violet-500/[0.045]"],
-.featmusic-app-light [class~="bg-violet-500/[0.05]"],
-.featmusic-app-light [class~="bg-violet-500/[0.06]"],
-.featmusic-app-light [class~="bg-violet-500/[0.065]"],
-.featmusic-app-light [class~="bg-violet-500/[0.07]"],
-.featmusic-app-light [class~="bg-violet-500/[0.08]"],
-.featmusic-app-light [class~="bg-violet-500/[0.09]"] {
-  background-color: #f3e8ff !important;
+.featmusic-app-light [class~="bg-emerald-500/5"],
+.featmusic-app-light [class~="bg-emerald-500/10"],
+.featmusic-app-light [class~="bg-emerald-500/12"],
+.featmusic-app-light [class~="bg-emerald-500/15"],
+.featmusic-app-light [class~="bg-emerald-500/20"],
+.featmusic-app-light [class~="bg-emerald-500/[0.035]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.045]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.05]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.06]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.065]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.07]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.08]"],
+.featmusic-app-light [class~="bg-emerald-500/[0.09]"] {
+  background-color: #d1fae5 !important;
 }
 
 .featmusic-app-light [class~="bg-sky-500/10"],
@@ -2048,13 +2048,13 @@ body {
 .featmusic-app-light [class~="hover:bg-white/[0.025]"]:hover,
 .featmusic-app-light [class~="hover:bg-white/[0.035]"]:hover,
 .featmusic-app-light [class~="hover:bg-white/[0.08]"]:hover {
-  background-color: #eef2ff !important;
+  background-color: #ecfdf5 !important;
 }
 
 .featmusic-app-light [class~="hover:text-white"]:hover,
 .featmusic-app-light [class~="hover:text-zinc-200"]:hover,
 .featmusic-app-light [class~="hover:text-zinc-300"]:hover {
-  color: var(--fm-violet-deep) !important;
+  color: var(--fm-emerald-deep) !important;
 }
 
 .featmusic-app-light > header [class~="hover:text-white"]:hover,
@@ -2085,9 +2085,11 @@ body {
 @media (max-width: 640px) {
   .featmusic-app-light {
     background:
-      radial-gradient(circle at 50% -5%, rgba(124, 58, 237, 0.08), transparent 18rem),
+      radial-gradient(circle at 50% -5%, rgba(5,150,105, 0.08), transparent 18rem),
       var(--fm-app-bg) !important;
   }
 }
 
 /* FEATMUSIC_TEMA_CLARO_V1_FIN */
+
+/* FEATMUSIC_TEMA_ESMERALDA_V1 */

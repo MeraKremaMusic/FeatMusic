@@ -54,7 +54,7 @@ export default async function CompletarPerfilPage({
   return (
     <main className="min-h-screen bg-black px-5 py-10 text-white sm:px-8">
       <section className="mx-auto max-w-4xl rounded-3xl border border-zinc-800 bg-zinc-950 p-6 sm:p-10">
-        <p className="text-sm font-semibold text-violet-400">Último paso</p>
+        <p className="text-sm font-semibold text-emerald-400">Último paso</p>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
           Personaliza tu perfil
         </h1>
@@ -127,10 +127,10 @@ export default async function CompletarPerfilPage({
               {roles.map(([valor, etiqueta]) => (
                 <label
                   key={valor}
-                  className="cursor-pointer rounded-xl border border-zinc-800 bg-black p-4 transition hover:border-violet-500"
+                  className="cursor-pointer rounded-xl border border-zinc-800 bg-black p-4 transition hover:border-emerald-500"
                 >
                   <input
-                    className="mr-2 accent-violet-500"
+                    className="mr-2 accent-emerald-500"
                     type="radio"
                     name="rolPrincipal"
                     value={valor}
@@ -153,10 +153,10 @@ export default async function CompletarPerfilPage({
               {generos.map((genero) => (
                 <label
                   key={genero}
-                  className="cursor-pointer rounded-full border border-zinc-800 px-3 py-2 text-sm transition hover:border-violet-500"
+                  className="cursor-pointer rounded-full border border-zinc-800 px-3 py-2 text-sm transition hover:border-emerald-500"
                 >
                   <input
-                    className="mr-2 accent-violet-500"
+                    className="mr-2 accent-emerald-500"
                     type="checkbox"
                     name="generos"
                     value={genero}
@@ -170,7 +170,7 @@ export default async function CompletarPerfilPage({
 
           <button
             type="submit"
-            className="w-full rounded-full bg-violet-600 px-6 py-4 font-semibold transition hover:bg-violet-500"
+            className="w-full rounded-full bg-emerald-600 px-6 py-4 font-semibold transition hover:bg-emerald-500"
           >
             Guardar y entrar a FeatMusic
           </button>
@@ -196,7 +196,7 @@ function Campo({
         required
         name={nombre}
         defaultValue={valor}
-        className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none transition focus:border-violet-500"
+        className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none transition focus:border-emerald-500"
       />
     </label>
   );
@@ -219,7 +219,7 @@ function Selector({
       <select
         name={nombre}
         defaultValue={valor}
-        className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none transition focus:border-violet-500"
+        className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none transition focus:border-emerald-500"
       >
         {opciones.map(([opcion, texto]) => (
           <option key={opcion} value={opcion}>
