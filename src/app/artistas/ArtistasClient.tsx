@@ -140,6 +140,25 @@ function IconoBuscar({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
+function IconoFiltro({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 6h16" />
+      <path d="M7 12h10" />
+      <path d="M10 18h4" />
+    </svg>
+  );
+}
+
 function IconoUsuarios({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg
@@ -759,6 +778,7 @@ export default function ArtistasClient({
   const [genero, setGenero] = useState("");
   const [rol, setRol] = useState("");
   const [soloConIdeas, setSoloConIdeas] = useState(true);
+  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
   const [pagina, setPagina] = useState(1);
   const [descripcionAbiertaId, setDescripcionAbiertaId] = useState<number | null>(
     null,
@@ -790,6 +810,35 @@ export default function ArtistasClient({
     return () => {
       document.removeEventListener("pointerdown", cerrarDescripcionFuera);
       document.removeEventListener("keydown", cerrarDescripcionConEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    function cerrarFiltrosFuera(evento: PointerEvent) {
+      const objetivo = evento.target;
+
+      if (
+        objetivo instanceof Element &&
+        objetivo.closest("[data-filtros-artistas]")
+      ) {
+        return;
+      }
+
+      setFiltrosAbiertos(false);
+    }
+
+    function cerrarFiltrosConEscape(evento: KeyboardEvent) {
+      if (evento.key === "Escape") {
+        setFiltrosAbiertos(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", cerrarFiltrosFuera);
+    document.addEventListener("keydown", cerrarFiltrosConEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", cerrarFiltrosFuera);
+      document.removeEventListener("keydown", cerrarFiltrosConEscape);
     };
   }, []);
 
@@ -861,7 +910,21 @@ export default function ArtistasClient({
     setPagina(1);
   }
 
+  function limpiarFiltrosAvanzados() {
+    setPais("");
+    setCiudad("");
+    setGenero("");
+    setRol("");
+    setSoloConIdeas(true);
+    setPagina(1);
+  }
+
   const hayFiltros = Boolean(busqueda || pais || ciudad || genero || rol);
+  const cantidadFiltrosActivos =
+    Number(Boolean(pais)) +
+    Number(Boolean(ciudad)) +
+    Number(Boolean(genero)) +
+    Number(Boolean(rol));
 
   return (
     <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
@@ -958,91 +1021,144 @@ export default function ArtistasClient({
 
           {vista === "artistas" ? (
             <>
-              <section className="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 backdrop-blur-sm">
-            <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
-              <label className="flex min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#08140f] px-3 py-2 focus-within:border-emerald-400/40 lg:w-[320px] lg:flex-none">
-                <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
-                <input
-                  value={busqueda}
-                  onChange={(evento) => setBusqueda(evento.target.value)}
-                  placeholder="Nombre, usuario, ciudad o país"
-                  className="min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
-                />
-              </label>
+              <section className="relative mt-3" data-filtros-artistas>
+                <div className="flex min-w-0 items-center rounded-xl border border-white/10 bg-black/35 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-sm transition focus-within:border-emerald-400/35">
+                  <div className="flex min-w-0 flex-1 items-center gap-2 px-2.5">
+                    <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
+                    <input
+                      value={busqueda}
+                      onChange={(evento) => setBusqueda(evento.target.value)}
+                      placeholder="Buscar por nombre, usuario, ciudad o país"
+                      aria-label="Buscar artistas"
+                      className="h-9 min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
+                    />
+                  </div>
 
-              <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:min-w-0 lg:flex-1">
-                <select
-                  value={pais}
-                  onChange={(evento) => setPais(evento.target.value)}
-                  aria-label="Filtrar por país"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
-                >
-                  <option value="">Todos los países</option>
-                  {opciones.paises.map((opcion) => (
-                    <option key={opcion} value={opcion}>{opcion}</option>
-                  ))}
-                </select>
+                  <button
+                    type="button"
+                    aria-label="Abrir filtros de artistas"
+                    aria-expanded={filtrosAbiertos}
+                    aria-controls="panel-filtros-artistas"
+                    title="Filtros"
+                    onClick={() => setFiltrosAbiertos((actual) => !actual)}
+                    className={`relative inline-flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-emerald-400/40 ${
+                      filtrosAbiertos || cantidadFiltrosActivos > 0
+                        ? "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
+                        : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200"
+                    }`}
+                  >
+                    <IconoFiltro className="h-4 w-4" />
+                    {cantidadFiltrosActivos > 0 && (
+                      <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white">
+                        {cantidadFiltrosActivos}
+                      </span>
+                    )}
+                  </button>
+                </div>
 
-                <select
-                  value={ciudad}
-                  onChange={(evento) => setCiudad(evento.target.value)}
-                  aria-label="Filtrar por ciudad"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
-                >
-                  <option value="">Todas las ciudades</option>
-                  {opciones.ciudades.map((opcion) => (
-                    <option key={opcion} value={opcion}>{opcion}</option>
-                  ))}
-                </select>
+                {filtrosAbiertos && (
+                  <div
+                    id="panel-filtros-artistas"
+                    role="dialog"
+                    aria-label="Filtros de artistas"
+                    className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-full rounded-xl border border-emerald-400/20 bg-[#07120d]/95 p-3 shadow-[0_22px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:w-[520px]"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-black text-zinc-100">
+                          Filtrar artistas
+                        </p>
+                        <p className="mt-0.5 text-[9px] text-zinc-500">
+                          Refina los resultados sin ocupar espacio en la página.
+                        </p>
+                      </div>
+                      {cantidadFiltrosActivos > 0 && (
+                        <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-1 text-[8px] font-black text-emerald-200">
+                          {cantidadFiltrosActivos} activos
+                        </span>
+                      )}
+                    </div>
 
-                <select
-                  value={genero}
-                  onChange={(evento) => setGenero(evento.target.value)}
-                  aria-label="Filtrar por género"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
-                >
-                  <option value="">Todos los géneros</option>
-                  {opciones.generos.map((opcion) => (
-                    <option key={opcion} value={opcion}>{opcion}</option>
-                  ))}
-                </select>
+                    <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      <select
+                        value={pais}
+                        onChange={(evento) => setPais(evento.target.value)}
+                        aria-label="Filtrar por país"
+                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                      >
+                        <option value="">Todos los países</option>
+                        {opciones.paises.map((opcion) => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
 
-                <select
-                  value={rol}
-                  onChange={(evento) => setRol(evento.target.value)}
-                  aria-label="Filtrar por rol"
-                  className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
-                >
-                  <option value="">Todos los roles</option>
-                  {opciones.roles.map((opcion) => (
-                    <option key={opcion} value={opcion}>{formatearRol(opcion)}</option>
-                  ))}
-                </select>
-              </div>
+                      <select
+                        value={ciudad}
+                        onChange={(evento) => setCiudad(evento.target.value)}
+                        aria-label="Filtrar por ciudad"
+                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                      >
+                        <option value="">Todas las ciudades</option>
+                        {opciones.ciudades.map((opcion) => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
 
-              {hayFiltros && (
-                <button
-                  type="button"
-                  onClick={limpiarFiltros}
-                  className="rounded-lg border border-white/10 px-3 py-2 text-[11px] font-bold text-zinc-300 transition hover:bg-white/5"
-                >
-                  Limpiar
-                </button>
-              )}
-            </div>
+                      <select
+                        value={genero}
+                        onChange={(evento) => setGenero(evento.target.value)}
+                        aria-label="Filtrar por género"
+                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                      >
+                        <option value="">Todos los géneros</option>
+                        {opciones.generos.map((opcion) => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
 
-            <div className="mt-2 border-t border-white/5 pt-2">
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg px-1 py-0.5 text-[11px] font-semibold text-zinc-400 transition hover:text-white">
-                <input
-                  type="checkbox"
-                  checked={soloConIdeas}
-                  onChange={(evento) => setSoloConIdeas(evento.target.checked)}
-                  className="h-3.5 w-3.5 cursor-pointer rounded border-white/20 bg-[#08140f] accent-emerald-500"
-                />
-                <span>Mostrar solo artistas con ideas</span>
-              </label>
-            </div>
-          </section>
+                      <select
+                        value={rol}
+                        onChange={(evento) => setRol(evento.target.value)}
+                        aria-label="Filtrar por rol"
+                        className="w-full min-w-0 rounded-lg border border-white/10 bg-[#08140f] px-2.5 py-2.5 text-[11px] text-zinc-200 outline-none focus:border-emerald-400/40"
+                      >
+                        <option value="">Todos los roles</option>
+                        {opciones.roles.map((opcion) => (
+                          <option key={opcion} value={opcion}>{formatearRol(opcion)}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-white/[0.08] bg-white/[0.025] px-3 py-2.5 text-[10px] font-semibold text-zinc-300 transition hover:border-emerald-400/20 hover:bg-emerald-500/[0.05]">
+                      <span>Mostrar solo artistas con ideas</span>
+                      <input
+                        type="checkbox"
+                        checked={soloConIdeas}
+                        onChange={(evento) => setSoloConIdeas(evento.target.checked)}
+                        className="h-4 w-4 cursor-pointer rounded border-white/20 bg-[#08140f] accent-emerald-500"
+                      />
+                    </label>
+
+                    <div className="mt-3 flex items-center justify-end gap-2 border-t border-white/[0.07] pt-3">
+                      <button
+                        type="button"
+                        onClick={limpiarFiltrosAvanzados}
+                        disabled={cantidadFiltrosActivos === 0}
+                        className="rounded-lg border border-white/10 px-3 py-2 text-[10px] font-bold text-zinc-400 transition hover:bg-white/5 hover:text-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Limpiar filtros
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFiltrosAbiertos(false)}
+                        className="rounded-lg border border-emerald-400/25 bg-emerald-500/15 px-3 py-2 text-[10px] font-black text-emerald-100 transition hover:bg-emerald-500/25"
+                      >
+                        Listo
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </section>
 
           <div className="mt-4 flex items-center justify-between gap-4">
             <p className="text-xs font-semibold text-zinc-400">
