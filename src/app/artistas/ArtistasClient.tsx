@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import ContadorVistasIdea from "../components/ContadorVistasIdea";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
 import RegistrarVistaIdea from "../components/RegistrarVistaIdea";
 import ReproductorAudio from "../components/ReproductorAudio";
@@ -254,28 +253,6 @@ function IconoDescripcion({
   );
 }
 
-function IconoFlechaDerecha({
-  className = "h-3.5 w-3.5",
-}: {
-  className?: string;
-}) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m14 7 5 5-5 5" />
-    </svg>
-  );
-}
-
 function CargandoArtistas() {
   return (
     <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
@@ -515,6 +492,21 @@ function TarjetaArtista({
           <div className="flex-1 divide-y divide-white/[0.06] border-t border-white/[0.06] px-3.5 sm:px-4">
             {artista.ideasRecientes.map((idea, indice) => {
               const descripcion = idea.descripcion?.trim() ?? "";
+              const hayDatosColaboracion = [
+                idea.rolBuscado,
+                idea.generoMusical,
+                idea.idiomaBuscado,
+                idea.modalidadColaboracion,
+                idea.paisPreferido,
+                idea.departamentoPreferido,
+                idea.ciudadPreferida,
+                idea.tipoAcuerdo,
+              ].some(
+                (valor) =>
+                  typeof valor === "string" && valor.trim().length > 0,
+              );
+              const mostrarDetalle =
+                Boolean(descripcion) || hayDatosColaboracion;
               const descripcionAbierta = descripcionAbiertaId === idea.id;
 
               return (
@@ -539,28 +531,7 @@ function TarjetaArtista({
                     className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
                   />
 
-                  <ResumenColaboracionIdea
-                    rolBuscado={idea.rolBuscado}
-                    generoMusical={idea.generoMusical}
-                    idiomaBuscado={idea.idiomaBuscado}
-                    modalidadColaboracion={idea.modalidadColaboracion}
-                    paisPreferido={idea.paisPreferido}
-                    departamentoPreferido={idea.departamentoPreferido}
-                    ciudadPreferida={idea.ciudadPreferida}
-                    tipoAcuerdo={idea.tipoAcuerdo}
-                    compacta
-                    className="pr-20"
-                  />
-
-                  <ContadorVistasIdea
-                    ideaId={idea.id}
-                    totalInicial={idea.vistasUnicas}
-                    esPropietario={usuarioActualId === artista.id}
-                    variante="compacta"
-                    className="mt-2"
-                  />
-
-                  {descripcion && (
+                  {mostrarDetalle && (
                     <div
                       data-descripcion-idea
                       className="absolute right-0 top-[31px] z-30"
@@ -593,7 +564,7 @@ function TarjetaArtista({
                           id={`descripcion-idea-${idea.id}`}
                           role="dialog"
                           aria-label={`Descripción de ${idea.titulo}`}
-                          className="absolute bottom-7 right-0 z-50 w-[min(245px,calc(100vw-4rem))] rounded-xl border border-violet-400/20 bg-[#110d18]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+                          className="absolute bottom-7 right-0 z-50 max-h-[min(420px,70vh)] w-[min(300px,calc(100vw-3rem))] overflow-y-auto rounded-xl border border-violet-400/20 bg-[#110d18]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl [scrollbar-width:thin]"
                         >
                           <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-violet-400/20 bg-[#110d18]" />
 
@@ -612,9 +583,39 @@ function TarjetaArtista({
                               </div>
                             </div>
 
-                            <p className="mt-2.5 max-h-28 overflow-y-auto whitespace-pre-wrap pr-1 text-[10px] leading-4 text-zinc-400 [scrollbar-width:thin] sm:text-[11px] sm:leading-[1.15rem]">
-                              {descripcion}
-                            </p>
+                            {descripcion ? (
+                              <p className="mt-2.5 max-h-28 overflow-y-auto whitespace-pre-wrap pr-1 text-[10px] leading-4 text-zinc-400 [scrollbar-width:thin] sm:text-[11px] sm:leading-[1.15rem]">
+                                {descripcion}
+                              </p>
+                            ) : (
+                              <p className="mt-2.5 text-[10px] leading-4 text-zinc-500 sm:text-[11px]">
+                                Sin descripción adicional.
+                              </p>
+                            )}
+
+                            {hayDatosColaboracion && (
+                              <div className="mt-3 border-t border-white/[0.08] pt-3">
+                                <p className="text-[8px] font-black uppercase tracking-[0.14em] text-violet-300">
+                                  Tipo de colaboración
+                                </p>
+                                <ResumenColaboracionIdea
+                                  rolBuscado={idea.rolBuscado}
+                                  generoMusical={idea.generoMusical}
+                                  idiomaBuscado={idea.idiomaBuscado}
+                                  modalidadColaboracion={
+                                    idea.modalidadColaboracion
+                                  }
+                                  paisPreferido={idea.paisPreferido}
+                                  departamentoPreferido={
+                                    idea.departamentoPreferido
+                                  }
+                                  ciudadPreferida={idea.ciudadPreferida}
+                                  tipoAcuerdo={idea.tipoAcuerdo}
+                                  compacta
+                                  className="!mt-2"
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
@@ -641,12 +642,9 @@ function TarjetaArtista({
 
       <Link
         href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-        className="relative flex items-center justify-between rounded-b-2xl border-t border-white/[0.07] bg-white/[0.018] px-4 py-3 text-[11px] font-bold text-zinc-300 transition hover:bg-violet-500/[0.08] hover:text-violet-100"
+        className="relative flex items-center justify-center rounded-b-2xl border-t border-violet-500/20 bg-violet-600 px-4 py-3 text-center text-[11px] font-black text-white transition hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
       >
-        <span>Ver perfil completo</span>
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.035] text-zinc-500 transition group-hover:border-violet-400/20 group-hover:text-violet-300">
-          <IconoFlechaDerecha className="h-3 w-3" />
-        </span>
+        <span>Ver perfil</span>
       </Link>
     </article>
   );
