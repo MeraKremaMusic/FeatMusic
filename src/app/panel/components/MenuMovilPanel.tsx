@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 import { useNotificaciones } from "@/app/components/useNotificaciones";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
@@ -94,6 +95,7 @@ export default function MenuMovilPanel({
   ocultarDesde = "lg",
 }: MenuMovilPanelProps) {
   const pathname = usePathname();
+  const menuRef = useRef<HTMLElement>(null);
   const { total: mensajesNoLeidos } = useNotificacionesChat();
   const { totalNoLeidas: notificacionesNoLeidas } = useNotificaciones();
   const etiquetaMensajes =
@@ -110,8 +112,39 @@ export default function MenuMovilPanel({
   const estaEnMensajes =
     pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
+  useEffect(() => {
+    const menu = menuRef.current;
+    if (!menu) return;
+
+    const raiz = document.documentElement;
+    const actualizarAltura = () => {
+      const altura = Math.ceil(menu.getBoundingClientRect().height);
+      raiz.style.setProperty(
+        "--featmusic-menu-movil-altura",
+        `${altura}px`,
+      );
+    };
+
+    actualizarAltura();
+
+    const observador =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(actualizarAltura);
+
+    observador?.observe(menu);
+    window.addEventListener("resize", actualizarAltura);
+
+    return () => {
+      observador?.disconnect();
+      window.removeEventListener("resize", actualizarAltura);
+      raiz.style.removeProperty("--featmusic-menu-movil-altura");
+    };
+  }, []);
+
   return (
     <nav
+      ref={menuRef}
       aria-label="Menú principal móvil"
       className={`featmusic-dark-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible border-t border-white/10 bg-[#06100c]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
         ocultarDesde === "md" ? "md:hidden" : "lg:hidden"

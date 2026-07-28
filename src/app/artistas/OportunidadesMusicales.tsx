@@ -632,7 +632,11 @@ export default function OportunidadesMusicales({
               tabIndex={-1}
               aria-label="Cerrar filtros de oportunidades"
               onClick={() => setFiltrosAbiertos(false)}
-              className="fixed inset-x-0 bottom-20 top-12 z-30 cursor-default bg-slate-950/10 backdrop-blur-[3px] lg:bottom-0"
+              className={`fixed inset-x-0 top-12 z-30 cursor-default bg-slate-950/10 backdrop-blur-[3px] ${
+                sesionActiva
+                  ? "bottom-[var(--featmusic-menu-movil-altura,4.25rem)]"
+                  : "bottom-0"
+              } lg:bottom-0`}
             />
 
             <div
