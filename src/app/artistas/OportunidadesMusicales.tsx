@@ -9,6 +9,8 @@ import {
   formatearTipoAcuerdo,
   formatearUbicacionPreferida,
 } from "@/lib/colaboracion-ideas";
+import ContadorVistasIdea from "../components/ContadorVistasIdea";
+import RegistrarVistaIdea from "../components/RegistrarVistaIdea";
 import ReproductorAudio from "../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../components/ResumenColaboracionIdea";
 import EnviarPropuesta from "./[nombreUsuario]/components/EnviarPropuesta";
@@ -39,6 +41,7 @@ export type OportunidadMusical = {
   creadoEn: string;
   expiraEn: string;
   propuestasActuales: number;
+  vistasUnicas: number;
   propuestaUsuario: PropuestaOportunidad | null;
   artista: {
     id: number;
@@ -256,8 +259,13 @@ function TarjetaOportunidad({
   const perfilHref = `/artistas/${encodeURIComponent(artista.nombreUsuario)}`;
 
   return (
-    <article className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(139,92,246,0.045))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
+    <article data-vista-idea className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(139,92,246,0.045))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-violet-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
       <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-violet-500/[0.08] blur-3xl transition group-hover:bg-violet-500/[0.13]" />
+      <RegistrarVistaIdea
+        ideaId={oportunidad.id}
+        sesionActiva={sesionActiva}
+        esPropietario={usuarioActualId === artista.id}
+      />
 
       <div className="relative border-b border-white/[0.07] p-3.5 sm:p-4">
         <div className="flex min-w-0 items-start gap-3">
@@ -352,6 +360,12 @@ function TarjetaOportunidad({
         <div className="mt-auto pt-3">
           <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.07] pt-3 text-[9px] font-semibold text-zinc-500">
             <span>{textoPublicacion(oportunidad.creadoEn)}</span>
+            <ContadorVistasIdea
+              ideaId={oportunidad.id}
+              totalInicial={oportunidad.vistasUnicas}
+              esPropietario={usuarioActualId === artista.id}
+              variante="compacta"
+            />
             <span
               className={`inline-flex items-center gap-1 ${
                 restantes <= 7 ? "text-amber-300" : "text-zinc-500"

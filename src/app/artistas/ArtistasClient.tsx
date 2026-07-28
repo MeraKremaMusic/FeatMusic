@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import ContadorVistasIdea from "../components/ContadorVistasIdea";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
+import RegistrarVistaIdea from "../components/RegistrarVistaIdea";
 import ReproductorAudio from "../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../panel/components/MenuMovilPanel";
@@ -39,6 +41,7 @@ export type ArtistaExplorar = {
     departamentoPreferido: string | null;
     ciudadPreferida: string | null;
     tipoAcuerdo: string | null;
+    vistasUnicas: number;
   }>;
   creadoEn: string;
 };
@@ -414,10 +417,14 @@ function TarjetaArtista({
   artista,
   descripcionAbiertaId,
   onCambiarDescripcion,
+  sesionActiva,
+  usuarioActualId,
 }: {
   artista: ArtistaExplorar;
   descripcionAbiertaId: number | null;
   onCambiarDescripcion: (ideaId: number | null) => void;
+  sesionActiva: boolean;
+  usuarioActualId: number | null;
 }) {
   const ubicacion =
     [artista.ciudad, artista.pais].filter(Boolean).join(", ") ||
@@ -511,7 +518,16 @@ function TarjetaArtista({
               const descripcionAbierta = descripcionAbiertaId === idea.id;
 
               return (
-                <div key={idea.id} className="relative py-2.5">
+                <div
+                  key={idea.id}
+                  data-vista-idea
+                  className="relative py-2.5"
+                >
+                  <RegistrarVistaIdea
+                    ideaId={idea.id}
+                    sesionActiva={sesionActiva}
+                    esPropietario={usuarioActualId === artista.id}
+                  />
                   <ReproductorAudio
                     id={`explorar-${idea.id}`}
                     src={idea.audioUrl}
@@ -534,6 +550,14 @@ function TarjetaArtista({
                     tipoAcuerdo={idea.tipoAcuerdo}
                     compacta
                     className="pr-20"
+                  />
+
+                  <ContadorVistasIdea
+                    ideaId={idea.id}
+                    totalInicial={idea.vistasUnicas}
+                    esPropietario={usuarioActualId === artista.id}
+                    variante="compacta"
+                    className="mt-2"
                   />
 
                   {descripcion && (
@@ -970,6 +994,8 @@ export default function ArtistasClient({
                   artista={artista}
                   descripcionAbiertaId={descripcionAbiertaId}
                   onCambiarDescripcion={setDescripcionAbiertaId}
+                  sesionActiva={sesionActiva}
+                  usuarioActualId={usuarioActualId}
                 />
               ))}
             </section>

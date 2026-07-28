@@ -29,6 +29,7 @@ export type OportunidadFeed = {
   creadoEn: string;
   expiraEn: string;
   propuestasActuales: number;
+  vistasUnicas: number;
   propuestaUsuario: PropuestaFeed | null;
   esSeguido: boolean;
   compatibilidad: CompatibilidadFeed;

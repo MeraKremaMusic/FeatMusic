@@ -209,6 +209,11 @@ export default async function ArtistasPage() {
               departamentoPreferido: true,
               ciudadPreferida: true,
               tipoAcuerdo: true,
+              _count: {
+                select: {
+                  vistas: true,
+                },
+              },
             },
           },
           _count: {
@@ -267,6 +272,7 @@ export default async function ArtistasPage() {
                   estado: { in: ESTADOS_QUE_OCUPAN_CUPO },
                 },
               },
+              vistas: true,
             },
           },
           propuestas: {
@@ -300,7 +306,14 @@ export default async function ArtistasPage() {
         rol: usuario.rolPrincipal,
         generos: obtenerGeneros(usuario.generos),
         ideasActivas: usuario._count.ideas,
-        ideasRecientes: usuario.ideas,
+        ideasRecientes: usuario.ideas.map((idea) => {
+          const { _count, ...datosIdea } = idea;
+
+          return {
+            ...datosIdea,
+            vistasUnicas: _count.vistas,
+          };
+        }),
         creadoEn: usuario.creadoEn.toISOString(),
       }))
       .sort((a, b) => {
@@ -332,6 +345,7 @@ export default async function ArtistasPage() {
         creadoEn: idea.creadoEn.toISOString(),
         expiraEn: idea.expiraEn.toISOString(),
         propuestasActuales: idea._count.propuestas,
+        vistasUnicas: idea._count.vistas,
         propuestaUsuario: idea.propuestas[0] ?? null,
         artista: {
           id: idea.usuario.id,

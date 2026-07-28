@@ -11,6 +11,7 @@ import {
   OPCIONES_ROL_BUSCADO,
   OPCIONES_TIPO_ACUERDO,
 } from "@/lib/colaboracion-ideas";
+import ContadorVistasIdea from "../../components/ContadorVistasIdea";
 import ReproductorAudio from "../../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../../components/ResumenColaboracionIdea";
 import SelectorUbicacionIdea, {
@@ -38,6 +39,7 @@ export type IdeaPanel = {
   estado: string;
   expiraEn: string;
   creadoEn: string;
+  vistasUnicas: number;
 };
 
 type IdeasMusicalesCardProps = {
@@ -47,9 +49,13 @@ type IdeasMusicalesCardProps = {
 type RespuestaCrearIdea = {
   ok: boolean;
   mensaje?: string;
-  idea?: Omit<IdeaPanel, "creadoEn" | "expiraEn"> & {
+  idea?: Omit<
+    IdeaPanel,
+    "creadoEn" | "expiraEn" | "vistasUnicas"
+  > & {
     creadoEn: string | Date;
     expiraEn: string | Date;
+    vistasUnicas?: number;
   };
 };
 
@@ -584,6 +590,7 @@ export default function IdeasMusicalesCard({
 
       const ideaNueva: IdeaPanel = {
         ...data.idea,
+        vistasUnicas: data.idea.vistasUnicas ?? 0,
         creadoEn: new Date(data.idea.creadoEn).toISOString(),
         expiraEn: new Date(data.idea.expiraEn).toISOString(),
       };
@@ -738,6 +745,14 @@ export default function IdeasMusicalesCard({
                             <span className="text-zinc-700">•</span>
                             <span>Vence {formatearFecha(idea.expiraEn)}</span>
                           </div>
+
+                          <ContadorVistasIdea
+                            ideaId={idea.id}
+                            totalInicial={idea.vistasUnicas}
+                            esPropietario
+                            variante="panel"
+                            className="mt-1.5"
+                          />
 
                           {(idea.formato || tamanoFormateado) && (
                             <div className="mt-1 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wide text-zinc-600 sm:text-[9px]">

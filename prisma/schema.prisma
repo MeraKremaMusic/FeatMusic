@@ -45,6 +45,7 @@ model Usuario {
   notificacionesGeneradas Notificacion[] @relation("NotificacionesActor")
   siguiendo               Seguimiento[] @relation("UsuarioSiguiendo")
   seguidores              Seguimiento[] @relation("UsuarioSeguidores")
+  vistasIdeas              VistaIdea[]
 
   @@map("usuarios")
 }
@@ -90,9 +91,25 @@ model Idea {
   actualizadoEn    DateTime    @updatedAt @map("actualizado_en")
   usuario          Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   propuestas       Propuesta[]
+  vistas            VistaIdea[]
 
   @@index([usuarioId, estado, expiraEn])
   @@map("ideas")
+}
+
+
+model VistaIdea {
+  id        Int      @id @default(autoincrement())
+  ideaId    Int      @map("idea_id")
+  usuarioId Int      @map("usuario_id")
+  vistaEn   DateTime @default(now()) @map("vista_en")
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([ideaId, usuarioId])
+  @@index([ideaId, vistaEn])
+  @@index([usuarioId, vistaEn])
+  @@map("vistas_ideas")
 }
 
 model Propuesta {

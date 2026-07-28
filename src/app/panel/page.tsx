@@ -321,14 +321,24 @@ export default async function PanelPage() {
       estado: true,
       expiraEn: true,
       creadoEn: true,
+      _count: {
+        select: {
+          vistas: true,
+        },
+      },
     },
   });
 
-  const ideasIniciales = ideasGuardadas.map((idea) => ({
-    ...idea,
-    expiraEn: idea.expiraEn.toISOString(),
-    creadoEn: idea.creadoEn.toISOString(),
-  }));
+  const ideasIniciales = ideasGuardadas.map((idea) => {
+    const { _count, ...datosIdea } = idea;
+
+    return {
+      ...datosIdea,
+      vistasUnicas: _count.vistas,
+      expiraEn: idea.expiraEn.toISOString(),
+      creadoEn: idea.creadoEn.toISOString(),
+    };
+  });
 
   const propuestasGuardadas = await prisma.propuesta.findMany({
     where: {

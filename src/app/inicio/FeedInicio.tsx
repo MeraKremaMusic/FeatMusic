@@ -10,6 +10,8 @@ import {
 } from "react";
 
 import EnviarPropuesta from "@/app/artistas/[nombreUsuario]/components/EnviarPropuesta";
+import ContadorVistasIdea from "@/app/components/ContadorVistasIdea";
+import RegistrarVistaIdea from "@/app/components/RegistrarVistaIdea";
 import ReproductorAudio from "@/app/components/ReproductorAudio";
 import ResumenColaboracionIdea from "@/app/components/ResumenColaboracionIdea";
 import type { OportunidadFeed } from "@/lib/feed-inicio";
@@ -173,6 +175,7 @@ function TarjetaFeed({
       className="h-full min-h-full snap-start snap-always px-3 py-3 sm:px-5 sm:py-4 lg:px-8"
     >
       <article
+        data-vista-idea
         className={`relative mx-auto flex h-full w-full max-w-[720px] flex-col overflow-hidden rounded-[26px] border bg-[linear-gradient(155deg,rgba(139,92,246,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.42)] transition duration-300 ${
           activa
             ? "border-violet-300/30 ring-1 ring-violet-400/10"
@@ -181,6 +184,12 @@ function TarjetaFeed({
       >
         <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 -left-28 h-64 w-64 rounded-full bg-fuchsia-500/[0.08] blur-3xl" />
+        <RegistrarVistaIdea
+          ideaId={oportunidad.id}
+          sesionActiva
+          esPropietario={usuarioActualId === artista.id}
+          activa={activa}
+        />
 
         <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-4 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-5 sm:pb-5 sm:pt-5">
           <div className="flex min-w-0 items-center gap-3">
@@ -301,6 +310,12 @@ function TarjetaFeed({
               <span>
                 {formatearRol(artista.rol)} · {artista.ciudad}, {artista.pais}
               </span>
+              <ContadorVistasIdea
+                ideaId={oportunidad.id}
+                totalInicial={oportunidad.vistasUnicas}
+                esPropietario={usuarioActualId === artista.id}
+                variante="compacta"
+              />
               <span
                 className={`inline-flex items-center gap-1 ${
                   restantes <= 7 ? "text-amber-300" : "text-zinc-500"
@@ -400,7 +415,7 @@ function usarOportunidadActiva(
           .filter((entrada) => entrada.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-        if (!visible || visible.intersectionRatio < 0.52) return;
+        if (!visible || visible.intersectionRatio < 0.6) return;
 
         const id = Number(
           (visible.target as HTMLElement).dataset.oportunidadId,
@@ -411,7 +426,7 @@ function usarOportunidadActiva(
       },
       {
         root: contenedor,
-        threshold: [0.52, 0.68, 0.82],
+        threshold: [0.6, 0.75, 0.9],
       },
     );
 

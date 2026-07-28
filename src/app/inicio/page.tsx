@@ -136,6 +136,7 @@ export default async function InicioPage() {
                 estado: { in: ESTADOS_QUE_OCUPAN_CUPO },
               },
             },
+            vistas: true,
           },
         },
         propuestas: {
@@ -193,6 +194,7 @@ export default async function InicioPage() {
       creadoEn: idea.creadoEn.toISOString(),
       expiraEn: idea.expiraEn.toISOString(),
       propuestasActuales: idea._count.propuestas,
+      vistasUnicas: idea._count.vistas,
       propuestaUsuario: idea.propuestas[0] ?? null,
       esSeguido: idsSeguidos.has(idea.usuario.id),
       compatibilidad: calcularCompatibilidad(perfilCompatibilidad, idea),
