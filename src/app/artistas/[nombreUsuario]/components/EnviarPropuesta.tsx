@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
+// FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
 
 import {
   useCallback,
@@ -43,6 +44,7 @@ type EnviarPropuestaProps = {
   esPropietario: boolean;
   propuestasActuales: number;
   propuestaUsuario: PropuestaUsuario | null;
+  variante?: "normal" | "integrada";
 };
 
 type RespuestaApi = {
@@ -165,6 +167,7 @@ export default function EnviarPropuesta({
   esPropietario,
   propuestasActuales,
   propuestaUsuario,
+  variante = "normal",
 }: EnviarPropuestaProps) {
   const router = useRouter();
   const inputArchivoRef = useRef<HTMLInputElement>(null);
@@ -481,8 +484,30 @@ export default function EnviarPropuesta({
     : puedeReintentar
       ? "El nuevo intento ocupará un cupo disponible"
       : "Colaborar con esta idea";
+  const cuposDisponibles = Math.max(0, MAX_PROPUESTAS - totalPropuestas);
+  const textoCupos = cuposCompletos
+    ? "Cupos completos"
+    : `${cuposDisponibles} cupo${cuposDisponibles === 1 ? "" : "s"} disponible${
+        cuposDisponibles === 1 ? "" : "s"
+      }`;
+  const claseSegmento =
+    "flex min-h-11 w-full items-center justify-center px-1.5 py-2 text-center text-[9px] font-black leading-tight sm:text-[10px]";
+  const claseCupos = `${claseSegmento} bg-slate-50 text-slate-600`;
+  const claseAccion =
+    `${claseSegmento} bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400`;
 
   if (esPropietario) {
+    if (variante === "integrada") {
+      return (
+        <>
+          <span className={claseCupos}>{textoCupos}</span>
+          <span className={`${claseSegmento} bg-slate-100 text-slate-500`}>
+            Tu publicación
+          </span>
+        </>
+      );
+    }
+
     return (
       <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
         <p className="text-[10px] font-semibold text-slate-500">
@@ -500,6 +525,22 @@ export default function EnviarPropuesta({
     !puedeEnviarCorreccion &&
     !puedeReintentar
   ) {
+    if (variante === "integrada") {
+      return (
+        <>
+          <span className={claseCupos}>{textoCupos}</span>
+          <button
+            type="button"
+            disabled
+            title={propuestaPropia?.motivoDecision ?? etiquetaEstado(estadoPropio)}
+            className={`${claseSegmento} ${claseEstado(estadoPropio)} cursor-default border-0`}
+          >
+            {etiquetaEstado(estadoPropio)}
+          </button>
+        </>
+      );
+    }
+
     return (
       <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -526,6 +567,17 @@ export default function EnviarPropuesta({
   }
 
   if (!sesionActiva) {
+    if (variante === "integrada") {
+      return (
+        <>
+          <span className={claseCupos}>{textoCupos}</span>
+          <Link href="/iniciar-sesion" className={claseAccion}>
+            Enviar propuesta
+          </Link>
+        </>
+      );
+    }
+
     return (
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5">
         <p className="text-[10px] font-medium text-slate-600">
@@ -543,7 +595,31 @@ export default function EnviarPropuesta({
 
   return (
     <>
-      {puedeEnviarCorreccion || puedeReintentar ? (
+      {variante === "integrada" ? (
+        <>
+          <span className={claseCupos}>{textoCupos}</span>
+          <button
+            type="button"
+            disabled={
+              (puedeEnviarCorreccion || puedeReintentar)
+                ? formularioBloqueado
+                : cuposCompletos
+            }
+            title={propuestaPropia?.motivoDecision ?? tituloFormulario}
+            onClick={() => {
+              setError("");
+              setModalAbierto(true);
+            }}
+            className={claseAccion}
+          >
+            {(puedeEnviarCorreccion || puedeReintentar)
+              ? formularioBloqueado
+                ? "Cupos completos"
+                : tituloFormulario
+              : "Enviar propuesta"}
+          </button>
+        </>
+      ) : puedeEnviarCorreccion || puedeReintentar ? (
         <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span

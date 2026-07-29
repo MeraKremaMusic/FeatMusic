@@ -1,7 +1,9 @@
 "use client";
 
+// FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
+
 import { useEffect, useId, useRef, useState } from "react";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, ReactNode } from "react";
 
 type ReproductorAudioProps = {
   id: number | string;
@@ -11,6 +13,7 @@ type ReproductorAudioProps = {
   tonalidad?: string | null;
   duracionSegundos?: number | null;
   numero?: number;
+  detalleMetadatos?: ReactNode;
   className?: string;
 };
 
@@ -63,6 +66,7 @@ export default function ReproductorAudio({
   tonalidad,
   duracionSegundos = 0,
   numero,
+  detalleMetadatos,
   className = "",
 }: ReproductorAudioProps) {
   const reactId = useId();
@@ -171,6 +175,9 @@ export default function ReproductorAudio({
                 <p className="mt-0.5 truncate text-[9px] font-medium text-zinc-500">
                   {metadatos.join(" · ")}
                 </p>
+              )}
+              {detalleMetadatos && (
+                <div className="mt-1 min-w-0">{detalleMetadatos}</div>
               )}
             </div>
 

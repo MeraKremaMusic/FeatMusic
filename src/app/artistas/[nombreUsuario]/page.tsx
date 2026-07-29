@@ -17,6 +17,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_DESCRIPCION_IDEA_PERFIL_V1
 // FEATMUSIC_DESCRIPCION_IDEA_POSICIONADA_V2
 // FEATMUSIC_DESCRIPCION_CON_COLABORACION_MODAL_V1
+// FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -619,6 +620,14 @@ export default async function PerfilPublicoPage({
                           tonalidad={idea.tonalidad}
                           duracionSegundos={idea.duracionSegundos}
                           numero={indice + 1}
+                          detalleMetadatos={
+                            <ContadorVistasIdea
+                              ideaId={idea.id}
+                              totalInicial={idea._count.vistas}
+                              esPropietario={sesion?.usuarioId === artista.id}
+                              className="!gap-1 !text-[8px] !text-slate-500 sm:!text-[9px]"
+                            />
+                          }
                           className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
                         />
 
@@ -639,37 +648,36 @@ export default async function PerfilPublicoPage({
                       </div>
                     </div>
 
-                    <div className="border-t border-slate-200 bg-white px-2.5 py-1.5 sm:px-3">
-                      <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
-                        <ContadorVistasIdea
-                          ideaId={idea.id}
-                          totalInicial={idea._count.vistas}
-                          esPropietario={sesion?.usuarioId === artista.id}
-                        />
+                    <div className="grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-b-xl border-t border-slate-200 bg-white">
+                      {sesion?.usuarioId === artista.id ? (
+                        <button
+                          type="button"
+                          disabled
+                          title="No puedes guardar tu propia idea"
+                          className="flex min-h-11 w-full items-center justify-center gap-1.5 bg-white px-1.5 py-2 text-[9px] font-black text-slate-400 sm:text-[10px]"
+                        >
+                          Guardar
+                        </button>
+                      ) : (
                         <BotonGuardarIdea
                           ideaId={idea.id}
                           guardadaInicial={idea.guardadas.length > 0}
                           sesionActiva={Boolean(sesion)}
-                          esPropietario={sesion?.usuarioId === artista.id}
+                          esPropietario={false}
                           disponible={idea._count.propuestas < 3}
                           variante="compacta"
+                          className="!min-h-11 !w-full !justify-center !rounded-none !border-0 !bg-white !px-1.5 !py-2 !text-[9px] !font-black !text-slate-700 hover:!bg-slate-50 hover:!text-emerald-700 sm:!text-[10px]"
                         />
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700">
-                          <IconoColaboracion />
-                        </span>
+                      )}
 
-                        <div className="min-w-0 flex-1 [&>div]:mt-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent [&>div]:px-0 [&>div]:py-0">
-                          <EnviarPropuesta
-                            ideaId={idea.id}
-                            sesionActiva={Boolean(sesion)}
-                            esPropietario={sesion?.usuarioId === artista.id}
-                            propuestasActuales={idea._count.propuestas}
-                            propuestaUsuario={idea.propuestas[0] ?? null}
-                          />
-                        </div>
-                      </div>
+                      <EnviarPropuesta
+                        ideaId={idea.id}
+                        sesionActiva={Boolean(sesion)}
+                        esPropietario={sesion?.usuarioId === artista.id}
+                        propuestasActuales={idea._count.propuestas}
+                        propuestaUsuario={idea.propuestas[0] ?? null}
+                        variante="integrada"
+                      />
                     </div>
                   </article>
                 ))}
