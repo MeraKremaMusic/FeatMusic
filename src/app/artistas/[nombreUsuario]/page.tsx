@@ -20,6 +20,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
 // FEATMUSIC_SEGUIR_COMPACTO_IDEAS_SIN_CAJA_V1
 // FEATMUSIC_VISTAS_PERFIL_PROPIO_LINEA_UNICA_V1
+// FEATMUSIC_DESCARGA_MP3_PERFIL_PUBLICO_V2
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -639,6 +640,7 @@ export default async function PerfilPublicoPage({
                         />
 
                         <DescripcionIdea
+                          ideaId={idea.id}
                           titulo={idea.titulo}
                           descripcion={idea.descripcion}
                           resumenColaboracion={crearFraseColaboracion({
@@ -651,6 +653,7 @@ export default async function PerfilPublicoPage({
                             ciudadPreferida: idea.ciudadPreferida,
                             tipoAcuerdo: idea.tipoAcuerdo,
                           })}
+                          sesionActiva={Boolean(sesion)}
                         />
                       </div>
                     </div>

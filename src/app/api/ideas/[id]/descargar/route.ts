@@ -6,6 +6,8 @@ import { obtenerSesion } from "@/lib/session";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const TIEMPO_MAXIMO_DESCARGA_MS = 20_000;
+
 type ContextoRuta = {
   params: Promise<{ id: string }>;
 };
@@ -29,7 +31,7 @@ function crearNombreArchivo(titulo: string) {
       .replace(/\s+/g, "-")
       .slice(0, 70) || "idea-musical";
 
-  return `${nombre}.mp3`;
+  return `FeatMusic-${nombre}.mp3`;
 }
 
 function urlCloudinaryValida(url: string) {
@@ -55,12 +57,12 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
     return respuestaError("El identificador de la idea no es válido.", 400);
   }
 
-  const idea = await prisma.idea.findFirst({
-    where: {
-      id: ideaId,
-      usuarioId: sesion.usuarioId,
-    },
+  const idea = await prisma.idea.findUnique({
+    where: { id: ideaId },
     select: {
+      usuarioId: true,
+      estado: true,
+      expiraEn: true,
       titulo: true,
       audioUrl: true,
       formato: true,
@@ -68,7 +70,18 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
   });
 
   if (!idea) {
-    return respuestaError("No tienes permiso para descargar este audio.", 404);
+    return respuestaError("La idea musical no existe.", 404);
+  }
+
+  const esPropietario = idea.usuarioId === sesion.usuarioId;
+  const estaDisponiblePublicamente =
+    idea.estado === "ACTIVA" && idea.expiraEn.getTime() > Date.now();
+
+  if (!esPropietario && !estaDisponiblePublicamente) {
+    return respuestaError(
+      "Esta idea ya no está disponible para descargar.",
+      410,
+    );
   }
 
   if (idea.formato?.toLowerCase() !== "mp3") {
@@ -80,10 +93,17 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
     return respuestaError("La dirección del audio no es válida.", 500);
   }
 
+  const controlador = new AbortController();
+  const temporizador = setTimeout(
+    () => controlador.abort(),
+    TIEMPO_MAXIMO_DESCARGA_MS,
+  );
+
   try {
     const audioResponse = await fetch(idea.audioUrl, {
       cache: "no-store",
       redirect: "error",
+      signal: controlador.signal,
     });
 
     if (!audioResponse.ok || !audioResponse.body) {
@@ -110,7 +130,16 @@ export async function GET(_request: Request, contexto: ContextoRuta) {
       headers,
     });
   } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      return respuestaError(
+        "La descarga tardó demasiado. Inténtalo nuevamente.",
+        504,
+      );
+    }
+
     console.error("No se pudo descargar la idea musical.", error);
     return respuestaError("No se pudo descargar el audio.", 502);
+  } finally {
+    clearTimeout(temporizador);
   }
 }
