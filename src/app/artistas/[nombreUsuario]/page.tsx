@@ -549,7 +549,7 @@ export default async function PerfilPublicoPage({
 
                 {generos.length > 0 && (
                   <div className="mt-2.5 flex max-w-full flex-nowrap gap-1.5 overflow-x-auto pb-1 whitespace-nowrap [scrollbar-width:none] lg:justify-center [&::-webkit-scrollbar]:hidden">
-                    {generos.map((genero) => (
+                    {generos.slice(0, 2).map((genero) => (
                       <span
                         key={genero}
                         className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[9px] text-slate-600 sm:text-[10px]"
@@ -570,13 +570,13 @@ export default async function PerfilPublicoPage({
                   siguiendoCantidad={artista._count.siguiendo}
                   botonCompactoEnCabecera={Boolean(codigoPais)}
                 />
+
+                <p className="mt-2 max-w-full text-left text-[11px] leading-[1.5] text-slate-600 sm:text-xs sm:leading-5 lg:px-2 lg:text-center">
+                  {artista.biografia?.replace(/\s+/g, " ").trim() ||
+                    "Este artista todavía no ha agregado una biografía."}
+                </p>
               </div>
             </div>
-
-            <p className="mt-3 pl-[5.35rem] pr-1 text-left text-[11px] leading-[1.55] text-slate-600 sm:pl-[6.35rem] sm:text-xs sm:leading-5 lg:px-5 lg:text-center">
-              {artista.biografia?.replace(/\s+/g, " ").trim() ||
-                "Este artista todavía no ha agregado una biografía."}
-            </p>
 
           </aside>
 
