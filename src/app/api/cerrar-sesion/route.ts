@@ -12,10 +12,18 @@ function obtenerDestino(request: Request) {
     : "/";
 }
 
-async function cerrarSesionYRedirigir(request: Request, destino: string) {
+async function cerrarSesionYRedirigir(destino: string) {
   await eliminarSesion();
 
-  const respuesta = NextResponse.redirect(new URL(destino, request.url), 303);
+  // FEATMUSIC_REDIRECCION_RELATIVA_CIERRE_V1
+  // Location es relativo para conservar el dominio público del navegador.
+  // En producción, request.url puede contener el host interno 0.0.0.0:3000.
+  const respuesta = new NextResponse(null, {
+    status: 303,
+    headers: {
+      Location: destino,
+    },
+  });
 
   // Se define también sobre la respuesta para garantizar que el navegador
   // elimine la cookie incluso durante una cadena de redirecciones.
@@ -36,9 +44,9 @@ async function cerrarSesionYRedirigir(request: Request, destino: string) {
 }
 
 export async function GET(request: Request) {
-  return cerrarSesionYRedirigir(request, obtenerDestino(request));
+  return cerrarSesionYRedirigir(obtenerDestino(request));
 }
 
-export async function POST(request: Request) {
-  return cerrarSesionYRedirigir(request, "/");
+export async function POST() {
+  return cerrarSesionYRedirigir("/");
 }
