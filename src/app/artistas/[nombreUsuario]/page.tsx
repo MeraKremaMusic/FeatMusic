@@ -268,6 +268,8 @@ function iniciales(nombre: string) {
   );
 }
 
+// FEATMUSIC_BIOGRAFIA_COMPACTA_V1
+
 export default async function PerfilPublicoPage({
   params,
 }: PerfilPublicoPageProps) {
@@ -530,25 +532,27 @@ export default async function PerfilPublicoPage({
                 </div>
               </div>
 
-              <div className="min-w-0 flex-1 pr-28 pt-0.5 sm:pr-32 lg:w-full lg:px-10 lg:pt-0">
-                <h1 className="break-words text-xl font-black leading-tight text-slate-900 sm:text-2xl lg:mt-4">
-                  {nombreArtistico}
-                </h1>
-                <p className="mt-1 break-all text-[11px] font-semibold text-emerald-700 sm:text-xs">
-                  @{usuarioVisible}
-                </p>
+              <div className="min-w-0 flex-1 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
+                <div className="pr-28 sm:pr-32 lg:pr-0">
+                  <h1 className="break-words text-xl font-black leading-tight text-slate-900 sm:text-2xl lg:mt-4">
+                    {nombreArtistico}
+                  </h1>
+                  <p className="mt-1 break-all text-[11px] font-semibold text-emerald-700 sm:text-xs">
+                    @{usuarioVisible}
+                  </p>
 
-                <p className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-500 lg:justify-center">
-                  <IconoUbicacion className="h-3 w-3 shrink-0" />
-                  <span className="min-w-0 truncate">{ubicacion}</span>
-                </p>
+                  <p className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-500 lg:justify-center">
+                    <IconoUbicacion className="h-3 w-3 shrink-0" />
+                    <span className="min-w-0 truncate">{ubicacion}</span>
+                  </p>
+                </div>
 
                 {generos.length > 0 && (
-                  <div className="mt-2.5 flex flex-wrap gap-1.5 lg:justify-center">
+                  <div className="mt-2.5 flex max-w-full flex-nowrap gap-1.5 overflow-x-auto pb-1 whitespace-nowrap [scrollbar-width:none] lg:justify-center [&::-webkit-scrollbar]:hidden">
                     {generos.map((genero) => (
                       <span
                         key={genero}
-                        className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[9px] text-slate-600 sm:text-[10px]"
+                        className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[9px] text-slate-600 sm:text-[10px]"
                       >
                         {genero}
                       </span>
@@ -566,13 +570,13 @@ export default async function PerfilPublicoPage({
                   siguiendoCantidad={artista._count.siguiendo}
                   botonCompactoEnCabecera={Boolean(codigoPais)}
                 />
-
-                <p className="mt-2.5 whitespace-pre-wrap text-[11px] leading-[1.45] text-slate-600 sm:text-xs sm:leading-5 lg:text-center">
-                  {artista.biografia?.trim() ||
-                    "Este artista todavía no ha agregado una biografía."}
-                </p>
               </div>
             </div>
+
+            <p className="mt-3 pl-[5.35rem] pr-1 text-left text-[11px] leading-[1.55] text-slate-600 sm:pl-[6.35rem] sm:text-xs sm:leading-5 lg:px-5 lg:text-center">
+              {artista.biografia?.replace(/\s+/g, " ").trim() ||
+                "Este artista todavía no ha agregado una biografía."}
+            </p>
 
           </aside>
 

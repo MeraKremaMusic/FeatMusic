@@ -1,6 +1,7 @@
 "use client";
 
 // FEATMUSIC_SEGUIR_COMPACTO_CABECERA_V1
+// FEATMUSIC_SEGUIMIENTO_UNA_FILA_V1
 
 import { useState } from "react";
 
@@ -123,12 +124,14 @@ export default function SeguimientoPerfil({
         </button>
       )}
 
-      <ContadoresSeguimiento
-        nombreUsuario={nombreUsuario}
-        seguidores={seguidores}
-        siguiendo={siguiendoCantidad}
-        className="lg:justify-center"
-      />
+      <div className="max-w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ContadoresSeguimiento
+          nombreUsuario={nombreUsuario}
+          seguidores={seguidores}
+          siguiendo={siguiendoCantidad}
+          className="!flex-nowrap whitespace-nowrap lg:justify-center"
+        />
+      </div>
 
       {error && (
         <p role="alert" className="text-[10px] font-semibold text-red-300">
