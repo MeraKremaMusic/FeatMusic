@@ -492,7 +492,7 @@ export default function EnviarPropuesta({
       }`;
   const claseSegmento =
     "flex min-h-11 w-full items-center justify-center px-1.5 py-2 text-center text-[9px] font-black leading-tight sm:text-[10px]";
-  const claseCupos = `${claseSegmento} bg-slate-50 text-slate-600`;
+  const claseCupos = `${claseSegmento} bg-white text-slate-600`;
   const claseAccion =
     `${claseSegmento} bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400`;
 
@@ -501,7 +501,7 @@ export default function EnviarPropuesta({
       return (
         <>
           <span className={claseCupos}>{textoCupos}</span>
-          <span className={`${claseSegmento} bg-slate-100 text-slate-500`}>
+          <span className={`${claseSegmento} bg-white text-slate-500`}>
             Tu publicación
           </span>
         </>

@@ -605,7 +605,7 @@ export default async function PerfilPublicoPage({
                     id={`idea-${idea.id}`}
                     key={idea.id}
                     data-vista-idea
-                    className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-slate-50 transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
+                    className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
                   >
                     <RegistrarVistaIdea
                       ideaId={idea.id}
