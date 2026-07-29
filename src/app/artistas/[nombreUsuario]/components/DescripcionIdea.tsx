@@ -1,10 +1,12 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import { useEffect, useId, useRef, useState } from "react";
 
 type DescripcionIdeaProps = {
   titulo: string;
   descripcion: string | null;
+  resumenColaboracion: string | null;
 };
 
 function IconoDescripcion({ className = "h-3 w-3" }: { className?: string }) {
@@ -26,32 +28,48 @@ function IconoDescripcion({ className = "h-3 w-3" }: { className?: string }) {
   );
 }
 
+function IconoCerrar({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+    >
+      <path d="m6 6 12 12" />
+      <path d="M18 6 6 18" />
+    </svg>
+  );
+}
+
 export default function DescripcionIdea({
   titulo,
   descripcion,
+  resumenColaboracion,
 }: DescripcionIdeaProps) {
   const [abierta, setAbierta] = useState(false);
+  const [montado, setMontado] = useState(false);
   const panelId = useId();
-  const contenedorRef = useRef<HTMLDivElement>(null);
-  const texto = descripcion?.trim();
+  const botonCerrarRef = useRef<HTMLButtonElement>(null);
+  const textoDescripcion = descripcion?.trim() || null;
+  const textoColaboracion = resumenColaboracion?.trim() || null;
+  const tieneContenido = Boolean(textoDescripcion || textoColaboracion);
+
+  useEffect(() => {
+    setMontado(true);
+  }, []);
 
   useEffect(() => {
     if (!abierta) {
       return;
     }
 
-    function cerrarFuera(evento: PointerEvent) {
-      const objetivo = evento.target;
-
-      if (
-        objetivo instanceof Node &&
-        contenedorRef.current?.contains(objetivo)
-      ) {
-        return;
-      }
-
-      setAbierta(false);
-    }
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    botonCerrarRef.current?.focus();
 
     function cerrarConEscape(evento: KeyboardEvent) {
       if (evento.key === "Escape") {
@@ -59,33 +77,113 @@ export default function DescripcionIdea({
       }
     }
 
-    document.addEventListener("pointerdown", cerrarFuera);
     document.addEventListener("keydown", cerrarConEscape);
 
     return () => {
-      document.removeEventListener("pointerdown", cerrarFuera);
+      document.body.style.overflow = overflowAnterior;
       document.removeEventListener("keydown", cerrarConEscape);
     };
   }, [abierta]);
 
-  if (!texto) {
+  if (!tieneContenido) {
     return null;
   }
 
+  const modal =
+    montado && abierta
+      ? createPortal(
+          <>
+            <button
+              type="button"
+              aria-label="Cerrar descripción"
+              className="fixed inset-x-0 top-12 z-40 bg-slate-950/20 backdrop-blur-[5px]"
+              style={{
+                bottom: "var(--featmusic-menu-movil-altura, 0px)",
+              }}
+              onClick={() => setAbierta(false)}
+            />
+
+            <div
+              className="pointer-events-none fixed inset-x-0 top-12 z-[45] flex items-center justify-center px-4 py-5"
+              style={{
+                bottom: "var(--featmusic-menu-movil-altura, 0px)",
+              }}
+            >
+              <section
+                id={panelId}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={`${panelId}-titulo`}
+                className="pointer-events-auto max-h-full w-full max-w-md overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-[0_24px_70px_rgba(15,23,42,0.24)] [scrollbar-width:thin] sm:p-5"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+                      <IconoDescripcion className="h-4.5 w-4.5" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-700">
+                        Detalles de la idea
+                      </p>
+                      <h3
+                        id={`${panelId}-titulo`}
+                        className="truncate text-sm font-black text-slate-900 sm:text-base"
+                      >
+                        {titulo}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <button
+                    ref={botonCerrarRef}
+                    type="button"
+                    aria-label="Cerrar"
+                    onClick={() => setAbierta(false)}
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-300/60"
+                  >
+                    <IconoCerrar />
+                  </button>
+                </div>
+
+                <div className="mt-4 grid gap-3">
+                  {textoDescripcion && (
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
+                        Descripción de la idea
+                      </p>
+                      <p className="mt-1.5 whitespace-pre-wrap text-[11px] leading-[1.15rem] text-slate-700 sm:text-xs sm:leading-5">
+                        {textoDescripcion}
+                      </p>
+                    </div>
+                  )}
+
+                  {textoColaboracion && (
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 px-3.5 py-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-emerald-700">
+                        Colaboración buscada
+                      </p>
+                      <p className="mt-1.5 text-[11px] leading-[1.15rem] text-slate-700 sm:text-xs sm:leading-5">
+                        {textoColaboracion}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </section>
+            </div>
+          </>,
+          document.body,
+        )
+      : null;
+
   return (
-    <div
-      ref={contenedorRef}
-      className="absolute right-0 top-[20px] z-30"
-      onMouseEnter={() => setAbierta(true)}
-      onMouseLeave={() => setAbierta(false)}
-    >
+    <div className="absolute right-0 top-[20px] z-30">
       <button
         type="button"
         aria-label={`Ver descripción de ${titulo}`}
         aria-expanded={abierta}
         aria-controls={panelId}
         title="Ver descripción"
-        onClick={() => setAbierta((valorActual) => !valorActual)}
+        onClick={() => setAbierta(true)}
         className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-300/60 sm:text-[8px] ${
           abierta
             ? "border-emerald-300 bg-emerald-50 text-emerald-800"
@@ -96,36 +194,7 @@ export default function DescripcionIdea({
         <span>Descripción</span>
       </button>
 
-      {abierta && (
-        <div
-          id={panelId}
-          role="dialog"
-          aria-label={`Descripción de ${titulo}`}
-          className="absolute bottom-7 right-0 z-50 w-[min(245px,calc(100vw-4rem))] rounded-xl border border-slate-200 bg-white/95 p-3 text-left shadow-[0_18px_45px_rgba(15,23,42,0.18)] backdrop-blur-xl"
-        >
-          <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-slate-200 bg-white" />
-
-          <div className="relative">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700">
-                <IconoDescripcion className="h-3.5 w-3.5" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-700">
-                  Descripción
-                </p>
-                <p className="truncate text-[10px] font-bold text-slate-800 sm:text-[11px]">
-                  {titulo}
-                </p>
-              </div>
-            </div>
-
-            <p className="mt-2.5 max-h-28 overflow-y-auto whitespace-pre-wrap pr-1 text-[10px] leading-4 text-slate-600 [scrollbar-width:thin] sm:text-[11px] sm:leading-[1.15rem]">
-              {texto}
-            </p>
-          </div>
-        </div>
-      )}
+      {modal}
     </div>
   );
 }

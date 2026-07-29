@@ -1,5 +1,3 @@
-"use client";
-
 import {
   formatearIdiomaBuscado,
   formatearModalidadColaboracion,
@@ -19,7 +17,7 @@ function minuscula(texto: string) {
   return texto.charAt(0).toLocaleLowerCase("es") + texto.slice(1);
 }
 
-function crearFraseColaboracion({
+export function crearFraseColaboracion({
   rolBuscado,
   generoMusical,
   idiomaBuscado,

@@ -7,7 +7,7 @@ import ContadorVistasIdea from "../../components/ContadorVistasIdea";
 import NavegacionEscritorio from "../../components/NavegacionEscritorio";
 import RegistrarVistaIdea from "../../components/RegistrarVistaIdea";
 import ReproductorAudio from "../../components/ReproductorAudio";
-import ResumenColaboracionIdea from "../../components/ResumenColaboracionIdea";
+import { crearFraseColaboracion } from "../../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
 import EnviarPropuesta from "./components/EnviarPropuesta";
 import DescripcionIdea from "./components/DescripcionIdea";
@@ -16,6 +16,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
 // FEATMUSIC_DESCRIPCION_IDEA_PERFIL_V1
 // FEATMUSIC_DESCRIPCION_IDEA_POSICIONADA_V2
+// FEATMUSIC_DESCRIPCION_CON_COLABORACION_MODAL_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -624,20 +625,18 @@ export default async function PerfilPublicoPage({
                         <DescripcionIdea
                           titulo={idea.titulo}
                           descripcion={idea.descripcion}
+                          resumenColaboracion={crearFraseColaboracion({
+                            rolBuscado: idea.rolBuscado,
+                            generoMusical: idea.generoMusical,
+                            idiomaBuscado: idea.idiomaBuscado,
+                            modalidadColaboracion: idea.modalidadColaboracion,
+                            paisPreferido: idea.paisPreferido,
+                            departamentoPreferido: idea.departamentoPreferido,
+                            ciudadPreferida: idea.ciudadPreferida,
+                            tipoAcuerdo: idea.tipoAcuerdo,
+                          })}
                         />
                       </div>
-
-                      <ResumenColaboracionIdea
-                        variante="frase"
-                        rolBuscado={idea.rolBuscado}
-                        generoMusical={idea.generoMusical}
-                        idiomaBuscado={idea.idiomaBuscado}
-                        modalidadColaboracion={idea.modalidadColaboracion}
-                        paisPreferido={idea.paisPreferido}
-                        departamentoPreferido={idea.departamentoPreferido}
-                        ciudadPreferida={idea.ciudadPreferida}
-                        tipoAcuerdo={idea.tipoAcuerdo}
-                      />
                     </div>
 
                     <div className="border-t border-slate-200 bg-white px-2.5 py-1.5 sm:px-3">
