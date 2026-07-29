@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
-import BotonGuardarIdea from "../../components/BotonGuardarIdea";
 import ContadorVistasIdea from "../../components/ContadorVistasIdea";
 import NavegacionEscritorio from "../../components/NavegacionEscritorio";
 import RegistrarVistaIdea from "../../components/RegistrarVistaIdea";
@@ -11,6 +10,7 @@ import { crearFraseColaboracion } from "../../components/ResumenColaboracionIdea
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
 import EnviarPropuesta from "./components/EnviarPropuesta";
 import DescripcionIdea from "./components/DescripcionIdea";
+import DescargaMp3Idea from "./components/DescargaMp3Idea";
 import SeguimientoPerfil from "./components/SeguimientoPerfil";
 
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
@@ -21,6 +21,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_SEGUIR_COMPACTO_IDEAS_SIN_CAJA_V1
 // FEATMUSIC_VISTAS_PERFIL_PROPIO_LINEA_UNICA_V1
 // FEATMUSIC_DESCARGA_MP3_PERFIL_PUBLICO_V2
+// FEATMUSIC_MP3_FRANJA_INFERIOR_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -376,13 +377,6 @@ export default async function PerfilPublicoPage({
             },
             take: 1,
           },
-          guardadas: {
-            where: {
-              usuarioId: sesion?.usuarioId ?? -1,
-            },
-            select: { id: true },
-            take: 1,
-          },
         },
       },
     },
@@ -640,7 +634,6 @@ export default async function PerfilPublicoPage({
                         />
 
                         <DescripcionIdea
-                          ideaId={idea.id}
                           titulo={idea.titulo}
                           descripcion={idea.descripcion}
                           resumenColaboracion={crearFraseColaboracion({
@@ -653,32 +646,16 @@ export default async function PerfilPublicoPage({
                             ciudadPreferida: idea.ciudadPreferida,
                             tipoAcuerdo: idea.tipoAcuerdo,
                           })}
-                          sesionActiva={Boolean(sesion)}
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-b-xl border-t border-slate-200 bg-white">
-                      {sesion?.usuarioId === artista.id ? (
-                        <button
-                          type="button"
-                          disabled
-                          title="No puedes guardar tu propia idea"
-                          className="flex min-h-11 w-full items-center justify-center gap-1.5 bg-white px-1.5 py-2 text-[9px] font-black text-slate-400 sm:text-[10px]"
-                        >
-                          Guardar
-                        </button>
-                      ) : (
-                        <BotonGuardarIdea
-                          ideaId={idea.id}
-                          guardadaInicial={idea.guardadas.length > 0}
-                          sesionActiva={Boolean(sesion)}
-                          esPropietario={false}
-                          disponible={idea._count.propuestas < 3}
-                          variante="compacta"
-                          className="!min-h-11 !w-full !justify-center !rounded-none !border-0 !bg-white !px-1.5 !py-2 !text-[9px] !font-black !text-slate-700 hover:!bg-slate-50 hover:!text-emerald-700 sm:!text-[10px]"
-                        />
-                      )}
+                      <DescargaMp3Idea
+                        ideaId={idea.id}
+                        titulo={idea.titulo}
+                        sesionActiva={Boolean(sesion)}
+                      />
 
                       <EnviarPropuesta
                         ideaId={idea.id}
