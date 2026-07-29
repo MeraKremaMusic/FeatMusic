@@ -19,6 +19,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_DESCRIPCION_CON_COLABORACION_MODAL_V1
 // FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
 // FEATMUSIC_SEGUIR_COMPACTO_IDEAS_SIN_CAJA_V1
+// FEATMUSIC_VISTAS_PERFIL_PROPIO_LINEA_UNICA_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -631,7 +632,7 @@ export default async function PerfilPublicoPage({
                               ideaId={idea.id}
                               totalInicial={idea._count.vistas}
                               esPropietario={sesion?.usuarioId === artista.id}
-                              className="!gap-1 !text-[8px] !text-slate-500 sm:!text-[9px]"
+                              className="!h-auto !w-auto !shrink-0 !gap-1 !whitespace-nowrap !text-[8px] !leading-none !text-slate-500 sm:!text-[9px] [&_svg]:!h-3 [&_svg]:!w-3 [&_svg]:!shrink-0"
                             />
                           }
                           className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
