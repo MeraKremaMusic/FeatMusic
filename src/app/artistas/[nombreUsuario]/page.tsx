@@ -18,6 +18,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_DESCRIPCION_IDEA_POSICIONADA_V2
 // FEATMUSIC_DESCRIPCION_CON_COLABORACION_MODAL_V1
 // FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
+// FEATMUSIC_SEGUIR_COMPACTO_IDEAS_SIN_CAJA_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -529,7 +530,7 @@ export default async function PerfilPublicoPage({
                 </div>
               </div>
 
-              <div className="min-w-0 flex-1 pr-12 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
+              <div className="min-w-0 flex-1 pr-28 pt-0.5 sm:pr-32 lg:w-full lg:px-10 lg:pt-0">
                 <h1 className="break-words text-xl font-black leading-tight text-slate-900 sm:text-2xl lg:mt-4">
                   {nombreArtistico}
                 </h1>
@@ -563,6 +564,7 @@ export default async function PerfilPublicoPage({
                   siguiendoInicial={artista.seguidores.length > 0}
                   seguidoresIniciales={artista._count.seguidores}
                   siguiendoCantidad={artista._count.siguiendo}
+                  botonCompactoEnCabecera={Boolean(codigoPais)}
                 />
 
                 <p className="mt-2.5 whitespace-pre-wrap text-[11px] leading-[1.45] text-slate-600 sm:text-xs sm:leading-5 lg:text-center">
@@ -574,7 +576,7 @@ export default async function PerfilPublicoPage({
 
           </aside>
 
-          <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_16px_45px_rgba(15,23,42,0.07)] sm:p-4 lg:p-5">
+          <section className="min-w-0">
             <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
               <div className="flex items-center gap-2">
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 sm:h-7 sm:w-7">

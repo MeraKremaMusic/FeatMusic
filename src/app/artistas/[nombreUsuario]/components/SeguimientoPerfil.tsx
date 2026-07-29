@@ -1,5 +1,7 @@
 "use client";
 
+// FEATMUSIC_SEGUIR_COMPACTO_CABECERA_V1
+
 import { useState } from "react";
 
 import ContadoresSeguimiento from "@/app/components/ContadoresSeguimiento";
@@ -19,6 +21,7 @@ export default function SeguimientoPerfil({
   siguiendoInicial,
   seguidoresIniciales,
   siguiendoCantidad,
+  botonCompactoEnCabecera = false,
 }: {
   artistaId: number;
   nombreUsuario: string;
@@ -27,6 +30,7 @@ export default function SeguimientoPerfil({
   siguiendoInicial: boolean;
   seguidoresIniciales: number;
   siguiendoCantidad: number;
+  botonCompactoEnCabecera?: boolean;
 }) {
   const [siguiendo, setSiguiendo] = useState(siguiendoInicial);
   const [seguidores, setSeguidores] = useState(seguidoresIniciales);
@@ -94,14 +98,28 @@ export default function SeguimientoPerfil({
           onClick={() => void alternarSeguimiento()}
           disabled={procesando}
           aria-pressed={siguiendo}
-          className={`inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-[11px] font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 lg:w-auto lg:min-w-32 ${
-            siguiendo
-              ? "border-white/15 bg-white/[0.055] text-zinc-200 hover:border-red-400/25 hover:bg-red-500/[0.07] hover:text-red-200"
-              : "border-emerald-400/35 bg-emerald-500/15 text-emerald-100 hover:border-emerald-300/50 hover:bg-emerald-500/25"
+          className={`border font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 ${
+            botonCompactoEnCabecera
+              ? "absolute right-[3.25rem] top-3 z-10 inline-flex h-5 min-w-[3.6rem] items-center justify-center gap-1 rounded-full px-2 text-[8px] shadow-sm sm:right-[3.75rem] sm:top-4"
+              : "inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-[11px] lg:w-auto lg:min-w-32"
+          } ${
+            botonCompactoEnCabecera
+              ? siguiendo
+                ? "border-slate-300 bg-slate-100 text-slate-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+                : "border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-100"
+              : siguiendo
+                ? "border-white/15 bg-white/[0.055] text-zinc-200 hover:border-red-400/25 hover:bg-red-500/[0.07] hover:text-red-200"
+                : "border-emerald-400/35 bg-emerald-500/15 text-emerald-100 hover:border-emerald-300/50 hover:bg-emerald-500/25"
           }`}
         >
           <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>
-          {procesando ? "Guardando..." : siguiendo ? "Siguiendo" : "Seguir"}
+          {procesando
+            ? botonCompactoEnCabecera
+              ? "..."
+              : "Guardando..."
+            : siguiendo
+              ? "Siguiendo"
+              : "Seguir"}
         </button>
       )}
 
