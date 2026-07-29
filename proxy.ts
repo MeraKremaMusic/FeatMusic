@@ -1,56 +1,20 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { jwtVerify } from "jose";
 
-const rutasSoloParaVisitantes = new Set([
+// FEATMUSIC_SESION_RECUPERABLE_V1
+// El proxy ya no redirige basándose únicamente en la firma del JWT.
+// Una cookie puede ser auténtica y, aun así, pertenecer a un usuario que ya
+// no existe. La validación completa se realiza en el servidor/API y, cuando
+// falla, la cookie se elimina antes de mostrar nuevamente el inicio de sesión.
+const rutasSinCache = new Set([
   "/",
   "/iniciar-sesion",
   "/registro",
 ]);
 
-const secreto = process.env.SESSION_SECRET;
-const clave = secreto
-  ? new TextEncoder().encode(secreto)
-  : undefined;
-
-async function tieneSesionValida(request: NextRequest) {
-  const token = request.cookies.get("featmusic_session")?.value;
-
-  if (!token || !clave) {
-    return false;
-  }
-
-  try {
-    await jwtVerify(token, clave);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export async function proxy(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-  const esRutaSoloParaVisitantes =
-    rutasSoloParaVisitantes.has(pathname);
-
-  if (
-    esRutaSoloParaVisitantes &&
-    (await tieneSesionValida(request))
-  ) {
-    const respuesta = NextResponse.redirect(
-      new URL("/panel", request.url),
-    );
-
-    respuesta.headers.set(
-      "Cache-Control",
-      "no-store, no-cache, must-revalidate, max-age=0",
-    );
-
-    return respuesta;
-  }
-
+export function proxy(request: NextRequest) {
   const respuesta = NextResponse.next();
 
-  if (esRutaSoloParaVisitantes) {
+  if (rutasSinCache.has(request.nextUrl.pathname)) {
     respuesta.headers.set(
       "Cache-Control",
       "no-store, no-cache, must-revalidate, max-age=0",

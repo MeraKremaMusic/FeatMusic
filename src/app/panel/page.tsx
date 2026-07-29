@@ -13,6 +13,10 @@ import PropuestasRecibidasCard from "./components/PropuestasRecibidasCard";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+// FEATMUSIC_SESION_RECUPERABLE_V1
+const RUTA_RESTABLECER_SESION =
+  "/api/cerrar-sesion?destino=%2Finiciar-sesion&motivo=sesion-invalida";
+
 function formatearRol(rol: string) {
   const roles: Record<string, string> = {
     CANTANTE: "Cantante",
@@ -242,23 +246,30 @@ export default async function PanelPage() {
   const sesion = await obtenerSesion();
 
   if (!sesion) {
-    redirect("/iniciar-sesion");
+    redirect(RUTA_RESTABLECER_SESION);
   }
 
-  const usuario = await prisma.usuario.findUnique({
-    where: { id: sesion.usuarioId },
-    include: {
-      _count: {
-        select: {
-          seguidores: true,
-          siguiendo: true,
+  const usuario = await prisma.usuario
+    .findUnique({
+      where: { id: sesion.usuarioId },
+      include: {
+        _count: {
+          select: {
+            seguidores: true,
+            siguiendo: true,
+          },
         },
       },
-    },
-  });
+    })
+    .catch((error) => {
+      // Ante una sesión que no puede comprobarse, se prioriza recuperar la
+      // navegación en lugar de dejar al usuario atrapado en la página.
+      console.error("No se pudo recuperar el usuario de la sesión.", error);
+      return null;
+    });
 
   if (!usuario) {
-    redirect("/iniciar-sesion");
+    redirect(RUTA_RESTABLECER_SESION);
   }
 
   if (!usuario.perfilCompleto) {

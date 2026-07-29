@@ -1,6 +1,7 @@
 "use client";
 
 // FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
+// FEATMUSIC_VISTAS_BAJO_METADATOS_V1
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { ChangeEvent, ReactNode } from "react";
@@ -171,13 +172,25 @@ export default function ReproductorAudio({
               <p className="truncate text-[11px] font-bold text-zinc-100">
                 {titulo}
               </p>
-              {metadatos.length > 0 && (
-                <p className="mt-0.5 truncate text-[9px] font-medium text-zinc-500">
-                  {metadatos.join(" · ")}
-                </p>
-              )}
-              {detalleMetadatos && (
-                <div className="mt-1 min-w-0">{detalleMetadatos}</div>
+
+              {(metadatos.length > 0 || detalleMetadatos) && (
+                <div className="mt-0.5 min-w-0">
+                  {metadatos.length > 0 && (
+                    <p className="truncate text-[9px] font-medium text-zinc-500">
+                      {metadatos.join(" · ")}
+                    </p>
+                  )}
+
+                  {detalleMetadatos && (
+                    <div
+                      className={`min-w-0 ${
+                        metadatos.length > 0 ? "mt-0.5" : ""
+                      }`}
+                    >
+                      {detalleMetadatos}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 

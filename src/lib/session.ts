@@ -9,6 +9,8 @@ if (!secret) {
 
 const key = new TextEncoder().encode(secret);
 
+// FEATMUSIC_SESION_RECUPERABLE_V1
+
 type SessionPayload = {
   usuarioId: number;
   correo: string;
@@ -45,11 +47,17 @@ export async function obtenerSesion() {
 
   try {
     const { payload } = await jwtVerify(token, key);
+    const usuarioId = Number(payload.usuarioId);
+    const correo =
+      typeof payload.correo === "string" ? payload.correo.trim() : "";
 
-    return {
-      usuarioId: Number(payload.usuarioId),
-      correo: String(payload.correo),
-    };
+    // Un JWT correctamente firmado también puede contener datos antiguos o
+    // incompletos. No se considera sesión si su identidad no es utilizable.
+    if (!Number.isSafeInteger(usuarioId) || usuarioId <= 0 || !correo) {
+      return null;
+    }
+
+    return { usuarioId, correo };
   } catch {
     return null;
   }

@@ -1,17 +1,35 @@
 import { NextResponse } from "next/server";
 
+import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
+// FEATMUSIC_SESION_RECUPERABLE_V1
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const runtime = "nodejs";
 
 export async function GET() {
-  const sesion = await obtenerSesion();
+  let sesionActiva = false;
+
+  try {
+    const sesion = await obtenerSesion();
+
+    if (sesion) {
+      const usuario = await prisma.usuario.findUnique({
+        where: { id: sesion.usuarioId },
+        select: { id: true },
+      });
+
+      sesionActiva = Boolean(usuario);
+    }
+  } catch (error) {
+    // La página pública nunca debe quedar bloqueada si la comprobación falla.
+    console.error("No se pudo validar completamente la sesión.", error);
+    sesionActiva = false;
+  }
 
   const respuesta = NextResponse.json(
-    {
-      sesionActiva: Boolean(sesion),
-    },
+    { sesionActiva },
     {
       headers: {
         "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
@@ -21,15 +39,14 @@ export async function GET() {
     },
   );
 
-  // Si la cookie está vencida, dañada o ya no representa una sesión válida,
-  // la eliminamos para que el navegador no siga enviándola en cada visita.
-  if (!sesion) {
+  if (!sesionActiva) {
     respuesta.cookies.set("featmusic_session", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 0,
+      expires: new Date(0),
     });
   }
 
