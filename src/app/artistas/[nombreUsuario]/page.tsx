@@ -628,6 +628,7 @@ export default async function PerfilPublicoPage({
                       </div>
 
                       <ResumenColaboracionIdea
+                        variante="frase"
                         rolBuscado={idea.rolBuscado}
                         generoMusical={idea.generoMusical}
                         idiomaBuscado={idea.idiomaBuscado}
