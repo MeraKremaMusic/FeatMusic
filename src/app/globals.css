@@ -2641,3 +2641,29 @@ body {
 }
 /* FEATMUSIC_REEL_TABS_OVERLAY_V1_END */
 
+/* FEATMUSIC_REEL_FINAL_POLISH_V1_START */
+/*
+  Mantiene el título de cada idea en blanco puro y permite que el fondo del
+  reel continúe detrás del menú móvil. El contenido conserva un espacio
+  seguro calculado con la altura real del menú y su botón central elevado.
+*/
+.feat-reel-title,
+.featmusic-app-light .feat-reel-title {
+  color: #ffffff !important;
+}
+
+.feat-reel-content {
+  padding-bottom: calc(
+    var(
+        --featmusic-menu-movil-altura,
+        calc(4.75rem + env(safe-area-inset-bottom))
+      ) + 1.25rem
+  ) !important;
+}
+
+@media (min-width: 1024px) {
+  .feat-reel-content {
+    padding-bottom: 1.25rem !important;
+  }
+}
+/* FEATMUSIC_REEL_FINAL_POLISH_V1_END */

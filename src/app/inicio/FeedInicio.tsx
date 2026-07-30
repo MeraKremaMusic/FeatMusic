@@ -136,31 +136,8 @@ function TarjetaFeed({
           activa={activa}
         />
 
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pb-3 pt-[4.15rem] sm:px-6 sm:pb-5 sm:pt-[4.5rem]">
-          <header className="flex min-w-0 items-center gap-3">
-            <Link href={perfilHref} className="shrink-0">
-              <FotoArtista oportunidad={oportunidad} />
-            </Link>
-
-            <div className="min-w-0 flex-1">
-              <div className="flex min-w-0 items-center gap-2">
-                <Link
-                  href={perfilHref}
-                  className="truncate text-sm font-black text-white transition hover:text-emerald-200"
-                >
-                  {artista.nombreArtistico}
-                </Link>
-                {oportunidad.esSeguido && (
-                  <span className="shrink-0 rounded-full border border-emerald-200/20 bg-emerald-400/10 px-2 py-0.5 text-[8px] font-black text-emerald-100">
-                    Siguiendo
-                  </span>
-                )}
-              </div>
-              <p className="mt-0.5 truncate text-[10px] font-semibold text-white/50">
-                @{artista.nombreUsuario} · {tiempoPublicacion(oportunidad.creadoEn)}
-              </p>
-            </div>
-
+        <div className="feat-reel-content relative z-10 flex min-h-0 flex-1 flex-col px-4 pt-[4.15rem] sm:px-6 sm:pt-[4.5rem]">
+          <header className="flex justify-end">
             <BotonGuardarIdea
               ideaId={oportunidad.id}
               guardadaInicial={oportunidad.guardada}
@@ -185,29 +162,45 @@ function TarjetaFeed({
           </div>
 
           <div className="shrink-0">
-            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-300/75">
-              Idea musical
-            </p>
-            <h1 className="mt-1.5 line-clamp-2 break-words text-[1.45rem] font-black leading-[1.03] tracking-[-0.025em] text-white sm:text-3xl">
+            <div className="flex min-w-0 items-center gap-3">
+              <Link href={perfilHref} className="shrink-0">
+                <FotoArtista oportunidad={oportunidad} />
+              </Link>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <Link
+                    href={perfilHref}
+                    className="max-w-full truncate text-sm font-black !text-white"
+                  >
+                    {artista.nombreArtistico}
+                  </Link>
+
+                  <span className="feat-reel-chip feat-reel-chip-muted shrink-0">
+                    {formatearRol(artista.rol)}
+                  </span>
+
+                  {oportunidad.esSeguido && (
+                    <span className="shrink-0 rounded-full border border-emerald-200/20 bg-emerald-400/10 px-2 py-0.5 text-[8px] font-black text-emerald-100">
+                      Siguiendo
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-0.5 truncate text-[10px] font-semibold text-white/55">
+                  @{artista.nombreUsuario} · {tiempoPublicacion(oportunidad.creadoEn)}
+                </p>
+              </div>
+            </div>
+
+            <h1 className="feat-reel-title mt-3 line-clamp-2 break-words text-[1.45rem] font-black leading-[1.03] tracking-[-0.025em] text-white sm:text-3xl">
               {oportunidad.titulo}
             </h1>
             <p className="mt-2 line-clamp-1 text-[11px] font-medium text-white/60 sm:text-xs">
               {oportunidad.descripcion}
             </p>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              {oportunidad.bpm ? (
-                <span className="feat-reel-chip">{oportunidad.bpm} BPM</span>
-              ) : null}
-              {oportunidad.tonalidad ? (
-                <span className="feat-reel-chip">♪ {oportunidad.tonalidad}</span>
-              ) : null}
-              <span className="feat-reel-chip feat-reel-chip-muted">
-                {formatearRol(artista.rol)}
-              </span>
-            </div>
-
-            <div className="mt-2 min-h-5 text-[10px] font-semibold text-white/55">
+            <div className="mt-2 flex min-h-5 justify-end text-right text-[10px] font-semibold text-white/55">
               <ContadorVistasIdea
                 ideaId={oportunidad.id}
                 totalInicial={oportunidad.vistasUnicas}
@@ -215,7 +208,6 @@ function TarjetaFeed({
                 variante="compacta"
               />
             </div>
-
           </div>
         </div>
       </article>
@@ -439,7 +431,7 @@ export default function FeedInicio({
   ];
 
   return (
-    <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden bg-[#020806] pb-[calc(4.65rem+env(safe-area-inset-bottom))] lg:h-[calc(100vh-48px)] lg:pb-0">
+    <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden bg-[#020806] lg:h-[calc(100vh-48px)]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.13),transparent_36%)]" />
 
       <div className="feat-reel-tabs pointer-events-none absolute inset-x-0 top-0 z-30 px-3 pt-2.5 sm:px-5 sm:pt-3">
