@@ -10,20 +10,12 @@ import {
 
 const EVENTO_REPRODUCCION = "featmusic:reproducir-audio";
 
-const ALTURAS_ONDA = [
-  34, 58, 78, 46, 88, 64, 40, 72, 96, 62, 38, 82, 54, 92, 66, 44, 76, 100,
-  68, 48, 86, 56, 94, 70, 42, 80, 60, 90, 52, 74, 98, 64, 46, 84, 58, 92,
-  68, 40, 78, 54, 88, 62, 44, 72, 96, 60, 36, 82,
-];
-
 type ReproductorReelProps = {
   id: string;
   src: string;
   titulo: string;
   activa: boolean;
   duracionSegundos?: number | null;
-  fotoArtista?: string | null;
-  inicialesArtista: string;
   onEstadoChange?: (reproduciendo: boolean) => void;
 };
 
@@ -37,7 +29,12 @@ function formatearTiempo(segundos: number) {
 
 function IconoPlay() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7" fill="currentColor">
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-5 w-5"
+      fill="currentColor"
+    >
       <path d="M8.2 5.5v13l10-6.5-10-6.5Z" />
     </svg>
   );
@@ -45,7 +42,12 @@ function IconoPlay() {
 
 function IconoPausa() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7" fill="currentColor">
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-5 w-5"
+      fill="currentColor"
+    >
       <path d="M7 5h3.5v14H7V5Zm6.5 0H17v14h-3.5V5Z" />
     </svg>
   );
@@ -57,22 +59,18 @@ export default function ReproductorReel({
   titulo,
   activa,
   duracionSegundos,
-  fotoArtista,
-  inicialesArtista,
   onEstadoChange,
 }: ReproductorReelProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [reproduciendo, setReproduciendo] = useState(false);
-  const [autoplayBloqueado, setAutoplayBloqueado] = useState(false);
   const [tiempoActual, setTiempoActual] = useState(0);
   const [duracionReal, setDuracionReal] = useState(
     Math.max(0, duracionSegundos ?? 0),
   );
-  const [fotoInvalida, setFotoInvalida] = useState(false);
 
   const duracion = Math.max(duracionReal, duracionSegundos ?? 0, 0);
-  const progreso = duracion > 0 ? Math.min(100, (tiempoActual / duracion) * 100) : 0;
-  const barrasActivas = Math.round((progreso / 100) * ALTURAS_ONDA.length);
+  const progreso =
+    duracion > 0 ? Math.min(100, (tiempoActual / duracion) * 100) : 0;
 
   const estiloProgreso = useMemo(
     () =>
@@ -108,7 +106,6 @@ export default function ReproductorReel({
       audio.pause();
       audio.currentTime = 0;
       setTiempoActual(0);
-      setAutoplayBloqueado(false);
       return;
     }
 
@@ -120,9 +117,9 @@ export default function ReproductorReel({
         );
         audio.currentTime = 0;
         await audio.play();
-        if (!cancelado) setAutoplayBloqueado(false);
       } catch {
-        if (!cancelado) setAutoplayBloqueado(true);
+        // El navegador puede bloquear el primer autoplay con sonido.
+        // El botón de reproducción permanece disponible sin mostrar mensajes.
       }
     }, 180);
 
@@ -146,9 +143,8 @@ export default function ReproductorReel({
         new CustomEvent<string>(EVENTO_REPRODUCCION, { detail: id }),
       );
       await audio.play();
-      setAutoplayBloqueado(false);
     } catch {
-      setAutoplayBloqueado(true);
+      // El control seguirá disponible para un nuevo intento.
     }
   }
 
@@ -161,7 +157,11 @@ export default function ReproductorReel({
   }
 
   return (
-    <div className="feat-reel-player" data-playing={reproduciendo ? "true" : "false"}>
+    <div
+      className="feat-reel-linear-player"
+      data-playing={reproduciendo ? "true" : "false"}
+      style={estiloProgreso}
+    >
       <audio
         ref={audioRef}
         src={src}
@@ -169,52 +169,36 @@ export default function ReproductorReel({
         loop
         onPlay={() => setReproduciendo(true)}
         onPause={() => setReproduciendo(false)}
-        onTimeUpdate={(evento) => setTiempoActual(evento.currentTarget.currentTime)}
+        onTimeUpdate={(evento) =>
+          setTiempoActual(evento.currentTarget.currentTime)
+        }
         onLoadedMetadata={(evento) => {
           const nuevaDuracion = evento.currentTarget.duration;
-          if (Number.isFinite(nuevaDuracion)) setDuracionReal(nuevaDuracion);
+          if (Number.isFinite(nuevaDuracion)) {
+            setDuracionReal(nuevaDuracion);
+          }
         }}
       />
 
       <button
         type="button"
         onClick={alternarReproduccion}
-        className="feat-reel-disc"
+        className="feat-reel-linear-toggle"
         aria-label={reproduciendo ? `Pausar ${titulo}` : `Reproducir ${titulo}`}
       >
-        <span className="feat-reel-disc-glow" aria-hidden="true" />
-        <span className="feat-reel-disc-cover">
-          {fotoArtista && !fotoInvalida ? (
-            <img
-              src={fotoArtista}
-              alt=""
-              draggable={false}
-              onError={() => setFotoInvalida(true)}
-            />
-          ) : (
-            <span className="feat-reel-disc-initials">{inicialesArtista}</span>
-          )}
-        </span>
-        <span className="feat-reel-disc-control">
-          {reproduciendo ? <IconoPausa /> : <IconoPlay />}
-        </span>
+        {reproduciendo ? <IconoPausa /> : <IconoPlay />}
       </button>
 
-      <div className="feat-reel-wave-shell" style={estiloProgreso}>
-        <div className="feat-reel-wave" aria-hidden="true">
-          {ALTURAS_ONDA.map((altura, indice) => (
-            <span
-              key={`${indice}-${altura}`}
-              className={indice < barrasActivas ? "is-progress" : undefined}
-              style={
-                {
-                  "--bar-height": `${altura}%`,
-                  "--bar-delay": `${-(indice % 9) * 90}ms`,
-                } as CSSProperties
-              }
-            />
-          ))}
-        </div>
+      <span className="feat-reel-linear-time">
+        {formatearTiempo(tiempoActual)}
+      </span>
+
+      <div className="feat-reel-linear-track-shell">
+        <span className="feat-reel-linear-track" aria-hidden="true">
+          <span className="feat-reel-linear-fill" />
+          <span className="feat-reel-linear-thumb" />
+        </span>
+
         <input
           type="range"
           min={0}
@@ -222,27 +206,14 @@ export default function ReproductorReel({
           step={0.1}
           value={progreso}
           onChange={(evento) => moverProgreso(Number(evento.target.value))}
-          className="feat-reel-seek"
+          className="feat-reel-linear-seek"
           aria-label={`Posición de ${titulo}`}
         />
       </div>
 
-      <div className="mt-2 flex w-full items-center justify-between text-[10px] font-bold tabular-nums text-white/55">
-        <span>{formatearTiempo(tiempoActual)}</span>
-        <span>{formatearTiempo(duracion)}</span>
-      </div>
-
-      <p
-        className={`mt-2 min-h-4 text-center text-[10px] font-black uppercase tracking-[0.16em] transition ${
-          autoplayBloqueado ? "text-emerald-200" : "text-white/45"
-        }`}
-      >
-        {autoplayBloqueado
-          ? "Toca el reproductor para escuchar"
-          : reproduciendo
-            ? "Reproduciendo ahora"
-            : "Listo para reproducir"}
-      </p>
+      <span className="feat-reel-linear-time">
+        {formatearTiempo(duracion)}
+      </span>
     </div>
   );
 }

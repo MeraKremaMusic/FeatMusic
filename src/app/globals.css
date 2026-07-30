@@ -2657,7 +2657,7 @@ body {
     var(
         --featmusic-menu-movil-altura,
         calc(4.75rem + env(safe-area-inset-bottom))
-      ) + 1.25rem
+      ) + 0.35rem
   ) !important;
 }
 
@@ -2667,3 +2667,152 @@ body {
   }
 }
 /* FEATMUSIC_REEL_FINAL_POLISH_V1_END */
+
+/* FEATMUSIC_REEL_LINEAR_PLAYER_V1_START */
+/*
+  Reproductor minimalista del inicio: botón pequeño, tiempos y una línea
+  continua con un punto que avanza según la reproducción.
+*/
+.feat-reel-linear-player {
+  --reel-progress: 0%;
+  display: grid;
+  width: min(100%, 34rem);
+  grid-template-columns: 2.55rem auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  color: #ffffff;
+}
+
+.feat-reel-linear-toggle,
+.featmusic-app-light .feat-reel-linear-toggle {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  flex-shrink: 0;
+  border: 0 !important;
+  border-radius: 999px;
+  color: #ffffff !important;
+  background: rgba(5, 150, 105, 0.82) !important;
+  box-shadow: 0 0 1.4rem rgba(16, 185, 129, 0.28);
+  cursor: pointer;
+  outline: none;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.feat-reel-linear-toggle:hover,
+.feat-reel-linear-toggle:focus-visible,
+.featmusic-app-light .feat-reel-linear-toggle:hover,
+.featmusic-app-light .feat-reel-linear-toggle:focus-visible {
+  color: #ffffff !important;
+  background: rgba(16, 185, 129, 0.96) !important;
+  box-shadow: 0 0 1.8rem rgba(52, 211, 153, 0.38);
+}
+
+.feat-reel-linear-toggle:focus-visible {
+  outline: 2px solid rgba(167, 243, 208, 0.92);
+  outline-offset: 0.22rem;
+}
+
+.feat-reel-linear-toggle:active {
+  transform: scale(0.92);
+}
+
+.feat-reel-linear-time,
+.featmusic-app-light .feat-reel-linear-time {
+  color: rgba(255, 255, 255, 0.62) !important;
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.72);
+}
+
+.feat-reel-linear-track-shell {
+  position: relative;
+  width: 100%;
+  height: 2rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.feat-reel-linear-track {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 0.18rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  transform: translateY(-50%);
+}
+
+.feat-reel-linear-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--reel-progress);
+  border-radius: inherit;
+  background: linear-gradient(90deg, #10b981, #6ee7b7);
+  box-shadow: 0 0 0.7rem rgba(52, 211, 153, 0.46);
+}
+
+.feat-reel-linear-thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--reel-progress);
+  width: 0.68rem;
+  height: 0.68rem;
+  border: 2px solid rgba(236, 253, 245, 0.98);
+  border-radius: 999px;
+  background: #10b981;
+  box-shadow:
+    0 0 0 0.18rem rgba(16, 185, 129, 0.2),
+    0 0 1rem rgba(52, 211, 153, 0.62);
+  transform: translate(-50%, -50%);
+  transition: box-shadow 180ms ease;
+  pointer-events: none;
+}
+
+.feat-reel-linear-player[data-playing="true"] .feat-reel-linear-thumb {
+  box-shadow:
+    0 0 0 0.24rem rgba(16, 185, 129, 0.24),
+    0 0 1.25rem rgba(110, 231, 183, 0.72);
+}
+
+.feat-reel-linear-seek {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.feat-reel-bottom-info {
+  margin-bottom: 0;
+}
+
+@media (max-width: 420px) {
+  .feat-reel-linear-player {
+    grid-template-columns: 2.35rem auto minmax(0, 1fr) auto;
+    gap: 0.48rem;
+  }
+
+  .feat-reel-linear-toggle {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .feat-reel-linear-time {
+    font-size: 0.58rem;
+  }
+}
+/* FEATMUSIC_REEL_LINEAR_PLAYER_V1_END */
+

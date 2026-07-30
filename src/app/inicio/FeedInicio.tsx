@@ -155,13 +155,11 @@ function TarjetaFeed({
               titulo={oportunidad.titulo}
               activa={activa}
               duracionSegundos={oportunidad.duracionSegundos}
-              fotoArtista={artista.fotoPerfil}
-              inicialesArtista={iniciales(artista.nombreArtistico)}
               onEstadoChange={setReproduciendo}
             />
           </div>
 
-          <div className="shrink-0">
+          <div className="feat-reel-bottom-info shrink-0">
             <div className="flex min-w-0 items-center gap-3">
               <Link href={perfilHref} className="shrink-0">
                 <FotoArtista oportunidad={oportunidad} />
