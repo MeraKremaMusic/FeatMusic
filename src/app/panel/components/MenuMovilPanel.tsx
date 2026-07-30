@@ -146,7 +146,7 @@ export default function MenuMovilPanel({
     <nav
       ref={menuRef}
       aria-label="Menú principal móvil"
-      className={`featmusic-dark-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible border-t border-white/10 bg-[#06100c]/95 px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
+      className={`featmusic-dark-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible bg-black px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] ${
         ocultarDesde === "md" ? "md:hidden" : "lg:hidden"
       }`}
     >
@@ -197,7 +197,7 @@ export default function MenuMovilPanel({
           <span className="relative flex">
             <Icono tipo="mensajes" />
             {mensajesNoLeidos > 0 && (
-              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-black bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
                 {etiquetaMensajes}
               </span>
             )}
@@ -220,7 +220,7 @@ export default function MenuMovilPanel({
           <span className="relative flex">
             <Icono tipo="perfil" />
             {notificacionesNoLeidas > 0 && (
-              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-emerald-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-emerald-950/50">
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-black bg-emerald-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-emerald-950/50">
                 {etiquetaPerfil}
               </span>
             )}
