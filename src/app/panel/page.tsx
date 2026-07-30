@@ -463,7 +463,7 @@ export default async function PanelPage() {
 
   return (
     <main className="featmusic-app-light h-[100dvh] overflow-hidden bg-[#06100c] text-white lg:h-screen">
-      <header className="bg-black">
+      <header className="featmusic-solid-black-chrome">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
             Feat<span className="text-emerald-400">Music</span>
@@ -474,7 +474,7 @@ export default async function PanelPage() {
           <form action="/api/cerrar-sesion" method="post">
             <button
               type="submit"
-              className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold text-white transition hover:text-zinc-300"
+              className="featmusic-logout-plain flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold text-white transition"
             >
               <Icono tipo="salir" className="h-3 w-3" />
               Cerrar sesión

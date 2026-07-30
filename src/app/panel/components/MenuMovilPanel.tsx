@@ -146,7 +146,7 @@ export default function MenuMovilPanel({
     <nav
       ref={menuRef}
       aria-label="Menú principal móvil"
-      className={`featmusic-dark-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible bg-black px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] ${
+      className={`featmusic-dark-chrome featmusic-solid-black-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] ${
         ocultarDesde === "md" ? "md:hidden" : "lg:hidden"
       }`}
     >
