@@ -14,6 +14,8 @@ type ReproductorReelProps = {
   id: string;
   src: string;
   titulo: string;
+  fotoArtista?: string | null;
+  inicialesArtista: string;
   activa: boolean;
   duracionSegundos?: number | null;
   onEstadoChange?: (reproduciendo: boolean) => void;
@@ -57,12 +59,15 @@ export default function ReproductorReel({
   id,
   src,
   titulo,
+  fotoArtista,
+  inicialesArtista,
   activa,
   duracionSegundos,
   onEstadoChange,
 }: ReproductorReelProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [reproduciendo, setReproduciendo] = useState(false);
+  const [falloFoto, setFalloFoto] = useState(false);
   const [tiempoActual, setTiempoActual] = useState(0);
   const [duracionReal, setDuracionReal] = useState(
     Math.max(0, duracionSegundos ?? 0),
@@ -79,6 +84,10 @@ export default function ReproductorReel({
       }) as CSSProperties,
     [progreso],
   );
+
+  useEffect(() => {
+    setFalloFoto(false);
+  }, [fotoArtista]);
 
   useEffect(() => {
     onEstadoChange?.(reproduciendo);
@@ -109,7 +118,6 @@ export default function ReproductorReel({
       return;
     }
 
-    let cancelado = false;
     const temporizador = window.setTimeout(async () => {
       try {
         window.dispatchEvent(
@@ -124,7 +132,6 @@ export default function ReproductorReel({
     }, 180);
 
     return () => {
-      cancelado = true;
       window.clearTimeout(temporizador);
     };
   }, [activa, id, src]);
@@ -158,7 +165,7 @@ export default function ReproductorReel({
 
   return (
     <div
-      className="feat-reel-linear-player"
+      className="feat-reel-audio-stage"
       data-playing={reproduciendo ? "true" : "false"}
       style={estiloProgreso}
     >
@@ -180,40 +187,64 @@ export default function ReproductorReel({
         }}
       />
 
-      <button
-        type="button"
-        onClick={alternarReproduccion}
-        className="feat-reel-linear-toggle"
-        aria-label={reproduciendo ? `Pausar ${titulo}` : `Reproducir ${titulo}`}
-      >
-        {reproduciendo ? <IconoPausa /> : <IconoPlay />}
-      </button>
+      <div className="feat-reel-artist-visual" aria-hidden="true">
+        <span className="feat-reel-artist-ring feat-reel-artist-ring-one" />
+        <span className="feat-reel-artist-ring feat-reel-artist-ring-two" />
+        <span className="feat-reel-artist-spark feat-reel-artist-spark-one" />
+        <span className="feat-reel-artist-spark feat-reel-artist-spark-two" />
 
-      <span className="feat-reel-linear-time">
-        {formatearTiempo(tiempoActual)}
-      </span>
-
-      <div className="feat-reel-linear-track-shell">
-        <span className="feat-reel-linear-track" aria-hidden="true">
-          <span className="feat-reel-linear-fill" />
-          <span className="feat-reel-linear-thumb" />
-        </span>
-
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={0.1}
-          value={progreso}
-          onChange={(evento) => moverProgreso(Number(evento.target.value))}
-          className="feat-reel-linear-seek"
-          aria-label={`Posición de ${titulo}`}
-        />
+        <div className="feat-reel-artist-photo">
+          {fotoArtista && !falloFoto ? (
+            <img
+              src={fotoArtista}
+              alt=""
+              draggable={false}
+              onError={() => setFalloFoto(true)}
+            />
+          ) : (
+            <span>{inicialesArtista}</span>
+          )}
+        </div>
       </div>
 
-      <span className="feat-reel-linear-time">
-        {formatearTiempo(duracion)}
-      </span>
+      <div className="feat-reel-linear-player">
+        <button
+          type="button"
+          onClick={alternarReproduccion}
+          className="feat-reel-linear-toggle"
+          aria-label={
+            reproduciendo ? `Pausar ${titulo}` : `Reproducir ${titulo}`
+          }
+        >
+          {reproduciendo ? <IconoPausa /> : <IconoPlay />}
+        </button>
+
+        <span className="feat-reel-linear-time">
+          {formatearTiempo(tiempoActual)}
+        </span>
+
+        <div className="feat-reel-linear-track-shell">
+          <span className="feat-reel-linear-track" aria-hidden="true">
+            <span className="feat-reel-linear-fill" />
+            <span className="feat-reel-linear-thumb" />
+          </span>
+
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={0.1}
+            value={progreso}
+            onChange={(evento) => moverProgreso(Number(evento.target.value))}
+            className="feat-reel-linear-seek"
+            aria-label={`Posición de ${titulo}`}
+          />
+        </div>
+
+        <span className="feat-reel-linear-time">
+          {formatearTiempo(duracion)}
+        </span>
+      </div>
     </div>
   );
 }

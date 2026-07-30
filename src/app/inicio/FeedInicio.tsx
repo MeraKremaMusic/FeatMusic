@@ -153,6 +153,8 @@ function TarjetaFeed({
               id={`reel-${oportunidad.id}`}
               src={oportunidad.audioUrl}
               titulo={oportunidad.titulo}
+              fotoArtista={artista.fotoPerfil}
+              inicialesArtista={iniciales(artista.nombreArtistico)}
               activa={activa}
               duracionSegundos={oportunidad.duracionSegundos}
               onEstadoChange={setReproduciendo}

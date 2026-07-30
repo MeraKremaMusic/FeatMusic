@@ -2816,3 +2816,264 @@ body {
 }
 /* FEATMUSIC_REEL_LINEAR_PLAYER_V1_END */
 
+/* FEATMUSIC_REEL_ARTIST_VISUAL_V1_START */
+/*
+  Recupera la foto central del artista como elemento visual independiente.
+  No contiene controles ni iconos: la reproducción se maneja únicamente desde
+  la barra lineal inferior.
+*/
+@keyframes feat-reel-artist-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes feat-reel-artist-orbit-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes feat-reel-artist-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes feat-reel-artist-float {
+  0%,
+  100% {
+    transform: translate3d(0, -0.15rem, 0);
+  }
+  50% {
+    transform: translate3d(0, 0.2rem, 0);
+  }
+}
+
+.feat-reel-audio-stage {
+  --reel-progress: 0%;
+  display: flex;
+  width: min(100%, 34rem);
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feat-reel-artist-visual {
+  position: relative;
+  display: grid;
+  width: clamp(8.75rem, 24vh, 13rem);
+  height: clamp(8.75rem, 24vh, 13rem);
+  margin-bottom: clamp(1.35rem, 3vh, 2rem);
+  place-items: center;
+  isolation: isolate;
+  animation: feat-reel-artist-float 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.feat-reel-artist-visual::before,
+.feat-reel-artist-visual::after {
+  position: absolute;
+  content: "";
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.feat-reel-artist-visual::before {
+  inset: -0.6rem;
+  z-index: -3;
+  background: conic-gradient(
+    from 24deg,
+    transparent 0 10%,
+    rgba(52, 211, 153, 0.95) 17%,
+    rgba(167, 243, 208, 0.18) 28%,
+    transparent 39% 57%,
+    rgba(16, 185, 129, 0.78) 68%,
+    rgba(110, 231, 183, 0.22) 77%,
+    transparent 88%
+  );
+  filter: drop-shadow(0 0 0.75rem rgba(16, 185, 129, 0.35));
+  opacity: 0.62;
+  animation: feat-reel-artist-orbit 8s linear infinite;
+}
+
+.feat-reel-artist-visual::after {
+  inset: -1.55rem;
+  z-index: -4;
+  border: 1px solid rgba(110, 231, 183, 0.2);
+  background: radial-gradient(
+    circle,
+    rgba(16, 185, 129, 0.14),
+    transparent 64%
+  );
+  box-shadow:
+    0 0 2.8rem rgba(16, 185, 129, 0.24),
+    inset 0 0 2.2rem rgba(52, 211, 153, 0.08);
+  animation: feat-reel-artist-pulse 3.4s ease-in-out infinite;
+}
+
+.feat-reel-artist-ring {
+  position: absolute;
+  z-index: -2;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.feat-reel-artist-ring-one {
+  inset: -0.95rem;
+  border: 1px dashed rgba(167, 243, 208, 0.3);
+  animation: feat-reel-artist-orbit-reverse 12s linear infinite;
+}
+
+.feat-reel-artist-ring-two {
+  inset: -2.05rem;
+  border: 1px solid rgba(16, 185, 129, 0.12);
+  box-shadow: 0 0 1.8rem rgba(52, 211, 153, 0.12);
+  animation: feat-reel-artist-pulse 4.8s -1.2s ease-in-out infinite;
+}
+
+.feat-reel-artist-photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgba(236, 253, 245, 0.28);
+  border-radius: 999px;
+  background:
+    radial-gradient(
+      circle at 35% 26%,
+      rgba(110, 231, 183, 0.3),
+      transparent 38%
+    ),
+    linear-gradient(145deg, #0d3d2c, #020a07 72%);
+  box-shadow:
+    inset 0 0 0 0.42rem rgba(0, 0, 0, 0.2),
+    0 1.35rem 4rem rgba(0, 0, 0, 0.5),
+    0 0 2.2rem rgba(16, 185, 129, 0.22);
+}
+
+.feat-reel-artist-photo::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14),
+    transparent 40%,
+    rgba(0, 0, 0, 0.3)
+  );
+  pointer-events: none;
+}
+
+.feat-reel-artist-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.07) brightness(0.78);
+  transform: scale(1.035);
+  transition:
+    transform 5s ease,
+    filter 450ms ease;
+}
+
+.feat-reel-artist-photo > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(236, 253, 245, 0.94);
+  font-size: clamp(2.2rem, 8vw, 4.1rem);
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  text-shadow: 0 0 1.5rem rgba(16, 185, 129, 0.5);
+}
+
+.feat-reel-artist-spark {
+  position: absolute;
+  z-index: 2;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 999px;
+  background: #a7f3d0;
+  box-shadow:
+    0 0 0 0.25rem rgba(16, 185, 129, 0.12),
+    0 0 1rem rgba(110, 231, 183, 0.95);
+  pointer-events: none;
+}
+
+.feat-reel-artist-spark-one {
+  top: 7%;
+  right: 4%;
+  animation: feat-reel-artist-pulse 2.2s ease-in-out infinite;
+}
+
+.feat-reel-artist-spark-two {
+  bottom: 11%;
+  left: 1%;
+  width: 0.34rem;
+  height: 0.34rem;
+  animation: feat-reel-artist-pulse 2.7s -0.8s ease-in-out infinite;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-visual::before {
+  opacity: 1;
+  animation-duration: 4.4s;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-visual::after {
+  border-color: rgba(110, 231, 183, 0.48);
+  box-shadow:
+    0 0 3.8rem rgba(16, 185, 129, 0.4),
+    inset 0 0 2.8rem rgba(52, 211, 153, 0.13);
+  animation-duration: 1.6s;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-photo img {
+  filter: saturate(1.1) contrast(1.08) brightness(0.86);
+  transform: scale(1.115);
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-ring-one {
+  border-color: rgba(167, 243, 208, 0.48);
+  animation-duration: 7s;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-spark {
+  opacity: 1;
+  animation-duration: 1.25s;
+}
+
+@media (max-height: 720px) {
+  .feat-reel-artist-visual {
+    width: clamp(6.8rem, 20vh, 9rem);
+    height: clamp(6.8rem, 20vh, 9rem);
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .feat-reel-artist-visual {
+    width: clamp(7.8rem, 22vh, 10.5rem);
+    height: clamp(7.8rem, 22vh, 10.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feat-reel-artist-visual,
+  .feat-reel-artist-visual::before,
+  .feat-reel-artist-visual::after,
+  .feat-reel-artist-ring,
+  .feat-reel-artist-spark {
+    animation: none !important;
+  }
+
+  .feat-reel-artist-photo img {
+    transition: none !important;
+  }
+}
+/* FEATMUSIC_REEL_ARTIST_VISUAL_V1_END */
