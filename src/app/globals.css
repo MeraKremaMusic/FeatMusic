@@ -2580,3 +2580,64 @@ body {
 }
 /* FEATMUSIC_SOLID_BLACK_CHROME_V1_END */
 
+/* FEATMUSIC_REEL_TABS_OVERLAY_V1_START */
+/*
+  Integra las pestañas del inicio directamente sobre el fondo del reel.
+  Estas reglas prevalecen sobre las conversiones del tema claro para que
+  la zona no vuelva a mostrarse blanca.
+*/
+.feat-reel-tabs,
+.featmusic-app-light .feat-reel-tabs {
+  color-scheme: dark;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.feat-reel-tab,
+.featmusic-app-light .feat-reel-tab {
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: rgba(255, 255, 255, 0.66) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.72);
+}
+
+.feat-reel-tab:hover,
+.feat-reel-tab:focus-visible,
+.featmusic-app-light .feat-reel-tab:hover,
+.featmusic-app-light .feat-reel-tab:focus-visible {
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: none;
+}
+
+.feat-reel-tab[aria-selected="true"],
+.featmusic-app-light .feat-reel-tab[aria-selected="true"] {
+  color: #ffffff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  font-weight: 900 !important;
+}
+
+.feat-reel-position,
+.featmusic-app-light .feat-reel-position {
+  color: rgba(255, 255, 255, 0.48) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-weight: 600;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+}
+/* FEATMUSIC_REEL_TABS_OVERLAY_V1_END */
+

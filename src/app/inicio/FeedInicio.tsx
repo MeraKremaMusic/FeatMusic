@@ -189,7 +189,7 @@ function TarjetaFeed({
           activa={activa}
         />
 
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pb-3 pt-4 sm:px-6 sm:pb-5 sm:pt-5">
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pb-3 pt-[4.15rem] sm:px-6 sm:pb-5 sm:pt-[4.5rem]">
           <header className="flex min-w-0 items-center gap-3">
             <Link href={perfilHref} className="shrink-0">
               <FotoArtista oportunidad={oportunidad} />
@@ -574,10 +574,10 @@ export default function FeedInicio({
     <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden bg-[#020806] pb-[calc(4.65rem+env(safe-area-inset-bottom))] lg:h-[calc(100vh-48px)] lg:pb-0">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.13),transparent_36%)]" />
 
-      <div className="relative z-20 shrink-0 border-b border-white/[0.08] bg-[#06100c]/92 px-3 py-2 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[760px] items-center gap-2">
+      <div className="feat-reel-tabs pointer-events-none absolute inset-x-0 top-0 z-30 px-3 pt-2.5 sm:px-5 sm:pt-3">
+        <div className="pointer-events-auto mx-auto flex max-w-[760px] items-center gap-2">
           <div
-            className="grid min-w-0 flex-1 grid-cols-4 gap-1 rounded-xl border border-white/10 bg-black/30 p-1"
+            className="grid min-w-0 flex-1 grid-cols-4"
             role="tablist"
             aria-label="Feed de oportunidades"
           >
@@ -588,11 +588,7 @@ export default function FeedInicio({
                 role="tab"
                 aria-selected={vista === pestana.id}
                 onClick={() => cambiarVista(pestana.id)}
-                className={`rounded-lg px-1 py-2 text-[10px] font-black transition sm:px-2 sm:text-xs ${
-                  vista === pestana.id
-                    ? "bg-emerald-500/20 text-emerald-100 ring-1 ring-inset ring-emerald-300/25"
-                    : "text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
-                }`}
+                className="feat-reel-tab px-1 py-2 text-[10px] transition sm:px-2 sm:text-xs"
               >
                 {pestana.etiqueta}
               </button>
@@ -600,7 +596,7 @@ export default function FeedInicio({
           </div>
 
           {oportunidades.length > 0 && (
-            <span className="hidden shrink-0 rounded-lg border border-white/10 bg-black/30 px-2.5 py-2 text-[9px] font-black tabular-nums text-zinc-500 sm:block">
+            <span className="feat-reel-position hidden shrink-0 px-2 py-2 text-[9px] tabular-nums sm:block">
               {indiceActivo + 1} / {oportunidades.length}
             </span>
           )}
