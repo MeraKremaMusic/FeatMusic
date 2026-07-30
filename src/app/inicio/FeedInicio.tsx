@@ -10,14 +10,12 @@ import {
   type RefObject,
 } from "react";
 
-import EnviarPropuesta from "@/app/artistas/[nombreUsuario]/components/EnviarPropuesta";
 import BotonGuardarIdea, {
   EVENTO_CAMBIO_IDEA_GUARDADA,
   type DetalleCambioIdeaGuardada,
 } from "@/app/components/BotonGuardarIdea";
 import ContadorVistasIdea from "@/app/components/ContadorVistasIdea";
 import RegistrarVistaIdea from "@/app/components/RegistrarVistaIdea";
-import ResumenColaboracionIdea from "@/app/components/ResumenColaboracionIdea";
 import type { OportunidadFeed } from "@/lib/feed-inicio";
 
 import ReproductorReel from "./ReproductorReel";
@@ -67,48 +65,6 @@ function tiempoPublicacion(creadoEn: string) {
   return `Hace ${dias} días`;
 }
 
-function diasRestantes(expiraEn: string) {
-  const diferencia = new Date(expiraEn).getTime() - Date.now();
-  return Math.max(0, Math.ceil(diferencia / 86_400_000));
-}
-
-function IconoFlecha({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m14 7 5 5-5 5" />
-    </svg>
-  );
-}
-
-function IconoInformacion({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 11v5" />
-      <path d="M12 8h.01" />
-    </svg>
-  );
-}
-
 function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
   const [fallo, setFallo] = useState(false);
   const { artista } = oportunidad;
@@ -135,12 +91,10 @@ function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
 function TarjetaFeed({
   oportunidad,
   activa,
-  vista,
   usuarioActualId,
 }: {
   oportunidad: OportunidadFeed;
   activa: boolean;
-  vista: VistaFeed;
   usuarioActualId: number;
 }) {
   const [reproduciendo, setReproduciendo] = useState(false);
@@ -150,9 +104,6 @@ function TarjetaFeed({
     0,
     MAX_PROPUESTAS - oportunidad.propuestasActuales,
   );
-  const restantes = diasRestantes(oportunidad.expiraEn);
-  const razonPrincipal = oportunidad.compatibilidad.razones[0];
-
   const estiloFondo = artista.fotoPerfil
     ? ({
         "--reel-cover": `url("${artista.fotoPerfil.replaceAll('"', '\\"')}")`,
@@ -169,11 +120,7 @@ function TarjetaFeed({
         data-vista-idea
         data-playing={reproduciendo ? "true" : "false"}
         style={estiloFondo}
-        className={`feat-reel-card relative mx-auto flex h-full w-full max-w-[760px] flex-col overflow-hidden border bg-[#020907] shadow-[0_26px_90px_rgba(0,0,0,0.55)] transition duration-300 sm:rounded-[30px] ${
-          activa
-            ? "border-emerald-300/35 ring-1 ring-emerald-300/10"
-            : "border-white/10"
-        }`}
+        className="feat-reel-card relative mx-auto flex h-full w-full max-w-[760px] flex-col overflow-hidden bg-[#020907] shadow-[0_26px_90px_rgba(0,0,0,0.55)] transition duration-300 sm:rounded-[30px]"
       >
         <div className="feat-reel-cover-bg" aria-hidden="true" />
         <div className="feat-reel-shade" aria-hidden="true" />
@@ -214,27 +161,14 @@ function TarjetaFeed({
               </p>
             </div>
 
-            <div className="flex shrink-0 items-center gap-2">
-              <span
-                className={`rounded-full border px-2.5 py-1 text-[9px] font-black backdrop-blur-xl ${
-                  cuposDisponibles > 0
-                    ? "border-emerald-200/25 bg-emerald-400/10 text-emerald-100"
-                    : "border-white/10 bg-black/25 text-white/45"
-                }`}
-              >
-                {cuposDisponibles > 0
-                  ? `${cuposDisponibles} ${cuposDisponibles === 1 ? "cupo" : "cupos"}`
-                  : "Completa"}
-              </span>
-              <BotonGuardarIdea
-                ideaId={oportunidad.id}
-                guardadaInicial={oportunidad.guardada}
-                sesionActiva
-                esPropietario={usuarioActualId === artista.id}
-                disponible={cuposDisponibles > 0}
-                variante="icono"
-              />
-            </div>
+            <BotonGuardarIdea
+              ideaId={oportunidad.id}
+              guardadaInicial={oportunidad.guardada}
+              sesionActiva
+              esPropietario={usuarioActualId === artista.id}
+              disponible={cuposDisponibles > 0}
+              variante="icono"
+            />
           </header>
 
           <div className="flex min-h-0 flex-1 items-center justify-center py-3 sm:py-5">
@@ -282,72 +216,6 @@ function TarjetaFeed({
               />
             </div>
 
-            <div className="mt-3 flex items-stretch gap-2">
-              <Link
-                href={`${perfilHref}#idea-${oportunidad.id}`}
-                className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-white/12 bg-black/30 px-3 text-[10px] font-black text-white/75 backdrop-blur-xl transition hover:border-emerald-200/30 hover:bg-emerald-400/10 hover:text-emerald-100"
-              >
-                Perfil
-                <IconoFlecha className="h-3.5 w-3.5" />
-              </Link>
-
-              <details className="feat-reel-details group relative shrink-0">
-                <summary className="flex h-full cursor-pointer list-none items-center justify-center gap-1.5 rounded-xl border border-white/12 bg-black/30 px-3 text-[10px] font-black text-white/75 backdrop-blur-xl transition hover:border-emerald-200/30 hover:text-emerald-100 [&::-webkit-details-marker]:hidden">
-                  <IconoInformacion className="h-3.5 w-3.5" />
-                  Detalles
-                </summary>
-                <div className="absolute bottom-[calc(100%+0.65rem)] left-0 z-40 w-[min(86vw,360px)] rounded-2xl border border-emerald-200/20 bg-[#06120e]/95 p-3 shadow-2xl shadow-black/60 backdrop-blur-2xl">
-                  {vista === "para-ti" && (
-                    <div className="mb-3 rounded-xl border border-emerald-200/15 bg-emerald-400/[0.08] p-3">
-                      <p className="text-xs font-black text-emerald-100">
-                        {oportunidad.compatibilidad.porcentaje >= 40
-                          ? `${oportunidad.compatibilidad.porcentaje}% compatible contigo`
-                          : "Recomendación para ti"}
-                      </p>
-                      {razonPrincipal ? (
-                        <p className="mt-1 text-[10px] leading-4 text-emerald-100/60">
-                          {razonPrincipal}
-                        </p>
-                      ) : null}
-                    </div>
-                  )}
-
-                  <ResumenColaboracionIdea
-                    rolBuscado={oportunidad.rolBuscado}
-                    generoMusical={oportunidad.generoMusical}
-                    idiomaBuscado={oportunidad.idiomaBuscado}
-                    modalidadColaboracion={oportunidad.modalidadColaboracion}
-                    paisPreferido={oportunidad.paisPreferido}
-                    departamentoPreferido={oportunidad.departamentoPreferido}
-                    ciudadPreferida={oportunidad.ciudadPreferida}
-                    tipoAcuerdo={oportunidad.tipoAcuerdo}
-                    compacta
-                    className="!mt-0"
-                  />
-
-                  <div className="mt-3 flex flex-wrap justify-between gap-2 border-t border-white/10 pt-3 text-[9px] font-semibold text-white/45">
-                    <span>
-                      {artista.ciudad}, {artista.pais}
-                    </span>
-                    <span className={restantes <= 7 ? "text-amber-300" : undefined}>
-                      {restantes === 0
-                        ? "Expira hoy"
-                        : `Expira en ${restantes} ${restantes === 1 ? "día" : "días"}`}
-                    </span>
-                  </div>
-                </div>
-              </details>
-
-              <div className="feat-reel-proposal min-w-0 flex-1 [&>div]:!mt-0">
-                <EnviarPropuesta
-                  ideaId={oportunidad.id}
-                  sesionActiva
-                  esPropietario={usuarioActualId === artista.id}
-                  propuestasActuales={oportunidad.propuestasActuales}
-                  propuestaUsuario={oportunidad.propuestaUsuario}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </article>
@@ -615,21 +483,12 @@ export default function FeedInicio({
               key={`${vista}-${oportunidad.id}`}
               oportunidad={oportunidad}
               activa={activaId === oportunidad.id}
-              vista={vista}
               usuarioActualId={usuarioActualId}
             />
           ))
         )}
       </div>
 
-      {oportunidades.length > 1 && (
-        <div className="pointer-events-none absolute bottom-[calc(5rem+env(safe-area-inset-bottom))] right-2 z-20 flex flex-col items-center gap-0.5 lg:bottom-4 lg:right-5">
-          <span className="rounded-full border border-white/10 bg-black/45 px-2 py-1 text-[8px] font-black text-white/50 backdrop-blur">
-            Desliza
-          </span>
-          <span className="feat-reel-swipe-arrow text-base text-emerald-300/80">↓</span>
-        </div>
-      )}
     </div>
   );
 }
