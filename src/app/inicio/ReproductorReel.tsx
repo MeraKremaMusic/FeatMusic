@@ -6,9 +6,11 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 
 const EVENTO_REPRODUCCION = "featmusic:reproducir-audio";
+const EVENTO_ALTERNAR_REEL = "featmusic:alternar-reproduccion-reel";
 
 type ReproductorReelProps = {
   id: string;
@@ -69,6 +71,7 @@ export default function ReproductorReel({
   const [reproduciendo, setReproduciendo] = useState(false);
   const [falloFoto, setFalloFoto] = useState(false);
   const [tiempoActual, setTiempoActual] = useState(0);
+  const [desplazando, setDesplazando] = useState(false);
   const [duracionReal, setDuracionReal] = useState(
     Math.max(0, duracionSegundos ?? 0),
   );
@@ -108,6 +111,18 @@ export default function ReproductorReel({
   }, [id]);
 
   useEffect(() => {
+    function alternarDesdePantalla(evento: Event) {
+      const detalle = (evento as CustomEvent<string>).detail;
+      if (detalle !== id) return;
+      void alternarReproduccion();
+    }
+
+    window.addEventListener(EVENTO_ALTERNAR_REEL, alternarDesdePantalla);
+    return () =>
+      window.removeEventListener(EVENTO_ALTERNAR_REEL, alternarDesdePantalla);
+  }, [id]);
+
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -115,6 +130,7 @@ export default function ReproductorReel({
       audio.pause();
       audio.currentTime = 0;
       setTiempoActual(0);
+      setDesplazando(false);
       return;
     }
 
@@ -163,6 +179,36 @@ export default function ReproductorReel({
     setTiempoActual(audio.currentTime);
   }
 
+  function iniciarDesplazamiento(
+    evento: ReactPointerEvent<HTMLInputElement>,
+  ) {
+    if (duracion <= 0) return;
+
+    try {
+      evento.currentTarget.setPointerCapture(evento.pointerId);
+    } catch {
+      // Algunos navegadores no permiten capturar el puntero del range.
+    }
+
+    setDesplazando(true);
+  }
+
+  function finalizarDesplazamiento(
+    evento?: ReactPointerEvent<HTMLInputElement>,
+  ) {
+    if (evento) {
+      try {
+        if (evento.currentTarget.hasPointerCapture(evento.pointerId)) {
+          evento.currentTarget.releasePointerCapture(evento.pointerId);
+        }
+      } catch {
+        // El indicador igualmente se oculta aunque no exista captura.
+      }
+    }
+
+    setDesplazando(false);
+  }
+
   return (
     <div
       className="feat-reel-audio-stage"
@@ -207,7 +253,12 @@ export default function ReproductorReel({
         </div>
       </div>
 
-      <div className="feat-reel-linear-player">
+      <div
+        className="feat-reel-linear-player"
+        data-playing={reproduciendo ? "true" : "false"}
+        data-scrubbing={desplazando ? "true" : "false"}
+        data-no-toggle-reel
+      >
         <button
           type="button"
           onClick={alternarReproduccion}
@@ -219,11 +270,15 @@ export default function ReproductorReel({
           {reproduciendo ? <IconoPausa /> : <IconoPlay />}
         </button>
 
-        <span className="feat-reel-linear-time">
-          {formatearTiempo(tiempoActual)}
-        </span>
-
         <div className="feat-reel-linear-track-shell">
+          <output
+            className="feat-reel-scrub-time"
+            aria-live="off"
+            aria-hidden={!desplazando}
+          >
+            {formatearTiempo(tiempoActual)} / {formatearTiempo(duracion)}
+          </output>
+
           <span className="feat-reel-linear-track" aria-hidden="true">
             <span className="feat-reel-linear-fill" />
             <span className="feat-reel-linear-thumb" />
@@ -235,15 +290,16 @@ export default function ReproductorReel({
             max={100}
             step={0.1}
             value={progreso}
+            onPointerDown={iniciarDesplazamiento}
+            onPointerUp={finalizarDesplazamiento}
+            onPointerCancel={finalizarDesplazamiento}
+            onBlur={() => setDesplazando(false)}
             onChange={(evento) => moverProgreso(Number(evento.target.value))}
             className="feat-reel-linear-seek"
             aria-label={`Posición de ${titulo}`}
+            aria-valuetext={`${formatearTiempo(tiempoActual)} de ${formatearTiempo(duracion)}`}
           />
         </div>
-
-        <span className="feat-reel-linear-time">
-          {formatearTiempo(duracion)}
-        </span>
       </div>
     </div>
   );

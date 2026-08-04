@@ -174,11 +174,10 @@ export default function MenuMovilPanel({
         <Link
           href="/panel#panel-card-2"
           aria-label="Ir a publicar una idea"
-          className="group -mt-5 flex min-w-0 flex-col items-center justify-center gap-1 text-zinc-300"
+          data-featmusic-publicar-sin-circulo-v1="true"
+        className="group flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-emerald-300"
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-500 text-white shadow-lg shadow-emerald-950/60 transition group-hover:scale-105 group-hover:bg-emerald-400">
-            <Icono tipo="mas" className="h-6 w-6" />
-          </span>
+          <Icono tipo="mas" className="h-6 w-6" />
           <span className="truncate text-[9px] font-semibold">Publicar</span>
         </Link>
 

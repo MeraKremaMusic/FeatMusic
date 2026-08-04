@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from "react";
 
@@ -22,6 +23,7 @@ import ReproductorReel from "./ReproductorReel";
 
 const MAX_PROPUESTAS = 3;
 const EVENTO_REPRODUCCION = "featmusic:reproducir-audio";
+const EVENTO_ALTERNAR_REEL = "featmusic:alternar-reproduccion-reel";
 
 type VistaFeed = "para-ti" | "siguiendo" | "recientes" | "guardadas";
 
@@ -98,6 +100,11 @@ function TarjetaFeed({
   usuarioActualId: number;
 }) {
   const [reproduciendo, setReproduciendo] = useState(false);
+  const gestoToqueRef = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+  } | null>(null);
   const { artista } = oportunidad;
   const perfilHref = `/artistas/${encodeURIComponent(artista.nombreUsuario)}`;
   const cuposDisponibles = Math.max(
@@ -110,6 +117,78 @@ function TarjetaFeed({
       } as CSSProperties)
     : undefined;
 
+  function esZonaInteractiva(objetivo: EventTarget | null) {
+    return (
+      objetivo instanceof Element &&
+      Boolean(
+        objetivo.closest(
+          "a, button, input, select, textarea, [role='button'], [data-no-toggle-reel]",
+        ),
+      )
+    );
+  }
+
+  function iniciarToque(evento: ReactPointerEvent<HTMLElement>) {
+    if (!activa || esZonaInteractiva(evento.target)) {
+      gestoToqueRef.current = null;
+      return;
+    }
+
+    if (evento.pointerType === "mouse" && evento.button !== 0) {
+      gestoToqueRef.current = null;
+      return;
+    }
+
+    gestoToqueRef.current = {
+      pointerId: evento.pointerId,
+      x: evento.clientX,
+      y: evento.clientY,
+    };
+  }
+
+  function moverToque(evento: ReactPointerEvent<HTMLElement>) {
+    const gesto = gestoToqueRef.current;
+    if (!gesto || gesto.pointerId !== evento.pointerId) return;
+
+    const distancia = Math.hypot(
+      evento.clientX - gesto.x,
+      evento.clientY - gesto.y,
+    );
+
+    if (distancia > 12) {
+      gestoToqueRef.current = null;
+    }
+  }
+
+  function cancelarToque() {
+    gestoToqueRef.current = null;
+  }
+
+  function finalizarToque(evento: ReactPointerEvent<HTMLElement>) {
+    const gesto = gestoToqueRef.current;
+    gestoToqueRef.current = null;
+
+    if (
+      !gesto ||
+      gesto.pointerId !== evento.pointerId ||
+      esZonaInteractiva(evento.target)
+    ) {
+      return;
+    }
+
+    const distancia = Math.hypot(
+      evento.clientX - gesto.x,
+      evento.clientY - gesto.y,
+    );
+    if (distancia > 12) return;
+
+    window.dispatchEvent(
+      new CustomEvent<string>(EVENTO_ALTERNAR_REEL, {
+        detail: `reel-${oportunidad.id}`,
+      }),
+    );
+  }
+
   return (
     <section
       data-feed-item
@@ -119,6 +198,10 @@ function TarjetaFeed({
       <article
         data-vista-idea
         data-playing={reproduciendo ? "true" : "false"}
+        onPointerDown={iniciarToque}
+        onPointerMove={moverToque}
+        onPointerUp={finalizarToque}
+        onPointerCancel={cancelarToque}
         style={estiloFondo}
         className="feat-reel-card relative mx-auto flex h-full w-full max-w-[760px] flex-col overflow-hidden bg-[#020907] shadow-[0_26px_90px_rgba(0,0,0,0.55)] transition duration-300 sm:rounded-[30px]"
       >
