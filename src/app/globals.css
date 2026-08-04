@@ -3120,9 +3120,16 @@ body {
       var(
           --featmusic-menu-movil-altura,
           calc(4.25rem + env(safe-area-inset-bottom))
-        ) + 2.15rem
+        ) + 0.45rem
     ) !important;
   }
+
+  /* FEATMUSIC_REEL_BOTTOM_INFO_NEAR_PLAYER_V1_START */
+  .feat-reel-bottom-info {
+    position: relative;
+    z-index: 25;
+  }
+  /* FEATMUSIC_REEL_BOTTOM_INFO_NEAR_PLAYER_V1_END */
 
   .feat-reel-linear-player {
     position: absolute;
