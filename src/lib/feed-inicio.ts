@@ -41,6 +41,7 @@ export type OportunidadFeed = {
     fotoPerfil: string | null;
     ciudad: string;
     pais: string;
+    codigoPais: string;
     rol: string;
     generos: string[];
   };

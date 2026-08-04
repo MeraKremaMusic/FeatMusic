@@ -423,8 +423,23 @@ function TarjetaFeed({
                     {artista.nombreArtistico}
                   </Link>
 
-                  <span className="feat-reel-chip feat-reel-chip-muted shrink-0">
-                    {formatearRol(artista.rol)}
+                  <span className="flex shrink-0 items-center gap-1.5">
+                    <span className="feat-reel-chip feat-reel-chip-muted shrink-0">
+                      {formatearRol(artista.rol)}
+                    </span>
+
+                    {artista.codigoPais && (
+                      <img
+                        src={`https://flagcdn.com/20x15/${artista.codigoPais.toLowerCase()}.png`}
+                        srcSet={`https://flagcdn.com/40x30/${artista.codigoPais.toLowerCase()}.png 2x`}
+                        width={20}
+                        height={15}
+                        alt={`Bandera de ${artista.pais}`}
+                        title={artista.pais}
+                        className="h-[13px] w-[18px] shrink-0 rounded-[2px] object-cover ring-1 ring-white/20"
+                        loading="lazy"
+                      />
+                    )}
                   </span>
 
                   {oportunidad.esSeguido && (

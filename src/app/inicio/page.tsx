@@ -10,6 +10,7 @@ import {
 } from "@/lib/feed-inicio";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import { obtenerPaises } from "@/lib/ubicaciones";
 
 import FeedInicio from "./FeedInicio";
 
@@ -25,6 +26,14 @@ const ESTADOS_QUE_OCUPAN_CUPO = [
 
 function tieneTexto(valor: string | null | undefined): valor is string {
   return typeof valor === "string" && valor.trim().length > 0;
+}
+
+function normalizarNombrePais(valor: string) {
+  return valor
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLocaleLowerCase("es");
 }
 
 function perfilEsPublicable(usuario: {
@@ -73,7 +82,7 @@ export default async function InicioPage() {
 
   const ahora = new Date();
 
-  const [usuario, ideasActivas] = await Promise.all([
+  const [usuario, ideasActivas, paises] = await Promise.all([
     prisma.usuario.findUnique({
       where: { id: sesion.usuarioId },
       select: {
@@ -156,6 +165,7 @@ export default async function InicioPage() {
         },
       },
     }),
+    obtenerPaises(),
   ]);
 
   if (!usuario) {
@@ -169,6 +179,10 @@ export default async function InicioPage() {
   const idsSeguidos = new Set(
     usuario.siguiendo.map((seguimiento) => seguimiento.seguidoId),
   );
+  const codigoPaisPorNombre = new Map(
+    paises.map((pais) => [normalizarNombrePais(pais.nombre), pais.codigo]),
+  );
+
   const perfilCompatibilidad = {
     rolPrincipal: usuario.rolPrincipal,
     generos: obtenerGenerosPerfil(usuario.generos),
@@ -211,6 +225,10 @@ export default async function InicioPage() {
         fotoPerfil: idea.usuario.fotoPerfil,
         ciudad: idea.usuario.ciudad!.trim(),
         pais: idea.usuario.pais!.trim(),
+        codigoPais:
+          codigoPaisPorNombre.get(
+            normalizarNombrePais(idea.usuario.pais!.trim()),
+          ) ?? "",
         rol: idea.usuario.rolPrincipal,
         generos: obtenerGenerosPerfil(idea.usuario.generos),
       },
