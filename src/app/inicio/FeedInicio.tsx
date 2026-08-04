@@ -103,6 +103,10 @@ function TarjetaFeed({
   const [descripcionExpandida, setDescripcionExpandida] = useState(false);
   const [descripcionRecortada, setDescripcionRecortada] = useState(false);
   const descripcionRef = useRef<HTMLParagraphElement>(null);
+  // FEATMUSIC_DESCRIPCION_SIN_MOVER_VISUAL_V1
+  const informacionCompactaRef = useRef<HTMLDivElement>(null);
+  const [alturaInformacionCompacta, setAlturaInformacionCompacta] =
+    useState<number | null>(null);
   const gestoToqueRef = useRef<{
     pointerId: number;
     x: number;
@@ -149,6 +153,19 @@ function TarjetaFeed({
       observador.disconnect();
     };
   }, [descripcionExpandida, oportunidad.descripcion]);
+
+  function alternarDescripcion() {
+    if (!descripcionExpandida) {
+      const alturaActual =
+        informacionCompactaRef.current?.getBoundingClientRect().height;
+
+      if (alturaActual && Number.isFinite(alturaActual)) {
+        setAlturaInformacionCompacta(alturaActual);
+      }
+    }
+
+    setDescripcionExpandida((estadoActual) => !estadoActual);
+  }
 
   function esZonaInteractiva(objetivo: EventTarget | null) {
     return (
@@ -277,7 +294,22 @@ function TarjetaFeed({
             />
           </div>
 
-          <div className="feat-reel-bottom-info shrink-0">
+          <div
+            ref={informacionCompactaRef}
+            className="feat-reel-bottom-info relative shrink-0 overflow-visible"
+            style={
+              descripcionExpandida && alturaInformacionCompacta
+                ? { height: `${alturaInformacionCompacta}px` }
+                : undefined
+            }
+          >
+            <div
+              className={
+                descripcionExpandida
+                  ? "absolute inset-x-0 bottom-0"
+                  : undefined
+              }
+            >
             <div className="flex min-w-0 items-center gap-3">
               <Link href={perfilHref} className="shrink-0">
                 <FotoArtista oportunidad={oportunidad} />
@@ -328,9 +360,7 @@ function TarjetaFeed({
                 <button
                   type="button"
                   aria-expanded={descripcionExpandida}
-                  onClick={() =>
-                    setDescripcionExpandida((estadoActual) => !estadoActual)
-                  }
+                  onClick={alternarDescripcion}
                   className="mt-1 inline-flex items-center text-[11px] font-black text-white/90 transition hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/70"
                 >
                   {descripcionExpandida ? "Cerrar" : "Leer más"}
@@ -345,6 +375,7 @@ function TarjetaFeed({
                 esPropietario={usuarioActualId === artista.id}
                 variante="compacta"
               />
+            </div>
             </div>
           </div>
         </div>
