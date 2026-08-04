@@ -90,6 +90,34 @@ function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
   );
 }
 
+
+// FEATMUSIC_INDICADORES_PLAY_PAUSA_CENTRO_V1
+function IconoPlayCentro() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-9 w-9 translate-x-0.5 sm:h-10 sm:w-10"
+      fill="currentColor"
+    >
+      <path d="M8.2 5.5v13l10-6.5-10-6.5Z" />
+    </svg>
+  );
+}
+
+function IconoPausaCentro() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-9 w-9 sm:h-10 sm:w-10"
+      fill="currentColor"
+    >
+      <path d="M7 5.5h3.5v13H7zM13.5 5.5H17v13h-3.5z" />
+    </svg>
+  );
+}
+
 function TarjetaFeed({
   oportunidad,
   activa,
@@ -100,6 +128,8 @@ function TarjetaFeed({
   usuarioActualId: number;
 }) {
   const [reproduciendo, setReproduciendo] = useState(false);
+  const [mostrarFeedbackPausa, setMostrarFeedbackPausa] = useState(false);
+  const temporizadorFeedbackPausaRef = useRef<number | null>(null);
   const [descripcionExpandida, setDescripcionExpandida] = useState(false);
   const [descripcionRecortada, setDescripcionRecortada] = useState(false);
   const descripcionRef = useRef<HTMLParagraphElement>(null);
@@ -153,6 +183,46 @@ function TarjetaFeed({
       observador.disconnect();
     };
   }, [descripcionExpandida, oportunidad.descripcion]);
+
+  useEffect(() => {
+    if (activa) return;
+
+    if (temporizadorFeedbackPausaRef.current !== null) {
+      window.clearTimeout(temporizadorFeedbackPausaRef.current);
+      temporizadorFeedbackPausaRef.current = null;
+    }
+
+    setMostrarFeedbackPausa(false);
+  }, [activa]);
+
+  useEffect(() => {
+    return () => {
+      if (temporizadorFeedbackPausaRef.current !== null) {
+        window.clearTimeout(temporizadorFeedbackPausaRef.current);
+      }
+    };
+  }, []);
+
+  function mostrarIndicadorPausaTemporal() {
+    if (temporizadorFeedbackPausaRef.current !== null) {
+      window.clearTimeout(temporizadorFeedbackPausaRef.current);
+    }
+
+    setMostrarFeedbackPausa(true);
+    temporizadorFeedbackPausaRef.current = window.setTimeout(() => {
+      setMostrarFeedbackPausa(false);
+      temporizadorFeedbackPausaRef.current = null;
+    }, 900);
+  }
+
+  function ocultarIndicadorPausaTemporal() {
+    if (temporizadorFeedbackPausaRef.current !== null) {
+      window.clearTimeout(temporizadorFeedbackPausaRef.current);
+      temporizadorFeedbackPausaRef.current = null;
+    }
+
+    setMostrarFeedbackPausa(false);
+  }
 
   function alternarDescripcion() {
     if (!descripcionExpandida) {
@@ -232,6 +302,12 @@ function TarjetaFeed({
     );
     if (distancia > 12) return;
 
+    if (reproduciendo) {
+      ocultarIndicadorPausaTemporal();
+    } else {
+      mostrarIndicadorPausaTemporal();
+    }
+
     window.dispatchEvent(
       new CustomEvent<string>(EVENTO_ALTERNAR_REEL, {
         detail: `reel-${oportunidad.id}`,
@@ -261,6 +337,27 @@ function TarjetaFeed({
         <span className="feat-reel-orb feat-reel-orb-one" aria-hidden="true" />
         <span className="feat-reel-orb feat-reel-orb-two" aria-hidden="true" />
         <span className="feat-reel-orb feat-reel-orb-three" aria-hidden="true" />
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+        >
+          {activa && !reproduciendo && !mostrarFeedbackPausa && (
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black/30 text-white/70 opacity-80 shadow-[0_10px_35px_rgba(0,0,0,0.35)] backdrop-blur-[2px] sm:h-20 sm:w-20">
+              <IconoPlayCentro />
+            </span>
+          )}
+
+          <span
+            className={`absolute flex h-16 w-16 items-center justify-center rounded-full bg-black/35 text-white shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-[2px] transition-all duration-500 ease-out sm:h-20 sm:w-20 ${
+              activa && mostrarFeedbackPausa
+                ? "scale-100 opacity-90"
+                : "scale-90 opacity-0"
+            }`}
+          >
+            <IconoPausaCentro />
+          </span>
+        </div>
 
         <RegistrarVistaIdea
           ideaId={oportunidad.id}
