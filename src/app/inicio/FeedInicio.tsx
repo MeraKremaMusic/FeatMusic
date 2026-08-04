@@ -93,6 +93,7 @@ function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
 
 // FEATMUSIC_INDICADORES_PLAY_PAUSA_CENTRO_V1
 // FEATMUSIC_ICONOS_PLAY_PAUSA_SIN_FONDO_V1
+// FEATMUSIC_ICONOS_CENTRADOS_SOBRE_FOTO_V1
 function IconoPlayCentro() {
   return (
     <svg
@@ -341,7 +342,7 @@ function TarjetaFeed({
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+          className="pointer-events-none absolute inset-0 z-20 flex -translate-y-8 items-center justify-center sm:-translate-y-6 lg:translate-y-0"
         >
           {activa && !reproduciendo && !mostrarFeedbackPausa && (
             <span className="flex items-center justify-center text-white/75 opacity-80 drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)]">
