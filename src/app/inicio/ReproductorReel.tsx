@@ -213,7 +213,6 @@ export default function ReproductorReel({
     <div
       className="feat-reel-audio-stage"
       data-playing={reproduciendo ? "true" : "false"}
-      style={estiloProgreso}
     >
       <audio
         ref={audioRef}
@@ -257,6 +256,7 @@ export default function ReproductorReel({
         className="feat-reel-linear-player"
         data-playing={reproduciendo ? "true" : "false"}
         data-scrubbing={desplazando ? "true" : "false"}
+        style={estiloProgreso}
         data-no-toggle-reel
       >
         <button
