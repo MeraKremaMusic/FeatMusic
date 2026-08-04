@@ -100,6 +100,9 @@ function TarjetaFeed({
   usuarioActualId: number;
 }) {
   const [reproduciendo, setReproduciendo] = useState(false);
+  const [descripcionExpandida, setDescripcionExpandida] = useState(false);
+  const [descripcionRecortada, setDescripcionRecortada] = useState(false);
+  const descripcionRef = useRef<HTMLParagraphElement>(null);
   const gestoToqueRef = useRef<{
     pointerId: number;
     x: number;
@@ -116,6 +119,36 @@ function TarjetaFeed({
         "--reel-cover": `url("${artista.fotoPerfil.replaceAll('"', '\\"')}")`,
       } as CSSProperties)
     : undefined;
+
+  useEffect(() => {
+    if (!activa) setDescripcionExpandida(false);
+  }, [activa]);
+
+  useEffect(() => {
+    if (descripcionExpandida) return;
+
+    const descripcion = descripcionRef.current;
+    if (!descripcion) return;
+
+    function medirDescripcion() {
+      const elemento = descripcionRef.current;
+      if (!elemento) return;
+
+      setDescripcionRecortada(
+        elemento.scrollHeight > elemento.clientHeight + 1 ||
+          elemento.scrollWidth > elemento.clientWidth + 1,
+      );
+    }
+
+    const fotograma = window.requestAnimationFrame(medirDescripcion);
+    const observador = new ResizeObserver(medirDescripcion);
+    observador.observe(descripcion);
+
+    return () => {
+      window.cancelAnimationFrame(fotograma);
+      observador.disconnect();
+    };
+  }, [descripcionExpandida, oportunidad.descripcion]);
 
   function esZonaInteractiva(objetivo: EventTarget | null) {
     return (
@@ -279,9 +312,31 @@ function TarjetaFeed({
             <h1 className="feat-reel-title mt-3 line-clamp-2 break-words text-[1.45rem] font-black leading-[1.03] tracking-[-0.025em] text-white sm:text-3xl">
               {oportunidad.titulo}
             </h1>
-            <p className="mt-2 line-clamp-1 text-[11px] font-medium text-white/60 sm:text-xs">
-              {oportunidad.descripcion}
-            </p>
+            <div className="mt-2" data-no-toggle-reel>
+              <p
+                ref={descripcionRef}
+                className={
+                  descripcionExpandida
+                    ? "whitespace-pre-wrap break-words text-[11px] font-medium leading-[1.55] text-white/75 sm:text-xs"
+                    : "line-clamp-1 text-[11px] font-medium text-white/60 sm:text-xs"
+                }
+              >
+                {oportunidad.descripcion}
+              </p>
+
+              {(descripcionRecortada || descripcionExpandida) && (
+                <button
+                  type="button"
+                  aria-expanded={descripcionExpandida}
+                  onClick={() =>
+                    setDescripcionExpandida((estadoActual) => !estadoActual)
+                  }
+                  className="mt-1 inline-flex items-center text-[11px] font-black text-white/90 transition hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/70"
+                >
+                  {descripcionExpandida ? "Cerrar" : "Leer más"}
+                </button>
+              )}
+            </div>
 
             <div className="mt-2 flex min-h-5 justify-end text-right text-[10px] font-semibold text-white/55">
               <ContadorVistasIdea
