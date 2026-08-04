@@ -92,12 +92,13 @@ function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
 
 
 // FEATMUSIC_INDICADORES_PLAY_PAUSA_CENTRO_V1
+// FEATMUSIC_ICONOS_PLAY_PAUSA_SIN_FONDO_V1
 function IconoPlayCentro() {
   return (
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="h-9 w-9 translate-x-0.5 sm:h-10 sm:w-10"
+      className="h-12 w-12 translate-x-0.5 sm:h-14 sm:w-14"
       fill="currentColor"
     >
       <path d="M8.2 5.5v13l10-6.5-10-6.5Z" />
@@ -110,7 +111,7 @@ function IconoPausaCentro() {
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="h-9 w-9 sm:h-10 sm:w-10"
+      className="h-12 w-12 sm:h-14 sm:w-14"
       fill="currentColor"
     >
       <path d="M7 5.5h3.5v13H7zM13.5 5.5H17v13h-3.5z" />
@@ -343,13 +344,13 @@ function TarjetaFeed({
           className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
         >
           {activa && !reproduciendo && !mostrarFeedbackPausa && (
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black/30 text-white/70 opacity-80 shadow-[0_10px_35px_rgba(0,0,0,0.35)] backdrop-blur-[2px] sm:h-20 sm:w-20">
+            <span className="flex items-center justify-center text-white/75 opacity-80 drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)]">
               <IconoPlayCentro />
             </span>
           )}
 
           <span
-            className={`absolute flex h-16 w-16 items-center justify-center rounded-full bg-black/35 text-white shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-[2px] transition-all duration-500 ease-out sm:h-20 sm:w-20 ${
+            className={`absolute flex items-center justify-center text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.95)] transition-all duration-500 ease-out ${
               activa && mostrarFeedbackPausa
                 ? "scale-100 opacity-90"
                 : "scale-90 opacity-0"
