@@ -13,6 +13,7 @@ import EnviarPropuesta from "./components/EnviarPropuesta";
 import DescripcionIdea from "./components/DescripcionIdea";
 import DescargaMp3Idea from "./components/DescargaMp3Idea";
 import SeguimientoPerfil from "./components/SeguimientoPerfil";
+import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
 // FEATMUSIC_DESCRIPCION_IDEA_PERFIL_V1
@@ -24,6 +25,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_DESCARGA_MP3_PERFIL_PUBLICO_V2
 // FEATMUSIC_MP3_FRANJA_INFERIOR_V1
 // FEATMUSIC_PERFIL_PRIVADO_COMO_PUBLICO_V1
+// FEATMUSIC_PESTANAS_PRIVADAS_IDEAS_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -405,6 +407,95 @@ export default async function PerfilPublicoPage({
 
   const esPerfilPropio = sesion?.usuarioId === artista.id;
 
+  const propuestasRecibidasGuardadas = esPerfilPropio
+    ? await prisma.propuesta.findMany({
+        where: {
+          idea: {
+            usuarioId: artista.id,
+          },
+        },
+        orderBy: { creadoEn: "desc" },
+        take: 30,
+        select: {
+          id: true,
+          mensaje: true,
+          audioUrl: true,
+          duracionSegundos: true,
+          estado: true,
+          motivoDecision: true,
+          permiteReintento: true,
+          numeroIntento: true,
+          decisionEn: true,
+          creadoEn: true,
+          conversacion: { select: { id: true } },
+          idea: { select: { id: true, titulo: true } },
+          remitente: {
+            select: {
+              id: true,
+              nombre: true,
+              nombreArtistico: true,
+              nombreUsuario: true,
+              fotoPerfil: true,
+            },
+          },
+        },
+      })
+    : [];
+
+  const propuestasEnviadasGuardadas = esPerfilPropio
+    ? await prisma.propuesta.findMany({
+        where: { remitenteId: artista.id },
+        orderBy: { creadoEn: "desc" },
+        take: 30,
+        select: {
+          id: true,
+          mensaje: true,
+          audioUrl: true,
+          duracionSegundos: true,
+          estado: true,
+          motivoDecision: true,
+          permiteReintento: true,
+          numeroIntento: true,
+          decisionEn: true,
+          creadoEn: true,
+          conversacion: { select: { id: true } },
+          idea: {
+            select: {
+              id: true,
+              titulo: true,
+              usuario: {
+                select: {
+                  id: true,
+                  nombre: true,
+                  nombreArtistico: true,
+                  nombreUsuario: true,
+                  fotoPerfil: true,
+                },
+              },
+            },
+          },
+        },
+      })
+    : [];
+
+  const propuestasRecibidasIniciales = propuestasRecibidasGuardadas.map(
+    ({ conversacion, ...propuesta }) => ({
+      ...propuesta,
+      conversacionId: conversacion?.id ?? null,
+      decisionEn: propuesta.decisionEn?.toISOString() ?? null,
+      creadoEn: propuesta.creadoEn.toISOString(),
+    }),
+  );
+
+  const propuestasEnviadasIniciales = propuestasEnviadasGuardadas.map(
+    ({ conversacion, ...propuesta }) => ({
+      ...propuesta,
+      conversacionId: conversacion?.id ?? null,
+      decisionEn: propuesta.decisionEn?.toISOString() ?? null,
+      creadoEn: propuesta.creadoEn.toISOString(),
+    }),
+  );
+
   const nombreArtistico =
     artista.nombreArtistico?.trim() || artista.nombre?.trim() || "Artista";
   const usuarioVisible =
@@ -438,6 +529,90 @@ export default async function PerfilPublicoPage({
       etiqueta: string;
       valor: string;
     } => Boolean(preferencia.valor),
+  );
+
+  const tarjetasIdeasActivas = (
+    <>
+      {artista.ideas.length === 0 ? (
+        <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-12 text-center">
+          <p className="text-sm font-semibold text-slate-600">
+            Este artista no tiene ideas activas
+          </p>
+        </div>
+      ) : (
+        <div className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
+          {artista.ideas.map((idea, indice) => (
+            <article
+              id={`idea-${idea.id}`}
+              key={idea.id}
+              data-vista-idea
+              className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
+            >
+              <RegistrarVistaIdea
+                ideaId={idea.id}
+                sesionActiva={Boolean(sesion)}
+                esPropietario={esPerfilPropio}
+              />
+              <div className="p-2.5 sm:p-3">
+                <div className="relative">
+                  <ReproductorAudio
+                    id={`perfil-${idea.id}`}
+                    src={idea.audioUrl}
+                    titulo={idea.titulo}
+                    bpm={idea.bpm}
+                    tonalidad={idea.tonalidad}
+                    duracionSegundos={idea.duracionSegundos}
+                    numero={indice + 1}
+                    detalleMetadatos={
+                      <ContadorVistasIdea
+                        ideaId={idea.id}
+                        totalInicial={idea._count.vistas}
+                        esPropietario={esPerfilPropio}
+                        className="!h-auto !w-auto !shrink-0 !gap-1 !whitespace-nowrap !text-[8px] !leading-none !text-slate-500 sm:!text-[9px] [&_svg]:!h-3 [&_svg]:!w-3 [&_svg]:!shrink-0"
+                      />
+                    }
+                    className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-2"
+                  />
+      
+                  <DescripcionIdea
+                    titulo={idea.titulo}
+                    descripcion={idea.descripcion}
+                    resumenColaboracion={crearFraseColaboracion({
+                      rolBuscado: idea.rolBuscado,
+                      generoMusical: idea.generoMusical,
+                      idiomaBuscado: idea.idiomaBuscado,
+                      modalidadColaboracion: idea.modalidadColaboracion,
+                      paisPreferido: idea.paisPreferido,
+                      departamentoPreferido: idea.departamentoPreferido,
+                      ciudadPreferida: idea.ciudadPreferida,
+                      tipoAcuerdo: idea.tipoAcuerdo,
+                    })}
+                  />
+                </div>
+              </div>
+      
+              <div className="grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-b-xl border-t border-slate-200 bg-white">
+                <DescargaMp3Idea
+                  ideaId={idea.id}
+                  titulo={idea.titulo}
+                  sesionActiva={Boolean(sesion)}
+                />
+      
+                <EnviarPropuesta
+                  ideaId={idea.id}
+                  sesionActiva={Boolean(sesion)}
+                  esPropietario={esPerfilPropio}
+                  propuestasActuales={idea._count.propuestas}
+                  propuestaUsuario={idea.propuestas[0] ?? null}
+                  variante="integrada"
+                />
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+      
+    </>
   );
 
   return (
@@ -629,98 +804,31 @@ export default async function PerfilPublicoPage({
           </aside>
 
           <section className="min-w-0">
-            <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 sm:h-7 sm:w-7">
-                  <IconoIdea className="h-3.5 w-3.5" />
-                </span>
-                <h2 className="text-sm font-black text-slate-900 sm:text-base lg:text-lg">
-                  Ideas activas
-                </h2>
-              </div>
-
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 sm:px-3 sm:py-1 sm:text-xs">
-                {artista.ideas.length}
-              </span>
-            </div>
-
-            {artista.ideas.length === 0 ? (
-              <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-12 text-center">
-                <p className="text-sm font-semibold text-slate-600">
-                  Este artista no tiene ideas activas
-                </p>
-              </div>
+            {esPerfilPropio ? (
+              <SeccionesPerfilPrivado
+                ideasActivas={tarjetasIdeasActivas}
+                cantidadIdeasActivas={artista.ideas.length}
+                propuestasRecibidasIniciales={propuestasRecibidasIniciales}
+                propuestasEnviadasIniciales={propuestasEnviadasIniciales}
+              />
             ) : (
-              <div className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
-                {artista.ideas.map((idea, indice) => (
-                  <article
-                    id={`idea-${idea.id}`}
-                    key={idea.id}
-                    data-vista-idea
-                    className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
-                  >
-                    <RegistrarVistaIdea
-                      ideaId={idea.id}
-                      sesionActiva={Boolean(sesion)}
-                      esPropietario={esPerfilPropio}
-                    />
-                    <div className="p-2.5 sm:p-3">
-                      <div className="relative">
-                        <ReproductorAudio
-                          id={`perfil-${idea.id}`}
-                          src={idea.audioUrl}
-                          titulo={idea.titulo}
-                          bpm={idea.bpm}
-                          tonalidad={idea.tonalidad}
-                          duracionSegundos={idea.duracionSegundos}
-                          numero={indice + 1}
-                          detalleMetadatos={
-                            <ContadorVistasIdea
-                              ideaId={idea.id}
-                              totalInicial={idea._count.vistas}
-                              esPropietario={esPerfilPropio}
-                              className="!h-auto !w-auto !shrink-0 !gap-1 !whitespace-nowrap !text-[8px] !leading-none !text-slate-500 sm:!text-[9px] [&_svg]:!h-3 [&_svg]:!w-3 [&_svg]:!shrink-0"
-                            />
-                          }
-                          className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-2"
-                        />
-
-                        <DescripcionIdea
-                          titulo={idea.titulo}
-                          descripcion={idea.descripcion}
-                          resumenColaboracion={crearFraseColaboracion({
-                            rolBuscado: idea.rolBuscado,
-                            generoMusical: idea.generoMusical,
-                            idiomaBuscado: idea.idiomaBuscado,
-                            modalidadColaboracion: idea.modalidadColaboracion,
-                            paisPreferido: idea.paisPreferido,
-                            departamentoPreferido: idea.departamentoPreferido,
-                            ciudadPreferida: idea.ciudadPreferida,
-                            tipoAcuerdo: idea.tipoAcuerdo,
-                          })}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-b-xl border-t border-slate-200 bg-white">
-                      <DescargaMp3Idea
-                        ideaId={idea.id}
-                        titulo={idea.titulo}
-                        sesionActiva={Boolean(sesion)}
-                      />
-
-                      <EnviarPropuesta
-                        ideaId={idea.id}
-                        sesionActiva={Boolean(sesion)}
-                        esPropietario={esPerfilPropio}
-                        propuestasActuales={idea._count.propuestas}
-                        propuestaUsuario={idea.propuestas[0] ?? null}
-                        variante="integrada"
-                      />
-                    </div>
-                  </article>
-                ))}
-              </div>
+              <>
+                <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 sm:h-7 sm:w-7">
+                      <IconoIdea className="h-3.5 w-3.5" />
+                    </span>
+                    <h2 className="text-sm font-black text-slate-900 sm:text-base lg:text-lg">
+                      Ideas activas
+                    </h2>
+                  </div>
+                
+                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 sm:px-3 sm:py-1 sm:text-xs">
+                    {artista.ideas.length}
+                  </span>
+                </div>
+                {tarjetasIdeasActivas}
+              </>
             )}
           </section>
         </div>
