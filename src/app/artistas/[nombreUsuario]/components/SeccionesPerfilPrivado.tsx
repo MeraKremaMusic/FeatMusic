@@ -628,11 +628,15 @@ export default function SeccionesPerfilPrivado({
                     </div>
 
                     {(rutaIdea || propuesta.conversacionId) && (
-                      <div className="flex justify-end gap-2 border-t border-slate-200 bg-slate-50/70 px-3 py-2.5">
+                      <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
                         {rutaIdea && (
                           <Link
                             href={rutaIdea}
-                            className="inline-flex h-8 items-center rounded-lg border border-slate-200 bg-white px-2.5 text-[9px] font-black text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700"
+                            className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-slate-600 transition hover:bg-slate-50 hover:text-emerald-700 ${
+                              propuesta.conversacionId
+                                ? "border-r border-slate-200"
+                                : ""
+                            }`}
                           >
                             Ver idea
                           </Link>
@@ -640,7 +644,7 @@ export default function SeccionesPerfilPrivado({
                         {propuesta.conversacionId && (
                           <Link
                             href={`/mensajes/${propuesta.conversacionId}`}
-                            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 text-[9px] font-black text-emerald-700 transition hover:bg-emerald-100"
+                            className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50"
                           >
                             Abrir chat
                             {mensajes > 0 && (
@@ -780,7 +784,7 @@ export default function SeccionesPerfilPrivado({
                     </div>
 
                     {propuesta.estado === "PENDIENTE" ? (
-                      <div className="flex flex-wrap justify-end gap-1.5 border-t border-slate-200 bg-slate-50/70 px-3 py-2.5">
+                      <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
                         <button
                           type="button"
                           disabled={procesando}
@@ -794,7 +798,7 @@ export default function SeccionesPerfilPrivado({
                               numeroIntento: propuesta.numeroIntento,
                             });
                           }}
-                          className="h-8 rounded-lg border border-red-200 bg-red-50 px-2.5 text-[9px] font-black text-red-700 transition hover:bg-red-100 disabled:opacity-50"
+                          className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-red-700 transition hover:bg-red-50 disabled:opacity-50 sm:text-[9px]"
                         >
                           Rechazar
                         </button>
@@ -812,7 +816,7 @@ export default function SeccionesPerfilPrivado({
                                 numeroIntento: propuesta.numeroIntento,
                               });
                             }}
-                            className="h-8 rounded-lg border border-sky-200 bg-sky-50 px-2.5 text-[9px] font-black text-sky-700 transition hover:bg-sky-100 disabled:opacity-50"
+                            className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-sky-700 transition hover:bg-sky-50 disabled:opacity-50 sm:text-[9px]"
                           >
                             Solicitar cambios
                           </button>
@@ -823,17 +827,21 @@ export default function SeccionesPerfilPrivado({
                           onClick={() =>
                             enviarDecision(propuesta.id, { accion: "ACEPTAR" })
                           }
-                          className="h-8 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 text-[9px] font-black text-emerald-700 transition hover:bg-emerald-100 disabled:opacity-50"
+                          className="flex min-w-0 flex-1 items-center justify-center px-1.5 py-2 text-center text-[8px] font-black leading-tight text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 sm:text-[9px]"
                         >
                           {procesando ? "Procesando…" : "Aceptar"}
                         </button>
                       </div>
                     ) : propuesta.estado === "ACEPTADA" ? (
-                      <div className="flex flex-wrap justify-end gap-1.5 border-t border-slate-200 bg-slate-50/70 px-3 py-2.5">
+                      <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
                         {propuesta.audioUrl && (
                           <a
                             href={`/api/propuestas/${propuesta.id}/descargar`}
-                            className="inline-flex h-8 items-center rounded-lg border border-sky-200 bg-sky-50 px-2.5 text-[9px] font-black text-sky-700 transition hover:bg-sky-100"
+                            className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-sky-700 transition hover:bg-sky-50 ${
+                              propuesta.conversacionId
+                                ? "border-r border-slate-200"
+                                : ""
+                            }`}
                           >
                             Descargar MP3
                           </a>
@@ -841,7 +849,7 @@ export default function SeccionesPerfilPrivado({
                         {propuesta.conversacionId && (
                           <Link
                             href={`/mensajes/${propuesta.conversacionId}`}
-                            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 text-[9px] font-black text-emerald-700 transition hover:bg-emerald-100"
+                            className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50"
                           >
                             Abrir chat
                             {mensajes > 0 && (
