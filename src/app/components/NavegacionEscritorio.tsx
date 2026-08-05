@@ -1,5 +1,7 @@
 "use client";
 
+// FEATMUSIC_NAVEGACION_MI_PERFIL_PUBLICO_V1
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -87,10 +89,13 @@ export default function NavegacionEscritorio({
 
   const viendoInicio =
     pathname === "/inicio" || pathname.startsWith("/inicio/");
-  const explorando =
-    pathname === "/artistas" || pathname.startsWith("/artistas/");
   const viendoPerfil =
-    pathname === "/panel" || pathname.startsWith("/panel/");
+    pathname === "/artistas/mi-perfil" ||
+    pathname === "/panel" ||
+    pathname.startsWith("/panel/");
+  const explorando =
+    (pathname === "/artistas" || pathname.startsWith("/artistas/")) &&
+    pathname !== "/artistas/mi-perfil";
   const viendoMensajes =
     pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
@@ -142,7 +147,7 @@ export default function NavegacionEscritorio({
       </Link>
 
       <Link
-        href="/panel#panel-card-1"
+        href="/artistas/mi-perfil"
         aria-current={viendoPerfil ? "page" : undefined}
         className={`${claseBase} ${
           viendoPerfil ? claseActiva : claseInactiva

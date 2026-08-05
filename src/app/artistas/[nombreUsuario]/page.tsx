@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import ContadorVistasIdea from "../../components/ContadorVistasIdea";
@@ -8,6 +8,7 @@ import RegistrarVistaIdea from "../../components/RegistrarVistaIdea";
 import ReproductorAudio from "../../components/ReproductorAudio";
 import { crearFraseColaboracion } from "../../components/ResumenColaboracionIdea";
 import MenuMovilPanel from "../../panel/components/MenuMovilPanel";
+import PerfilArtistaCard from "../../panel/components/PerfilArtistaCard";
 import EnviarPropuesta from "./components/EnviarPropuesta";
 import DescripcionIdea from "./components/DescripcionIdea";
 import DescargaMp3Idea from "./components/DescargaMp3Idea";
@@ -22,6 +23,7 @@ import SeguimientoPerfil from "./components/SeguimientoPerfil";
 // FEATMUSIC_VISTAS_PERFIL_PROPIO_LINEA_UNICA_V1
 // FEATMUSIC_DESCARGA_MP3_PERFIL_PUBLICO_V2
 // FEATMUSIC_MP3_FRANJA_INFERIOR_V1
+// FEATMUSIC_PERFIL_PRIVADO_COMO_PUBLICO_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -286,20 +288,31 @@ export default async function PerfilPublicoPage({
     nombreUsuario = parametro;
   }
 
+  const esRutaPerfilPropio = nombreUsuario === "mi-perfil";
+
+  if (esRutaPerfilPropio && !sesion) {
+    redirect("/iniciar-sesion");
+  }
+
   const idAlternativo = nombreUsuario.startsWith("artista-")
     ? Number(nombreUsuario.replace("artista-", ""))
     : Number.NaN;
 
   const artista = await prisma.usuario.findFirst({
-    where: {
-      perfilCompleto: true,
-      OR: [
-        { nombreUsuario },
-        ...(Number.isInteger(idAlternativo) && idAlternativo > 0
-          ? [{ id: idAlternativo }]
-          : []),
-      ],
-    },
+    where: esRutaPerfilPropio
+      ? {
+          id: sesion?.usuarioId ?? -1,
+          perfilCompleto: true,
+        }
+      : {
+          perfilCompleto: true,
+          OR: [
+            { nombreUsuario },
+            ...(Number.isInteger(idAlternativo) && idAlternativo > 0
+              ? [{ id: idAlternativo }]
+              : []),
+          ],
+        },
     select: {
       id: true,
       nombre: true,
@@ -385,6 +398,8 @@ export default async function PerfilPublicoPage({
   if (!artista) {
     notFound();
   }
+
+  const esPerfilPropio = sesion?.usuarioId === artista.id;
 
   const nombreArtistico =
     artista.nombreArtistico?.trim() || artista.nombre?.trim() || "Artista";
@@ -560,7 +575,7 @@ export default async function PerfilPublicoPage({
                   artistaId={artista.id}
                   nombreUsuario={usuarioVisible}
                   sesionActiva={Boolean(sesion)}
-                  esPerfilPropio={sesion?.usuarioId === artista.id}
+                  esPerfilPropio={esPerfilPropio}
                   siguiendoInicial={artista.seguidores.length > 0}
                   seguidoresIniciales={artista._count.seguidores}
                   siguiendoCantidad={artista._count.siguiendo}
@@ -573,6 +588,39 @@ export default async function PerfilPublicoPage({
                 </p>
               </div>
             </div>
+
+            {esPerfilPropio && (
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2 border-t border-slate-200 pt-4">
+                <PerfilArtistaCard
+                  modo="controles"
+                  nombreArtistico={nombreArtistico}
+                  nombreUsuario={usuarioVisible}
+                  fotoPerfil={artista.fotoPerfil}
+                  biografia={artista.biografia}
+                  spotifyUrl={artista.spotifyUrl}
+                  youtubeUrl={artista.youtubeUrl}
+                  instagramUrl={artista.instagramUrl}
+                  distribuidoraPreferida={artista.distribuidoraPreferida}
+                  softwarePreferido={artista.softwarePreferido}
+                  rol={formatearRol(artista.rolPrincipal)}
+                  tipoColaboracion=""
+                  generos={generos}
+                  ubicacion={ubicacion}
+                  idiomaPrincipal=""
+                  fechaRegistro=""
+                  correoVerificado={false}
+                  seguidores={artista._count.seguidores}
+                  siguiendo={artista._count.siguiendo}
+                />
+
+                <Link
+                  href="/panel#panel-card-2"
+                  className="inline-flex h-9 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-[10px] font-black text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
+                >
+                  Administrar ideas
+                </Link>
+              </div>
+            )}
 
           </aside>
 
@@ -610,7 +658,7 @@ export default async function PerfilPublicoPage({
                     <RegistrarVistaIdea
                       ideaId={idea.id}
                       sesionActiva={Boolean(sesion)}
-                      esPropietario={sesion?.usuarioId === artista.id}
+                      esPropietario={esPerfilPropio}
                     />
                     <div className="p-2.5 sm:p-3">
                       <div className="relative">
@@ -626,7 +674,7 @@ export default async function PerfilPublicoPage({
                             <ContadorVistasIdea
                               ideaId={idea.id}
                               totalInicial={idea._count.vistas}
-                              esPropietario={sesion?.usuarioId === artista.id}
+                              esPropietario={esPerfilPropio}
                               className="!h-auto !w-auto !shrink-0 !gap-1 !whitespace-nowrap !text-[8px] !leading-none !text-slate-500 sm:!text-[9px] [&_svg]:!h-3 [&_svg]:!w-3 [&_svg]:!shrink-0"
                             />
                           }
@@ -660,7 +708,7 @@ export default async function PerfilPublicoPage({
                       <EnviarPropuesta
                         ideaId={idea.id}
                         sesionActiva={Boolean(sesion)}
-                        esPropietario={sesion?.usuarioId === artista.id}
+                        esPropietario={esPerfilPropio}
                         propuestasActuales={idea._count.propuestas}
                         propuestaUsuario={idea.propuestas[0] ?? null}
                         variante="integrada"

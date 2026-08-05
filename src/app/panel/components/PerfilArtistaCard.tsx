@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ChangeEvent, FormEvent, ReactNode } from "react";
 
 import ContadoresSeguimiento from "@/app/components/ContadoresSeguimiento";
@@ -31,7 +32,10 @@ type PerfilArtistaCardProps = PerfilActualizado & {
   correoVerificado: boolean;
   seguidores: number;
   siguiendo: number;
+  modo?: "tarjeta" | "controles";
 };
+
+// FEATMUSIC_CONTROLES_PERFIL_PUBLICO_PROPIO_V1
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -186,7 +190,9 @@ export default function PerfilArtistaCard({
   correoVerificado,
   seguidores,
   siguiendo,
+  modo = "tarjeta",
 }: PerfilArtistaCardProps) {
+  const router = useRouter();
   const [perfil, setPerfil] = useState<PerfilActualizado>({
     nombreArtistico: nombreInicial,
     nombreUsuario: usuarioInicial,
@@ -452,6 +458,10 @@ export default function PerfilArtistaCard({
       // el usuario pueda apreciar inmediatamente los cambios en el panel.
       setExito("");
       setModalAbierto(false);
+
+      if (modo === "controles") {
+        router.refresh();
+      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -465,7 +475,35 @@ export default function PerfilArtistaCard({
 
   return (
     <>
-      <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#07110d]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
+      {modo === "controles" ? (
+        <div className="flex items-center gap-2">
+          <div className="[&>button]:!border [&>button]:!border-slate-200 [&>button]:!bg-slate-50 [&>button]:!text-slate-600 [&>button:hover]:!bg-violet-50 [&>button:hover]:!text-violet-700">
+            <CentroNotificaciones />
+          </div>
+
+          <button
+            type="button"
+            onClick={abrirModal}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 text-[10px] font-black text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
+            </svg>
+            Editar perfil
+          </button>
+        </div>
+      ) : (
+        <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#07110d]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-4">
             <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-600 text-2xl font-black shadow-lg shadow-black/30">
@@ -633,7 +671,8 @@ export default function PerfilArtistaCard({
           </div>
         </div>
 
-      </article>
+        </article>
+      )}
 
       {modalAbierto && (
         <div

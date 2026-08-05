@@ -1,5 +1,7 @@
 "use client";
 
+// FEATMUSIC_MENU_MI_PERFIL_PUBLICO_V1
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -106,9 +108,13 @@ export default function MenuMovilPanel({
       : String(notificacionesNoLeidas);
 
   const estaEnInicio = pathname === "/inicio" || pathname.startsWith("/inicio/");
-  const estaEnPanel = pathname === "/panel" || pathname.startsWith("/panel/");
+  const estaEnPanel =
+    pathname === "/artistas/mi-perfil" ||
+    pathname === "/panel" ||
+    pathname.startsWith("/panel/");
   const estaEnExplorar =
-    pathname === "/artistas" || pathname.startsWith("/artistas/");
+    (pathname === "/artistas" || pathname.startsWith("/artistas/")) &&
+    pathname !== "/artistas/mi-perfil";
   const estaEnMensajes =
     pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
@@ -205,7 +211,7 @@ export default function MenuMovilPanel({
         </Link>
 
         <Link
-          href="/panel#panel-card-1"
+          href="/artistas/mi-perfil"
           aria-label={
             notificacionesNoLeidas > 0
               ? `Ir al perfil. ${notificacionesNoLeidas} notificación${
