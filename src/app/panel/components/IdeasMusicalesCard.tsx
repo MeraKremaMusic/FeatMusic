@@ -44,6 +44,9 @@ export type IdeaPanel = {
 
 type IdeasMusicalesCardProps = {
   ideasIniciales: IdeaPanel[];
+  soloModal?: boolean;
+  abiertoExterno?: boolean;
+  onCerrarExterno?: () => void;
 };
 
 type RespuestaCrearIdea = {
@@ -325,6 +328,9 @@ function enviarIdeaConProgreso(
 
 export default function IdeasMusicalesCard({
   ideasIniciales,
+  soloModal = false,
+  abiertoExterno,
+  onCerrarExterno,
 }: IdeasMusicalesCardProps) {
   const router = useRouter();
   const [ideas, setIdeas] = useState(ideasIniciales);
@@ -350,13 +356,15 @@ export default function IdeasMusicalesCard({
   const [progresoSubida, setProgresoSubida] = useState(0);
   const [error, setError] = useState("");
   const inputArchivoRef = useRef<HTMLInputElement>(null);
+  const modalControlado = typeof abiertoExterno === "boolean";
+  const modalVisible = modalControlado ? abiertoExterno : modalAbierto;
 
   useEffect(() => {
     setIdeas(ideasIniciales);
   }, [ideasIniciales]);
 
   useEffect(() => {
-    if (!modalAbierto) return;
+    if (!modalVisible) return;
 
     const cerrarConEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !guardando) {
@@ -371,7 +379,7 @@ export default function IdeasMusicalesCard({
       document.removeEventListener("keydown", cerrarConEscape);
       document.body.style.overflow = "";
     };
-  }, [modalAbierto, guardando]);
+  }, [modalVisible, guardando]);
 
   useEffect(() => {
     return () => {
@@ -412,7 +420,7 @@ export default function IdeasMusicalesCard({
   }
 
   function abrirModal() {
-    if (limiteAlcanzado) return;
+    if (limiteAlcanzado || modalControlado) return;
     limpiarFormulario();
     setModalAbierto(true);
   }
@@ -420,6 +428,12 @@ export default function IdeasMusicalesCard({
   function cerrarModal() {
     if (guardando) return;
     limpiarFormulario();
+
+    if (modalControlado) {
+      onCerrarExterno?.();
+      return;
+    }
+
     setModalAbierto(false);
   }
 
@@ -597,7 +611,13 @@ export default function IdeasMusicalesCard({
 
       setIdeas((ideasActuales) => [ideaNueva, ...ideasActuales]);
       limpiarFormulario();
-      setModalAbierto(false);
+
+      if (modalControlado) {
+        onCerrarExterno?.();
+      } else {
+        setModalAbierto(false);
+      }
+
       router.refresh();
     } catch (err) {
       setError(
@@ -647,6 +667,7 @@ export default function IdeasMusicalesCard({
 
   return (
     <>
+      {!soloModal && (
       <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(16,185,129,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm">
         <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-emerald-500/[0.08] blur-3xl" />
 
@@ -805,7 +826,7 @@ export default function IdeasMusicalesCard({
               </div>
             </div>
 
-            {error && !modalAbierto && (
+            {error && !modalVisible && (
               <p className="relative mx-3.5 mb-2 rounded-xl border border-red-400/20 bg-red-500/[0.06] px-3 py-2 text-[10px] text-red-200 sm:mx-4">
                 {error}
               </p>
@@ -827,8 +848,9 @@ export default function IdeasMusicalesCard({
           </>
         )}
       </div>
+      )}
 
-      {modalAbierto && (
+      {modalVisible && (
         <div
           role="presentation"
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md"

@@ -4,10 +4,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useNotificaciones } from "@/app/components/useNotificaciones";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
+import IdeasMusicalesCard, { type IdeaPanel } from "./IdeasMusicalesCard";
 
 type IconoTipo =
   | "inicio"
@@ -89,6 +90,8 @@ function claseOpcion(activa: boolean) {
   ].join(" ");
 }
 
+const IDEAS_VACIAS: IdeaPanel[] = [];
+
 type MenuMovilPanelProps = {
   ocultarDesde?: "md" | "lg";
 };
@@ -98,6 +101,7 @@ export default function MenuMovilPanel({
 }: MenuMovilPanelProps) {
   const pathname = usePathname();
   const menuRef = useRef<HTMLElement>(null);
+  const [publicarAbierto, setPublicarAbierto] = useState(false);
   const { total: mensajesNoLeidos } = useNotificacionesChat();
   const { totalNoLeidas: notificacionesNoLeidas } = useNotificaciones();
   const etiquetaMensajes =
@@ -146,7 +150,8 @@ export default function MenuMovilPanel({
   }, []);
 
   return (
-    <nav
+    <>
+      <nav
       ref={menuRef}
       aria-label="Menú principal móvil"
       className={`featmusic-dark-chrome featmusic-solid-black-chrome fixed bottom-0 left-0 right-0 z-50 box-border w-full max-w-[100vw] overflow-visible px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_35px_rgba(0,0,0,0.45)] ${
@@ -174,15 +179,18 @@ export default function MenuMovilPanel({
           <span className="truncate text-[9px] font-semibold">Explorar</span>
         </Link>
 
-        <Link
-          href="/panel#panel-card-2"
-          aria-label="Ir a publicar una idea"
+        <button
+          type="button"
+          onClick={() => setPublicarAbierto(true)}
+          aria-label="Abrir el formulario para publicar una idea"
+          aria-haspopup="dialog"
+          aria-expanded={publicarAbierto}
           data-featmusic-publicar-sin-circulo-v1="true"
-        className="group flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-emerald-300"
+          className="group flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-emerald-300"
         >
           <Icono tipo="mas" className="h-6 w-6" />
           <span className="truncate text-[9px] font-semibold">Publicar</span>
-        </Link>
+        </button>
 
         <Link
           href="/mensajes"
@@ -230,6 +238,14 @@ export default function MenuMovilPanel({
           <span className="truncate text-[9px] font-semibold">Perfil</span>
         </Link>
       </div>
-    </nav>
+      </nav>
+
+      <IdeasMusicalesCard
+        ideasIniciales={IDEAS_VACIAS}
+        soloModal
+        abiertoExterno={publicarAbierto}
+        onCerrarExterno={() => setPublicarAbierto(false)}
+      />
+    </>
   );
 }
