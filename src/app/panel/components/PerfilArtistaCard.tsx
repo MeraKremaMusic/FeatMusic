@@ -36,6 +36,7 @@ type PerfilArtistaCardProps = PerfilActualizado & {
 };
 
 // FEATMUSIC_CONTROLES_PERFIL_PUBLICO_PROPIO_V1
+// FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -476,20 +477,18 @@ export default function PerfilArtistaCard({
   return (
     <>
       {modo === "controles" ? (
-        <div className="flex items-center gap-2">
-          <div className="[&>button]:!border [&>button]:!border-slate-200 [&>button]:!bg-slate-50 [&>button]:!text-slate-600 [&>button:hover]:!bg-violet-50 [&>button:hover]:!text-violet-700">
-            <CentroNotificaciones />
-          </div>
+        <>
+          <CentroNotificaciones variante="integrada" />
 
           <button
             type="button"
             onClick={abrirModal}
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 text-[10px] font-black text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+            className="flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
           >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="h-3.5 w-3.5"
+              className="h-3.5 w-3.5 shrink-0"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.8"
@@ -499,9 +498,9 @@ export default function PerfilArtistaCard({
               <path d="M12 20h9" />
               <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
             </svg>
-            Editar perfil
+            <span>Editar perfil</span>
           </button>
-        </div>
+        </>
       ) : (
         <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#07110d]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
         <div className="flex items-start justify-between gap-4">

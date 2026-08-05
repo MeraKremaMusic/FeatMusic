@@ -26,6 +26,7 @@ import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 // FEATMUSIC_MP3_FRANJA_INFERIOR_V1
 // FEATMUSIC_PERFIL_PRIVADO_COMO_PUBLICO_V1
 // FEATMUSIC_PESTANAS_PRIVADAS_IDEAS_V1
+// FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -651,7 +652,7 @@ export default async function PerfilPublicoPage({
 
       <div className="mx-auto max-w-[1180px] px-3 py-3 sm:px-4 sm:py-5 md:py-8">
         <div className="grid gap-3 sm:gap-4 lg:grid-cols-[310px_minmax(0,1fr)]">
-          <aside className="relative rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5">
+          <aside className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5">
             <div className="absolute right-3 top-3 flex flex-col items-center gap-2 sm:right-4 sm:top-4">
               {codigoPais && (
                 <img
@@ -769,7 +770,7 @@ export default async function PerfilPublicoPage({
             </div>
 
             {esPerfilPropio && (
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2 border-t border-slate-200 pt-4">
+              <div className="-mx-4 -mb-4 mt-4 grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 bg-white sm:-mx-5 sm:-mb-5">
                 <PerfilArtistaCard
                   modo="controles"
                   nombreArtistico={nombreArtistico}
@@ -794,9 +795,22 @@ export default async function PerfilPublicoPage({
 
                 <Link
                   href="/panel#panel-card-2"
-                  className="inline-flex h-9 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-[10px] font-black text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
+                  className="flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
                 >
-                  Administrar ideas
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="h-3.5 w-3.5 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M4 5h16v14H4Z" />
+                    <path d="M8 9h8M8 13h8M8 17h5" />
+                  </svg>
+                  <span>Administrar ideas</span>
                 </Link>
               </div>
             )}

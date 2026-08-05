@@ -17,6 +17,11 @@ import {
   useNotificaciones,
 } from "@/app/components/useNotificaciones";
 
+
+type CentroNotificacionesProps = {
+  variante?: "icono" | "integrada";
+};
+
 function IconoCampana({
   className = "h-4 w-4",
 }: {
@@ -198,7 +203,9 @@ function iniciales(nombre: string) {
   );
 }
 
-export default function CentroNotificaciones() {
+export default function CentroNotificaciones({
+  variante = "icono",
+}: CentroNotificacionesProps) {
   const botonRef = useRef<HTMLButtonElement | null>(null);
   const [montado, setMontado] = useState(false);
   const [abierto, setAbierto] = useState(false);
@@ -213,6 +220,7 @@ export default function CentroNotificaciones() {
     top: 64,
     left: 16,
   });
+  const esIntegrada = variante === "integrada";
 
   const actualizarPosicion = useCallback(() => {
     const boton = botonRef.current;
@@ -376,12 +384,23 @@ export default function CentroNotificaciones() {
             : "Notificaciones"
         }
         aria-expanded={abierto}
-        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-emerald-500/15 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+        className={
+          esIntegrada
+            ? "relative flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
+            : "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-emerald-500/15 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+        }
       >
-        <IconoCampana />
+        <IconoCampana className={esIntegrada ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4"} />
+        {esIntegrada && <span>Notificaciones</span>}
 
         {totalNoLeidas > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#07110d] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-emerald-950/40">
+          <span
+            className={
+              esIntegrada
+                ? "absolute right-1.5 top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-white bg-emerald-500 px-1 text-[8px] font-black leading-none text-white shadow-sm"
+                : "absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#07110d] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-emerald-950/40"
+            }
+          >
             {totalNoLeidas > 99 ? "99+" : totalNoLeidas}
           </span>
         )}
