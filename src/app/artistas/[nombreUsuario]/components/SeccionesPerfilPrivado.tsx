@@ -276,23 +276,25 @@ function BotonPestana({
     <button
       type="button"
       onClick={onClick}
-      className={`relative inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[9px] font-black transition sm:h-10 sm:px-3 sm:text-[10px] ${
+      className={`relative flex h-9 w-full min-w-0 items-center justify-center gap-1 rounded-lg border px-1 text-[8px] font-black transition sm:h-10 sm:w-auto sm:shrink-0 sm:gap-1.5 sm:px-3 sm:text-[10px] ${
         activa
           ? "border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm"
           : "border-slate-200 bg-white text-slate-500 hover:border-emerald-200 hover:bg-emerald-50/50 hover:text-emerald-700"
       }`}
     >
-      {icono}
-      <span>{etiqueta}</span>
+      <span className="flex shrink-0 items-center justify-center [&>svg]:h-3 [&>svg]:w-3 sm:[&>svg]:h-3.5 sm:[&>svg]:w-3.5">
+        {icono}
+      </span>
+      <span className="min-w-0 whitespace-nowrap text-center">{etiqueta}</span>
       <span
-        className={`rounded-full px-1.5 py-0.5 text-[7px] tabular-nums ${
+        className={`shrink-0 rounded-full px-1 py-0.5 text-[7px] tabular-nums sm:px-1.5 ${
           activa ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
         }`}
       >
         {cantidad}
       </span>
       {notificaciones > 0 && (
-        <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
+        <span className="absolute -right-1 -top-1 rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white shadow-sm">
           {etiquetaCantidad(notificaciones)}
         </span>
       )}
@@ -479,17 +481,17 @@ export default function SeccionesPerfilPrivado({
 
   return (
     <div className="min-w-0">
-      <div className="flex items-center gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] lg:px-0 [&::-webkit-scrollbar]:hidden">
+      <div className="grid w-full grid-cols-3 gap-1.5 px-1 pb-1 sm:flex sm:w-auto sm:items-center sm:gap-2 sm:overflow-visible lg:px-0">
         <BotonPestana
           activa={pestana === "ACTIVAS"}
-          etiqueta="Ideas activas"
+          etiqueta="Activas"
           cantidad={cantidadIdeasActivas}
           icono={<IconoIdea />}
           onClick={() => cambiarPestana("ACTIVAS")}
         />
         <BotonPestana
           activa={pestana === "ENVIADAS"}
-          etiqueta="Ideas enviadas"
+          etiqueta="Enviadas"
           cantidad={propuestasEnviadasIniciales.length}
           notificaciones={mensajesEnviados}
           icono={<IconoEnviar />}
@@ -497,7 +499,7 @@ export default function SeccionesPerfilPrivado({
         />
         <BotonPestana
           activa={pestana === "RECIBIDAS"}
-          etiqueta="Ideas recibidas"
+          etiqueta="Recibidas"
           cantidad={recibidas.length}
           notificaciones={mensajesRecibidos}
           icono={<IconoRecibir />}
