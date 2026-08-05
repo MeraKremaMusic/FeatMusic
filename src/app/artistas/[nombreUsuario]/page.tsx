@@ -617,7 +617,7 @@ export default async function PerfilPublicoPage({
   );
 
   return (
-    <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#f4f6fa] pb-20 text-[#172033] lg:pb-0">
+    <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#f4f6fa] pb-20 text-[#172033] lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-50">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link

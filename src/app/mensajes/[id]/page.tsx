@@ -182,7 +182,7 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
   }));
 
   return (
-    <main className="featmusic-app-light min-h-[100dvh] bg-[#06100c] text-white">
+    <main className="featmusic-app-light featmusic-page-contrast min-h-[100dvh] bg-[#06100c] text-white">
       <header className="featmusic-solid-black-chrome sticky top-0 z-30">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <Link

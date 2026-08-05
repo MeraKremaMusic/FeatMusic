@@ -916,7 +916,7 @@ export default function ArtistasClient({
     Number(soloConIdeas);
 
   return (
-    <main className="featmusic-app-light min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-50">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <Link
