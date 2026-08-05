@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
 // FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
+// FEATMUSIC_ELIMINAR_IDEA_PERFIL_PRIVADO_V1
 
 import {
   useCallback,
@@ -190,6 +191,7 @@ export default function EnviarPropuesta({
   } | null>(null);
   const [totalPropuestas, setTotalPropuestas] = useState(propuestasActuales);
   const [propuestaPropia, setPropuestaPropia] = useState(propuestaUsuario);
+  const [eliminandoIdea, setEliminandoIdea] = useState(false);
 
   useEffect(() => {
     setTotalPropuestas(propuestasActuales);
@@ -464,6 +466,41 @@ export default function EnviarPropuesta({
     }
   }
 
+  async function eliminarIdeaPropia() {
+    if (eliminandoIdea) return;
+
+    const confirmado = window.confirm(
+      "¿Eliminar esta idea? Dejará de aparecer en tu perfil y esta acción no se puede deshacer.",
+    );
+
+    if (!confirmado) return;
+
+    setEliminandoIdea(true);
+
+    try {
+      const response = await fetch(`/api/ideas/${ideaId}`, {
+        method: "DELETE",
+      });
+      const data = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        mensaje?: string;
+      };
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.mensaje ?? "No se pudo eliminar la idea.");
+      }
+
+      router.refresh();
+    } catch (errorEliminacion) {
+      window.alert(
+        errorEliminacion instanceof Error
+          ? errorEliminacion.message
+          : "No se pudo eliminar la idea.",
+      );
+      setEliminandoIdea(false);
+    }
+  }
+
   const estadoPropio = propuestaPropia?.estado ?? null;
   const cuposCompletos = totalPropuestas >= MAX_PROPUESTAS;
   const puedeEnviarCorreccion =
@@ -501,9 +538,16 @@ export default function EnviarPropuesta({
       return (
         <>
           <span className={claseCupos}>{textoCupos}</span>
-          <span className={`${claseSegmento} bg-white text-slate-500`}>
-            Tu publicación
-          </span>
+          <button
+            type="button"
+            onClick={eliminarIdeaPropia}
+            disabled={eliminandoIdea}
+            className={`${claseSegmento} bg-white text-red-600 transition hover:bg-red-50 hover:text-red-700 disabled:cursor-wait disabled:bg-slate-50 disabled:text-slate-400`}
+            aria-label="Eliminar esta idea"
+            title="Eliminar idea"
+          >
+            {eliminandoIdea ? "Eliminando..." : "Eliminar"}
+          </button>
         </>
       );
     }
