@@ -182,7 +182,7 @@ export default async function MensajesPage() {
 
   return (
     <main className="featmusic-app-light min-h-[100dvh] bg-[#06100c] pb-20 text-white lg:pb-0">
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-black/90 backdrop-blur-xl">
+      <header className="featmusic-solid-black-chrome sticky top-0 z-40">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link href="/panel" className="text-lg font-black tracking-tight">
             Feat<span className="text-emerald-400">Music</span>
@@ -193,7 +193,7 @@ export default async function MensajesPage() {
           <form action="/api/cerrar-sesion" method="post">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-lg border border-red-400/50 px-3 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"
+              className="featmusic-logout-plain flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold text-white transition"
             >
               <IconoSalir />
               Cerrar sesión
