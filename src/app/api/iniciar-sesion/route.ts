@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     await crearSesion({ usuarioId: usuario.id, correo: usuario.correo });
-    return redirigir("/panel");
+    return redirigir("/artistas/mi-perfil");
   } catch (error) {
     console.error("No se pudo iniciar sesión.", error);
     return redirigirConError("servidor");

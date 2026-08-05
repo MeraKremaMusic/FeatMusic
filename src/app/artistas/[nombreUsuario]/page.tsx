@@ -302,7 +302,6 @@ export default async function PerfilPublicoPage({
     where: esRutaPerfilPropio
       ? {
           id: sesion?.usuarioId ?? -1,
-          perfilCompleto: true,
         }
       : {
           perfilCompleto: true,
@@ -315,6 +314,7 @@ export default async function PerfilPublicoPage({
         },
     select: {
       id: true,
+      perfilCompleto: true,
       nombre: true,
       nombreArtistico: true,
       nombreUsuario: true,
@@ -399,6 +399,10 @@ export default async function PerfilPublicoPage({
     notFound();
   }
 
+  if (esRutaPerfilPropio && !artista.perfilCompleto) {
+    redirect("/completar-perfil");
+  }
+
   const esPerfilPropio = sesion?.usuarioId === artista.id;
 
   const nombreArtistico =
@@ -441,7 +445,7 @@ export default async function PerfilPublicoPage({
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <Link
-            href={sesion ? "/panel" : "/"}
+            href={sesion ? "/artistas/mi-perfil" : "/"}
             className="text-lg font-black tracking-tight"
           >
             Feat<span className="text-emerald-400">Music</span>

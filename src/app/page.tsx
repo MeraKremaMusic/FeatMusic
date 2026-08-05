@@ -1,3 +1,4 @@
+// FEATMUSIC_ENTRADA_PERFIL_NUEVO_V2
 import { redirect } from "next/navigation";
 
 import { obtenerSesion } from "@/lib/session";
@@ -7,7 +8,7 @@ export default async function HomePage() {
   const sesion = await obtenerSesion();
 
   if (sesion) {
-    redirect("/panel");
+    redirect("/artistas/mi-perfil");
   }
 
   return <HomeClient />;

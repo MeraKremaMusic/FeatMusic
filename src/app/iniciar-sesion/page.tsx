@@ -16,7 +16,7 @@ export default async function IniciarSesionPage({
   searchParams: Promise<{ error?: string; exito?: string }>;
 }) {
   const sesion = await obtenerSesion();
-  if (sesion) redirect("/panel");
+  if (sesion) redirect("/artistas/mi-perfil");
 
   const { error, exito } = await searchParams;
   const mensaje = error ? mensajesDeError[error] : undefined;

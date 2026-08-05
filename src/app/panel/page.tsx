@@ -5,7 +5,6 @@ import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
-import PerfilArtistaCard from "./components/PerfilArtistaCard";
 import MenuMovilPanel from "./components/MenuMovilPanel";
 import IdeasMusicalesCard from "./components/IdeasMusicalesCard";
 import PropuestasRecibidasCard from "./components/PropuestasRecibidasCard";
@@ -16,57 +15,6 @@ export const revalidate = 0;
 // FEATMUSIC_SESION_RECUPERABLE_V1
 const RUTA_RESTABLECER_SESION =
   "/api/cerrar-sesion?destino=%2Finiciar-sesion&motivo=sesion-invalida";
-
-function formatearRol(rol: string) {
-  const roles: Record<string, string> = {
-    CANTANTE: "Cantante",
-    COMPOSITOR: "Compositor",
-    PRODUCTOR: "Productor",
-    BEATMAKER: "Beatmaker",
-  };
-
-  return roles[rol] ?? rol;
-}
-
-function obtenerGeneros(generos: unknown): string[] {
-  if (!Array.isArray(generos)) {
-    return [];
-  }
-
-  return generos.filter(
-    (genero): genero is string => typeof genero === "string",
-  );
-}
-
-
-function crearUsuario(nombre: string) {
-  return (
-    nombre
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "") || "artista"
-  );
-}
-
-function formatearFecha(fecha: Date | string | null | undefined) {
-  if (!fecha) {
-    return "Sin registrar";
-  }
-
-  const fechaConvertida =
-    fecha instanceof Date ? fecha : new Date(fecha);
-
-  if (Number.isNaN(fechaConvertida.getTime())) {
-    return "Sin registrar";
-  }
-
-  return new Intl.DateTimeFormat("es-CO", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(fechaConvertida);
-}
 
 type IconoTipo =
   | "inicio"
@@ -252,14 +200,6 @@ export default async function PanelPage() {
   const usuario = await prisma.usuario
     .findUnique({
       where: { id: sesion.usuarioId },
-      include: {
-        _count: {
-          select: {
-            seguidores: true,
-            siguiendo: true,
-          },
-        },
-      },
     })
     .catch((error) => {
       // Ante una sesión que no puede comprobarse, se prioriza recuperar la
@@ -279,29 +219,6 @@ export default async function PanelPage() {
   await limpiarIdeasExpiradasUsuario(sesion.usuarioId).catch((error) => {
     console.error("No se pudieron limpiar las ideas expiradas.", error);
   });
-
-  const nombreArtistico =
-    usuario.nombreArtistico?.trim() ||
-    usuario.nombre?.trim() ||
-    "Artista";
-
-  const usuarioPublico =
-    usuario.nombreUsuario?.trim() || crearUsuario(nombreArtistico);
-  const generos = obtenerGeneros(usuario.generos);
-  const rol = formatearRol(usuario.rolPrincipal);
-
-  const ubicacion =
-    [usuario.ciudad, usuario.pais].filter(Boolean).join(", ") ||
-    "Ubicación sin completar";
-
-
-  const idiomaPrincipal =
-    usuario.idiomaPrincipal?.trim() || "Sin completar";
-
-  const tipoColaboracion =
-    usuario.tipoColaboracion?.trim() || "Sin completar";
-
-  const fechaRegistro = formatearFecha(usuario.creadoEn);
 
   const ideasGuardadas = await prisma.idea.findMany({
     where: {
@@ -465,7 +382,7 @@ export default async function PanelPage() {
     <main className="featmusic-app-light h-[100dvh] overflow-hidden bg-[#06100c] text-white lg:h-screen">
       <header className="featmusic-solid-black-chrome">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
-          <Link href="/panel" className="text-lg font-black tracking-tight">
+          <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
             Feat<span className="text-emerald-400">Music</span>
           </Link>
 
@@ -494,41 +411,11 @@ export default async function PanelPage() {
             items-center gap-4 overflow-x-auto overflow-y-hidden overscroll-x-contain
             px-4 pb-3 pt-4 scroll-smooth touch-pan-x
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-            lg:grid lg:h-full lg:grid-cols-[0.84fr_1.08fr_1.08fr]
+            lg:grid lg:h-full lg:grid-cols-[1fr_1fr]
             lg:items-stretch lg:gap-3 lg:overflow-visible lg:snap-none
             lg:px-4 lg:py-3
           "
         >
-          <section
-            id="panel-card-1"
-            className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden [&>*]:!h-full [&>*]:!max-h-full [&>*]:!border-0 [&>*]:!bg-transparent [&>*]:!shadow-none lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink"
-          >
-            <PerfilArtistaCard
-              nombreArtistico={nombreArtistico}
-              nombreUsuario={usuarioPublico}
-              fotoPerfil={usuario.fotoPerfil}
-              biografia={usuario.biografia}
-
-              spotifyUrl={usuario.spotifyUrl}
-
-              youtubeUrl={usuario.youtubeUrl}
-
-              instagramUrl={usuario.instagramUrl}
-
-              distribuidoraPreferida={usuario.distribuidoraPreferida}
-              softwarePreferido={usuario.softwarePreferido}
-              rol={rol}
-              tipoColaboracion={tipoColaboracion}
-              generos={generos}
-              ubicacion={ubicacion}
-              idiomaPrincipal={idiomaPrincipal}
-              fechaRegistro={fechaRegistro}
-              correoVerificado={usuario.correoVerificado}
-              seguidores={usuario._count.seguidores}
-              siguiendo={usuario._count.siguiendo}
-/>
-          </section>
-
           <section
             id="panel-card-2"
             className="flex h-full min-h-0 w-[calc(100vw-32px)] max-w-[440px] shrink-0 snap-center scroll-mt-20 overflow-hidden p-2.5 sm:p-3 lg:w-auto lg:max-w-none lg:min-w-0 lg:shrink lg:p-2"

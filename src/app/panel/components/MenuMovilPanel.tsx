@@ -108,10 +108,7 @@ export default function MenuMovilPanel({
       : String(notificacionesNoLeidas);
 
   const estaEnInicio = pathname === "/inicio" || pathname.startsWith("/inicio/");
-  const estaEnPanel =
-    pathname === "/artistas/mi-perfil" ||
-    pathname === "/panel" ||
-    pathname.startsWith("/panel/");
+  const estaEnPanel = pathname === "/artistas/mi-perfil";
   const estaEnExplorar =
     (pathname === "/artistas" || pathname.startsWith("/artistas/")) &&
     pathname !== "/artistas/mi-perfil";

@@ -89,10 +89,7 @@ export default function NavegacionEscritorio({
 
   const viendoInicio =
     pathname === "/inicio" || pathname.startsWith("/inicio/");
-  const viendoPerfil =
-    pathname === "/artistas/mi-perfil" ||
-    pathname === "/panel" ||
-    pathname.startsWith("/panel/");
+  const viendoPerfil = pathname === "/artistas/mi-perfil";
   const explorando =
     (pathname === "/artistas" || pathname.startsWith("/artistas/")) &&
     pathname !== "/artistas/mi-perfil";
