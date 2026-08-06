@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { eliminarAudioIdea } from "@/lib/cloudinary";
+import {
+  eliminarAudioIdea,
+  eliminarImagenPortadaIdea,
+} from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
@@ -43,6 +46,7 @@ export async function DELETE(_request: Request, contexto: ContextoRuta) {
     select: {
       id: true,
       audioPublicId: true,
+      portadaPublicId: true,
       propuestas: {
         select: {
           id: true,
@@ -77,6 +81,10 @@ export async function DELETE(_request: Request, contexto: ContextoRuta) {
       await eliminarAudioIdea(idea.audioPublicId);
     }
 
+    if (idea.portadaPublicId) {
+      await eliminarImagenPortadaIdea(idea.portadaPublicId);
+    }
+
     await prisma.$transaction(async (tx) => {
       await tx.propuesta.updateMany({
         where: {
@@ -105,6 +113,8 @@ export async function DELETE(_request: Request, contexto: ContextoRuta) {
         where: { id: idea.id },
         data: {
           estado: "ELIMINADA",
+          portadaUrl: null,
+          portadaPublicId: null,
         },
       });
     });

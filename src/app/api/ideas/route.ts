@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { eliminarAudioIdea, subirAudioIdea } from "@/lib/cloudinary";
+import {
+  eliminarAudioIdea,
+  eliminarImagenPortadaIdea,
+  subirAudioIdea,
+  subirImagenPortadaIdea,
+} from "@/lib/cloudinary";
 import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
@@ -14,6 +19,15 @@ export const dynamic = "force-dynamic";
 const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
 const MAX_AUDIO_DURATION = 240;
 const MAX_ACTIVE_IDEAS = 3;
+const MAX_PORTADA_SIZE = 5 * 1024 * 1024;
+
+const PORTADA_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]);
+
+const PORTADA_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp"]);
 
 const AUDIO_TYPES = new Set([
   "audio/mpeg",
@@ -103,6 +117,17 @@ function tipoAudioPermitido(archivo: File) {
   return extensionValida && mimeValido;
 }
 
+function tipoPortadaPermitido(archivo: File) {
+  const extensionValida = PORTADA_EXTENSIONS.has(
+    obtenerExtension(archivo.name),
+  );
+  const mime = archivo.type.toLowerCase();
+  const mimeValido =
+    PORTADA_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
+
+  return extensionValida && mimeValido;
+}
+
 export async function POST(request: Request) {
   const sesion = await obtenerSesion();
 
@@ -111,6 +136,7 @@ export async function POST(request: Request) {
   }
 
   let audioPublicId: string | null = null;
+  let portadaPublicId: string | null = null;
 
   try {
     const formData = await request.formData();
@@ -200,6 +226,26 @@ export async function POST(request: Request) {
       );
     }
 
+    const portadaFormulario = formData.get("portada");
+    const portada =
+      portadaFormulario instanceof File && portadaFormulario.size > 0
+        ? portadaFormulario
+        : null;
+
+    if (portada && !tipoPortadaPermitido(portada)) {
+      return respuestaError(
+        "La portada debe ser una imagen JPG, PNG o WebP.",
+        400,
+      );
+    }
+
+    if (portada && portada.size > MAX_PORTADA_SIZE) {
+      return respuestaError(
+        "La portada no puede pesar más de 5 MB.",
+        400,
+      );
+    }
+
     await limpiarIdeasExpiradasUsuario(sesion.usuarioId).catch((error) => {
       console.error("No se pudieron limpiar las ideas expiradas.", error);
     });
@@ -265,6 +311,11 @@ export async function POST(request: Request) {
       );
     }
 
+    const portadaSubida = portada
+      ? await subirImagenPortadaIdea(portada, sesion.usuarioId)
+      : null;
+    portadaPublicId = portadaSubida?.publicId ?? null;
+
     const expiraEn = new Date();
     expiraEn.setDate(expiraEn.getDate() + 60);
 
@@ -283,6 +334,8 @@ export async function POST(request: Request) {
         departamentoPreferido: ubicacionPreferida?.departamento ?? null,
         ciudadPreferida: ubicacionPreferida?.ciudad ?? null,
         tipoAcuerdo: resultado.data.tipoAcuerdo,
+        portadaUrl: portadaSubida?.url ?? null,
+        portadaPublicId: portadaSubida?.publicId ?? null,
         audioUrl: audioSubido.url,
         audioPublicId: audioSubido.publicId,
         duracionSegundos: audioSubido.duracionSegundos,
@@ -304,6 +357,7 @@ export async function POST(request: Request) {
         departamentoPreferido: true,
         ciudadPreferida: true,
         tipoAcuerdo: true,
+        portadaUrl: true,
         audioUrl: true,
         duracionSegundos: true,
         formato: true,
@@ -315,6 +369,7 @@ export async function POST(request: Request) {
     });
 
     audioPublicId = null;
+    portadaPublicId = null;
 
     await notificarSeguidoresNuevaIdea({
       artistaId: sesion.usuarioId,
@@ -338,6 +393,17 @@ export async function POST(request: Request) {
           errorEliminacion,
         );
       });
+    }
+
+    if (portadaPublicId) {
+      await eliminarImagenPortadaIdea(portadaPublicId).catch(
+        (errorEliminacion) => {
+          console.error(
+            "No se pudo limpiar la portada después del error.",
+            errorEliminacion,
+          );
+        },
+      );
     }
 
     console.error("No se pudo publicar la idea.", error);

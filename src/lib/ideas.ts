@@ -1,4 +1,7 @@
-import { eliminarAudioIdea } from "@/lib/cloudinary";
+import {
+  eliminarAudioIdea,
+  eliminarImagenPortadaIdea,
+} from "@/lib/cloudinary";
 import { crearNotificacionSegura } from "@/lib/notificaciones";
 import { prisma } from "@/lib/prisma";
 
@@ -10,6 +13,7 @@ type IdeaParaLimpiar = {
   usuarioId: number;
   titulo: string;
   audioPublicId: string;
+  portadaPublicId: string | null;
   propuestas: Array<{
     id: number;
     remitenteId: number;
@@ -41,6 +45,10 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
       // original de la idea para que pueda usarse en el futuro chat.
       if (!tienePropuestaAceptada) {
         await eliminarAudioIdea(idea.audioPublicId);
+      }
+
+      if (idea.portadaPublicId) {
+        await eliminarImagenPortadaIdea(idea.portadaPublicId);
       }
 
       const resultado = await prisma.$transaction(async (tx) => {
@@ -76,6 +84,8 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
           },
           data: {
             estado: "EXPIRADA",
+            portadaUrl: null,
+            portadaPublicId: null,
           },
         });
       });
@@ -138,6 +148,7 @@ const seleccionLimpieza = {
   usuarioId: true,
   titulo: true,
   audioPublicId: true,
+  portadaPublicId: true,
   propuestas: {
     select: {
       id: true,

@@ -150,9 +150,10 @@ function TarjetaFeed({
     0,
     MAX_PROPUESTAS - oportunidad.propuestasActuales,
   );
-  const estiloFondo = artista.fotoPerfil
+  const imagenFondo = oportunidad.portadaUrl?.trim() || artista.fotoPerfil;
+  const estiloFondo = imagenFondo
     ? ({
-        "--reel-cover": `url("${artista.fotoPerfil.replaceAll('"', '\\"')}")`,
+        "--reel-cover": `url("${imagenFondo.replaceAll('"', '\\"')}")`,
       } as CSSProperties)
     : undefined;
 
@@ -326,6 +327,7 @@ function TarjetaFeed({
       <article
         data-vista-idea
         data-playing={reproduciendo ? "true" : "false"}
+        data-idea-cover={oportunidad.portadaUrl ? "true" : "false"}
         onPointerDown={iniciarToque}
         onPointerMove={moverToque}
         onPointerUp={finalizarToque}
@@ -385,7 +387,7 @@ function TarjetaFeed({
               id={`reel-${oportunidad.id}`}
               src={oportunidad.audioUrl}
               titulo={oportunidad.titulo}
-              fotoArtista={artista.fotoPerfil}
+              fotoArtista={oportunidad.portadaUrl || artista.fotoPerfil}
               inicialesArtista={iniciales(artista.nombreArtistico)}
               activa={activa}
               duracionSegundos={oportunidad.duracionSegundos}

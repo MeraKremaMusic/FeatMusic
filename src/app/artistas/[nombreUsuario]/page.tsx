@@ -372,6 +372,7 @@ export default async function PerfilPublicoPage({
           departamentoPreferido: true,
           ciudadPreferida: true,
           tipoAcuerdo: true,
+          portadaUrl: true,
           audioUrl: true,
           duracionSegundos: true,
           expiraEn: true,
@@ -551,74 +552,110 @@ export default async function PerfilPublicoPage({
         </div>
       ) : (
         <div className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
-          {artista.ideas.map((idea, indice) => (
-            <article
-              id={`idea-${idea.id}`}
-              key={idea.id}
-              data-vista-idea
-              className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
-            >
-              <RegistrarVistaIdea
-                ideaId={idea.id}
-                sesionActiva={Boolean(sesion)}
-                esPropietario={esPerfilPropio}
-              />
-              <div className="p-2.5 sm:p-3">
-                <div className="relative">
-                  <ReproductorAudio
-                    id={`perfil-${idea.id}`}
-                    src={idea.audioUrl}
-                    titulo={idea.titulo}
-                    bpm={idea.bpm}
-                    tonalidad={idea.tonalidad}
-                    duracionSegundos={idea.duracionSegundos}
-                    numero={indice + 1}
-                    detalleMetadatos={
-                      <ContadorVistasIdea
-                        ideaId={idea.id}
-                        totalInicial={idea._count.vistas}
-                        esPropietario={esPerfilPropio}
-                        className="!h-auto !w-auto !shrink-0 !gap-1 !whitespace-nowrap !text-[8px] !leading-none !text-slate-500 sm:!text-[9px] [&_svg]:!h-3 [&_svg]:!w-3 [&_svg]:!shrink-0"
-                      />
-                    }
-                    className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-2"
-                  />
-      
-                  <DescripcionIdea
-                    titulo={idea.titulo}
-                    descripcion={idea.descripcion}
-                    resumenColaboracion={crearFraseColaboracion({
-                      rolBuscado: idea.rolBuscado,
-                      generoMusical: idea.generoMusical,
-                      idiomaBuscado: idea.idiomaBuscado,
-                      modalidadColaboracion: idea.modalidadColaboracion,
-                      paisPreferido: idea.paisPreferido,
-                      departamentoPreferido: idea.departamentoPreferido,
-                      ciudadPreferida: idea.ciudadPreferida,
-                      tipoAcuerdo: idea.tipoAcuerdo,
-                    })}
-                  />
-                </div>
-              </div>
-      
-              <div className="grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-b-xl border-t border-slate-200 bg-white">
-                <DescargaMp3Idea
-                  ideaId={idea.id}
-                  titulo={idea.titulo}
-                  sesionActiva={Boolean(sesion)}
-                />
-      
-                <EnviarPropuesta
+          {artista.ideas.map((idea, indice) => {
+            const portadaIdeaVisible = idea.portadaUrl?.trim() || null;
+
+            return (
+              <article
+                id={`idea-${idea.id}`}
+                key={idea.id}
+                data-vista-idea
+                className="relative scroll-mt-16 overflow-visible rounded-xl border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-[0_10px_28px_rgba(15,23,42,0.07)]"
+              >
+                <RegistrarVistaIdea
                   ideaId={idea.id}
                   sesionActiva={Boolean(sesion)}
                   esPropietario={esPerfilPropio}
-                  propuestasActuales={idea._count.propuestas}
-                  propuestaUsuario={idea.propuestas[0] ?? null}
-                  variante="integrada"
                 />
-              </div>
-            </article>
-          ))}
+
+                <div
+                  className={`relative overflow-hidden rounded-t-xl p-2.5 sm:p-3 ${
+                    portadaIdeaVisible
+                      ? "featmusic-idea-cover bg-black"
+                      : ""
+                  }`}
+                >
+                  {portadaIdeaVisible && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                    >
+                      <img
+                        src={portadaIdeaVisible}
+                        alt=""
+                        className="h-full w-full object-cover object-center contrast-[1.04] saturate-[1.08]"
+                        loading="lazy"
+                      />
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <div
+                    className={`relative z-10 ${
+                      portadaIdeaVisible ? "featmusic-idea-cover-content" : ""
+                    }`}
+                  >
+                    <ReproductorAudio
+                      id={`perfil-${idea.id}`}
+                      src={idea.audioUrl}
+                      titulo={idea.titulo}
+                      bpm={idea.bpm}
+                      tonalidad={idea.tonalidad}
+                      duracionSegundos={idea.duracionSegundos}
+                      numero={indice + 1}
+                      detalleMetadatos={
+                        <ContadorVistasIdea
+                          ideaId={idea.id}
+                          totalInicial={idea._count.vistas}
+                          esPropietario={esPerfilPropio}
+                          className="!h-auto !w-auto !shrink-0 !gap-1 !whitespace-nowrap !text-[8px] !leading-none !text-slate-500 sm:!text-[9px] [&_svg]:!h-3 [&_svg]:!w-3 [&_svg]:!shrink-0"
+                        />
+                      }
+                      className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-2"
+                    />
+
+                    <DescripcionIdea
+                      titulo={idea.titulo}
+                      descripcion={idea.descripcion}
+                      resumenColaboracion={crearFraseColaboracion({
+                        rolBuscado: idea.rolBuscado,
+                        generoMusical: idea.generoMusical,
+                        idiomaBuscado: idea.idiomaBuscado,
+                        modalidadColaboracion: idea.modalidadColaboracion,
+                        paisPreferido: idea.paisPreferido,
+                        departamentoPreferido: idea.departamentoPreferido,
+                        ciudadPreferida: idea.ciudadPreferida,
+                        tipoAcuerdo: idea.tipoAcuerdo,
+                      })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-b-xl border-t border-slate-200 bg-white">
+                  <DescargaMp3Idea
+                    ideaId={idea.id}
+                    titulo={idea.titulo}
+                    sesionActiva={Boolean(sesion)}
+                  />
+
+                  <EnviarPropuesta
+                    ideaId={idea.id}
+                    sesionActiva={Boolean(sesion)}
+                    esPropietario={esPerfilPropio}
+                    propuestasActuales={idea._count.propuestas}
+                    propuestaUsuario={idea.propuestas[0] ?? null}
+                    variante="integrada"
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
       

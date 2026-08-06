@@ -15,6 +15,11 @@ export type AudioIdeaSubido = {
   resourceType: string | null;
 };
 
+export type PortadaIdeaSubida = {
+  url: string;
+  publicId: string;
+};
+
 function obtenerConfiguracion() {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -172,6 +177,96 @@ export async function eliminarImagenPortada(usuarioId: number) {
   if (!response.ok || (data.result !== "ok" && data.result !== "not found")) {
     throw new Error(
       data.error?.message ?? "Cloudinary no pudo eliminar la portada.",
+    );
+  }
+}
+
+
+// FEATMUSIC_PORTADAS_IDEAS_CLOUDINARY_V1
+export async function subirImagenPortadaIdea(
+  archivo: File,
+  usuarioId: number,
+): Promise<PortadaIdeaSubida> {
+  const { cloudName, apiKey, apiSecret } = obtenerConfiguracion();
+  const timestamp = Math.floor(Date.now() / 1000);
+  const folder = `featmusic/portadas-ideas/usuario-${usuarioId}`;
+  const publicId = `idea-${randomUUID()}`;
+  const parametros: ParametroFirma[] = [
+    ["folder", folder],
+    ["overwrite", "false"],
+    ["public_id", publicId],
+    ["timestamp", String(timestamp)],
+  ];
+
+  const formData = new FormData();
+  formData.set("file", archivo);
+  formData.set("api_key", apiKey);
+  formData.set("timestamp", String(timestamp));
+  formData.set("folder", folder);
+  formData.set("public_id", publicId);
+  formData.set("overwrite", "false");
+  formData.set("signature", crearFirma(parametros, apiSecret));
+
+  const response = await fetch(
+    `${CLOUDINARY_UPLOAD_URL}/${cloudName}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+
+  const data = (await response.json()) as {
+    secure_url?: string;
+    public_id?: string;
+    error?: { message?: string };
+  };
+
+  if (!response.ok || !data.secure_url || !data.public_id) {
+    throw new Error(
+      data.error?.message ??
+        "Cloudinary no pudo guardar la portada de la idea.",
+    );
+  }
+
+  return {
+    url: data.secure_url,
+    publicId: data.public_id,
+  };
+}
+
+export async function eliminarImagenPortadaIdea(publicId: string) {
+  const { cloudName, apiKey, apiSecret } = obtenerConfiguracion();
+  const timestamp = Math.floor(Date.now() / 1000);
+  const parametros: ParametroFirma[] = [
+    ["invalidate", "true"],
+    ["public_id", publicId],
+    ["timestamp", String(timestamp)],
+  ];
+
+  const formData = new FormData();
+  formData.set("public_id", publicId);
+  formData.set("api_key", apiKey);
+  formData.set("timestamp", String(timestamp));
+  formData.set("invalidate", "true");
+  formData.set("signature", crearFirma(parametros, apiSecret));
+
+  const response = await fetch(
+    `${CLOUDINARY_UPLOAD_URL}/${cloudName}/image/destroy`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+
+  const data = (await response.json()) as {
+    result?: string;
+    error?: { message?: string };
+  };
+
+  if (!response.ok || (data.result !== "ok" && data.result !== "not found")) {
+    throw new Error(
+      data.error?.message ??
+        "Cloudinary no pudo eliminar la portada de la idea.",
     );
   }
 }

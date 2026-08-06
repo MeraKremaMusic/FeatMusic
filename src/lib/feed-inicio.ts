@@ -15,6 +15,7 @@ export type OportunidadFeed = {
   titulo: string;
   descripcion: string;
   audioUrl: string;
+  portadaUrl: string | null;
   duracionSegundos: number;
   bpm: number;
   tonalidad: string;

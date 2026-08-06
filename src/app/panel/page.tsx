@@ -242,6 +242,7 @@ export default async function PanelPage() {
       departamentoPreferido: true,
       ciudadPreferida: true,
       tipoAcuerdo: true,
+      portadaUrl: true,
       audioUrl: true,
       duracionSegundos: true,
       formato: true,

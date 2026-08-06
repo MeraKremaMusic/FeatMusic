@@ -3258,3 +3258,72 @@ body {
   color: #ffffff !important;
 }
 /* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_END */
+
+/* FEATMUSIC_PORTADAS_IDEAS_MUSICALES_V1_START */
+/*
+  Las portadas de las ideas conservan el mismo tratamiento del perfil:
+  imagen visible, negro sólido a la izquierda y transparencia progresiva.
+  Estas reglas evitan que el tema claro cambie los textos blancos.
+*/
+.featmusic-idea-cover {
+  isolation: isolate;
+  background-color: #000000;
+}
+
+.featmusic-app-light .featmusic-idea-cover {
+  background-color: #000000 !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  :is(h1, h2, h3, h4, p, span, a, button) {
+  color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.76);
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  input[type="range"] {
+  accent-color: #34d399;
+}
+
+/* En Inicio la portada de la idea reemplaza al fondo difuminado del artista. */
+.feat-reel-card[data-idea-cover="true"] .feat-reel-cover-bg {
+  background-position: center;
+  opacity: 0.7;
+  filter: saturate(1.08) contrast(1.05);
+  transform: scale(1.035);
+}
+
+.feat-reel-card[data-idea-cover="true"][data-playing="true"]
+  .feat-reel-cover-bg {
+  opacity: 0.78;
+  transform: scale(1.08);
+}
+
+.feat-reel-card[data-idea-cover="true"] .feat-reel-shade {
+  background:
+    linear-gradient(
+      90deg,
+      #000000 0%,
+      rgba(0, 0, 0, 0.98) 16%,
+      rgba(0, 0, 0, 0.78) 38%,
+      rgba(0, 0, 0, 0.38) 64%,
+      rgba(0, 0, 0, 0.08) 82%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.22) 52%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+}
+
+.feat-reel-card[data-idea-cover="true"] .feat-reel-grid {
+  opacity: 0.16;
+}
+/* FEATMUSIC_PORTADAS_IDEAS_MUSICALES_V1_END */
+

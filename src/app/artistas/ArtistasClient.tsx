@@ -29,6 +29,7 @@ export type ArtistaExplorar = {
     id: number;
     titulo: string;
     descripcion: string | null;
+    portadaUrl: string | null;
     audioUrl: string;
     duracionSegundos: number;
     bpm: number;
@@ -676,6 +677,7 @@ function TarjetaArtista({
           <div className="flex-1 divide-y divide-white/[0.06] px-3.5 sm:px-4">
             {artista.ideasRecientes.map((idea, indice) => {
               const descripcion = idea.descripcion?.trim() ?? "";
+              const portadaIdeaVisible = idea.portadaUrl?.trim() || null;
               const hayDatosColaboracion = [
                 idea.rolBuscado,
                 idea.generoMusical,
@@ -697,8 +699,36 @@ function TarjetaArtista({
                 <div
                   key={idea.id}
                   data-vista-idea
-                  className="relative py-2.5"
+                  className={`relative py-2.5 ${
+                    portadaIdeaVisible ? "featmusic-idea-cover px-2.5" : ""
+                  }`}
                 >
+                  {portadaIdeaVisible && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl"
+                    >
+                      <img
+                        src={portadaIdeaVisible}
+                        alt=""
+                        className="h-full w-full object-cover object-center contrast-[1.04] saturate-[1.08]"
+                        loading="lazy"
+                      />
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <div
+                    className={`relative z-10 ${
+                      portadaIdeaVisible ? "featmusic-idea-cover-content" : ""
+                    }`}
+                  >
                   <RegistrarVistaIdea
                     ideaId={idea.id}
                     sesionActiva={sesionActiva}
@@ -805,6 +835,7 @@ function TarjetaArtista({
                       )}
                     </div>
                   )}
+                  </div>
                 </div>
               );
             })}

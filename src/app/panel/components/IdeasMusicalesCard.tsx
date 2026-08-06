@@ -32,6 +32,7 @@ export type IdeaPanel = {
   departamentoPreferido: string | null;
   ciudadPreferida: string | null;
   tipoAcuerdo: string | null;
+  portadaUrl: string | null;
   audioUrl: string;
   duracionSegundos: number;
   formato: string | null;
@@ -65,6 +66,10 @@ type RespuestaCrearIdea = {
 const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
 const MAX_AUDIO_DURATION = 240;
 const MAX_ACTIVE_IDEAS = 3;
+const MAX_PORTADA_SIZE = 5 * 1024 * 1024;
+
+const PORTADA_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp"]);
+const PORTADA_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 const UBICACION_VACIA: UbicacionIdeaSeleccionada = {
   paisCodigo: "",
@@ -135,6 +140,7 @@ const TONALIDADES = [
 type IconoTipo =
   | "mas"
   | "musica"
+  | "imagen"
   | "subir"
   | "cerrar"
   | "reloj"
@@ -169,6 +175,16 @@ function Icono({
         <path d="M9 18V5l10-2v13" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="16" cy="16" r="3" />
+      </svg>
+    );
+  }
+
+  if (tipo === "imagen") {
+    return (
+      <svg {...props}>
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <circle cx="8.5" cy="10" r="1.5" />
+        <path d="m5 17 4.5-4 3.5 3 2.5-2 3.5 3" />
       </svg>
     );
   }
@@ -229,6 +245,17 @@ function audioPermitido(archivo: File) {
   const mime = archivo.type.toLowerCase();
   const mimeValido =
     AUDIO_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
+
+  return extensionValida && mimeValido;
+}
+
+function portadaPermitida(archivo: File) {
+  const extensionValida = PORTADA_EXTENSIONS.has(
+    obtenerExtension(archivo.name),
+  );
+  const mime = archivo.type.toLowerCase();
+  const mimeValido =
+    PORTADA_TYPES.has(mime) || MIME_TYPES_GENERICOS.has(mime);
 
   return extensionValida && mimeValido;
 }
@@ -348,6 +375,10 @@ export default function IdeasMusicalesCard({
     useState<UbicacionIdeaSeleccionada>(UBICACION_VACIA);
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(null);
+  const [archivoPortada, setArchivoPortada] = useState<File | null>(null);
+  const [vistaPreviaPortada, setVistaPreviaPortada] = useState<string | null>(
+    null,
+  );
   const [duracionSegundos, setDuracionSegundos] = useState<number | null>(null);
   const [avisoAudio, setAvisoAudio] = useState("");
   const [leyendoAudio, setLeyendoAudio] = useState(false);
@@ -356,6 +387,7 @@ export default function IdeasMusicalesCard({
   const [progresoSubida, setProgresoSubida] = useState(0);
   const [error, setError] = useState("");
   const inputArchivoRef = useRef<HTMLInputElement>(null);
+  const inputPortadaRef = useRef<HTMLInputElement>(null);
   const modalControlado = typeof abiertoExterno === "boolean";
   const modalVisible = modalControlado ? abiertoExterno : modalAbierto;
 
@@ -389,11 +421,23 @@ export default function IdeasMusicalesCard({
     };
   }, [vistaPrevia]);
 
+  useEffect(() => {
+    return () => {
+      if (vistaPreviaPortada) {
+        URL.revokeObjectURL(vistaPreviaPortada);
+      }
+    };
+  }, [vistaPreviaPortada]);
+
   const limiteAlcanzado = ideas.length >= MAX_ACTIVE_IDEAS;
 
   function limpiarFormulario() {
     if (vistaPrevia) {
       URL.revokeObjectURL(vistaPrevia);
+    }
+
+    if (vistaPreviaPortada) {
+      URL.revokeObjectURL(vistaPreviaPortada);
     }
 
     setTitulo("");
@@ -408,6 +452,8 @@ export default function IdeasMusicalesCard({
     setUbicacionPreferida(UBICACION_VACIA);
     setArchivo(null);
     setVistaPrevia(null);
+    setArchivoPortada(null);
+    setVistaPreviaPortada(null);
     setDuracionSegundos(null);
     setAvisoAudio("");
     setLeyendoAudio(false);
@@ -416,6 +462,10 @@ export default function IdeasMusicalesCard({
 
     if (inputArchivoRef.current) {
       inputArchivoRef.current.value = "";
+    }
+
+    if (inputPortadaRef.current) {
+      inputPortadaRef.current.value = "";
     }
   }
 
@@ -488,6 +538,45 @@ export default function IdeasMusicalesCard({
       );
     } finally {
       setLeyendoAudio(false);
+    }
+  }
+
+  function seleccionarPortada(event: ChangeEvent<HTMLInputElement>) {
+    const portadaSeleccionada = event.target.files?.[0];
+    if (!portadaSeleccionada) return;
+
+    setError("");
+
+    if (!portadaPermitida(portadaSeleccionada)) {
+      setError("La portada debe ser una imagen JPG, PNG o WebP.");
+      event.target.value = "";
+      return;
+    }
+
+    if (portadaSeleccionada.size > MAX_PORTADA_SIZE) {
+      setError("La portada no puede pesar más de 5 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    if (vistaPreviaPortada) {
+      URL.revokeObjectURL(vistaPreviaPortada);
+    }
+
+    setArchivoPortada(portadaSeleccionada);
+    setVistaPreviaPortada(URL.createObjectURL(portadaSeleccionada));
+  }
+
+  function quitarPortada() {
+    if (vistaPreviaPortada) {
+      URL.revokeObjectURL(vistaPreviaPortada);
+    }
+
+    setArchivoPortada(null);
+    setVistaPreviaPortada(null);
+
+    if (inputPortadaRef.current) {
+      inputPortadaRef.current.value = "";
     }
   }
 
@@ -591,6 +680,10 @@ export default function IdeasMusicalesCard({
     );
     formData.set("ciudadPreferida", ubicacionPreferida.ciudad.trim());
     formData.set("audio", archivo);
+
+    if (archivoPortada) {
+      formData.set("portada", archivoPortada);
+    }
 
     try {
       setGuardando(true);
@@ -721,12 +814,43 @@ export default function IdeasMusicalesCard({
               <div className="divide-y divide-white/[0.07]">
                 {ideas.map((idea, indice) => {
                   const tamanoFormateado = formatearTamano(idea.tamanoBytes);
+                  const portadaVisible = idea.portadaUrl?.trim() || null;
 
                   return (
                     <section
                       key={idea.id}
-                      className="px-3.5 py-3 transition hover:bg-white/[0.018] sm:px-4 sm:py-3.5"
+                      className={`relative overflow-hidden px-3.5 py-3 transition sm:px-4 sm:py-3.5 ${
+                        portadaVisible
+                          ? "featmusic-idea-cover bg-black"
+                          : "hover:bg-white/[0.018]"
+                      }`}
                     >
+                      {portadaVisible && (
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0"
+                        >
+                          <img
+                            src={portadaVisible}
+                            alt=""
+                            className="h-full w-full object-cover object-center contrast-[1.04] saturate-[1.08]"
+                            loading="lazy"
+                          />
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              background:
+                                "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+                            }}
+                          />
+                        </div>
+                      )}
+
+                      <div
+                        className={`relative z-10 ${
+                          portadaVisible ? "featmusic-idea-cover-content" : ""
+                        }`}
+                      >
                       <ReproductorAudio
                         id={`panel-${idea.id}`}
                         src={idea.audioUrl}
@@ -819,6 +943,7 @@ export default function IdeasMusicalesCard({
                             )}
                           </button>
                         </div>
+                      </div>
                       </div>
                     </section>
                   );
@@ -928,6 +1053,67 @@ export default function IdeasMusicalesCard({
                   )}
                 </div>
               )}
+
+              <div className="md:col-span-2">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      Portada de la idea
+                    </span>
+                    <p className="mt-1 text-[9px] leading-4 text-zinc-600">
+                      Opcional · JPG, PNG o WebP · máximo 5 MB
+                    </p>
+                  </div>
+
+                  {vistaPreviaPortada && (
+                    <button
+                      type="button"
+                      onClick={quitarPortada}
+                      disabled={guardando}
+                      className="rounded-lg border border-red-400/20 bg-red-500/[0.06] px-2.5 py-1.5 text-[9px] font-bold text-red-200 transition hover:bg-red-500/10 disabled:opacity-40"
+                    >
+                      Quitar
+                    </button>
+                  )}
+                </div>
+
+                <input
+                  ref={inputPortadaRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                  onChange={seleccionarPortada}
+                  disabled={guardando}
+                  className="mt-2 block w-full rounded-xl border border-dashed border-white/15 bg-black/20 p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-white"
+                />
+
+                {vistaPreviaPortada && (
+                  <div className="relative mt-3 h-40 overflow-hidden rounded-2xl border border-white/10 bg-black sm:h-48">
+                    <img
+                      src={vistaPreviaPortada}
+                      alt="Vista previa de la portada"
+                      className="h-full w-full object-cover object-center contrast-[1.04] saturate-[1.08]"
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+                      }}
+                    />
+                    <div className="absolute inset-y-0 left-0 flex max-w-[72%] flex-col justify-center p-4">
+                      <span className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-300">
+                        Vista previa
+                      </span>
+                      <p className="mt-1 line-clamp-2 text-lg font-black text-white">
+                        {titulo.trim() || "Título de la idea"}
+                      </p>
+                      <p className="mt-1 text-[10px] text-white/70">
+                        La información aparecerá encima de la portada.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <label>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
@@ -1127,7 +1313,7 @@ export default function IdeasMusicalesCard({
             {guardando && (
               <div className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.06] p-3">
                 <div className="flex items-center justify-between text-[10px] font-semibold text-emerald-200">
-                  <span>Subiendo y procesando audio...</span>
+                  <span>Subiendo y procesando la publicación...</span>
                   <span>{progresoSubida}%</span>
                 </div>
                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">

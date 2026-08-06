@@ -185,6 +185,7 @@ export default async function ArtistasPage() {
               id: true,
               titulo: true,
               descripcion: true,
+              portadaUrl: true,
               audioUrl: true,
               duracionSegundos: true,
               bpm: true,

@@ -82,6 +82,8 @@ model Idea {
   departamentoPreferido String? @map("departamento_preferido") @db.VarChar(120)
   ciudadPreferida  String?     @map("ciudad_preferida") @db.VarChar(120)
   tipoAcuerdo      String?     @map("tipo_acuerdo") @db.VarChar(30)
+  portadaUrl       String?     @map("portada_url") @db.VarChar(1000)
+  portadaPublicId  String?     @map("portada_public_id") @db.VarChar(255)
   audioUrl         String      @map("audio_url") @db.VarChar(1000)
   audioPublicId    String      @map("audio_public_id") @db.VarChar(255)
   duracionSegundos Int         @map("duracion_segundos")
