@@ -1,7 +1,8 @@
+import { enviarReporteUsuarioPorCorreo } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
-// FEATMUSIC_API_REPORTES_USUARIOS_V1
+// FEATMUSIC_API_REPORTES_DIRECTOS_CORREO_V1
 
 export const dynamic = "force-dynamic";
 
@@ -75,22 +76,24 @@ export async function POST(request: Request) {
     );
   }
 
-  const reportado = await prisma.usuario.findFirst({
-    where: {
-      nombreUsuario,
-    },
-    select: {
-      id: true,
-      nombreUsuario: true,
-    },
-  });
+  /*
+   * Solo se consultan las cuentas para comprobar que existan.
+   * No se crea ni se actualiza ningún reporte en la base de datos.
+   */
+  const [reportado, reportante] = await Promise.all([
+    prisma.usuario.findFirst({
+      where: { nombreUsuario },
+      select: { id: true, nombreUsuario: true },
+    }),
+    prisma.usuario.findUnique({
+      where: { id: sesion.usuarioId },
+      select: { nombreUsuario: true },
+    }),
+  ]);
 
   if (!reportado) {
     return Response.json(
-      {
-        ok: false,
-        mensaje: "No encontramos un usuario con ese nombre.",
-      },
+      { ok: false, mensaje: "No encontramos un usuario con ese nombre." },
       { status: 404 },
     );
   }
@@ -102,61 +105,30 @@ export async function POST(request: Request) {
     );
   }
 
-  const desde = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
-  const reportesRecientes = await prisma.reporteUsuario.count({
-    where: {
-      reportanteId: sesion.usuarioId,
-      creadoEn: {
-        gte: desde,
-      },
-    },
-  });
-
-  if (reportesRecientes >= 5) {
-    return Response.json(
-      {
-        ok: false,
-        mensaje:
-          "Alcanzaste el límite de reportes por hoy. Inténtalo nuevamente más tarde.",
-      },
-      { status: 429 },
-    );
-  }
-
-  const reportePendiente = await prisma.reporteUsuario.findFirst({
-    where: {
-      reportanteId: sesion.usuarioId,
-      reportadoId: reportado.id,
-      estado: "PENDIENTE",
-      creadoEn: {
-        gte: desde,
-      },
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  if (reportePendiente) {
-    return Response.json(
-      {
-        ok: false,
-        mensaje:
-          "Ya enviaste recientemente un reporte pendiente sobre este usuario.",
-      },
-      { status: 409 },
-    );
-  }
-
-  await prisma.reporteUsuario.create({
-    data: {
-      reportanteId: sesion.usuarioId,
-      reportadoId: reportado.id,
+  try {
+    await enviarReporteUsuarioPorCorreo({
+      reportanteUsuario:
+        reportante?.nombreUsuario || `usuario-${sesion.usuarioId}`,
+      reportadoUsuario: reportado.nombreUsuario,
       motivo,
       descripcion,
-    },
-  });
+      enviadoEn: new Date(),
+    });
+  } catch (error) {
+    console.error(
+      "[FeatMusic] No se pudo enviar el reporte a contact@featmusic.pro.",
+      error,
+    );
+
+    return Response.json(
+      {
+        ok: false,
+        mensaje:
+          "No pudimos enviar el reporte en este momento. Inténtalo nuevamente más tarde.",
+      },
+      { status: 503 },
+    );
+  }
 
   return Response.json(
     {
@@ -164,6 +136,6 @@ export async function POST(request: Request) {
       mensaje:
         "Reporte enviado. Gracias por ayudar a proteger la comunidad de FeatMusic.",
     },
-    { status: 201 },
+    { status: 200 },
   );
 }
