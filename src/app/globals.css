@@ -3231,3 +3231,30 @@ body {
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
 }
 /* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1_END */
+
+
+/* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_START */
+/*
+  Portada en las tarjetas de Explorar. El tema claro cambia varias utilidades
+  de texto y fondo con !important; estas reglas preservan la identidad blanca
+  y los chips translúcidos únicamente cuando una tarjeta tiene portada.
+*/
+.featmusic-app-light .featmusic-explore-cover {
+  background-color: #000000 !important;
+}
+
+.featmusic-app-light
+  .featmusic-explore-cover
+  .featmusic-explore-cover-text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
+}
+
+.featmusic-app-light
+  .featmusic-explore-cover
+  .featmusic-explore-cover-chip {
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  color: #ffffff !important;
+}
+/* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_END */

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
+// FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
 import ArtistasClient, {
   type ArtistaExplorar,
   type EstadisticasExplorar,
@@ -159,6 +160,7 @@ export default async function ArtistasPage() {
           nombreArtistico: true,
           nombreUsuario: true,
           fotoPerfil: true,
+          portadaPerfil: true,
           biografia: true,
           ciudad: true,
           pais: true,
@@ -225,6 +227,7 @@ export default async function ArtistasPage() {
         nombreArtistico: usuario.nombreArtistico!.trim(),
         nombreUsuario: usuario.nombreUsuario!.trim(),
         fotoPerfil: usuario.fotoPerfil,
+        portadaPerfil: usuario.portadaPerfil,
         biografia: usuario.biografia,
         siguiendoInicial: usuario.seguidores.length > 0,
         ciudad: usuario.ciudad!.trim(),

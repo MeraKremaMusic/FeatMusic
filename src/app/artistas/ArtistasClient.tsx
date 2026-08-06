@@ -1,5 +1,7 @@
 "use client";
 
+// FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
+
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -14,6 +16,7 @@ export type ArtistaExplorar = {
   nombreArtistico: string;
   nombreUsuario: string;
   fotoPerfil: string | null;
+  portadaPerfil: string | null;
   biografia: string | null;
   siguiendoInicial: boolean;
   ciudad: string;
@@ -325,10 +328,17 @@ function TarjetaEstadistica({
 
 function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
   const [fallo, setFallo] = useState(false);
+  const tienePortada = Boolean(artista.portadaPerfil?.trim());
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/25 bg-emerald-500/10 text-sm font-black text-emerald-200 shadow-[0_10px_25px_rgba(0,0,0,0.2)]">
+      <div
+        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border text-sm font-black shadow-[0_10px_25px_rgba(0,0,0,0.2)] ${
+          tienePortada
+            ? "featmusic-explore-cover-text border-white/30 bg-black/45 text-white backdrop-blur-sm"
+            : "border-emerald-400/25 bg-emerald-500/10 text-emerald-200"
+        }`}
+      >
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -338,7 +348,9 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
     <img
       src={artista.fotoPerfil}
       alt={`Foto de ${artista.nombreArtistico}`}
-      className="h-14 w-14 shrink-0 rounded-2xl border border-white/10 object-cover shadow-[0_10px_25px_rgba(0,0,0,0.2)]"
+      className={`h-14 w-14 shrink-0 rounded-2xl border object-cover shadow-[0_10px_25px_rgba(0,0,0,0.2)] ${
+        tienePortada ? "border-white/30" : "border-white/10"
+      }`}
       onError={() => setFallo(true)}
     />
   );
@@ -516,6 +528,7 @@ function TarjetaArtista({
   const descripcionAbiertaEnTarjeta = artista.ideasRecientes.some(
     (idea) => idea.id === descripcionAbiertaId,
   );
+  const portadaPerfilVisible = artista.portadaPerfil?.trim() || null;
 
   return (
     <article
@@ -527,17 +540,55 @@ function TarjetaArtista({
         <div className="absolute -right-14 -top-16 h-32 w-32 rounded-full bg-emerald-500/[0.08] blur-3xl transition duration-300 group-hover:bg-emerald-500/[0.12]" />
       </div>
 
-      <div className="relative p-3.5 sm:p-4">
-        <div className="flex items-start gap-3">
+      <div
+        className={`relative p-3.5 sm:p-4 ${
+          portadaPerfilVisible ? "featmusic-explore-cover bg-black" : ""
+        }`}
+      >
+        {portadaPerfilVisible && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-t-2xl"
+          >
+            <img
+              src={portadaPerfilVisible}
+              alt=""
+              className="h-full w-full object-cover object-center contrast-[1.04] saturate-[1.08]"
+              loading="lazy"
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+          </div>
+        )}
+
+        <div className="relative z-10">
+          <div className="flex items-start gap-3">
           <FotoArtista artista={artista} />
 
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-start justify-between gap-2">
               <div className="min-w-0">
-                <h2 className="truncate text-[15px] font-black leading-tight text-white sm:text-base">
+                <h2
+                  className={`truncate text-[15px] font-black leading-tight sm:text-base ${
+                    portadaPerfilVisible
+                      ? "featmusic-explore-cover-text text-white"
+                      : "text-white"
+                  }`}
+                >
                   {artista.nombreArtistico}
                 </h2>
-                <p className="mt-0.5 truncate text-[11px] font-semibold text-emerald-300">
+                <p
+                  className={`mt-0.5 truncate text-[11px] font-semibold ${
+                    portadaPerfilVisible
+                      ? "featmusic-explore-cover-text text-white"
+                      : "text-emerald-300"
+                  }`}
+                >
                   @{artista.nombreUsuario}
                 </p>
               </div>
@@ -557,7 +608,13 @@ function TarjetaArtista({
               </div>
             </div>
 
-            <p className="mt-2 flex min-w-0 items-center gap-1.5 text-[10px] text-zinc-500 sm:text-[11px]">
+            <p
+              className={`mt-2 flex min-w-0 items-center gap-1.5 text-[10px] sm:text-[11px] ${
+                portadaPerfilVisible
+                  ? "featmusic-explore-cover-text text-white"
+                  : "text-zinc-500"
+              }`}
+            >
               <IconoUbicacion className="h-3 w-3 shrink-0" />
               <span className="truncate">{ubicacion}</span>
             </p>
@@ -565,30 +622,53 @@ function TarjetaArtista({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-500/[0.09] px-2.5 py-1 text-[9px] font-bold text-emerald-200">
+          <span
+            className={`rounded-full border px-2.5 py-1 text-[9px] font-bold ${
+              portadaPerfilVisible
+                ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
+                : "border-emerald-400/20 bg-emerald-500/[0.09] text-emerald-200"
+            }`}
+          >
             {formatearRol(artista.rol)}
           </span>
 
           {artista.generos.slice(0, 3).map((genero) => (
             <span
               key={genero}
-              className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-1 text-[9px] font-medium text-zinc-400"
+              className={`rounded-full border px-2.5 py-1 text-[9px] font-medium ${
+                portadaPerfilVisible
+                  ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
+                  : "border-white/[0.08] bg-white/[0.035] text-zinc-400"
+              }`}
             >
               {genero}
             </span>
           ))}
 
           {artista.generos.length === 0 && (
-            <span className="rounded-full border border-white/[0.08] bg-white/[0.025] px-2.5 py-1 text-[9px] text-zinc-600">
+            <span
+              className={`rounded-full border px-2.5 py-1 text-[9px] ${
+                portadaPerfilVisible
+                  ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
+                  : "border-white/[0.08] bg-white/[0.025] text-zinc-600"
+              }`}
+            >
               Sin géneros
             </span>
           )}
         </div>
 
-        <p className="mt-3 [display:-webkit-box] overflow-hidden [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-[10px] leading-4 text-zinc-500 sm:text-[11px]">
-          {artista.biografia?.trim() ||
-            "Este artista todavía no ha agregado una descripción."}
-        </p>
+          <p
+            className={`mt-3 [display:-webkit-box] overflow-hidden [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-[10px] leading-4 sm:text-[11px] ${
+              portadaPerfilVisible
+                ? "featmusic-explore-cover-text text-white"
+                : "text-zinc-500"
+            }`}
+          >
+            {artista.biografia?.trim() ||
+              "Este artista todavía no ha agregado una descripción."}
+          </p>
+        </div>
       </div>
 
       <div className="relative flex flex-1 flex-col border-t border-white/[0.07]">
