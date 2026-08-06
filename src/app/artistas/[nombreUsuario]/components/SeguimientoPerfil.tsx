@@ -5,6 +5,7 @@
 // FEATMUSIC_SEGUIR_DEBAJO_BANDERA_V2
 // FEATMUSIC_ICONO_SEGUIR_IGUAL_REDES_V3
 // FEATMUSIC_SEGUIR_DENTRO_COLUMNA_REDES_V4
+// FEATMUSIC_BIOGRAFIA_Y_TOQUES_ICONOS_V5
 
 import { useEffect, useState } from "react";
 
@@ -223,19 +224,23 @@ export default function SeguimientoPerfil({
           ? `Dejar de seguir a @${nombreUsuario}`
           : `Seguir a @${nombreUsuario}`
       }
-      className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border bg-white p-0 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 ${
-        siguiendo
-          ? "border-emerald-300 text-emerald-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700"
-          : "border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
-      }`}
+      className="group relative z-40 inline-flex h-11 w-11 shrink-0 touch-manipulation select-none items-center justify-center rounded-xl bg-transparent p-0 outline-none transition active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400/70 disabled:cursor-wait disabled:opacity-65 [-webkit-tap-highlight-color:transparent]"
     >
-      {procesando ? (
-        <IconoCargando />
-      ) : siguiendo ? (
-        <IconoSeguido />
-      ) : (
-        <IconoSeguir />
-      )}
+      <span
+        className={`pointer-events-none inline-flex h-8 w-8 items-center justify-center rounded-lg border !bg-white shadow-sm transition ${
+          siguiendo
+            ? "border-emerald-300 text-emerald-700 group-hover:border-red-300 group-hover:!bg-red-50 group-hover:text-red-700"
+            : "border-slate-200 text-slate-700 group-hover:border-emerald-300 group-hover:!bg-emerald-50 group-hover:text-emerald-700"
+        }`}
+      >
+        {procesando ? (
+          <IconoCargando />
+        ) : siguiendo ? (
+          <IconoSeguido />
+        ) : (
+          <IconoSeguir />
+        )}
+      </span>
     </button>
   ) : null;
 

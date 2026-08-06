@@ -37,6 +37,7 @@ import CompartirPerfil from "./components/CompartirPerfil";
 // FEATMUSIC_SEGUIR_DEBAJO_BANDERA_V2
 // FEATMUSIC_ICONO_SEGUIR_IGUAL_REDES_V3
 // FEATMUSIC_SEGUIR_DENTRO_COLUMNA_REDES_V4
+// FEATMUSIC_BIOGRAFIA_Y_TOQUES_ICONOS_V5
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -858,19 +859,21 @@ export default async function PerfilPublicoPage({
               </div>
             )}
 
-            <div className="absolute right-3 top-3 z-10 flex flex-col items-center gap-2 sm:right-4 sm:top-4">
+            <div className="pointer-events-auto absolute right-2.5 top-2.5 z-40 flex flex-col items-center gap-0.5 sm:right-3.5 sm:top-3.5 sm:gap-1">
               {codigoPais && (
-                <img
-                  src={`https://flagcdn.com/w40/${codigoPais.toLowerCase()}.png`}
-                  srcSet={`https://flagcdn.com/w80/${codigoPais.toLowerCase()}.png 2x`}
-                  width={28}
-                  height={20}
-                  alt={`Bandera de ${artista.pais ?? ""}`}
-                  title={artista.pais ?? ""}
-                  className="h-5 w-7 object-contain"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                />
+                <div className="pointer-events-none flex h-7 w-11 shrink-0 items-center justify-center">
+                  <img
+                    src={`https://flagcdn.com/w40/${codigoPais.toLowerCase()}.png`}
+                    srcSet={`https://flagcdn.com/w80/${codigoPais.toLowerCase()}.png 2x`}
+                    width={28}
+                    height={20}
+                    alt={`Bandera de ${artista.pais ?? ""}`}
+                    title={artista.pais ?? ""}
+                    className="h-5 w-7 object-contain"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
               )}
 
               {!esPerfilPropio && (
@@ -891,16 +894,23 @@ export default async function PerfilPublicoPage({
                   key={red.nombre}
                   href={red.url}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label={`Abrir ${red.nombre}`}
                   title={red.nombre}
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition ${
-                    artista.portadaPerfil
-                      ? "border-white/20 bg-black/35 text-white backdrop-blur-sm hover:border-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200"
-                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
-                  }`}
+                  className="group relative z-40 inline-flex h-11 w-11 shrink-0 touch-manipulation select-none items-center justify-center rounded-xl outline-none transition active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400/70 [-webkit-tap-highlight-color:transparent]"
                 >
-                  <IconoRedSocial nombre={red.nombre} className="h-3.5 w-3.5" />
+                  <span
+                    className={`pointer-events-none inline-flex h-8 w-8 items-center justify-center rounded-lg border !bg-white shadow-sm transition group-hover:border-emerald-300 group-hover:!bg-emerald-50 ${
+                      artista.portadaPerfil
+                        ? "border-white/80 text-slate-800"
+                        : "border-slate-200 text-slate-700"
+                    }`}
+                  >
+                    <IconoRedSocial
+                      nombre={red.nombre}
+                      className="h-3.5 w-3.5"
+                    />
+                  </span>
                 </a>
               ))}
             </div>
@@ -1027,7 +1037,7 @@ export default async function PerfilPublicoPage({
                 </div>
 
                 <p
-                  className={`mt-2 max-w-full text-left text-[11px] leading-[1.5] sm:text-xs sm:leading-5 lg:px-2 lg:text-center ${
+                  className={`mt-2 max-w-full pr-14 text-left text-[11px] leading-[1.5] [overflow-wrap:anywhere] sm:pr-16 sm:text-xs sm:leading-5 lg:px-2 lg:pr-2 lg:text-center ${
                     artista.portadaPerfil ? "text-white/85" : "text-slate-600"
                   }`}
                 >
