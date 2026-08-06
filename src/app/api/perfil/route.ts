@@ -2,7 +2,11 @@ import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { subirImagenPerfil } from "@/lib/cloudinary";
+import {
+  eliminarImagenPortada,
+  subirImagenPerfil,
+  subirImagenPortada,
+} from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
@@ -100,7 +104,10 @@ export async function PATCH(request: Request) {
     }
 
     const imagen = formData.get("fotoPerfil");
+    const portada = formData.get("portadaPerfil");
+    const quitarPortada = formData.get("eliminarPortada") === "true";
     let fotoPerfil: string | undefined;
+    let portadaPerfil: string | null | undefined;
 
     if (imagen instanceof File && imagen.size > 0) {
       if (!IMAGE_TYPES.has(imagen.type)) {
@@ -117,6 +124,29 @@ export async function PATCH(request: Request) {
       fotoPerfil = await subirImagenPerfil(imagen, sesion.usuarioId);
     }
 
+    if (portada instanceof File && portada.size > 0) {
+      if (!IMAGE_TYPES.has(portada.type)) {
+        return respuestaError(
+          "La portada debe ser JPG, JPEG, PNG o WebP.",
+          400,
+        );
+      }
+
+      if (portada.size > MAX_IMAGE_SIZE) {
+        return respuestaError("La portada no puede pesar más de 5 MB.", 400);
+      }
+
+      portadaPerfil = await subirImagenPortada(portada, sesion.usuarioId);
+    } else if (quitarPortada) {
+      try {
+        await eliminarImagenPortada(sesion.usuarioId);
+      } catch (error) {
+        console.warn("No se pudo eliminar la portada anterior de Cloudinary.", error);
+      }
+
+      portadaPerfil = null;
+    }
+
     const usuarioActualizado = await prisma.usuario.update({
       where: { id: sesion.usuarioId },
       data: {
@@ -130,12 +160,14 @@ export async function PATCH(request: Request) {
           resultado.data.distribuidoraPreferida || null,
         softwarePreferido: resultado.data.softwarePreferido || null,
         ...(fotoPerfil ? { fotoPerfil } : {}),
+        ...(portadaPerfil !== undefined ? { portadaPerfil } : {}),
       },
       select: {
         nombreArtistico: true,
         nombreUsuario: true,
         biografia: true,
         fotoPerfil: true,
+        portadaPerfil: true,
         spotifyUrl: true,
         youtubeUrl: true,
         instagramUrl: true,

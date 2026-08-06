@@ -13,6 +13,7 @@ type PerfilActualizado = {
   nombreUsuario: string | null;
   biografia: string | null;
   fotoPerfil: string | null;
+  portadaPerfil?: string | null;
   spotifyUrl: string | null;
   youtubeUrl: string | null;
   instagramUrl: string | null;
@@ -37,6 +38,7 @@ type PerfilArtistaCardProps = PerfilActualizado & {
 
 // FEATMUSIC_CONTROLES_PERFIL_PUBLICO_PROPIO_V1
 // FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
+// FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -176,6 +178,7 @@ export default function PerfilArtistaCard({
   nombreArtistico: nombreInicial,
   nombreUsuario: usuarioInicial,
   fotoPerfil: fotoInicial,
+  portadaPerfil: portadaInicial = null,
   biografia: biografiaInicial,
   spotifyUrl: spotifyInicial,
   youtubeUrl: youtubeInicial,
@@ -199,6 +202,7 @@ export default function PerfilArtistaCard({
     nombreUsuario: usuarioInicial,
     biografia: biografiaInicial,
     fotoPerfil: fotoInicial,
+    portadaPerfil: portadaInicial,
     spotifyUrl: spotifyInicial,
     youtubeUrl: youtubeInicial,
     instagramUrl: instagramInicial,
@@ -228,10 +232,16 @@ export default function PerfilArtistaCard({
   );
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(fotoInicial);
+  const [archivoPortada, setArchivoPortada] = useState<File | null>(null);
+  const [vistaPreviaPortada, setVistaPreviaPortada] = useState<string | null>(
+    portadaInicial,
+  );
+  const [eliminarPortada, setEliminarPortada] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
   const inputArchivoRef = useRef<HTMLInputElement>(null);
+  const inputPortadaRef = useRef<HTMLInputElement>(null);
 
   const nombreVisible = perfil.nombreArtistico?.trim() || "Artista";
   const usuarioVisible = perfil.nombreUsuario?.trim() || usuarioInicial;
@@ -263,8 +273,12 @@ export default function PerfilArtistaCard({
       if (vistaPrevia?.startsWith("blob:")) {
         URL.revokeObjectURL(vistaPrevia);
       }
+
+      if (vistaPreviaPortada?.startsWith("blob:")) {
+        URL.revokeObjectURL(vistaPreviaPortada);
+      }
     };
-  }, [vistaPrevia]);
+  }, [vistaPrevia, vistaPreviaPortada]);
 
   function abrirModal() {
     const distribuidora = obtenerSeleccionDistribuidora(
@@ -284,6 +298,9 @@ export default function PerfilArtistaCard({
     setOtroSoftware(software.otro);
     setArchivo(null);
     setVistaPrevia(perfil.fotoPerfil);
+    setArchivoPortada(null);
+    setVistaPreviaPortada(perfil.portadaPerfil ?? null);
+    setEliminarPortada(false);
     setError("");
     setExito("");
     setModalAbierto(true);
@@ -296,9 +313,16 @@ export default function PerfilArtistaCard({
       URL.revokeObjectURL(vistaPrevia);
     }
 
+    if (vistaPreviaPortada?.startsWith("blob:")) {
+      URL.revokeObjectURL(vistaPreviaPortada);
+    }
+
     setModalAbierto(false);
     setArchivo(null);
     setVistaPrevia(perfil.fotoPerfil);
+    setArchivoPortada(null);
+    setVistaPreviaPortada(perfil.portadaPerfil ?? null);
+    setEliminarPortada(false);
     setError("");
     setExito("");
   }
@@ -328,6 +352,48 @@ export default function PerfilArtistaCard({
 
     setArchivo(imagen);
     setVistaPrevia(URL.createObjectURL(imagen));
+  }
+
+  function seleccionarPortada(event: ChangeEvent<HTMLInputElement>) {
+    const imagen = event.target.files?.[0];
+    if (!imagen) return;
+
+    setError("");
+    setExito("");
+
+    if (!IMAGE_TYPES.includes(imagen.type)) {
+      setError("La portada debe ser JPG, JPEG, PNG o WebP.");
+      event.target.value = "";
+      return;
+    }
+
+    if (imagen.size > MAX_IMAGE_SIZE) {
+      setError("La portada no puede pesar más de 5 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    if (vistaPreviaPortada?.startsWith("blob:")) {
+      URL.revokeObjectURL(vistaPreviaPortada);
+    }
+
+    setArchivoPortada(imagen);
+    setVistaPreviaPortada(URL.createObjectURL(imagen));
+    setEliminarPortada(false);
+  }
+
+  function quitarPortadaSeleccionada() {
+    if (vistaPreviaPortada?.startsWith("blob:")) {
+      URL.revokeObjectURL(vistaPreviaPortada);
+    }
+
+    setArchivoPortada(null);
+    setVistaPreviaPortada(null);
+    setEliminarPortada(Boolean(perfil.portadaPerfil));
+
+    if (inputPortadaRef.current) {
+      inputPortadaRef.current.value = "";
+    }
   }
 
   async function guardarPerfil(event: FormEvent<HTMLFormElement>) {
@@ -411,6 +477,12 @@ export default function PerfilArtistaCard({
       formData.set("fotoPerfil", archivo);
     }
 
+    if (archivoPortada) {
+      formData.set("portadaPerfil", archivoPortada);
+    } else if (eliminarPortada) {
+      formData.set("eliminarPortada", "true");
+    }
+
     try {
       setGuardando(true);
 
@@ -449,10 +521,17 @@ export default function PerfilArtistaCard({
       setSoftwareSeleccionado(softwareActualizado.seleccion);
       setOtroSoftware(softwareActualizado.otro);
       setVistaPrevia(data.usuario.fotoPerfil);
+      setVistaPreviaPortada(data.usuario.portadaPerfil ?? null);
       setArchivo(null);
+      setArchivoPortada(null);
+      setEliminarPortada(false);
 
       if (inputArchivoRef.current) {
         inputArchivoRef.current.value = "";
+      }
+
+      if (inputPortadaRef.current) {
+        inputPortadaRef.current.value = "";
       }
 
       // Cierra el editor después de guardar correctamente para que
@@ -693,7 +772,7 @@ export default function PerfilArtistaCard({
                   Editar perfil
                 </h2>
                 <p className="mt-1 text-sm text-zinc-400">
-                  Actualiza tu identidad, plataformas, distribuidora y software musical.
+                  Actualiza tu identidad, portada, plataformas, distribuidora y software musical.
                 </p>
               </div>
 
@@ -753,6 +832,67 @@ export default function PerfilArtistaCard({
                   disabled={guardando}
                   className="hidden"
                 />
+              </div>
+
+              <div className="border-t border-white/10 pt-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-zinc-200">
+                      Portada del perfil
+                    </p>
+                    <p className="mt-1 text-[10px] text-zinc-500">
+                      Se mostrará detrás de tu información con un degradado negro.
+                    </p>
+                  </div>
+
+                  {vistaPreviaPortada && (
+                    <button
+                      type="button"
+                      onClick={quitarPortadaSeleccionada}
+                      disabled={guardando}
+                      className="shrink-0 rounded-lg border border-red-400/20 px-2.5 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10 disabled:opacity-60"
+                    >
+                      Quitar
+                    </button>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => inputPortadaRef.current?.click()}
+                  disabled={guardando}
+                  className="relative mt-3 flex h-32 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/40 text-sm font-semibold text-zinc-300 transition hover:border-emerald-400/40 disabled:opacity-60"
+                >
+                  {vistaPreviaPortada ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={vistaPreviaPortada}
+                        alt="Vista previa de la portada"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                      <span className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-transparent" />
+                      <span className="relative z-10 rounded-lg bg-black/45 px-3 py-2 text-xs font-bold text-white backdrop-blur-sm">
+                        Cambiar portada
+                      </span>
+                    </>
+                  ) : (
+                    <span>Seleccionar portada</span>
+                  )}
+                </button>
+
+                <input
+                  ref={inputPortadaRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={seleccionarPortada}
+                  disabled={guardando}
+                  className="hidden"
+                />
+
+                <p className="mt-2 text-[10px] text-zinc-500">
+                  Recomendado: imagen horizontal. JPG, PNG o WebP. Máximo 5 MB.
+                </p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">

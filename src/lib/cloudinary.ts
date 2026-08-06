@@ -87,6 +87,91 @@ export async function subirImagenPerfil(
   return data.secure_url;
 }
 
+export async function subirImagenPortada(
+  archivo: File,
+  usuarioId: number,
+): Promise<string> {
+  const { cloudName, apiKey, apiSecret } = obtenerConfiguracion();
+  const timestamp = Math.floor(Date.now() / 1000);
+  const folder = "featmusic/portadas";
+  const publicId = `usuario-${usuarioId}`;
+  const parametros: ParametroFirma[] = [
+    ["folder", folder],
+    ["invalidate", "true"],
+    ["overwrite", "true"],
+    ["public_id", publicId],
+    ["timestamp", String(timestamp)],
+  ];
+
+  const formData = new FormData();
+  formData.set("file", archivo);
+  formData.set("api_key", apiKey);
+  formData.set("timestamp", String(timestamp));
+  formData.set("folder", folder);
+  formData.set("public_id", publicId);
+  formData.set("overwrite", "true");
+  formData.set("invalidate", "true");
+  formData.set("signature", crearFirma(parametros, apiSecret));
+
+  const response = await fetch(
+    `${CLOUDINARY_UPLOAD_URL}/${cloudName}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+
+  const data = (await response.json()) as {
+    secure_url?: string;
+    error?: { message?: string };
+  };
+
+  if (!response.ok || !data.secure_url) {
+    throw new Error(
+      data.error?.message ?? "Cloudinary no pudo guardar la portada.",
+    );
+  }
+
+  return data.secure_url;
+}
+
+export async function eliminarImagenPortada(usuarioId: number) {
+  const { cloudName, apiKey, apiSecret } = obtenerConfiguracion();
+  const timestamp = Math.floor(Date.now() / 1000);
+  const publicId = `featmusic/portadas/usuario-${usuarioId}`;
+  const parametros: ParametroFirma[] = [
+    ["invalidate", "true"],
+    ["public_id", publicId],
+    ["timestamp", String(timestamp)],
+  ];
+
+  const formData = new FormData();
+  formData.set("public_id", publicId);
+  formData.set("api_key", apiKey);
+  formData.set("timestamp", String(timestamp));
+  formData.set("invalidate", "true");
+  formData.set("signature", crearFirma(parametros, apiSecret));
+
+  const response = await fetch(
+    `${CLOUDINARY_UPLOAD_URL}/${cloudName}/image/destroy`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+
+  const data = (await response.json()) as {
+    result?: string;
+    error?: { message?: string };
+  };
+
+  if (!response.ok || (data.result !== "ok" && data.result !== "not found")) {
+    throw new Error(
+      data.error?.message ?? "Cloudinary no pudo eliminar la portada.",
+    );
+  }
+}
+
 async function subirAudioConvertido(
   archivo: File,
   folder: string,

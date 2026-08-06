@@ -27,6 +27,7 @@ import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 // FEATMUSIC_PERFIL_PRIVADO_COMO_PUBLICO_V1
 // FEATMUSIC_PESTANAS_PRIVADAS_IDEAS_V1
 // FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
+// FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -322,6 +323,7 @@ export default async function PerfilPublicoPage({
       nombreArtistico: true,
       nombreUsuario: true,
       fotoPerfil: true,
+      portadaPerfil: true,
       biografia: true,
       ciudad: true,
       pais: true,
@@ -652,8 +654,26 @@ export default async function PerfilPublicoPage({
 
       <div className="mx-auto max-w-[1180px] px-3 py-3 sm:px-4 sm:py-5 md:py-8">
         <div className="grid gap-3 sm:gap-4 lg:grid-cols-[310px_minmax(0,1fr)]">
-          <aside className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5">
-            <div className="absolute right-3 top-3 flex flex-col items-center gap-2 sm:right-4 sm:top-4">
+          <aside
+            className={`relative overflow-hidden rounded-2xl border p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5 ${
+              artista.portadaPerfil
+                ? "border-black/30 bg-slate-950"
+                : "border-slate-200 bg-white"
+            }`}
+          >
+            {artista.portadaPerfil && (
+              <div aria-hidden="true" className="absolute inset-0">
+                <img
+                  src={artista.portadaPerfil}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+                <div className="absolute inset-0 bg-black/15" />
+              </div>
+            )}
+
+            <div className="absolute right-3 top-3 z-10 flex flex-col items-center gap-2 sm:right-4 sm:top-4">
               {codigoPais && (
                 <img
                   src={`https://flagcdn.com/w40/${codigoPais.toLowerCase()}.png`}
@@ -676,23 +696,37 @@ export default async function PerfilPublicoPage({
                   rel="noreferrer"
                   aria-label={`Abrir ${red.nombre}`}
                   title={red.nombre}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition ${
+                    artista.portadaPerfil
+                      ? "border-white/20 bg-black/35 text-white backdrop-blur-sm hover:border-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200"
+                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                  }`}
                 >
                   <IconoRedSocial nombre={red.nombre} className="h-3.5 w-3.5" />
                 </a>
               ))}
             </div>
 
-            <div className="flex items-start gap-3.5 lg:flex-col lg:items-center lg:text-center">
+            <div className="relative z-10 flex items-start gap-3.5 lg:flex-col lg:items-center lg:text-center">
               <div className="flex w-20 shrink-0 flex-col gap-1.5 sm:w-24 lg:w-28">
                 {artista.fotoPerfil ? (
                   <img
                     src={artista.fotoPerfil}
                     alt={`Foto de ${nombreArtistico}`}
-                    className="h-20 w-full rounded-2xl border border-slate-200 object-cover shadow-sm sm:h-24 lg:h-28"
+                    className={`h-20 w-full rounded-2xl border object-cover shadow-sm sm:h-24 lg:h-28 ${
+                      artista.portadaPerfil
+                        ? "border-white/30"
+                        : "border-slate-200"
+                    }`}
                   />
                 ) : (
-                  <div className="flex h-20 w-full items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 text-2xl font-black text-emerald-700 sm:h-24 sm:text-3xl lg:h-28">
+                  <div
+                    className={`flex h-20 w-full items-center justify-center rounded-2xl border text-2xl font-black sm:h-24 sm:text-3xl lg:h-28 ${
+                      artista.portadaPerfil
+                        ? "border-white/25 bg-black/45 text-white backdrop-blur-sm"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    }`}
+                  >
                     {iniciales(nombreArtistico)}
                   </div>
                 )}
@@ -701,7 +735,11 @@ export default async function PerfilPublicoPage({
                   <span
                     title={`Rol: ${formatearRol(artista.rolPrincipal)}`}
                     aria-label={`Rol: ${formatearRol(artista.rolPrincipal)}`}
-                    className="flex min-h-7 w-full items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-1.5 py-1 text-center text-[8px] font-black leading-tight text-emerald-700"
+                    className={`flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-black leading-tight ${
+                      artista.portadaPerfil
+                        ? "border-white/20 bg-black/40 text-white backdrop-blur-sm"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    }`}
                   >
                     {formatearRol(artista.rolPrincipal)}
                   </span>
@@ -713,7 +751,11 @@ export default async function PerfilPublicoPage({
                           key={preferencia.etiqueta}
                           title={`${preferencia.etiqueta}: ${preferencia.valor}`}
                           aria-label={`${preferencia.etiqueta}: ${preferencia.valor}`}
-                          className="flex min-h-7 w-full items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-1.5 py-1 text-center text-[8px] font-bold leading-tight text-emerald-700"
+                          className={`flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-bold leading-tight ${
+                            artista.portadaPerfil
+                              ? "border-white/20 bg-black/40 text-white backdrop-blur-sm"
+                              : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                          }`}
                         >
                           {preferencia.valor}
                         </span>
@@ -725,14 +767,26 @@ export default async function PerfilPublicoPage({
 
               <div className="min-w-0 flex-1 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
                 <div className="pr-28 sm:pr-32 lg:pr-0">
-                  <h1 className="break-words text-xl font-black leading-tight text-slate-900 sm:text-2xl lg:mt-4">
+                  <h1
+                    className={`break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4 ${
+                      artista.portadaPerfil ? "text-white" : "text-slate-900"
+                    }`}
+                  >
                     {nombreArtistico}
                   </h1>
-                  <p className="mt-1 break-all text-[11px] font-semibold text-emerald-700 sm:text-xs">
+                  <p
+                    className={`mt-1 break-all text-[11px] font-semibold sm:text-xs ${
+                      artista.portadaPerfil ? "text-emerald-300" : "text-emerald-700"
+                    }`}
+                  >
                     @{usuarioVisible}
                   </p>
 
-                  <p className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-500 lg:justify-center">
+                  <p
+                    className={`mt-2 flex items-center gap-1.5 text-[11px] lg:justify-center ${
+                      artista.portadaPerfil ? "text-slate-200" : "text-slate-500"
+                    }`}
+                  >
                     <IconoUbicacion className="h-3 w-3 shrink-0" />
                     <span className="min-w-0 truncate">{ubicacion}</span>
                   </p>
@@ -743,7 +797,11 @@ export default async function PerfilPublicoPage({
                     {generos.slice(0, 2).map((genero) => (
                       <span
                         key={genero}
-                        className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[9px] text-slate-600 sm:text-[10px]"
+                        className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] backdrop-blur-sm sm:text-[10px] ${
+                          artista.portadaPerfil
+                            ? "border-white/20 bg-black/35 text-white"
+                            : "border-slate-200 bg-slate-50 text-slate-600"
+                        }`}
                       >
                         {genero}
                       </span>
@@ -751,18 +809,30 @@ export default async function PerfilPublicoPage({
                   </div>
                 )}
 
-                <SeguimientoPerfil
-                  artistaId={artista.id}
-                  nombreUsuario={usuarioVisible}
-                  sesionActiva={Boolean(sesion)}
-                  esPerfilPropio={esPerfilPropio}
-                  siguiendoInicial={artista.seguidores.length > 0}
-                  seguidoresIniciales={artista._count.seguidores}
-                  siguiendoCantidad={artista._count.siguiendo}
-                  botonCompactoEnCabecera={Boolean(codigoPais)}
-                />
+                <div
+                  className={
+                    artista.portadaPerfil
+                      ? "[&_a]:text-white [&_button]:text-white [&_p]:text-white [&_span]:text-white"
+                      : ""
+                  }
+                >
+                  <SeguimientoPerfil
+                    artistaId={artista.id}
+                    nombreUsuario={usuarioVisible}
+                    sesionActiva={Boolean(sesion)}
+                    esPerfilPropio={esPerfilPropio}
+                    siguiendoInicial={artista.seguidores.length > 0}
+                    seguidoresIniciales={artista._count.seguidores}
+                    siguiendoCantidad={artista._count.siguiendo}
+                    botonCompactoEnCabecera={Boolean(codigoPais)}
+                  />
+                </div>
 
-                <p className="mt-2 max-w-full text-left text-[11px] leading-[1.5] text-slate-600 sm:text-xs sm:leading-5 lg:px-2 lg:text-center">
+                <p
+                  className={`mt-2 max-w-full text-left text-[11px] leading-[1.5] sm:text-xs sm:leading-5 lg:px-2 lg:text-center ${
+                    artista.portadaPerfil ? "text-white/85" : "text-slate-600"
+                  }`}
+                >
                   {artista.biografia?.replace(/\s+/g, " ").trim() ||
                     "Este artista todavía no ha agregado una biografía."}
                 </p>
@@ -770,12 +840,13 @@ export default async function PerfilPublicoPage({
             </div>
 
             {esPerfilPropio && (
-              <div className="-mx-4 -mb-4 mt-4 grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 bg-white sm:-mx-5 sm:-mb-5">
+              <div className="relative z-10 -mx-4 -mb-4 mt-4 grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 bg-white sm:-mx-5 sm:-mb-5">
                 <PerfilArtistaCard
                   modo="controles"
                   nombreArtistico={nombreArtistico}
                   nombreUsuario={usuarioVisible}
                   fotoPerfil={artista.fotoPerfil}
+                  portadaPerfil={artista.portadaPerfil}
                   biografia={artista.biografia}
                   spotifyUrl={artista.spotifyUrl}
                   youtubeUrl={artista.youtubeUrl}
