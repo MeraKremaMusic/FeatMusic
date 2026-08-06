@@ -73,7 +73,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return redirigir("/panel");
+    return redirigir("/artistas/mi-perfil");
   } catch (error) {
     console.error("No se pudo completar el perfil.", error);
     return redirigir("/completar-perfil?error=servidor");

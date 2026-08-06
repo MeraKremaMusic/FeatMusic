@@ -63,7 +63,7 @@ export default function SessionRouteGuard({
 
       if (datos.sesionActiva) {
         redirigiendo.current = true;
-        window.location.replace("/panel");
+        window.location.replace("/artistas/mi-perfil");
       }
     } catch (error) {
       const fueCancelada =

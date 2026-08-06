@@ -32,7 +32,7 @@ export default async function RegistroPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const sesion = await obtenerSesion();
-  if (sesion) redirect("/panel");
+  if (sesion) redirect("/artistas/mi-perfil");
 
   const { error } = await searchParams;
   const mensaje = mensajeDeError(error);

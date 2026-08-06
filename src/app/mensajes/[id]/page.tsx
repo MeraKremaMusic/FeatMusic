@@ -199,7 +199,7 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
 
           <div className="flex min-w-0 items-center gap-0.5">
             <MenuMasMovil />
-            <Link href="/panel" className="text-lg font-black tracking-tight">
+            <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
               Feat<span className="text-emerald-400">Music</span>
             </Link>
           </div>

@@ -188,7 +188,7 @@ export default async function MensajesPage() {
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <div className="flex min-w-0 items-center gap-0.5">
             <MenuMasMovil />
-            <Link href="/panel" className="text-lg font-black tracking-tight">
+            <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
               Feat<span className="text-emerald-400">Music</span>
             </Link>
           </div>
@@ -239,7 +239,7 @@ export default async function MensajesPage() {
               con ese artista.
             </p>
             <Link
-              href="/panel#panel-card-3"
+              href="/artistas/mi-perfil?seccion=recibidas"
               className="mt-4 inline-flex rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-3 py-2 text-[10px] font-black text-emerald-200 transition hover:bg-emerald-500/20"
             >
               Ver propuestas

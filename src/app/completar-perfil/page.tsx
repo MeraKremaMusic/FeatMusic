@@ -42,7 +42,7 @@ export default async function CompletarPerfilPage({
   });
 
   if (!usuario) redirect("/iniciar-sesion");
-  if (usuario.perfilCompleto) redirect("/panel");
+  if (usuario.perfilCompleto) redirect("/artistas/mi-perfil");
 
   const { error } = await searchParams;
   const generosSeleccionados = Array.isArray(usuario.generos)

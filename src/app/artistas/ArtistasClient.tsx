@@ -1008,7 +1008,7 @@ export default function ArtistasClient({
           <div className="flex min-w-0 items-center gap-0.5">
             <MenuMasMovil />
             <Link
-              href={sesionActiva ? "/panel" : "/"}
+              href={sesionActiva ? "/artistas/mi-perfil" : "/"}
               className="text-lg font-black tracking-tight"
             >
               Feat<span className="text-emerald-400">Music</span>

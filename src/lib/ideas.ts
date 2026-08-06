@@ -98,7 +98,7 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
           tipo: "IDEA_EXPIRADA",
           titulo: "Tu idea expiró",
           mensaje: `“${idea.titulo}” terminó su periodo activo.`,
-          enlace: "/panel#panel-card-2",
+          enlace: "/artistas/mi-perfil?seccion=activas",
           entidadTipo: "IDEA",
           entidadId: idea.id,
         });
@@ -123,7 +123,7 @@ async function limpiarListado(ideas: IdeaParaLimpiar[], ahora: Date) {
               tipo: "PROPUESTA_EXPIRADA",
               titulo: "La convocatoria terminó",
               mensaje: `La idea “${idea.titulo}” expiró antes de que tu propuesta fuera aceptada.`,
-              enlace: "/panel#panel-card-3",
+              enlace: "/artistas/mi-perfil?seccion=enviadas",
               entidadTipo: "IDEA",
               entidadId: idea.id,
             }),

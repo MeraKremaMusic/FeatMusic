@@ -204,6 +204,7 @@ function iniciales(nombre: string) {
 }
 
 // FEATMUSIC_NOTIFICACIONES_PERFIL_PRIVADO_V1
+// FEATMUSIC_RETIRAR_PANEL_VIEJO_NOTIFICACIONES_V1
 const TIPOS_PROPUESTAS_RECIBIDAS = new Set([
   "PROPUESTA_RECIBIDA",
   "PROPUESTA_CORREGIDA",
@@ -214,7 +215,10 @@ const TIPOS_PROPUESTAS_ENVIADAS = new Set([
   "CAMBIOS_SOLICITADOS",
   "PROPUESTA_RECHAZADA",
   "REINTENTO_PERMITIDO",
+  "PROPUESTA_EXPIRADA",
 ]);
+
+const TIPOS_IDEAS_PROPIAS = new Set(["IDEA_EXPIRADA"]);
 
 function resolverEnlaceNotificacion(notificacion: NotificacionCentro) {
   if (TIPOS_PROPUESTAS_RECIBIDAS.has(notificacion.tipo)) {
@@ -225,7 +229,29 @@ function resolverEnlaceNotificacion(notificacion: NotificacionCentro) {
     return "/artistas/mi-perfil?seccion=enviadas";
   }
 
-  return notificacion.enlace;
+  if (TIPOS_IDEAS_PROPIAS.has(notificacion.tipo)) {
+    return "/artistas/mi-perfil?seccion=activas";
+  }
+
+  const enlace = notificacion.enlace?.trim();
+
+  if (!enlace) {
+    return enlace;
+  }
+
+  if (enlace === "/panel" || enlace.startsWith("/panel?")) {
+    return "/artistas/mi-perfil";
+  }
+
+  if (enlace.startsWith("/panel#panel-card-2")) {
+    return "/artistas/mi-perfil?seccion=activas";
+  }
+
+  if (enlace.startsWith("/panel#panel-card-3")) {
+    return "/artistas/mi-perfil?seccion=recibidas";
+  }
+
+  return enlace;
 }
 
 export default function CentroNotificaciones({
