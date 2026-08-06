@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -14,6 +15,7 @@ import DescripcionIdea from "./components/DescripcionIdea";
 import DescargaMp3Idea from "./components/DescargaMp3Idea";
 import SeguimientoPerfil from "./components/SeguimientoPerfil";
 import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
+import CompartirPerfil from "./components/CompartirPerfil";
 
 // FEATMUSIC_PERFIL_PUBLICO_CLARO_V1
 // FEATMUSIC_DESCRIPCION_IDEA_PERFIL_V1
@@ -31,6 +33,7 @@ import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 // FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1
 // FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
 // FEATMUSIC_PORTADA_VISIBLE_CORREGIDA_V2
+// FEATMUSIC_COMPARTIR_PERFIL_REDESSOCIALES_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -281,6 +284,136 @@ function iniciales(nombre: string) {
 }
 
 // FEATMUSIC_BIOGRAFIA_COMPACTA_V1
+
+const FEATMUSIC_URL_PUBLICA = (
+  process.env.NEXT_PUBLIC_APP_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://featmusic.pro"
+).replace(/\/+$/, "");
+
+function limitarDescripcionSocial(valor: string, maximo = 158) {
+  const limpio = valor.replace(/\s+/g, " ").trim();
+
+  if (limpio.length <= maximo) {
+    return limpio;
+  }
+
+  return `${limpio.slice(0, maximo - 1).trimEnd()}…`;
+}
+
+export async function generateMetadata({
+  params,
+}: PerfilPublicoPageProps): Promise<Metadata> {
+  const { nombreUsuario: parametro } = await params;
+
+  let nombreUsuario = parametro;
+  try {
+    nombreUsuario = decodeURIComponent(parametro);
+  } catch {
+    nombreUsuario = parametro;
+  }
+
+  const esRutaPerfilPropio = nombreUsuario === "mi-perfil";
+  const sesion = esRutaPerfilPropio ? await obtenerSesion() : null;
+  const idAlternativo = nombreUsuario.startsWith("artista-")
+    ? Number(nombreUsuario.replace("artista-", ""))
+    : Number.NaN;
+
+  const artista = await prisma.usuario.findFirst({
+    where: esRutaPerfilPropio
+      ? { id: sesion?.usuarioId ?? -1 }
+      : {
+          perfilCompleto: true,
+          OR: [
+            { nombreUsuario },
+            ...(Number.isInteger(idAlternativo) && idAlternativo > 0
+              ? [{ id: idAlternativo }]
+              : []),
+          ],
+        },
+    select: {
+      id: true,
+      nombre: true,
+      nombreArtistico: true,
+      nombreUsuario: true,
+      fotoPerfil: true,
+      portadaPerfil: true,
+      biografia: true,
+      ciudad: true,
+      pais: true,
+      generos: true,
+    },
+  });
+
+  if (!artista) {
+    return {
+      title: "Perfil de artista | FeatMusic",
+      description:
+        "Descubre artistas, escucha ideas musicales y encuentra nuevas colaboraciones en FeatMusic.",
+    };
+  }
+
+  const nombreArtistico =
+    artista.nombreArtistico?.trim() || artista.nombre?.trim() || "Artista";
+  const usuarioVisible =
+    artista.nombreUsuario?.trim() || `artista-${artista.id}`;
+  const generos = obtenerGeneros(artista.generos).slice(0, 2);
+  const ubicacion = [artista.ciudad, artista.pais]
+    .filter(Boolean)
+    .join(", ");
+  const rutaPublica = `/artistas/${encodeURIComponent(usuarioVisible)}`;
+  const urlPublica = `${FEATMUSIC_URL_PUBLICA}${rutaPublica}`;
+  const imagenSocial = artista.portadaPerfil || artista.fotoPerfil || undefined;
+  const descripcionBase =
+    artista.biografia?.trim() ||
+    `Escucha las ideas musicales de ${nombreArtistico} y propón una colaboración en FeatMusic.`;
+  const contexto = [
+    generos.length > 0 ? generos.join(" · ") : "",
+    ubicacion,
+  ]
+    .filter(Boolean)
+    .join(" — ");
+  const descripcion = limitarDescripcionSocial(
+    contexto ? `${descripcionBase} ${contexto}.` : descripcionBase,
+  );
+  const titulo = `${nombreArtistico} (@${usuarioVisible}) | FeatMusic`;
+  const imagenes = imagenSocial
+    ? [
+        {
+          url: imagenSocial,
+          alt: `Perfil musical de ${nombreArtistico} en FeatMusic`,
+        },
+      ]
+    : undefined;
+
+  return {
+    title: titulo,
+    description: descripcion,
+    alternates: {
+      canonical: urlPublica,
+    },
+    openGraph: {
+      type: "website",
+      siteName: "FeatMusic",
+      title: titulo,
+      description: descripcion,
+      url: urlPublica,
+      images: imagenes,
+    },
+    twitter: {
+      card: imagenSocial ? "summary_large_image" : "summary",
+      title: titulo,
+      description: descripcion,
+      images: imagenSocial ? [imagenSocial] : undefined,
+    },
+    robots: esRutaPerfilPropio
+      ? {
+          index: false,
+          follow: false,
+        }
+      : undefined,
+  };
+}
 
 export default async function PerfilPublicoPage({
   params,
@@ -913,25 +1046,14 @@ export default async function PerfilPublicoPage({
                   siguiendo={artista._count.siguiendo}
                 />
 
-                <Link
-                  href="/panel#panel-card-2"
-                  className="flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
-                >
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    className="h-3.5 w-3.5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M4 5h16v14H4Z" />
-                    <path d="M8 9h8M8 13h8M8 17h5" />
-                  </svg>
-                  <span>Administrar ideas</span>
-                </Link>
+                <CompartirPerfil
+                  nombreArtistico={nombreArtistico}
+                  nombreUsuario={usuarioVisible}
+                  fotoPerfil={artista.fotoPerfil}
+                  portadaPerfil={portadaPerfilVisible}
+                  biografia={artista.biografia}
+                  ubicacion={ubicacion}
+                />
               </div>
             )}
 
