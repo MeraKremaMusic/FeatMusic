@@ -34,6 +34,9 @@ import CompartirPerfil from "./components/CompartirPerfil";
 // FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
 // FEATMUSIC_PORTADA_VISIBLE_CORREGIDA_V2
 // FEATMUSIC_COMPARTIR_PERFIL_REDESSOCIALES_V1
+// FEATMUSIC_SEGUIR_DEBAJO_BANDERA_V2
+// FEATMUSIC_ICONO_SEGUIR_IGUAL_REDES_V3
+// FEATMUSIC_SEGUIR_DENTRO_COLUMNA_REDES_V4
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -870,6 +873,19 @@ export default async function PerfilPublicoPage({
                 />
               )}
 
+              {!esPerfilPropio && (
+                <SeguimientoPerfil
+                  artistaId={artista.id}
+                  nombreUsuario={usuarioVisible}
+                  sesionActiva={Boolean(sesion)}
+                  esPerfilPropio={esPerfilPropio}
+                  siguiendoInicial={artista.seguidores.length > 0}
+                  seguidoresIniciales={artista._count.seguidores}
+                  siguiendoCantidad={artista._count.siguiendo}
+                  modo="boton"
+                />
+              )}
+
               {redes.map((red) => (
                 <a
                   key={red.nombre}
@@ -1006,7 +1022,7 @@ export default async function PerfilPublicoPage({
                     siguiendoInicial={artista.seguidores.length > 0}
                     seguidoresIniciales={artista._count.seguidores}
                     siguiendoCantidad={artista._count.siguiendo}
-                    botonCompactoEnCabecera={Boolean(codigoPais)}
+                    modo="contadores"
                   />
                 </div>
 

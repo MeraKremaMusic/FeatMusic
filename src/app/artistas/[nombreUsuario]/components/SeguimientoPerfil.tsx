@@ -2,8 +2,11 @@
 
 // FEATMUSIC_SEGUIR_COMPACTO_CABECERA_V1
 // FEATMUSIC_SEGUIMIENTO_UNA_FILA_V1
+// FEATMUSIC_SEGUIR_DEBAJO_BANDERA_V2
+// FEATMUSIC_ICONO_SEGUIR_IGUAL_REDES_V3
+// FEATMUSIC_SEGUIR_DENTRO_COLUMNA_REDES_V4
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ContadoresSeguimiento from "@/app/components/ContadoresSeguimiento";
 
@@ -14,6 +17,16 @@ type RespuestaSeguimiento = {
   seguidores?: number;
 };
 
+type ModoSeguimiento = "completo" | "boton" | "contadores";
+
+type DetalleSeguimiento = {
+  artistaId: number;
+  siguiendo: boolean;
+  seguidores: number;
+};
+
+const EVENTO_SEGUIMIENTO = "featmusic:seguimiento-actualizado";
+
 export default function SeguimientoPerfil({
   artistaId,
   nombreUsuario,
@@ -22,7 +35,7 @@ export default function SeguimientoPerfil({
   siguiendoInicial,
   seguidoresIniciales,
   siguiendoCantidad,
-  botonCompactoEnCabecera = false,
+  modo = "completo",
 }: {
   artistaId: number;
   nombreUsuario: string;
@@ -31,12 +44,103 @@ export default function SeguimientoPerfil({
   siguiendoInicial: boolean;
   seguidoresIniciales: number;
   siguiendoCantidad: number;
-  botonCompactoEnCabecera?: boolean;
+  modo?: ModoSeguimiento;
 }) {
   const [siguiendo, setSiguiendo] = useState(siguiendoInicial);
   const [seguidores, setSeguidores] = useState(seguidoresIniciales);
   const [procesando, setProcesando] = useState(false);
   const [error, setError] = useState("");
+
+  const mostrarBoton = modo !== "contadores" && !esPerfilPropio;
+  const mostrarContadores = modo !== "boton";
+
+  useEffect(() => {
+    function sincronizarSeguimiento(evento: Event) {
+      const detalle = (evento as CustomEvent<DetalleSeguimiento>).detail;
+
+      if (!detalle || detalle.artistaId !== artistaId) {
+        return;
+      }
+
+      setSiguiendo(detalle.siguiendo);
+      setSeguidores(Math.max(0, detalle.seguidores));
+    }
+
+    window.addEventListener(EVENTO_SEGUIMIENTO, sincronizarSeguimiento);
+
+    return () => {
+      window.removeEventListener(EVENTO_SEGUIMIENTO, sincronizarSeguimiento);
+    };
+  }, [artistaId]);
+
+  function emitirActualizacion(
+    siguiendoActualizado: boolean,
+    seguidoresActualizados: number,
+  ) {
+    window.dispatchEvent(
+      new CustomEvent<DetalleSeguimiento>(EVENTO_SEGUIMIENTO, {
+        detail: {
+          artistaId,
+          siguiendo: siguiendoActualizado,
+          seguidores: Math.max(0, seguidoresActualizados),
+        },
+      }),
+    );
+  }
+
+  function IconoSeguir() {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-3.5 w-3.5 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.9}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="9" cy="7" r="3" />
+        <path d="M3.8 19c.6-4 2.4-6 5.2-6s4.6 2 5.2 6" />
+        <path d="M18 8v6M15 11h6" />
+      </svg>
+    );
+  }
+
+  function IconoSeguido() {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-3.5 w-3.5 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.9}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="8.5" cy="7" r="3" />
+        <path d="M3.5 19c.6-4 2.3-6 5-6 2.2 0 3.8 1.3 4.6 3.8" />
+        <path d="m15 12.5 2 2 4-4" />
+      </svg>
+    );
+  }
+
+  function IconoCargando() {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-3.5 w-3.5 animate-spin"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+      >
+        <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+      </svg>
+    );
+  }
 
   async function alternarSeguimiento() {
     if (procesando || esPerfilPropio) {
@@ -51,11 +155,16 @@ export default function SeguimientoPerfil({
     const estadoAnterior = siguiendo;
     const seguidoresAnteriores = seguidores;
     const nuevoEstado = !estadoAnterior;
+    const seguidoresOptimistas = Math.max(
+      0,
+      seguidoresAnteriores + (nuevoEstado ? 1 : -1),
+    );
 
     setError("");
     setProcesando(true);
     setSiguiendo(nuevoEstado);
-    setSeguidores((actual) => Math.max(0, actual + (nuevoEstado ? 1 : -1)));
+    setSeguidores(seguidoresOptimistas);
+    emitirActualizacion(nuevoEstado, seguidoresOptimistas);
 
     try {
       const respuesta = await fetch(`/api/artistas/${artistaId}/seguir`, {
@@ -72,15 +181,20 @@ export default function SeguimientoPerfil({
         throw new Error(datos.mensaje ?? "No se pudo actualizar el seguimiento.");
       }
 
-      setSiguiendo(Boolean(datos.siguiendo));
-      setSeguidores(
-        typeof datos.seguidores === "number" && Number.isFinite(datos.seguidores)
+      const siguiendoConfirmado = Boolean(datos.siguiendo);
+      const seguidoresConfirmados =
+        typeof datos.seguidores === "number" &&
+        Number.isFinite(datos.seguidores)
           ? Math.max(0, datos.seguidores)
-          : seguidoresAnteriores,
-      );
+          : seguidoresOptimistas;
+
+      setSiguiendo(siguiendoConfirmado);
+      setSeguidores(seguidoresConfirmados);
+      emitirActualizacion(siguiendoConfirmado, seguidoresConfirmados);
     } catch (errorSeguimiento) {
       setSiguiendo(estadoAnterior);
       setSeguidores(seguidoresAnteriores);
+      emitirActualizacion(estadoAnterior, seguidoresAnteriores);
       setError(
         errorSeguimiento instanceof Error
           ? errorSeguimiento.message
@@ -91,50 +205,70 @@ export default function SeguimientoPerfil({
     }
   }
 
+  const boton = mostrarBoton ? (
+    <button
+      type="button"
+      onClick={() => void alternarSeguimiento()}
+      disabled={procesando}
+      aria-pressed={siguiendo}
+      aria-label={
+        procesando
+          ? "Guardando seguimiento"
+          : siguiendo
+            ? `Dejar de seguir a @${nombreUsuario}`
+            : `Seguir a @${nombreUsuario}`
+      }
+      title={
+        siguiendo
+          ? `Dejar de seguir a @${nombreUsuario}`
+          : `Seguir a @${nombreUsuario}`
+      }
+      className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border bg-white p-0 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 ${
+        siguiendo
+          ? "border-emerald-300 text-emerald-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+          : "border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+      }`}
+    >
+      {procesando ? (
+        <IconoCargando />
+      ) : siguiendo ? (
+        <IconoSeguido />
+      ) : (
+        <IconoSeguir />
+      )}
+    </button>
+  ) : null;
+
+  if (modo === "boton") {
+    return (
+      <>
+        {boton}
+        {error && (
+          <span role="alert" className="sr-only">
+            {error}
+          </span>
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="mt-3 grid gap-2.5 lg:justify-items-center">
-      {!esPerfilPropio && (
-        <button
-          type="button"
-          onClick={() => void alternarSeguimiento()}
-          disabled={procesando}
-          aria-pressed={siguiendo}
-          className={`border font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 ${
-            botonCompactoEnCabecera
-              ? "absolute right-[3.25rem] top-3 z-10 inline-flex h-5 min-w-[3.6rem] items-center justify-center gap-1 rounded-full px-2 text-[8px] shadow-sm sm:right-[3.75rem] sm:top-4"
-              : "inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-[11px] lg:w-auto lg:min-w-32"
-          } ${
-            botonCompactoEnCabecera
-              ? siguiendo
-                ? "border-slate-300 bg-slate-100 text-slate-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700"
-                : "border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-100"
-              : siguiendo
-                ? "border-white/15 bg-white/[0.055] text-zinc-200 hover:border-red-400/25 hover:bg-red-500/[0.07] hover:text-red-200"
-                : "border-emerald-400/35 bg-emerald-500/15 text-emerald-100 hover:border-emerald-300/50 hover:bg-emerald-500/25"
-          }`}
-        >
-          <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>
-          {procesando
-            ? botonCompactoEnCabecera
-              ? "..."
-              : "Guardando..."
-            : siguiendo
-              ? "Siguiendo"
-              : "Seguir"}
-        </button>
+      {boton}
+
+      {mostrarContadores && (
+        <div className="max-w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ContadoresSeguimiento
+            nombreUsuario={nombreUsuario}
+            seguidores={seguidores}
+            siguiendo={siguiendoCantidad}
+            className="!flex-nowrap whitespace-nowrap lg:justify-center"
+          />
+        </div>
       )}
 
-      <div className="max-w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <ContadoresSeguimiento
-          nombreUsuario={nombreUsuario}
-          seguidores={seguidores}
-          siguiendo={siguiendoCantidad}
-          className="!flex-nowrap whitespace-nowrap lg:justify-center"
-        />
-      </div>
-
       {error && (
-        <p role="alert" className="text-[10px] font-semibold text-red-300">
+        <p role="alert" className="text-[10px] font-semibold text-red-500">
           {error}
         </p>
       )}
