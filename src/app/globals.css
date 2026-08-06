@@ -3325,5 +3325,65 @@ body {
 .feat-reel-card[data-idea-cover="true"] .feat-reel-grid {
   opacity: 0.16;
 }
+
+
+/* FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1_START */
+/*
+  Cuando una idea tiene portada, el control de reproducción usa un círculo
+  blanco y un icono negro. Las ideas sin portada conservan el estilo verde.
+*/
+.featmusic-idea-cover .featmusic-audio-toggle,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-audio-toggle {
+  border-color: rgba(255, 255, 255, 0.96) !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3) !important;
+}
+
+.featmusic-idea-cover .featmusic-audio-toggle:hover,
+.featmusic-idea-cover .featmusic-audio-toggle:focus-visible,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-audio-toggle:hover,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-audio-toggle:focus-visible {
+  border-color: #ffffff !important;
+  background: #f8fafc !important;
+  color: #000000 !important;
+  box-shadow:
+    0 6px 22px rgba(0, 0, 0, 0.34),
+    0 0 0 3px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Inicio / reels: solo cambia cuando la publicación tiene portada propia. */
+.feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle,
+.featmusic-app-light
+  .feat-reel-card[data-idea-cover="true"]
+  .feat-reel-linear-toggle {
+  border: 0 !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.34) !important;
+}
+
+.feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle:hover,
+.feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle:focus-visible,
+.featmusic-app-light
+  .feat-reel-card[data-idea-cover="true"]
+  .feat-reel-linear-toggle:hover,
+.featmusic-app-light
+  .feat-reel-card[data-idea-cover="true"]
+  .feat-reel-linear-toggle:focus-visible {
+  background: #f8fafc !important;
+  color: #000000 !important;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.38),
+    0 0 0 3px rgba(255, 255, 255, 0.2) !important;
+}
+/* FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1_END */
+
 /* FEATMUSIC_PORTADAS_IDEAS_MUSICALES_V1_END */
 

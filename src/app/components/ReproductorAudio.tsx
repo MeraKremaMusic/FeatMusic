@@ -2,6 +2,7 @@
 
 // FEATMUSIC_ACCIONES_INTEGRADAS_PERFIL_V1
 // FEATMUSIC_VISTAS_BAJO_METADATOS_V1
+// FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { ChangeEvent, ReactNode } from "react";
@@ -161,7 +162,7 @@ export default function ReproductorAudio({
           type="button"
           onClick={alternarReproduccion}
           aria-label={reproduciendo ? `Pausar ${titulo}` : `Reproducir ${titulo}`}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-emerald-400/30 bg-emerald-500/15 text-emerald-200 transition hover:border-emerald-300/50 hover:bg-emerald-500/25 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+          className="featmusic-audio-toggle flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-emerald-400/30 bg-emerald-500/15 text-emerald-200 transition hover:border-emerald-300/50 hover:bg-emerald-500/25 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
         >
           {reproduciendo ? <IconoPausa /> : <IconoPlay />}
         </button>
