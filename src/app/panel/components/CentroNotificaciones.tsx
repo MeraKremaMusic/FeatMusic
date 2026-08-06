@@ -203,6 +203,31 @@ function iniciales(nombre: string) {
   );
 }
 
+// FEATMUSIC_NOTIFICACIONES_PERFIL_PRIVADO_V1
+const TIPOS_PROPUESTAS_RECIBIDAS = new Set([
+  "PROPUESTA_RECIBIDA",
+  "PROPUESTA_CORREGIDA",
+  "PROPUESTA_REENVIADA",
+]);
+
+const TIPOS_PROPUESTAS_ENVIADAS = new Set([
+  "CAMBIOS_SOLICITADOS",
+  "PROPUESTA_RECHAZADA",
+  "REINTENTO_PERMITIDO",
+]);
+
+function resolverEnlaceNotificacion(notificacion: NotificacionCentro) {
+  if (TIPOS_PROPUESTAS_RECIBIDAS.has(notificacion.tipo)) {
+    return "/artistas/mi-perfil?seccion=recibidas";
+  }
+
+  if (TIPOS_PROPUESTAS_ENVIADAS.has(notificacion.tipo)) {
+    return "/artistas/mi-perfil?seccion=enviadas";
+  }
+
+  return notificacion.enlace;
+}
+
 export default function CentroNotificaciones({
   variante = "icono",
 }: CentroNotificacionesProps) {
@@ -302,12 +327,14 @@ export default function CentroNotificaciones({
     await marcarLeida(notificacion.id);
     setAbierto(false);
 
+    const enlace = resolverEnlaceNotificacion(notificacion);
+
     if (
-      notificacion.enlace &&
-      notificacion.enlace.startsWith("/") &&
-      !notificacion.enlace.startsWith("//")
+      enlace &&
+      enlace.startsWith("/") &&
+      !enlace.startsWith("//")
     ) {
-      window.location.assign(notificacion.enlace);
+      window.location.assign(enlace);
     }
   }
 

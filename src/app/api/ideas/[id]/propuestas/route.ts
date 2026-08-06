@@ -584,7 +584,7 @@ export async function POST(request: Request, contexto: ContextoRuta) {
       tipo: tiposNotificacion[resultadoGuardado.modo],
       titulo: titulosNotificacion[resultadoGuardado.modo],
       mensaje: mensajesNotificacion[resultadoGuardado.modo],
-      enlace: "/panel#panel-card-3",
+      enlace: "/artistas/mi-perfil?seccion=recibidas",
       entidadTipo: "PROPUESTA",
       entidadId: resultadoGuardado.propuesta.id,
     });

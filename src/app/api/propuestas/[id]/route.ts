@@ -315,7 +315,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
         tipo: "CAMBIOS_SOLICITADOS",
         titulo: "Solicitaron cambios",
         mensaje: `Para “${propuesta.idea.titulo}”: ${resultado.data.motivo}`,
-        enlace: "/panel#panel-card-3",
+        enlace: "/artistas/mi-perfil?seccion=enviadas",
         entidadTipo: "PROPUESTA",
         entidadId: propuesta.id,
       });
@@ -423,7 +423,7 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
         mensaje: actualizada.permiteReintento
           ? `Rechazaron tu propuesta para “${propuesta.idea.titulo}”, pero puedes enviar otro intento si hay un cupo disponible. Motivo: ${resultado.data.motivo}`
           : `Rechazaron definitivamente tu propuesta para “${propuesta.idea.titulo}”. Motivo: ${resultado.data.motivo}`,
-        enlace: "/panel#panel-card-3",
+        enlace: "/artistas/mi-perfil?seccion=enviadas",
         entidadTipo: "PROPUESTA",
         entidadId: propuesta.id,
       });

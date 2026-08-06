@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
@@ -334,6 +334,30 @@ function EstadoVacio({
   );
 }
 
+// FEATMUSIC_SECCIONES_PERFIL_NOTIFICACIONES_V1
+function leerPestanaDesdeUrl(): PestanaPerfil | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const seccion = new URLSearchParams(window.location.search)
+    .get("seccion")
+    ?.trim()
+    .toLowerCase();
+
+  if (seccion === "enviadas") return "ENVIADAS";
+  if (seccion === "recibidas") return "RECIBIDAS";
+  if (seccion === "activas") return "ACTIVAS";
+
+  return null;
+}
+
+function valorUrlPestana(pestana: PestanaPerfil) {
+  if (pestana === "ENVIADAS") return "enviadas";
+  if (pestana === "RECIBIDAS") return "recibidas";
+  return "activas";
+}
+
 export default function SeccionesPerfilPrivado({
   ideasActivas,
   cantidadIdeasActivas,
@@ -358,6 +382,24 @@ export default function SeccionesPerfilPrivado({
   const [motivo, setMotivo] = useState("");
   const [permiteReintento, setPermiteReintento] = useState(false);
   const { porConversacion } = useNotificacionesChat();
+
+  useEffect(() => {
+    const aplicarPestanaDesdeUrl = () => {
+      const pestanaUrl = leerPestanaDesdeUrl();
+
+      if (pestanaUrl) {
+        setPestana(pestanaUrl);
+        setError("");
+      }
+    };
+
+    aplicarPestanaDesdeUrl();
+    window.addEventListener("popstate", aplicarPestanaDesdeUrl);
+
+    return () => {
+      window.removeEventListener("popstate", aplicarPestanaDesdeUrl);
+    };
+  }, []);
 
   const mensajesRecibidos = useMemo(
     () =>
@@ -388,6 +430,16 @@ export default function SeccionesPerfilPrivado({
   function cambiarPestana(nueva: PestanaPerfil) {
     setPestana(nueva);
     setError("");
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("seccion", valorUrlPestana(nueva));
+      window.history.replaceState(
+        window.history.state,
+        "",
+        url.pathname + url.search + url.hash,
+      );
+    }
   }
 
   async function enviarDecision(
