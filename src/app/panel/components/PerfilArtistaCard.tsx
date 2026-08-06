@@ -1,5 +1,7 @@
 "use client";
 
+// FEATMUSIC_PORTADA_RECARGA_SEGURA_V2
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ChangeEvent, FormEvent, ReactNode } from "react";
@@ -501,6 +503,12 @@ export default function PerfilArtistaCard({
         throw new Error(data.mensaje ?? "No se pudo actualizar el perfil.");
       }
 
+      if (archivoPortada && !data.usuario.portadaPerfil) {
+        throw new Error(
+          "La portada se subió, pero el servidor no devolvió la imagen guardada.",
+        );
+      }
+
       setPerfil(data.usuario);
       setNombreArtistico(data.usuario.nombreArtistico ?? "");
       setNombreUsuario(data.usuario.nombreUsuario ?? "");
@@ -541,6 +549,12 @@ export default function PerfilArtistaCard({
 
       if (modo === "controles") {
         router.refresh();
+
+        // En Next.js el refresco suave puede conservar el árbol anterior.
+        // La recarga completa garantiza que la portada recién guardada se vea.
+        window.setTimeout(() => {
+          window.location.reload();
+        }, 100);
       }
     } catch (err) {
       setError(

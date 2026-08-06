@@ -132,7 +132,11 @@ export async function subirImagenPortada(
     );
   }
 
-  return data.secure_url;
+  // FEATMUSIC_PORTADA_CACHE_BUST_V2
+  // Añade una versión propia para impedir que el navegador conserve una
+  // portada anterior cuando Cloudinary reutiliza el mismo public_id.
+  const separador = data.secure_url.includes("?") ? "&" : "?";
+  return `${data.secure_url}${separador}fm_portada=${timestamp}`;
 }
 
 export async function eliminarImagenPortada(usuarioId: number) {

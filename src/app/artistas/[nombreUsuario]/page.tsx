@@ -28,6 +28,7 @@ import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 // FEATMUSIC_PESTANAS_PRIVADAS_IDEAS_V1
 // FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
 // FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
+// FEATMUSIC_PORTADA_VISIBLE_CORREGIDA_V2
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -324,6 +325,7 @@ export default async function PerfilPublicoPage({
       nombreUsuario: true,
       fotoPerfil: true,
       portadaPerfil: true,
+      actualizadoEn: true,
       biografia: true,
       ciudad: true,
       pais: true,
@@ -409,6 +411,9 @@ export default async function PerfilPublicoPage({
   }
 
   const esPerfilPropio = sesion?.usuarioId === artista.id;
+  const portadaPerfilVisible = artista.portadaPerfil
+    ? `${artista.portadaPerfil}${artista.portadaPerfil.includes("?") ? "&" : "?"}fm_portada=${artista.actualizadoEn.getTime()}`
+    : null;
 
   const propuestasRecibidasGuardadas = esPerfilPropio
     ? await prisma.propuesta.findMany({
@@ -661,10 +666,10 @@ export default async function PerfilPublicoPage({
                 : "border-slate-200 bg-white"
             }`}
           >
-            {artista.portadaPerfil && (
+            {portadaPerfilVisible && (
               <div aria-hidden="true" className="absolute inset-0">
                 <img
-                  src={artista.portadaPerfil}
+                  src={portadaPerfilVisible}
                   alt=""
                   className="h-full w-full object-cover"
                 />
@@ -846,7 +851,7 @@ export default async function PerfilPublicoPage({
                   nombreArtistico={nombreArtistico}
                   nombreUsuario={usuarioVisible}
                   fotoPerfil={artista.fotoPerfil}
-                  portadaPerfil={artista.portadaPerfil}
+                  portadaPerfil={portadaPerfilVisible}
                   biografia={artista.biografia}
                   spotifyUrl={artista.spotifyUrl}
                   youtubeUrl={artista.youtubeUrl}
