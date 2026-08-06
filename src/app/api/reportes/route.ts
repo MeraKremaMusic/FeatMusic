@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     await enviarReporteUsuarioPorCorreo({
       reportanteUsuario:
         reportante?.nombreUsuario || `usuario-${sesion.usuarioId}`,
-      reportadoUsuario: reportado.nombreUsuario,
+      reportadoUsuario: reportado.nombreUsuario ?? nombreUsuario,
       motivo,
       descripcion,
       enviadoEn: new Date(),
