@@ -27,6 +27,7 @@ import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 // FEATMUSIC_PERFIL_PRIVADO_COMO_PUBLICO_V1
 // FEATMUSIC_PESTANAS_PRIVADAS_IDEAS_V1
 // FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
+// FEATMUSIC_PORTADA_DEGRADADO_NEGRO_VISIBLE_V2
 // FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
 // FEATMUSIC_PORTADA_VISIBLE_CORREGIDA_V2
 
@@ -662,7 +663,7 @@ export default async function PerfilPublicoPage({
           <aside
             className={`relative overflow-hidden rounded-2xl border p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5 ${
               artista.portadaPerfil
-                ? "border-black/30 bg-slate-950"
+                ? "border-black/40 bg-black"
                 : "border-slate-200 bg-white"
             }`}
           >
@@ -671,10 +672,15 @@ export default async function PerfilPublicoPage({
                 <img
                   src={portadaPerfilVisible}
                   alt=""
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover object-center contrast-[1.04] saturate-[1.08]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
-                <div className="absolute inset-0 bg-black/15" />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+                  }}
+                />
               </div>
             )}
 
