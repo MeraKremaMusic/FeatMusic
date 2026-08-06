@@ -3663,3 +3663,62 @@ body {
 }
 /* FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1_END */
 
+/* FEATMUSIC_BANNER_NEGRO_PAGINAS_SECUNDARIAS_V2_START */
+/*
+  Las páginas de Planes, Ayuda, Reportes, Términos y Privacidad usan
+  .featmusic-secondary-page. El banner negro debe funcionar tanto dentro del
+  tema principal como dentro de esas páginas secundarias.
+*/
+.featmusic-solid-black-chrome,
+.featmusic-secondary-page .featmusic-solid-black-chrome,
+.featmusic-app-light .featmusic-solid-black-chrome {
+  color-scheme: dark;
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.featmusic-solid-black-chrome [class~="text-white"],
+.featmusic-secondary-page
+  .featmusic-solid-black-chrome
+  [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+.featmusic-solid-black-chrome [class~="text-emerald-400"],
+.featmusic-secondary-page
+  .featmusic-solid-black-chrome
+  [class~="text-emerald-400"] {
+  color: #34d399 !important;
+}
+
+.featmusic-secondary-back-link,
+.featmusic-secondary-page .featmusic-secondary-back-link,
+.featmusic-app-light .featmusic-secondary-back-link {
+  border: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.featmusic-secondary-back-link:hover,
+.featmusic-secondary-back-link:focus-visible,
+.featmusic-secondary-page .featmusic-secondary-back-link:hover,
+.featmusic-secondary-page .featmusic-secondary-back-link:focus-visible {
+  border-color: transparent !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+/* FEATMUSIC_BANNER_NEGRO_PAGINAS_SECUNDARIAS_V2_END */
+
