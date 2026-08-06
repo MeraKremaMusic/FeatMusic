@@ -3570,3 +3570,96 @@ body {
 }
 /* FEATMUSIC_COMPARTIR_PERFIL_REDESSOCIALES_V1_END */
 
+/* FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1_START */
+.featmusic-more-backdrop {
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  animation: featmusicMoreFade 180ms ease-out both;
+}
+
+.featmusic-more-drawer {
+  animation: featmusicMoreSlide 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.featmusic-more-dropdown {
+  animation: featmusicMoreDropdown 160ms ease-out both;
+}
+
+.featmusic-more-dropdown {
+  background: rgba(7, 17, 13, 0.98) !important;
+  color: #ffffff !important;
+}
+
+.featmusic-app-light .featmusic-more-dropdown [class~="text-zinc-300"],
+.featmusic-app-light .featmusic-more-dropdown [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+.featmusic-app-light .featmusic-more-dropdown [class~="text-zinc-500"] {
+  color: #71717a !important;
+}
+
+.featmusic-secondary-page {
+  min-width: 0;
+  overflow-x: clip;
+  background: #d8dee7 !important;
+  color: #172033;
+}
+
+.featmusic-secondary-page a,
+.featmusic-secondary-page button,
+.featmusic-secondary-page input,
+.featmusic-secondary-page select,
+.featmusic-secondary-page textarea,
+.featmusic-secondary-page summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.featmusic-secondary-page details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.featmusic-legal-copy h1,
+.featmusic-legal-copy h2,
+.featmusic-legal-copy p,
+.featmusic-legal-copy li,
+.featmusic-legal-copy span {
+  text-shadow: none !important;
+}
+
+@keyframes featmusicMoreFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes featmusicMoreSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes featmusicMoreDropdown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featmusic-more-backdrop,
+  .featmusic-more-drawer,
+  .featmusic-more-dropdown {
+    animation: none !important;
+  }
+}
+/* FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1_END */
+

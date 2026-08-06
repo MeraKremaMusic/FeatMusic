@@ -48,6 +48,8 @@ model Usuario {
   seguidores              Seguimiento[] @relation("UsuarioSeguidores")
   vistasIdeas              VistaIdea[]
   ideasGuardadas           IdeaGuardada[]
+  reportesEnviados         ReporteUsuario[] @relation("ReportesEnviados")
+  reportesRecibidos        ReporteUsuario[] @relation("ReportesRecibidos")
 
   @@map("usuarios")
 }
@@ -216,6 +218,24 @@ model Notificacion {
   @@index([conversacionId, leidaEn])
   @@index([entidadTipo, entidadId])
   @@map("notificaciones")
+}
+
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
+model ReporteUsuario {
+  id           Int      @id @default(autoincrement())
+  reportanteId Int      @map("reportante_id")
+  reportadoId  Int      @map("reportado_id")
+  motivo       String   @db.VarChar(50)
+  descripcion  String   @db.VarChar(1000)
+  estado       String   @default("PENDIENTE") @db.VarChar(20)
+  creadoEn     DateTime @default(now()) @map("creado_en")
+  actualizadoEn DateTime @updatedAt @map("actualizado_en")
+  reportante   Usuario  @relation("ReportesEnviados", fields: [reportanteId], references: [id], onDelete: Cascade)
+  reportado    Usuario  @relation("ReportesRecibidos", fields: [reportadoId], references: [id], onDelete: Cascade)
+
+  @@index([reportanteId, creadoEn])
+  @@index([reportadoId, estado, creadoEn])
+  @@map("reportes_usuarios")
 }
 
 model RegistroPendiente {

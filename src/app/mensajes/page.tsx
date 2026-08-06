@@ -2,10 +2,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import NavegacionEscritorio from "@/app/components/NavegacionEscritorio";
+import { MenuMasMovil } from "@/app/components/MenuMasNavegacion";
 import MenuMovilPanel from "@/app/panel/components/MenuMovilPanel";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -184,9 +186,12 @@ export default async function MensajesPage() {
     <main className="featmusic-app-light featmusic-page-contrast min-h-[100dvh] bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-40">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
-          <Link href="/panel" className="text-lg font-black tracking-tight">
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil />
+            <Link href="/panel" className="text-lg font-black tracking-tight">
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
           <NavegacionEscritorio />
 

@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import {
+  MenuMasEscritorio,
+  MenuMasMovil,
+} from "@/app/components/MenuMasNavegacion";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import ChatClient from "./ChatClient";
 
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -192,13 +197,16 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
             ← Mensajes
           </Link>
 
-          <Link href="/panel" className="text-lg font-black tracking-tight">
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil />
+            <Link href="/panel" className="text-lg font-black tracking-tight">
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
-          <span className="hidden text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-600 sm:block">
-            Chat privado
-          </span>
+          <div className="hidden md:block">
+            <MenuMasEscritorio />
+          </div>
         </div>
       </header>
 

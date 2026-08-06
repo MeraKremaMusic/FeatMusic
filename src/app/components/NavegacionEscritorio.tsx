@@ -1,9 +1,12 @@
 "use client";
 
 // FEATMUSIC_NAVEGACION_MI_PERFIL_PUBLICO_V1
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { MenuMasEscritorio } from "@/app/components/MenuMasNavegacion";
 
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
@@ -153,6 +156,8 @@ export default function NavegacionEscritorio({
         <Icono tipo="perfil" />
         Mi perfil
       </Link>
+
+      <MenuMasEscritorio />
     </nav>
   );
 }

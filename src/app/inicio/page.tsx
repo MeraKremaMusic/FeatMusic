@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import NavegacionEscritorio from "@/app/components/NavegacionEscritorio";
+import { MenuMasMovil } from "@/app/components/MenuMasNavegacion";
 import MenuMovilPanel from "@/app/panel/components/MenuMovilPanel";
 import {
   calcularCompatibilidad,
@@ -240,9 +241,12 @@ export default async function InicioPage() {
     <main className="featmusic-app-light h-[100dvh] overflow-hidden bg-[#06100c] text-white lg:h-screen">
       <header className="featmusic-solid-black-chrome relative z-50">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
-          <Link href="/inicio" className="text-lg font-black tracking-tight">
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil />
+            <Link href="/inicio" className="text-lg font-black tracking-tight">
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
           <NavegacionEscritorio />
 

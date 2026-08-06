@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import ContadorVistasIdea from "../../components/ContadorVistasIdea";
 import NavegacionEscritorio from "../../components/NavegacionEscritorio";
+import { MenuMasMovil } from "../../components/MenuMasNavegacion";
 import RegistrarVistaIdea from "../../components/RegistrarVistaIdea";
 import ReproductorAudio from "../../components/ReproductorAudio";
 import { crearFraseColaboracion } from "../../components/ResumenColaboracionIdea";
@@ -39,6 +40,7 @@ import CompartirPerfil from "./components/CompartirPerfil";
 // FEATMUSIC_SEGUIR_DENTRO_COLUMNA_REDES_V4
 // FEATMUSIC_BIOGRAFIA_Y_TOQUES_ICONOS_V5
 // FEATMUSIC_MENSAJES_PERFIL_PROPIO_VACIO_V1
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -806,12 +808,15 @@ export default async function PerfilPublicoPage({
     <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#f4f6fa] pb-20 text-[#172033] lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-50">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
-          <Link
-            href={sesion ? "/artistas/mi-perfil" : "/"}
-            className="text-lg font-black tracking-tight"
-          >
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil />
+            <Link
+              href={sesion ? "/artistas/mi-perfil" : "/"}
+              className="text-lg font-black tracking-tight"
+            >
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
           <NavegacionEscritorio />
 

@@ -5,6 +5,7 @@ import { limpiarIdeasExpiradasUsuario } from "@/lib/ideas";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
+import { MenuMasMovil } from "../components/MenuMasNavegacion";
 import MenuMovilPanel from "./components/MenuMovilPanel";
 import IdeasMusicalesCard from "./components/IdeasMusicalesCard";
 import PropuestasRecibidasCard from "./components/PropuestasRecibidasCard";
@@ -13,6 +14,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 // FEATMUSIC_SESION_RECUPERABLE_V1
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 const RUTA_RESTABLECER_SESION =
   "/api/cerrar-sesion?destino=%2Finiciar-sesion&motivo=sesion-invalida";
 
@@ -383,9 +385,15 @@ export default async function PanelPage() {
     <main className="featmusic-app-light h-[100dvh] overflow-hidden bg-[#06100c] text-white lg:h-screen">
       <header className="featmusic-solid-black-chrome">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4 lg:px-4">
-          <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil />
+            <Link
+              href="/artistas/mi-perfil"
+              className="text-lg font-black tracking-tight"
+            >
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
           <NavegacionEscritorio />
 

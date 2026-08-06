@@ -2,11 +2,13 @@
 
 // FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
 // FEATMUSIC_QUITAR_PORTADA_IDEAS_EXPLORAR_V1
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import NavegacionEscritorio from "../components/NavegacionEscritorio";
+import { MenuMasMovil } from "../components/MenuMasNavegacion";
 import RegistrarVistaIdea from "../components/RegistrarVistaIdea";
 import ReproductorAudio from "../components/ReproductorAudio";
 import ResumenColaboracionIdea from "../components/ResumenColaboracionIdea";
@@ -1003,12 +1005,15 @@ export default function ArtistasClient({
     <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-50">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
-          <Link
-            href={sesionActiva ? "/panel" : "/"}
-            className="text-lg font-black tracking-tight"
-          >
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil />
+            <Link
+              href={sesionActiva ? "/panel" : "/"}
+              className="text-lg font-black tracking-tight"
+            >
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
           <NavegacionEscritorio />
 
