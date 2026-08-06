@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 // FEATMUSIC_MENU_MAS_NEGRO_ENLACES_LEGALES_V2
 
 type IconoTipo = "premium" | "ayuda" | "reporte" | "terminos" | "privacidad";
+type TemaFeatMusic = "claro" | "oscuro";
 
 const OPCIONES_MAS: Array<{
   href: string;
@@ -140,6 +141,131 @@ function IconoChevron() {
   );
 }
 
+function IconoTema({ oscuro }: { oscuro: boolean }) {
+  return oscuro ? (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" />
+    </svg>
+  ) : (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.6 6.6 0 0 0 21 12.8Z" />
+    </svg>
+  );
+}
+
+function leerTemaActual(): TemaFeatMusic {
+  if (typeof document === "undefined") {
+    return "claro";
+  }
+
+  return document.documentElement.classList.contains("dark")
+    ? "oscuro"
+    : "claro";
+}
+
+function aplicarTema(tema: TemaFeatMusic) {
+  const oscuro = tema === "oscuro";
+  const raiz = document.documentElement;
+
+  raiz.classList.toggle("dark", oscuro);
+  raiz.dataset.tema = tema;
+  raiz.style.colorScheme = oscuro ? "dark" : "light";
+  window.localStorage.setItem("featmusic-tema", tema);
+  window.dispatchEvent(
+    new CustomEvent<TemaFeatMusic>("featmusic:cambio-tema", {
+      detail: tema,
+    }),
+  );
+}
+
+function ControlModoOscuro({ movil = false }: { movil?: boolean }) {
+  const [tema, setTema] = useState<TemaFeatMusic>("claro");
+  const oscuro = tema === "oscuro";
+
+  useEffect(() => {
+    setTema(leerTemaActual());
+
+    function sincronizarTema(evento: Event) {
+      const eventoTema = evento as CustomEvent<TemaFeatMusic>;
+      setTema(eventoTema.detail ?? leerTemaActual());
+    }
+
+    window.addEventListener("featmusic:cambio-tema", sincronizarTema);
+    return () => {
+      window.removeEventListener("featmusic:cambio-tema", sincronizarTema);
+    };
+  }, []);
+
+  function alternarTema() {
+    const siguiente: TemaFeatMusic = oscuro ? "claro" : "oscuro";
+    aplicarTema(siguiente);
+    setTema(siguiente);
+  }
+
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={oscuro}
+      onClick={alternarTema}
+      className={`flex w-full touch-manipulation items-center gap-3 rounded-xl border border-white/10 bg-white/[0.035] text-left text-zinc-300 transition hover:border-emerald-400/25 hover:bg-white/[0.06] hover:text-white ${
+        movil ? "min-h-16 px-3 py-3" : "px-3 py-2.5"
+      }`}
+    >
+      <span
+        className={`flex shrink-0 items-center justify-center border border-emerald-400/20 bg-emerald-500/10 text-emerald-300 ${
+          movil ? "h-11 w-11 rounded-2xl" : "h-9 w-9 rounded-xl"
+        }`}
+      >
+        <IconoTema oscuro={oscuro} />
+      </span>
+
+      <span className="min-w-0 flex-1">
+        <span className={`block font-black ${movil ? "text-xs" : "text-[11px]"}`}>
+          Modo oscuro
+        </span>
+        <span className={`mt-0.5 block leading-4 text-zinc-500 ${movil ? "text-[10px]" : "text-[9px]"}`}>
+          {oscuro ? "Activado en este dispositivo" : "Usar colores oscuros"}
+        </span>
+      </span>
+
+      <span
+        aria-hidden="true"
+        className={`relative h-6 w-11 shrink-0 rounded-full border transition ${
+          oscuro
+            ? "border-emerald-400 bg-emerald-500"
+            : "border-white/15 bg-white/10"
+        }`}
+      >
+        <span
+          className={`absolute top-0.5 h-[18px] w-[18px] rounded-full bg-white shadow-sm transition-transform ${
+            oscuro ? "translate-x-[21px]" : "translate-x-0.5"
+          }`}
+        />
+      </span>
+    </button>
+  );
+}
+
 const RUTAS_LEGALES = ["/terminos", "/privacidad"];
 
 function rutaActiva(pathname: string, href: string) {
@@ -217,6 +343,10 @@ export function MenuMasEscritorio() {
             <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400">
               Más en FeatMusic
             </p>
+          </div>
+
+          <div className="mb-2">
+            <ControlModoOscuro />
           </div>
 
           {OPCIONES_MAS.map((opcion) => {
@@ -357,6 +487,10 @@ export function MenuMasMovil() {
                 <p className="mt-1 text-[11px] leading-5 text-zinc-500">
                   Planes, ayuda, seguridad y documentos de la plataforma.
                 </p>
+              </div>
+
+              <div className="px-3 pb-2">
+                <ControlModoOscuro movil />
               </div>
 
               <nav
