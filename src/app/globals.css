@@ -3213,3 +3213,21 @@ body {
   background-color: #d8dee7 !important;
 }
 /* FEATMUSIC_FONDOS_MAYOR_CONTRASTE_V1_END */
+
+/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1_START */
+/*
+  La identidad que aparece sobre la portada debe conservar blanco puro aunque
+  el tema claro reinterprete las utilidades text-white. El borde permanece
+  transparente para conservar el tamaño de la tarjeta sin mostrar una línea.
+*/
+.featmusic-app-light .featmusic-profile-cover {
+  border-color: transparent !important;
+}
+
+.featmusic-app-light
+  .featmusic-profile-cover
+  .featmusic-cover-identity-text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
+}
+/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1_END */

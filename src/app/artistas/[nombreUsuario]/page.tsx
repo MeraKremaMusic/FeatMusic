@@ -28,6 +28,7 @@ import SeccionesPerfilPrivado from "./components/SeccionesPerfilPrivado";
 // FEATMUSIC_PESTANAS_PRIVADAS_IDEAS_V1
 // FEATMUSIC_CONTROLES_INTEGRADOS_PERFIL_PRIVADO_V1
 // FEATMUSIC_PORTADA_DEGRADADO_NEGRO_VISIBLE_V2
+// FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1
 // FEATMUSIC_PORTADA_PERFIL_ARTISTA_V1
 // FEATMUSIC_PORTADA_VISIBLE_CORREGIDA_V2
 
@@ -663,7 +664,7 @@ export default async function PerfilPublicoPage({
           <aside
             className={`relative overflow-hidden rounded-2xl border p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5 ${
               artista.portadaPerfil
-                ? "border-black/40 bg-black"
+                ? "featmusic-profile-cover border-transparent bg-black"
                 : "border-slate-200 bg-white"
             }`}
           >
@@ -779,15 +780,15 @@ export default async function PerfilPublicoPage({
               <div className="min-w-0 flex-1 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
                 <div className="pr-28 sm:pr-32 lg:pr-0">
                   <h1
-                    className={`break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4 ${
+                    className={`featmusic-cover-identity-text break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4 ${
                       artista.portadaPerfil ? "text-white" : "text-slate-900"
                     }`}
                   >
                     {nombreArtistico}
                   </h1>
                   <p
-                    className={`mt-1 break-all text-[11px] font-semibold sm:text-xs ${
-                      artista.portadaPerfil ? "text-emerald-300" : "text-emerald-700"
+                    className={`featmusic-cover-identity-text mt-1 break-all text-[11px] font-semibold sm:text-xs ${
+                      artista.portadaPerfil ? "text-white" : "text-emerald-700"
                     }`}
                   >
                     @{usuarioVisible}
