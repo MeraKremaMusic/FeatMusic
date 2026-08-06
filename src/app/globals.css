@@ -3385,5 +3385,84 @@ body {
 }
 /* FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1_END */
 
+/* FEATMUSIC_ICONOS_NEGROS_PORTADA_IDEA_V2_START */
+/*
+  La regla general de textos blancos sobre portadas tenía más especificidad.
+  Estas reglas fuerzan negro permanente en play/pausa y Descripción.
+*/
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle:hover,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle:focus-visible {
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle
+  svg,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle
+  svg
+  path {
+  color: #050505 !important;
+  fill: #050505 !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle:hover,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle:focus-visible {
+  border-color: rgba(255, 255, 255, 0.96) !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.24) !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle
+  span,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle
+  svg,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle
+  svg
+  path {
+  color: #050505 !important;
+  stroke: #050505 !important;
+  text-shadow: none !important;
+}
+/* FEATMUSIC_ICONOS_NEGROS_PORTADA_IDEA_V2_END */
+
+
 /* FEATMUSIC_PORTADAS_IDEAS_MUSICALES_V1_END */
 

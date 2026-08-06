@@ -1,5 +1,7 @@
 "use client";
 
+// FEATMUSIC_ICONOS_NEGROS_PORTADA_IDEA_V2
+
 import { createPortal } from "react-dom";
 import { useEffect, useId, useRef, useState } from "react";
 
@@ -184,7 +186,7 @@ export default function DescripcionIdea({
         aria-controls={panelId}
         title="Ver descripción"
         onClick={() => setAbierta(true)}
-        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-300/60 sm:text-[8px] ${
+        className={`featmusic-description-toggle inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-300/60 sm:text-[8px] ${
           abierta
             ? "border-emerald-300 bg-emerald-50 text-emerald-800"
             : "border-slate-200 bg-white/95 text-slate-500 shadow-sm hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800"
