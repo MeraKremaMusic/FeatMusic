@@ -35,6 +35,13 @@ type ContextoRuta = {
   params: Promise<{ id: string }>;
 };
 
+class ConflictoCancelacionError extends Error {
+  constructor() {
+    super("La propuesta cambió de estado antes de cancelarse.");
+    this.name = "ConflictoCancelacionError";
+  }
+}
+
 function respuestaError(mensaje: string, status: number) {
   return NextResponse.json({ ok: false, mensaje }, { status });
 }
@@ -465,4 +472,97 @@ export async function PATCH(request: Request, contexto: ContextoRuta) {
       500,
     );
   }
+}
+
+export async function DELETE(_request: Request, contexto: ContextoRuta) {
+  const sesion = await obtenerSesion();
+
+  if (!sesion) {
+    return respuestaError("Tu sesión expiró. Inicia sesión nuevamente.", 401);
+  }
+
+  const { id: idTexto } = await contexto.params;
+  const propuestaId = convertirId(idTexto);
+
+  if (!propuestaId) {
+    return respuestaError(
+      "El identificador de la propuesta no es válido.",
+      400,
+    );
+  }
+
+  const propuesta = await prisma.propuesta.findFirst({
+    where: {
+      id: propuestaId,
+      remitenteId: sesion.usuarioId,
+    },
+    select: {
+      id: true,
+      estado: true,
+      audioPublicId: true,
+    },
+  });
+
+  if (!propuesta) {
+    return respuestaError(
+      "No se encontró la propuesta o no tienes permiso para cancelarla.",
+      404,
+    );
+  }
+
+  if (propuesta.estado !== "PENDIENTE") {
+    return respuestaError(
+      "Solo puedes cancelar una propuesta mientras siga pendiente.",
+      409,
+    );
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const eliminacion = await tx.propuesta.deleteMany({
+        where: {
+          id: propuesta.id,
+          remitenteId: sesion.usuarioId,
+          estado: "PENDIENTE",
+        },
+      });
+
+      if (eliminacion.count === 0) {
+        throw new ConflictoCancelacionError();
+      }
+
+      await tx.notificacion.deleteMany({
+        where: {
+          entidadTipo: "PROPUESTA",
+          entidadId: propuesta.id,
+        },
+      });
+    });
+  } catch (error) {
+    if (error instanceof ConflictoCancelacionError) {
+      return respuestaError(
+        "La propuesta ya fue respondida o cambió de estado. Actualiza la página.",
+        409,
+      );
+    }
+
+    console.error("No se pudo cancelar la propuesta.", error);
+    return respuestaError("No se pudo cancelar la propuesta.", 500);
+  }
+
+  if (propuesta.audioPublicId) {
+    await eliminarAudioIdea(propuesta.audioPublicId).catch((error) => {
+      console.error(
+        "La propuesta se canceló, pero no se pudo eliminar su audio de Cloudinary.",
+        error,
+      );
+    });
+  }
+
+  return NextResponse.json({
+    ok: true,
+    mensaje:
+      "Propuesta cancelada. El cupo quedó libre y puedes enviar un audio nuevo.",
+    propuestaId: propuesta.id,
+  });
 }

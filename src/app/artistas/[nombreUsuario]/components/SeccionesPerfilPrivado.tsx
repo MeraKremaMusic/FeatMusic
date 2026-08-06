@@ -347,6 +347,7 @@ export default function SeccionesPerfilPrivado({
 }) {
   const [pestana, setPestana] = useState<PestanaPerfil>("ACTIVAS");
   const [recibidas, setRecibidas] = useState(propuestasRecibidasIniciales);
+  const [enviadas, setEnviadas] = useState(propuestasEnviadasIniciales);
   const [procesandoId, setProcesandoId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [modal, setModal] = useState<{
@@ -373,7 +374,7 @@ export default function SeccionesPerfilPrivado({
 
   const mensajesEnviados = useMemo(
     () =>
-      propuestasEnviadasIniciales.reduce(
+      enviadas.reduce(
         (total, propuesta) =>
           total +
           (propuesta.conversacionId
@@ -381,7 +382,7 @@ export default function SeccionesPerfilPrivado({
             : 0),
         0,
       ),
-    [propuestasEnviadasIniciales, porConversacion],
+    [enviadas, porConversacion],
   );
 
   function cambiarPestana(nueva: PestanaPerfil) {
@@ -455,6 +456,42 @@ export default function SeccionesPerfilPrivado({
     }
   }
 
+  async function cancelarPropuesta(propuestaId: number) {
+    if (procesandoId !== null) return;
+
+    const confirmada = window.confirm(
+      "¿Quieres cancelar esta propuesta? El audio enviado se eliminará y podrás enviar una versión nueva.",
+    );
+
+    if (!confirmada) return;
+
+    setError("");
+    setProcesandoId(propuestaId);
+
+    try {
+      const response = await fetch(`/api/propuestas/${propuestaId}`, {
+        method: "DELETE",
+      });
+      const data = (await response.json()) as RespuestaActualizacion;
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.mensaje || "No se pudo cancelar la propuesta.");
+      }
+
+      setEnviadas((actuales) =>
+        actuales.filter((propuesta) => propuesta.id !== propuestaId),
+      );
+    } catch (errorCancelacion) {
+      setError(
+        errorCancelacion instanceof Error
+          ? errorCancelacion.message
+          : "No se pudo cancelar la propuesta.",
+      );
+    } finally {
+      setProcesandoId(null);
+    }
+  }
+
   async function confirmarModal() {
     if (!modal || procesandoId !== null) return;
 
@@ -492,7 +529,7 @@ export default function SeccionesPerfilPrivado({
         <BotonPestana
           activa={pestana === "ENVIADAS"}
           etiqueta="Enviadas"
-          cantidad={propuestasEnviadasIniciales.length}
+          cantidad={enviadas.length}
           notificaciones={mensajesEnviados}
           icono={<IconoEnviar />}
           onClick={() => cambiarPestana("ENVIADAS")}
@@ -523,7 +560,13 @@ export default function SeccionesPerfilPrivado({
             </Link>
           </div>
 
-          {propuestasEnviadasIniciales.length === 0 ? (
+          {error && (
+            <p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[9px] font-semibold text-red-700 sm:text-[10px]">
+              {error}
+            </p>
+          )}
+
+          {enviadas.length === 0 ? (
             <EstadoVacio
               titulo="No has enviado propuestas"
               descripcion="Explora las ideas activas de otros artistas y envía tu audio para comenzar una colaboración."
@@ -532,7 +575,7 @@ export default function SeccionesPerfilPrivado({
             />
           ) : (
             <div className="grid gap-2.5">
-              {propuestasEnviadasIniciales.map((propuesta, indice) => {
+              {enviadas.map((propuesta, indice) => {
                 const destinatario = propuesta.idea.usuario;
                 const mensajes = propuesta.conversacionId
                   ? porConversacion[propuesta.conversacionId] ?? 0
@@ -627,13 +670,16 @@ export default function SeccionesPerfilPrivado({
                       </div>
                     </div>
 
-                    {(rutaIdea || propuesta.conversacionId) && (
+                    {(rutaIdea ||
+                      propuesta.conversacionId ||
+                      propuesta.estado === "PENDIENTE") && (
                       <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
                         {rutaIdea && (
                           <Link
                             href={rutaIdea}
                             className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-slate-600 transition hover:bg-slate-50 hover:text-emerald-700 ${
-                              propuesta.conversacionId
+                              propuesta.conversacionId ||
+                              propuesta.estado === "PENDIENTE"
                                 ? "border-r border-slate-200"
                                 : ""
                             }`}
@@ -644,7 +690,11 @@ export default function SeccionesPerfilPrivado({
                         {propuesta.conversacionId && (
                           <Link
                             href={`/mensajes/${propuesta.conversacionId}`}
-                            className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50"
+                            className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50 ${
+                              propuesta.estado === "PENDIENTE"
+                                ? "border-r border-slate-200"
+                                : ""
+                            }`}
                           >
                             Abrir chat
                             {mensajes > 0 && (
@@ -653,6 +703,18 @@ export default function SeccionesPerfilPrivado({
                               </span>
                             )}
                           </Link>
+                        )}
+                        {propuesta.estado === "PENDIENTE" && (
+                          <button
+                            type="button"
+                            disabled={procesandoId !== null}
+                            onClick={() => cancelarPropuesta(propuesta.id)}
+                            className="flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {procesandoId === propuesta.id
+                              ? "Cancelando…"
+                              : "Cancelar envío"}
+                          </button>
                         )}
                       </div>
                     )}
