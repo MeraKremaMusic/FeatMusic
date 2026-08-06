@@ -38,6 +38,7 @@ import CompartirPerfil from "./components/CompartirPerfil";
 // FEATMUSIC_ICONO_SEGUIR_IGUAL_REDES_V3
 // FEATMUSIC_SEGUIR_DENTRO_COLUMNA_REDES_V4
 // FEATMUSIC_BIOGRAFIA_Y_TOQUES_ICONOS_V5
+// FEATMUSIC_MENSAJES_PERFIL_PROPIO_VACIO_V1
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -684,7 +685,9 @@ export default async function PerfilPublicoPage({
       {artista.ideas.length === 0 ? (
         <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-12 text-center">
           <p className="text-sm font-semibold text-slate-600">
-            Este artista no tiene ideas activas
+            {esPerfilPropio
+              ? "Aún no has publicado ninguna idea. Comparte y empieza a recibir propuestas."
+              : "Este artista no tiene ideas activas"}
           </p>
         </div>
       ) : (
@@ -1042,7 +1045,9 @@ export default async function PerfilPublicoPage({
                   }`}
                 >
                   {artista.biografia?.replace(/\s+/g, " ").trim() ||
-                    "Este artista todavía no ha agregado una biografía."}
+                    (esPerfilPropio
+                      ? "Completa tu perfil y haz que otros artistas puedan encontrarte."
+                      : "Este artista todavía no ha agregado una biografía.")}
                 </p>
               </div>
             </div>
