@@ -532,7 +532,7 @@ export default function CompartirPerfil({
         onClick={() => setAbierto(true)}
         aria-haspopup="dialog"
         aria-expanded={abierto}
-        className="flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
+        className="flex min-h-10 min-w-0 items-center justify-center gap-1.5 px-1.5 py-2 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:min-h-11 sm:py-2.5 sm:text-[10px]"
       >
         <IconoCompartir className="h-3.5 w-3.5 shrink-0" />
         <span>Compartir perfil</span>
