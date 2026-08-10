@@ -4088,3 +4088,41 @@ html.dark * {
   border-color: #131313 !important;
 }
 /* FEATMUSIC_PERFIL_CONTROLES_OSCUROS_EN_CLARO_V1_END */
+
+/* FEATMUSIC_ETIQUETAS_PERFIL_OSCURAS_MODO_CLARO_V2_START */
+/*
+  Corrección de especificidad para el perfil privado.
+  Las reglas globales del tema claro reinterpretan utilidades bg-black/*
+  con !important, por eso aquí usamos un selector de igual/mayor prioridad
+  colocado al final del archivo.
+*/
+
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-label {
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Refuerzo para cualquier utilidad Tailwind que venga en esas etiquetas. */
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-label[class*="bg-"],
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip[class*="bg-"] {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-label[class*="border-"],
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip[class*="border-"] {
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+/* FEATMUSIC_ETIQUETAS_PERFIL_OSCURAS_MODO_CLARO_V2_END */
