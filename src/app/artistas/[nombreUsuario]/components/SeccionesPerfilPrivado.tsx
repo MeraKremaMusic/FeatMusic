@@ -278,8 +278,8 @@ function BotonPestana({
       onClick={onClick}
       className={`relative flex h-9 w-full min-w-0 items-center justify-center gap-1 rounded-lg border px-1 text-[8px] font-black transition sm:h-10 sm:w-auto sm:shrink-0 sm:gap-1.5 sm:px-3 sm:text-[10px] ${
         activa
-          ? "border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm"
-          : "border-slate-200 bg-white text-slate-500 hover:border-emerald-200 hover:bg-emerald-50/50 hover:text-emerald-700"
+          ? "border-[#FFD400] bg-[#FFD400] text-black shadow-sm"
+          : "border-black/15 bg-white text-black/60 hover:border-[#FFD400] hover:bg-[#FFD400]/15 hover:text-black"
       }`}
     >
       <span className="flex shrink-0 items-center justify-center [&>svg]:h-3 [&>svg]:w-3 sm:[&>svg]:h-3.5 sm:[&>svg]:w-3.5">
@@ -288,7 +288,7 @@ function BotonPestana({
       <span className="min-w-0 whitespace-nowrap text-center">{etiqueta}</span>
       <span
         className={`shrink-0 rounded-full px-1 py-0.5 text-[7px] tabular-nums sm:px-1.5 ${
-          activa ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+          activa ? "bg-black/10 text-black" : "bg-black/5 text-black/60"
         }`}
       >
         {cantidad}
