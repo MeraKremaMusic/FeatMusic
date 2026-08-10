@@ -685,13 +685,27 @@ export default async function PerfilPublicoPage({
   const tarjetasIdeasActivas = (
     <>
       {artista.ideas.length === 0 ? (
-        <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-12 text-center">
-          <p className="text-sm font-semibold text-slate-600">
-            {esPerfilPropio
-              ? "Aún no has publicado ninguna idea. Comparte y empieza a recibir propuestas."
-              : "Este artista no tiene ideas activas"}
-          </p>
-        </div>
+        esPerfilPropio ? (
+          <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center shadow-sm">
+            <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-[#FFD400] bg-[#FFD400] text-black">
+              <IconoIdea className="h-5 w-5" />
+            </span>
+
+            <p className="mt-3 text-sm font-black text-slate-800">
+              Aún no has publicado ninguna idea
+            </p>
+
+            <p className="mx-auto mt-1.5 max-w-sm text-[10px] leading-4 text-slate-500 sm:text-[11px]">
+              Comparte una idea y empieza a recibir propuestas.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-12 text-center">
+            <p className="text-sm font-semibold text-slate-600">
+              Este artista no tiene ideas activas
+            </p>
+          </div>
+        )
       ) : (
         <div className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
           {artista.ideas.map((idea, indice) => {
