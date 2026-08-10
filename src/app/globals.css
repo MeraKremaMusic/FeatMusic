@@ -4126,3 +4126,34 @@ html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip[class*="border
   border-color: rgba(255, 255, 255, 0.45) !important;
 }
 /* FEATMUSIC_ETIQUETAS_PERFIL_OSCURAS_MODO_CLARO_V2_END */
+
+/* FEATMUSIC_REDES_SOCIALES_OSCURAS_PERFIL_V1_START */
+/*
+  Botones de redes del perfil.
+  Deben conservar la misma apariencia en tema claro y oscuro:
+  negro semitransparente, borde blanco e icono blanco.
+*/
+
+.featmusic-profile-social-button {
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.50) !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Refuerzo contra las reglas globales del tema claro. */
+html:not(.dark) .featmusic-app-light .featmusic-profile-social-button,
+html.dark .featmusic-profile-social-button {
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.50) !important;
+  color: #ffffff !important;
+}
+
+.group:hover .featmusic-profile-social-button {
+  background-color: rgba(0, 0, 0, 0.62) !important;
+  border-color: #ffd400 !important;
+  color: #ffd400 !important;
+}
+/* FEATMUSIC_REDES_SOCIALES_OSCURAS_PERFIL_V1_END */

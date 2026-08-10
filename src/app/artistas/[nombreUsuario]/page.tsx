@@ -915,14 +915,10 @@ export default async function PerfilPublicoPage({
                   rel="noopener noreferrer"
                   aria-label={`Abrir ${red.nombre}`}
                   title={red.nombre}
-                  className="group relative z-40 inline-flex h-11 w-11 shrink-0 touch-manipulation select-none items-center justify-center rounded-xl outline-none transition active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400/70 [-webkit-tap-highlight-color:transparent]"
+                  className="group relative z-40 inline-flex h-11 w-11 shrink-0 touch-manipulation select-none items-center justify-center rounded-xl outline-none transition active:scale-95 focus-visible:ring-2 focus-visible:ring-yellow-400/70 [-webkit-tap-highlight-color:transparent]"
                 >
                   <span
-                    className={`pointer-events-none inline-flex h-8 w-8 items-center justify-center rounded-lg border !bg-white shadow-sm transition group-hover:border-emerald-300 group-hover:!bg-emerald-50 ${
-                      artista.portadaPerfil
-                        ? "border-white/80 text-slate-800"
-                        : "border-slate-200 text-slate-700"
-                    }`}
+                    className="featmusic-profile-social-button pointer-events-none inline-flex h-8 w-8 items-center justify-center rounded-lg border shadow-sm transition"
                   >
                     <IconoRedSocial
                       nombre={red.nombre}
