@@ -307,15 +307,23 @@ function EstadoVacio({
   descripcion,
   enlace,
   textoEnlace,
+  amarillo = false,
 }: {
   titulo: string;
   descripcion: string;
   enlace?: string;
   textoEnlace?: string;
+  amarillo?: boolean;
 }) {
   return (
     <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center shadow-sm">
-      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+      <span
+        className={
+          amarillo
+            ? "mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-[#FFD400] bg-[#FFD400] text-black"
+            : "mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700"
+        }
+      >
         <IconoIdea className="h-5 w-5" />
       </span>
       <p className="mt-3 text-sm font-black text-slate-800">{titulo}</p>
@@ -325,7 +333,11 @@ function EstadoVacio({
       {enlace && textoEnlace && (
         <Link
           href={enlace}
-          className="mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-[10px] font-black text-emerald-700 transition hover:bg-emerald-100"
+          className={
+            amarillo
+              ? "mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-[#FFD400] bg-[#FFD400] px-3 text-[10px] font-black text-black transition hover:bg-[#e6bf00]"
+              : "mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-[10px] font-black text-emerald-700 transition hover:bg-emerald-100"
+          }
         >
           {textoEnlace}
         </Link>
@@ -606,7 +618,7 @@ export default function SeccionesPerfilPrivado({
             </p>
             <Link
               href="/artistas"
-              className="shrink-0 text-[9px] font-black text-emerald-700 hover:text-emerald-800 sm:text-[10px]"
+              className="shrink-0 text-[9px] font-black text-[#c9a700] transition hover:text-black dark:text-[#FFD400] dark:hover:text-white sm:text-[10px]"
             >
               Explorar
             </Link>
@@ -624,6 +636,7 @@ export default function SeccionesPerfilPrivado({
               descripcion="Explora las ideas activas de otros artistas y envía tu audio para comenzar una colaboración."
               enlace="/artistas"
               textoEnlace="Explorar artistas"
+              amarillo
             />
           ) : (
             <div className="grid gap-2.5">
