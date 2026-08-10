@@ -187,7 +187,7 @@ export default async function MensajesPage() {
       <header className="featmusic-solid-black-chrome sticky top-0 z-40">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <div className="flex min-w-0 items-center gap-0.5">
-            <MenuMasMovil />
+            <MenuMasMovil sesionActiva />
             <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
               Feat<span className="text-yellow-400">Music</span>
             </Link>
@@ -195,7 +195,7 @@ export default async function MensajesPage() {
 
           <NavegacionEscritorio />
 
-          <form action="/api/cerrar-sesion" method="post">
+          <form action="/api/cerrar-sesion" method="post" className="hidden lg:block">
             <button
               type="submit"
               className="featmusic-logout-plain flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold text-white transition"

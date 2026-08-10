@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import NavegacionEscritorio from "@/app/components/NavegacionEscritorio";
+import { MenuMasMovil } from "@/app/components/MenuMasNavegacion";
 import MenuMovilPanel from "@/app/panel/components/MenuMovilPanel";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
@@ -197,17 +198,20 @@ export default async function PaginaListaSeguimientos({
     <main className="featmusic-app-light min-h-screen bg-[#06100c] pb-20 text-white lg:pb-0">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
-          <Link
-            href={sesion ? "/artistas/mi-perfil" : "/"}
-            className="text-lg font-black tracking-tight"
-          >
-            Feat<span className="text-emerald-400">Music</span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-0.5">
+            <MenuMasMovil sesionActiva={Boolean(sesion)} />
+            <Link
+              href={sesion ? "/artistas/mi-perfil" : "/"}
+              className="text-lg font-black tracking-tight"
+            >
+              Feat<span className="text-emerald-400">Music</span>
+            </Link>
+          </div>
 
           <NavegacionEscritorio />
 
           {sesion ? (
-            <form action="/api/cerrar-sesion" method="post">
+            <form action="/api/cerrar-sesion" method="post" className="hidden lg:block">
               <button
                 type="submit"
                 className="flex items-center gap-2 rounded-lg border border-red-400/50 px-3 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10"

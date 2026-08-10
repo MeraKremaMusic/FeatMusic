@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { obtenerSesion } from "@/lib/session";
 
 import {
   MenuMasEscritorio,
@@ -8,18 +9,20 @@ import {
 // FEATMUSIC_ENCABEZADO_PAGINAS_SECUNDARIAS_V1
 // FEATMUSIC_BANNER_NEGRO_PAGINAS_SECUNDARIAS_V2
 
-export default function EncabezadoSecundario({
+export default async function EncabezadoSecundario({
   volverHref = "/artistas",
   volverTexto = "Volver",
 }: {
   volverHref?: string;
   volverTexto?: string;
 }) {
+  const sesion = await obtenerSesion();
+
   return (
     <header className="featmusic-solid-black-chrome featmusic-dark-chrome sticky top-0 z-50 border-b border-transparent bg-black">
       <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between gap-2 px-3 sm:px-4">
         <div className="flex min-w-0 items-center gap-0.5">
-          <MenuMasMovil />
+          <MenuMasMovil sesionActiva={Boolean(sesion)} />
           <Link
             href="/inicio"
             className="truncate text-lg font-black tracking-tight text-white"
