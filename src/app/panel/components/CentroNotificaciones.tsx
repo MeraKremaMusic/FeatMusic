@@ -439,7 +439,7 @@ export default function CentroNotificaciones({
         aria-expanded={abierto}
         className={
           esIntegrada
-            ? "relative flex min-h-10 min-w-0 items-center justify-center gap-1.5 px-1.5 py-2 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-yellow-50 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500/30 sm:min-h-11 sm:py-2.5 sm:text-[10px]"
+            ? "featmusic-profile-dark-control relative flex min-h-10 min-w-0 items-center justify-center gap-1.5 px-1.5 py-2 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-yellow-50 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500/30 sm:min-h-11 sm:py-2.5 sm:text-[10px]"
             : "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-yellow-500/15 hover:text-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500/40"
         }
       >

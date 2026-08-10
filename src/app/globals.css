@@ -4038,3 +4038,53 @@ html.dark * {
   }
 }
 /* FEATMUSIC_MODO_OSCURO_MANUAL_V1_END */
+
+/* FEATMUSIC_PERFIL_CONTROLES_OSCUROS_EN_CLARO_V1_START */
+/*
+  En el perfil privado, estos controles deben conservar en tema claro
+  exactamente la lectura visual oscura: negro, blanco y amarillo.
+  Se usan clases propias para que las reglas globales del tema claro
+  no reinterpreten las utilidades de Tailwind.
+*/
+
+.featmusic-profile-dark-label,
+.featmusic-profile-dark-chip {
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  color: #ffffff !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.featmusic-profile-dark-chip {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.featmusic-profile-dark-controls {
+  background-color: #131313 !important;
+  border-top-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.featmusic-profile-dark-controls > :not(:last-child) {
+  border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.featmusic-profile-dark-control {
+  background-color: transparent !important;
+  color: #b1b1b1 !important;
+}
+
+.featmusic-profile-dark-control:hover {
+  background-color: rgba(255, 212, 0, 0.12) !important;
+  color: #fcd84a !important;
+}
+
+.featmusic-profile-dark-control:focus-visible {
+  --tw-ring-color: rgba(255, 212, 0, 0.35) !important;
+}
+
+/* El contador de notificaciones conserva contraste sobre la franja oscura. */
+.featmusic-profile-dark-control > span[class*="absolute"] {
+  border-color: #131313 !important;
+}
+/* FEATMUSIC_PERFIL_CONTROLES_OSCUROS_EN_CLARO_V1_END */

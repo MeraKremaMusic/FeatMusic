@@ -961,7 +961,7 @@ export default async function PerfilPublicoPage({
                   <span
                     title={`Rol: ${formatearRol(artista.rolPrincipal)}`}
                     aria-label={`Rol: ${formatearRol(artista.rolPrincipal)}`}
-                    className={`flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-black leading-tight ${
+                    className={`featmusic-profile-dark-label flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-black leading-tight ${
                       artista.portadaPerfil
                         ? "border-white/20 bg-black/40 text-white backdrop-blur-sm"
                         : "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -977,7 +977,7 @@ export default async function PerfilPublicoPage({
                           key={preferencia.etiqueta}
                           title={`${preferencia.etiqueta}: ${preferencia.valor}`}
                           aria-label={`${preferencia.etiqueta}: ${preferencia.valor}`}
-                          className={`flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-bold leading-tight ${
+                          className={`featmusic-profile-dark-label flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-bold leading-tight ${
                             artista.portadaPerfil
                               ? "border-white/20 bg-black/40 text-white backdrop-blur-sm"
                               : "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -1019,7 +1019,7 @@ export default async function PerfilPublicoPage({
                     {generos.slice(0, 2).map((genero) => (
                       <span
                         key={genero}
-                        className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] backdrop-blur-sm sm:text-[10px] ${
+                        className={`featmusic-profile-dark-chip shrink-0 rounded-full border px-2.5 py-1 text-[9px] backdrop-blur-sm sm:text-[10px] ${
                           artista.portadaPerfil
                             ? "border-white/20 bg-black/35 text-white"
                             : "border-slate-200 bg-slate-50 text-slate-600"
@@ -1064,7 +1064,7 @@ export default async function PerfilPublicoPage({
             </div>
 
             {esPerfilPropio && (
-              <div className="relative z-10 -mx-4 -mb-4 mt-4 grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 bg-white sm:-mx-5 sm:-mb-5">
+              <div className="featmusic-profile-dark-controls relative z-10 -mx-4 -mb-4 mt-4 grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 bg-white sm:-mx-5 sm:-mb-5">
                 <PerfilArtistaCard
                   modo="controles"
                   nombreArtistico={nombreArtistico}
