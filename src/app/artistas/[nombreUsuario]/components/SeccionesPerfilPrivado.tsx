@@ -793,16 +793,10 @@ export default function SeccionesPerfilPrivado({
 
       {pestana === "RECIBIDAS" && (
         <div className="mt-3 sm:mt-4">
-          <div className="mb-3 flex items-center justify-between gap-3 px-1">
+          <div className="mb-3 px-1">
             <p className="text-[10px] font-semibold text-slate-500 sm:text-[11px]">
               Propuestas que otros artistas enviaron a tus ideas.
             </p>
-            <Link
-              href="/mensajes"
-              className="shrink-0 text-[9px] font-black text-emerald-700 hover:text-emerald-800 sm:text-[10px]"
-            >
-              Mensajes
-            </Link>
           </div>
 
           {error && (
@@ -815,6 +809,7 @@ export default function SeccionesPerfilPrivado({
             <EstadoVacio
               titulo="Todavía no has recibido propuestas"
               descripcion="Cuando otro artista envíe una colaboración a una de tus ideas, aparecerá aquí."
+              amarillo
             />
           ) : (
             <div className="grid gap-2.5">
