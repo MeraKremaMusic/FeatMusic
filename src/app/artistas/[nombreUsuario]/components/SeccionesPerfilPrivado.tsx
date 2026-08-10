@@ -612,16 +612,10 @@ export default function SeccionesPerfilPrivado({
 
       {pestana === "ENVIADAS" && (
         <div className="mt-3 sm:mt-4">
-          <div className="mb-3 flex items-center justify-between gap-3 px-1">
+          <div className="mb-3 px-1">
             <p className="text-[10px] font-semibold text-slate-500 sm:text-[11px]">
               Propuestas que enviaste a las ideas de otros artistas.
             </p>
-            <Link
-              href="/artistas"
-              className="shrink-0 text-[9px] font-black text-[#c9a700] transition hover:text-black dark:text-[#FFD400] dark:hover:text-white sm:text-[10px]"
-            >
-              Explorar
-            </Link>
           </div>
 
           {error && (
@@ -634,8 +628,6 @@ export default function SeccionesPerfilPrivado({
             <EstadoVacio
               titulo="No has enviado propuestas"
               descripcion="Explora las ideas activas de otros artistas y envía tu audio para comenzar una colaboración."
-              enlace="/artistas"
-              textoEnlace="Explorar artistas"
               amarillo
             />
           ) : (
