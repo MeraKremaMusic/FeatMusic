@@ -141,6 +141,25 @@ function IconoChevron() {
   );
 }
 
+function IconoCerrarSesion() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M10 17l5-5-5-5" />
+      <path d="M15 12H3" />
+      <path d="M13 4h7v16h-7" />
+    </svg>
+  );
+}
+
 function IconoTema({ oscuro }: { oscuro: boolean }) {
   return oscuro ? (
     <svg
@@ -410,7 +429,7 @@ export function MenuMasEscritorio() {
   );
 }
 
-export function MenuMasMovil() {
+export function MenuMasMovil({ sesionActiva = false }: { sesionActiva?: boolean }) {
   const pathname = usePathname();
   const [abierto, setAbierto] = useState(false);
   const [montado, setMontado] = useState(false);
@@ -525,6 +544,30 @@ export function MenuMasMovil() {
                     </Link>
                   );
                 })}
+
+                {sesionActiva && (
+                  <div className="mt-2 border-t border-white/10 pt-2">
+                    <form action="/api/cerrar-sesion" method="post">
+                      <button
+                        type="submit"
+                        className="flex min-h-16 w-full touch-manipulation items-center gap-3 rounded-2xl px-3 py-3 text-left text-zinc-300 transition hover:bg-white/[0.06] hover:text-white active:scale-[0.99]"
+                      >
+                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
+                          <IconoCerrarSesion />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-xs font-black text-white">
+                            Cerrar sesión
+                          </span>
+                          <span className="mt-1 block text-[10px] leading-4 text-zinc-500">
+                            Salir de tu cuenta de FeatMusic.
+                          </span>
+                        </span>
+                        <IconoChevron />
+                      </button>
+                    </form>
+                  </div>
+                )}
               </nav>
 
               <div className="border-t border-white/10 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
