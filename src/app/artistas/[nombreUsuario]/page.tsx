@@ -814,7 +814,7 @@ export default async function PerfilPublicoPage({
               href={sesion ? "/artistas/mi-perfil" : "/"}
               className="text-lg font-black tracking-tight"
             >
-              Feat<span className="text-emerald-400">Music</span>
+              Feat<span className="text-yellow-400">Music</span>
             </Link>
           </div>
 
@@ -984,16 +984,12 @@ export default async function PerfilPublicoPage({
               <div className="min-w-0 flex-1 pt-0.5 lg:w-full lg:px-10 lg:pt-0">
                 <div className="pr-28 sm:pr-32 lg:pr-0">
                   <h1
-                    className={`featmusic-cover-identity-text break-words text-xl font-black leading-tight sm:text-2xl lg:mt-4 ${
-                      artista.portadaPerfil ? "text-white" : "text-slate-900"
-                    }`}
+                    className="featmusic-cover-identity-text break-words text-xl font-black leading-tight text-white sm:text-2xl lg:mt-4"
                   >
                     {nombreArtistico}
                   </h1>
                   <p
-                    className={`featmusic-cover-identity-text mt-1 break-all text-[11px] font-semibold sm:text-xs ${
-                      artista.portadaPerfil ? "text-white" : "text-emerald-700"
-                    }`}
+                    className="featmusic-cover-identity-text mt-1 break-all text-[11px] font-semibold text-white sm:text-xs"
                   >
                     @{usuarioVisible}
                   </p>
