@@ -24,7 +24,7 @@ export default function EncabezadoSecundario({
             href="/inicio"
             className="truncate text-lg font-black tracking-tight text-white"
           >
-            Feat<span className="text-emerald-400">Music</span>
+            Feat<span className="text-yellow-400">Music</span>
           </Link>
         </div>
 

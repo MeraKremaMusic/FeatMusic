@@ -227,12 +227,12 @@ function ControlModoOscuro({ movil = false }: { movil?: boolean }) {
       role="switch"
       aria-checked={oscuro}
       onClick={alternarTema}
-      className={`flex w-full touch-manipulation items-center gap-3 rounded-xl border border-white/10 bg-white/[0.035] text-left text-zinc-300 transition hover:border-emerald-400/25 hover:bg-white/[0.06] hover:text-white ${
+      className={`flex w-full touch-manipulation items-center gap-3 rounded-xl border border-white/10 bg-white/[0.035] text-left text-zinc-300 transition hover:border-yellow-400/25 hover:bg-white/[0.06] hover:text-white ${
         movil ? "min-h-16 px-3 py-3" : "px-3 py-2.5"
       }`}
     >
       <span
-        className={`flex shrink-0 items-center justify-center border border-emerald-400/20 bg-emerald-500/10 text-emerald-300 ${
+        className={`flex shrink-0 items-center justify-center border border-yellow-400/20 bg-yellow-500/10 text-yellow-300 ${
           movil ? "h-11 w-11 rounded-2xl" : "h-9 w-9 rounded-xl"
         }`}
       >
@@ -252,7 +252,7 @@ function ControlModoOscuro({ movil = false }: { movil?: boolean }) {
         aria-hidden="true"
         className={`relative h-6 w-11 shrink-0 rounded-full border transition ${
           oscuro
-            ? "border-emerald-400 bg-emerald-500"
+            ? "border-yellow-400 bg-yellow-500"
             : "border-white/15 bg-white/10"
         }`}
       >
@@ -326,7 +326,7 @@ export function MenuMasEscritorio() {
         aria-haspopup="menu"
         className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-semibold transition ${
           activo
-            ? "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30"
+            ? "bg-yellow-500/15 text-yellow-200 ring-1 ring-inset ring-yellow-400/30"
             : "text-zinc-400 hover:bg-white/5 hover:text-white"
         }`}
       >
@@ -340,7 +340,7 @@ export function MenuMasEscritorio() {
           className="featmusic-more-dropdown absolute left-1/2 top-[calc(100%+0.65rem)] z-[90] w-[330px] -translate-x-1/2 overflow-hidden rounded-2xl border border-white/10 bg-black p-2 shadow-[0_24px_70px_rgba(0,0,0,.65)]"
         >
           <div className="px-3 pb-2 pt-1">
-            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400">
+            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-yellow-400">
               Más en FeatMusic
             </p>
           </div>
@@ -359,11 +359,11 @@ export function MenuMasEscritorio() {
                 role="menuitem"
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition ${
                   seleccionada
-                    ? "bg-emerald-500/15 text-white"
+                    ? "bg-yellow-500/15 text-white"
                     : "text-zinc-300 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
                   <Icono tipo={opcion.icono} className="h-[18px] w-[18px]" />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -388,7 +388,7 @@ export function MenuMasEscritorio() {
               <Link
                 href="/terminos"
                 role="menuitem"
-                className="text-white underline decoration-white underline-offset-2 transition hover:text-emerald-300"
+                className="text-white underline decoration-white underline-offset-2 transition hover:text-yellow-300"
               >
                 Términos y condiciones
               </Link>
@@ -398,7 +398,7 @@ export function MenuMasEscritorio() {
               <Link
                 href="/privacidad"
                 role="menuitem"
-                className="text-white underline decoration-white underline-offset-2 transition hover:text-emerald-300"
+                className="text-white underline decoration-white underline-offset-2 transition hover:text-yellow-300"
               >
                 Política de privacidad
               </Link>
@@ -468,7 +468,7 @@ export function MenuMasMovil() {
                   href="/inicio"
                   className="text-xl font-black tracking-tight text-white"
                 >
-                  Feat<span className="text-emerald-400">Music</span>
+                  Feat<span className="text-yellow-400">Music</span>
                 </Link>
                 <button
                   type="button"
@@ -481,7 +481,7 @@ export function MenuMasMovil() {
               </div>
 
               <div className="px-4 pb-2 pt-5">
-                <p className="text-[9px] font-black uppercase tracking-[0.22em] text-emerald-400">
+                <p className="text-[9px] font-black uppercase tracking-[0.22em] text-yellow-400">
                   Información y soporte
                 </p>
                 <p className="mt-1 text-[11px] leading-5 text-zinc-500">
@@ -506,11 +506,11 @@ export function MenuMasMovil() {
                       href={opcion.href}
                       className={`flex min-h-16 touch-manipulation items-center gap-3 rounded-2xl px-3 py-3 transition active:scale-[0.99] ${
                         seleccionada
-                          ? "bg-emerald-500/15 text-white ring-1 ring-inset ring-emerald-400/25"
+                          ? "bg-yellow-500/15 text-white ring-1 ring-inset ring-yellow-400/25"
                           : "text-zinc-300 hover:bg-white/[0.06] hover:text-white"
                       }`}
                     >
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
                         <Icono tipo={opcion.icono} />
                       </span>
                       <span className="min-w-0 flex-1">
@@ -535,7 +535,7 @@ export function MenuMasMovil() {
                 <div className="mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[9px] font-semibold text-white">
                   <Link
                     href="/terminos"
-                    className="touch-manipulation text-white underline decoration-white underline-offset-2 transition active:text-emerald-300"
+                    className="touch-manipulation text-white underline decoration-white underline-offset-2 transition active:text-yellow-300"
                   >
                     Términos y condiciones
                   </Link>
@@ -544,7 +544,7 @@ export function MenuMasMovil() {
                   </span>
                   <Link
                     href="/privacidad"
-                    className="touch-manipulation text-white underline decoration-white underline-offset-2 transition active:text-emerald-300"
+                    className="touch-manipulation text-white underline decoration-white underline-offset-2 transition active:text-yellow-300"
                   >
                     Política de privacidad
                   </Link>

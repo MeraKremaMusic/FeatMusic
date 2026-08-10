@@ -129,30 +129,30 @@ function IconoTipo({
 
 function claseTipo(tipo: string) {
   if (tipo === "NUEVO_SEGUIDOR") {
-    return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
+    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
   }
 
   if (tipo === "NUEVA_IDEA_SEGUIDO") {
-    return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
+    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
   }
 
   if (tipo === "PROPUESTA_ACEPTADA") {
-    return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
+    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
   }
 
   if (tipo === "PROPUESTA_RECHAZADA") {
-    return "border-red-400/20 bg-red-500/10 text-red-300";
+    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
   }
 
   if (tipo === "CAMBIOS_SOLICITADOS") {
-    return "border-amber-400/20 bg-amber-500/10 text-amber-300";
+    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
   }
 
   if (tipo === "REINTENTO_PERMITIDO") {
-    return "border-sky-400/20 bg-sky-500/10 text-sky-300";
+    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
   }
 
-  return "border-emerald-400/20 bg-emerald-500/10 text-emerald-300";
+  return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
 }
 
 function formatearTiempo(fecha: string) {
@@ -377,7 +377,7 @@ export default function CentroNotificaciones({
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo"
-        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-white/10 bg-[#07110d]/98 shadow-[0_-24px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-white/10 bg-[#0f0f0f]/98 shadow-[0_-24px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:hidden"
       >
         <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-white/15" />
         <ContenidoCentro
@@ -398,7 +398,7 @@ export default function CentroNotificaciones({
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo-escritorio"
-        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#07110d]/98 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:flex"
+        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0f0f0f]/98 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:flex"
         style={{
           top: posicionEscritorio.top,
           left: posicionEscritorio.left,
@@ -439,8 +439,8 @@ export default function CentroNotificaciones({
         aria-expanded={abierto}
         className={
           esIntegrada
-            ? "relative flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
-            : "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-emerald-500/15 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+            ? "relative flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-yellow-50 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500/30 sm:text-[10px]"
+            : "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-yellow-500/15 hover:text-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500/40"
         }
       >
         <IconoCampana className={esIntegrada ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4"} />
@@ -450,8 +450,8 @@ export default function CentroNotificaciones({
           <span
             className={
               esIntegrada
-                ? "absolute right-1.5 top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-white bg-emerald-500 px-1 text-[8px] font-black leading-none text-white shadow-sm"
-                : "absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#07110d] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-emerald-950/40"
+                ? "absolute right-1.5 top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-white bg-yellow-500 px-1 text-[8px] font-black leading-none text-white shadow-sm"
+                : "absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#0f0f0f] bg-yellow-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-yellow-950/40"
             }
           >
             {totalNoLeidas > 99 ? "99+" : totalNoLeidas}
@@ -494,7 +494,7 @@ function ContenidoCentro({
       <header className="flex items-start justify-between gap-4 border-b border-white/[0.08] px-4 pb-3 pt-4 sm:px-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
               <IconoCampana />
             </span>
             <div>
@@ -533,7 +533,7 @@ function ContenidoCentro({
             type="checkbox"
             checked={soloNoLeidas}
             onChange={(evento) => onSoloNoLeidas(evento.target.checked)}
-            className="h-3.5 w-3.5 rounded border-white/20 bg-black accent-emerald-500"
+            className="h-3.5 w-3.5 rounded border-white/20 bg-black accent-yellow-500"
           />
           Solo no leídas
         </label>
@@ -542,7 +542,7 @@ function ContenidoCentro({
           type="button"
           onClick={onMarcarTodas}
           disabled={totalNoLeidas === 0}
-          className="text-[10px] font-bold text-emerald-300 transition hover:text-emerald-200 disabled:cursor-not-allowed disabled:text-zinc-700"
+          className="text-[10px] font-bold text-yellow-300 transition hover:text-yellow-200 disabled:cursor-not-allowed disabled:text-zinc-700"
         >
           Marcar todas como leídas
         </button>
@@ -560,7 +560,7 @@ function ContenidoCentro({
           </div>
         ) : error && notificaciones.length === 0 ? (
           <div className="px-5 py-12 text-center">
-            <p className="text-xs font-semibold text-red-200">{error}</p>
+            <p className="text-xs font-semibold text-yellow-200">{error}</p>
             <button
               type="button"
               onClick={onRecargar}
@@ -571,7 +571,7 @@ function ContenidoCentro({
           </div>
         ) : notificaciones.length === 0 ? (
           <div className="px-5 py-14 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/15 bg-emerald-500/[0.06] text-emerald-300/70">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/15 bg-yellow-500/[0.06] text-yellow-300/70">
               <IconoCampana className="h-5 w-5" />
             </div>
             <p className="mt-3 text-xs font-bold text-zinc-300">
@@ -595,12 +595,12 @@ function ContenidoCentro({
                   onClick={() => onAbrir(notificacion)}
                   className={`relative flex w-full items-start gap-3 px-4 py-3.5 text-left transition sm:px-5 ${
                     noLeida
-                      ? "bg-emerald-500/[0.045] hover:bg-emerald-500/[0.075]"
+                      ? "bg-yellow-500/[0.045] hover:bg-yellow-500/[0.075]"
                       : "hover:bg-white/[0.025]"
                   }`}
                 >
                   {noLeida && (
-                    <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-emerald-400" />
+                    <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-yellow-400" />
                   )}
 
                   {notificacion.actor?.fotoPerfil ? (
@@ -610,7 +610,7 @@ function ContenidoCentro({
                       className="h-9 w-9 shrink-0 rounded-xl border border-white/10 object-cover"
                     />
                   ) : notificacion.actor ? (
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-500/[0.07] text-[10px] font-black text-emerald-200">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-400/15 bg-yellow-500/[0.07] text-[10px] font-black text-yellow-200">
                       {iniciales(notificacion.actor.nombreVisible)}
                     </span>
                   ) : (
@@ -643,7 +643,7 @@ function ContenidoCentro({
                     </span>
 
                     {notificacion.actor && (
-                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-emerald-300/80">
+                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-yellow-300/80">
                         {notificacion.actor.nombreVisible}
                       </span>
                     )}
@@ -660,7 +660,7 @@ function ContenidoCentro({
       </div>
 
       {error && notificaciones.length > 0 && (
-        <div className="border-t border-red-400/10 bg-red-500/[0.04] px-4 py-2 text-[9px] text-red-200">
+        <div className="border-t border-yellow-400/10 bg-yellow-500/[0.04] px-4 py-2 text-[9px] text-yellow-200">
           {error}
         </div>
       )}

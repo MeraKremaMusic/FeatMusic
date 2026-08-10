@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme inline {
@@ -13,8 +13,8 @@
 }
 
 html.dark {
-  --background: #050a08;
-  --foreground: #f4f7f6;
+  --background: #000000;
+  --foreground: #ffffff;
 }
 
 html {
@@ -238,7 +238,7 @@ body {
 
 .hero-scroll-hint {
   z-index: 2;
-  color: rgba(244, 244, 245, 0.72);
+  color: rgba(244,244,244,0.72);
 }
 
 .hero-scroll-hint > span:first-child {
@@ -248,7 +248,7 @@ body {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8);
 }
 
 .hero-scroll-track {
@@ -256,10 +256,10 @@ body {
   display: block;
   width: 1.35rem;
   height: 2.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255,255,255,0.35);
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.22);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+  background: rgba(0,0,0,0.22);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.32);
 }
 
 .hero-scroll-indicator {
@@ -269,8 +269,8 @@ body {
   width: 0.22rem;
   height: 0.38rem;
   border-radius: 999px;
-  background: #6ee7b7;
-  box-shadow: 0 0 12px rgba(52,211,153, 0.7);
+  background: #f2d45c;
+  box-shadow: 0 0 12px rgba(238,199,43,0.7);
   transform: translateX(-50%);
   animation: scroll-hint-travel 1.8s ease-in-out infinite;
 }
@@ -287,7 +287,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  color: rgb(212 212 216);
+  color: rgb(212 212 212);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -309,7 +309,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.12),
+    rgba(255,255,255,0.12),
     transparent
   );
   transform: rotate(18deg) translateX(-280%);
@@ -337,10 +337,10 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 12px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08),
+    0 12px 30px rgba(0,0,0,0.18);
 }
 
 .visual-icon-compact {
@@ -348,24 +348,24 @@ body {
 }
 
 .visual-icon-violet {
-  color: rgb(216 180 254);
-  background: linear-gradient(145deg, rgba(16,185,129, 0.28), rgba(88, 28, 135, 0.16));
+  color: rgb(254 232 144);
+  background: linear-gradient(145deg, rgba(221,180,18,0.28), rgba(197,161,16,0.16));
 }
 
 .visual-icon-sky {
-  color: rgb(125 211 252);
-  background: linear-gradient(145deg, rgba(14, 165, 233, 0.26), rgba(30, 64, 175, 0.14));
+  color: rgb(252 223 107);
+  background: linear-gradient(145deg, rgba(241,199,29,0.26), rgba(223,182,18,0.14));
 }
 
 .process-step-card {
   min-height: 17.25rem;
-  color: #f4faff;
-  background: #07111f;
-  border-color: #1d4664;
+  color: #f9f9f9;
+  background: #101010;
+  border-color: #af8f0e;
   border-radius: 0;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 22px 60px rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 22px 60px rgba(0,0,0,0.28);
   backdrop-filter: none;
 }
 
@@ -377,30 +377,30 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(56, 189, 248, 0.92),
+    rgba(248,211,61,0.92),
     transparent
   );
 }
 
 .process-step-card:hover {
-  border-color: #30759f;
+  border-color: #e1b712;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 26px 70px rgba(0, 0, 0, 0.36);
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 26px 70px rgba(0,0,0,0.36);
 }
 
 .process-step-header {
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid #173a55;
+  border-bottom: 1px solid #a2840d;
 }
 
 .process-step-header .visual-icon {
   flex: 0 0 auto;
   width: 2.75rem;
   height: 2.75rem;
-  color: #75d6ff;
-  background: #0b2034;
-  border-color: #285f82;
+  color: #ffe064;
+  background: #1d1d1d;
+  border-color: #c9a410;
   border-radius: 0.4rem;
   box-shadow: none;
 }
@@ -409,7 +409,7 @@ body {
   font-size: 1.1rem;
   font-weight: 650;
   line-height: 1.35rem;
-  color: #f7fcff;
+  color: #fbfbfb;
 }
 
 .process-step-index {
@@ -418,7 +418,7 @@ body {
   font-weight: 800;
   line-height: 1rem;
   letter-spacing: 0.18em;
-  color: #4ba3cf;
+  color: #efca37;
 }
 
 .process-step-copy {
@@ -431,28 +431,28 @@ body {
 .process-step-copy p {
   font-size: 0.9rem;
   line-height: 1.55rem;
-  color: #a9becc;
+  color: #bbbbbb;
 }
 
 .visual-icon-rose {
-  color: rgb(253 164 175);
-  background: linear-gradient(145deg, rgba(244, 63, 94, 0.25), rgba(157, 23, 77, 0.13));
+  color: rgb(252 229 133);
+  background: linear-gradient(145deg, rgba(244,209,67,0.25), rgba(208,169,17,0.13));
 }
 
 .visual-icon-emerald {
-  color: rgb(110 231 183);
-  background: linear-gradient(145deg, rgba(16, 185, 129, 0.25), rgba(6, 95, 70, 0.14));
+  color: rgb(242 212 92);
+  background: linear-gradient(145deg, rgba(221,180,18,0.25), rgba(161,130,10,0.14));
 }
 
 .community-role-card {
   min-height: 14.5rem;
-  color: #effbf5;
-  background: #07130f;
-  border-color: #1f4d3e;
+  color: #f8f8f8;
+  background: #101010;
+  border-color: #424242;
   border-radius: 0;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 22px 60px rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 22px 60px rgba(0,0,0,0.28);
   backdrop-filter: none;
 }
 
@@ -464,30 +464,30 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(52, 211, 153, 0.92),
+    rgba(238,199,43,0.92),
     transparent
   );
 }
 
 .community-role-card:hover {
-  border-color: #337a63;
+  border-color: #cba610;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 26px 70px rgba(0, 0, 0, 0.36);
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 26px 70px rgba(0,0,0,0.36);
 }
 
 .community-role-header {
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid #173c31;
+  border-bottom: 1px solid #333333;
 }
 
 .community-role-header .visual-icon {
   flex: 0 0 auto;
   width: 2.75rem;
   height: 2.75rem;
-  color: #67d9ad;
-  background: #0c211a;
-  border-color: #245c49;
+  color: #f1d04f;
+  background: #1c1c1c;
+  border-color: #af8f0e;
   border-radius: 0.4rem;
   box-shadow: none;
 }
@@ -496,7 +496,7 @@ body {
   font-size: 1.15rem;
   font-weight: 650;
   line-height: 1.35rem;
-  color: #f7fffb;
+  color: #fdfdfd;
 }
 
 .community-role-index {
@@ -505,7 +505,7 @@ body {
   font-weight: 800;
   line-height: 1rem;
   letter-spacing: 0.18em;
-  color: #4d9d7e;
+  color: #ecc219;
 }
 
 .community-role-copy {
@@ -518,18 +518,18 @@ body {
 .community-role-copy p {
   font-size: 0.9rem;
   line-height: 1.55rem;
-  color: #aabdb4;
+  color: #b8b8b8;
 }
 
 .global-feature-card,
 .global-network-card {
-  color: #fff4f7;
-  background: #160c12;
-  border-color: #5a2539;
+  color: #f7f7f7;
+  background: #0f0f0f;
+  border-color: #ae8e0e;
   border-radius: 0;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 20px 54px rgba(0, 0, 0, 0.26);
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 20px 54px rgba(0,0,0,0.26);
   backdrop-filter: none;
 }
 
@@ -542,22 +542,22 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(251, 113, 133, 0.92),
+    rgba(251,220,99,0.92),
     transparent
   );
 }
 
 .global-feature-card:hover,
 .global-network-card:hover {
-  border-color: #8e3c59;
+  border-color: #ddb512;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 24px 64px rgba(0, 0, 0, 0.34);
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 24px 64px rgba(0,0,0,0.34);
 }
 
 .global-feature-header {
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #4a2031;
+  border-bottom: 1px solid #2a2a2a;
 }
 
 .global-feature-header .visual-icon,
@@ -565,9 +565,9 @@ body {
   flex: 0 0 auto;
   width: 2.65rem;
   height: 2.65rem;
-  color: #fb8fa3;
-  background: #2a111b;
-  border-color: #713047;
+  color: #fae078;
+  background: #171717;
+  border-color: #c4a010;
   border-radius: 0.4rem;
   box-shadow: none;
 }
@@ -576,7 +576,7 @@ body {
   font-size: 1.05rem;
   font-weight: 650;
   line-height: 1.3rem;
-  color: #fff9fb;
+  color: #fafafa;
 }
 
 .global-feature-index {
@@ -585,7 +585,7 @@ body {
   font-weight: 800;
   line-height: 1rem;
   letter-spacing: 0.18em;
-  color: #c35d7a;
+  color: #efcb3b;
 }
 
 .global-feature-copy {
@@ -598,7 +598,7 @@ body {
 .global-feature-copy p {
   font-size: 0.86rem;
   line-height: 1.4rem;
-  color: #c7aab3;
+  color: #b1b1b1;
 }
 
 .global-network-card .visual-icon + div {
@@ -606,17 +606,17 @@ body {
 }
 
 .global-network-card p:last-child {
-  color: #c7aab3;
+  color: #b1b1b1;
 }
 
 .visual-icon-amber {
-  color: rgb(252 211 77);
-  background: linear-gradient(145deg, rgba(245, 158, 11, 0.25), rgba(146, 64, 14, 0.14));
+  color: rgb(252 216 74);
+  background: linear-gradient(145deg, rgba(246,203,30,0.25), rgba(195,159,16,0.14));
 }
 
 .visual-icon-indigo {
-  color: rgb(94 234 212);
-  background: linear-gradient(145deg, rgba(20,184,166, 0.28), rgba(13,148,136, 0.14));
+  color: rgb(241 210 84);
+  background: linear-gradient(145deg, rgba(223,182,18,0.28), rgba(196,160,16,0.14));
 }
 
 .steps-grid::before {
@@ -627,7 +627,7 @@ body {
   z-index: -1;
   height: 1px;
   content: "";
-  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(252,223,107,0.4), transparent);
 }
 
 .waveform-bar,
@@ -661,13 +661,13 @@ body {
 
 .faq-answer-card,
 .faq-clarity-card {
-  color: #f0fdfa;
-  background: #06251f;
-  border-color: #134e4a;
+  color: #fafafa;
+  background: #1e1e1e;
+  border-color: #9b7f0d;
   border-radius: 0;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 22px 60px rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 22px 60px rgba(0,0,0,0.28);
   backdrop-filter: none;
 }
 
@@ -680,7 +680,7 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(45,212,191, 0.95),
+    rgba(238,198,39,0.95),
     transparent
   );
 }
@@ -694,7 +694,7 @@ body {
 .faq-answer-header,
 .faq-clarity-header {
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid #134e4a;
+  border-bottom: 1px solid #9b7f0d;
 }
 
 .faq-question-label {
@@ -702,7 +702,7 @@ body {
   font-weight: 800;
   line-height: 1rem;
   letter-spacing: 0.16em;
-  color: #5eead4;
+  color: #f1d254;
   text-transform: uppercase;
 }
 
@@ -711,7 +711,7 @@ body {
   font-weight: 700;
   line-height: 1rem;
   letter-spacing: 0.12em;
-  color: #4f8f84;
+  color: #eabf13;
 }
 
 .faq-answer-copy {
@@ -736,15 +736,15 @@ body {
   margin-top: 0.8rem;
   font-size: 1rem;
   line-height: 1.7rem;
-  color: #b4c9c4;
+  color: #c4c4c4;
 }
 
 .faq-clarity-card .visual-icon {
   width: 2.75rem;
   height: 2.75rem;
-  color: #5eead4;
-  background: #0f2f2a;
-  border-color: #115e59;
+  color: #f1d254;
+  background: #282828;
+  border-color: #a4860d;
   border-radius: 0.4rem;
   box-shadow: none;
 }
@@ -976,10 +976,10 @@ body {
   .mobile-plans-carousel > article:nth-child(1),
   .mobile-plans-carousel > article:nth-child(2),
   .mobile-plans-carousel > article:nth-child(3) {
-    color: #f5f0e4;
-    background: #17140e;
-    border-color: #4c3d1c;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    color: #f0f0f0;
+    background: #141414;
+    border-color: #3e3e3e;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.42);
   }
 
   .mobile-plan-card > span:first-child,
@@ -995,7 +995,7 @@ body {
     background: linear-gradient(
       to bottom,
       transparent,
-      rgba(201, 151, 40, 0.92),
+      rgba(237,195,29,0.92),
       transparent
     );
     opacity: 0.65;
@@ -1015,9 +1015,9 @@ body {
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 0.45rem;
-    color: #d1a53a;
-    background: #231d0e;
-    border-color: #5c4720;
+    color: #eec82e;
+    background: #1d1d1d;
+    border-color: #ac8d0e;
     box-shadow: none;
   }
 
@@ -1025,7 +1025,7 @@ body {
     font-size: 0.72rem;
     line-height: 1.05rem;
     letter-spacing: 0.2em;
-    color: #d1a53a;
+    color: #eec82e;
   }
 
   .mobile-plan-main {
@@ -1044,7 +1044,7 @@ body {
     font-weight: 800;
     line-height: 0.85;
     letter-spacing: -0.075em;
-    color: #d1a53a;
+    color: #eec82e;
   }
 
   .mobile-plan-price {
@@ -1059,7 +1059,7 @@ body {
     font-weight: 700;
     line-height: 1rem;
     letter-spacing: 0.14em;
-    color: #9f947c;
+    color: #959595;
     text-transform: uppercase;
   }
 
@@ -1074,7 +1074,7 @@ body {
     margin-top: 0.75rem;
     font-size: 0.9rem;
     line-height: 1.4rem;
-    color: #c9c1ad;
+    color: #c1c1c1;
     opacity: 1;
   }
 
@@ -1083,7 +1083,7 @@ body {
     flex: none;
     gap: 0.75rem;
     padding: 1.1rem 0 0.25rem;
-    border-top: 1px solid #40351b;
+    border-top: 1px solid #353535;
   }
 
   .mobile-plan-features li {
@@ -1093,7 +1093,7 @@ body {
     font-size: 0.88rem;
     font-weight: 600;
     line-height: 1.25rem;
-    color: #eee8db;
+    color: #e8e8e8;
   }
 
   .mobile-plan-features li > span {
@@ -1103,10 +1103,10 @@ body {
     justify-content: center;
     width: 1.65rem;
     height: 1.65rem;
-    border: 1px solid #685326;
+    border: 1px solid #b8960f;
     border-radius: 999px;
-    color: #d1a53a;
-    background: #231d0e;
+    color: #eec82e;
+    background: #1d1d1d;
   }
 
   .mobile-plan-features svg {
@@ -1131,21 +1131,21 @@ body {
   }
 
   .mobile-section-pagination {
-    --pagination-accent: #7dd3fc;
-    --pagination-muted: rgba(186, 230, 253, 0.2);
-    --pagination-glow: rgba(56, 189, 248, 0.34);
+    --pagination-accent: #fcdf6b;
+    --pagination-muted: rgba(252,231,149,0.2);
+    --pagination-glow: rgba(248,211,61,0.34);
   }
 
   .mobile-section-pagination-rose {
-    --pagination-accent: #fb7185;
-    --pagination-muted: rgba(253, 164, 175, 0.2);
-    --pagination-glow: rgba(244, 63, 94, 0.34);
+    --pagination-accent: #fbdc63;
+    --pagination-muted: rgba(252,229,133,0.2);
+    --pagination-glow: rgba(244,209,67,0.34);
   }
 
   .mobile-section-pagination-emerald {
-    --pagination-accent: #34d399;
-    --pagination-muted: rgba(110, 231, 183, 0.2);
-    --pagination-glow: rgba(16, 185, 129, 0.34);
+    --pagination-accent: #eec72b;
+    --pagination-muted: rgba(242,212,92,0.2);
+    --pagination-glow: rgba(221,180,18,0.34);
   }
 
   .mobile-plan-pagination button,
@@ -1171,7 +1171,7 @@ body {
     height: 0.7rem;
     content: "";
     border-radius: 999px;
-    background: rgba(253, 230, 138, 0.2);
+    background: rgba(253,225,115,0.2);
     transform: translate(-50%, -50%);
     transition:
       width 280ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -1194,8 +1194,8 @@ body {
   }
 
   .mobile-plan-pagination button.is-active::after {
-    background: #c99728;
-    box-shadow: 0 0 18px rgba(201, 151, 40, 0.34);
+    background: #edc31d;
+    box-shadow: 0 0 18px rgba(237,195,29,0.34);
   }
 
   .mobile-section-pagination button.is-active::after {
@@ -1276,7 +1276,7 @@ body {
 
   .mobile-demo-proposals {
     border-top: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255,255,255,0.1);
   }
 
   .mobile-demo-proposals > p:nth-child(2),
@@ -1507,21 +1507,21 @@ body {
   #planes .mobile-plan-card {
     min-height: 18.5rem;
     padding: 1.25rem;
-    color: #f5f0e4;
-    background: #17140e;
-    border-color: #4c3d1c;
+    color: #f0f0f0;
+    background: #141414;
+    border-color: #3e3e3e;
     border-radius: 0;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.025),
-      0 22px 60px rgba(0, 0, 0, 0.28);
+      inset 0 1px 0 rgba(255,255,255,0.025),
+      0 22px 60px rgba(0,0,0,0.28);
     backdrop-filter: none;
   }
 
   #planes .mobile-plan-card:hover {
-    border-color: #80662e;
+    border-color: #cca611;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      0 26px 70px rgba(0, 0, 0, 0.36);
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 26px 70px rgba(0,0,0,0.36);
   }
 
   #planes .mobile-plan-card > span:first-child,
@@ -1537,7 +1537,7 @@ body {
     background: linear-gradient(
       to bottom,
       transparent,
-      rgba(201, 151, 40, 0.92),
+      rgba(237,195,29,0.92),
       transparent
     );
   }
@@ -1547,15 +1547,15 @@ body {
     align-items: center;
     gap: 0.75rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid #40351b;
+    border-bottom: 1px solid #353535;
   }
 
   #planes .mobile-plan-card .visual-icon {
     width: 2.6rem;
     height: 2.6rem;
-    color: #d1a53a;
-    background: #231d0e;
-    border-color: #5c4720;
+    color: #eec82e;
+    background: #1d1d1d;
+    border-color: #ac8d0e;
     border-radius: 0.4rem;
     box-shadow: none;
   }
@@ -1565,7 +1565,7 @@ body {
     font-size: 0.68rem;
     line-height: 1rem;
     letter-spacing: 0.17em;
-    color: #d1a53a;
+    color: #eec82e;
   }
 
   #planes .mobile-plan-main {
@@ -1590,7 +1590,7 @@ body {
     font-weight: 800;
     line-height: 0.9;
     letter-spacing: -0.06em;
-    color: #d1a53a;
+    color: #eec82e;
   }
 
   #planes .mobile-plan-period {
@@ -1599,7 +1599,7 @@ body {
     font-weight: 700;
     line-height: 0.9rem;
     letter-spacing: 0.13em;
-    color: #9f947c;
+    color: #959595;
     text-transform: uppercase;
   }
 
@@ -1607,7 +1607,7 @@ body {
     margin-top: 0.65rem;
     font-size: 1.15rem;
     line-height: 1.35rem;
-    color: #fffdf7;
+    color: #fdfdfd;
   }
 
   #planes .mobile-plan-main p {
@@ -1615,14 +1615,14 @@ body {
     margin-top: 0.5rem;
     font-size: 0.78rem;
     line-height: 1.15rem;
-    color: #c9c1ad;
+    color: #c1c1c1;
   }
 
   #planes .mobile-plan-features {
     display: grid;
     gap: 0.45rem;
     padding-top: 0.75rem;
-    border-top: 1px solid #40351b;
+    border-top: 1px solid #353535;
   }
 
   #planes .mobile-plan-features li {
@@ -1632,7 +1632,7 @@ body {
     font-size: 0.76rem;
     font-weight: 600;
     line-height: 1.05rem;
-    color: #eee8db;
+    color: #e8e8e8;
   }
 
   #planes .mobile-plan-features li > span {
@@ -1642,9 +1642,9 @@ body {
     justify-content: center;
     width: 1.35rem;
     height: 1.35rem;
-    color: #d1a53a;
-    background: #231d0e;
-    border: 1px solid #685326;
+    color: #eec82e;
+    background: #1d1d1d;
+    border: 1px solid #b8960f;
     border-radius: 999px;
   }
 
@@ -1731,26 +1731,26 @@ body {
   página pública y mantener la identidad musical de la marca.
 */
 html:not(.dark) .featmusic-app-light {
-  --fm-app-bg: #f4f6fa;
+  --fm-app-bg: #ffffff;
   --fm-card: #ffffff;
-  --fm-card-soft: #f8fafc;
-  --fm-card-emerald: #ecfdf5;
-  --fm-text: #172033;
-  --fm-text-soft: #64748b;
-  --fm-text-muted: #94a3b8;
-  --fm-border: #e2e8f0;
-  --fm-emerald: #10b981;
-  --fm-emerald-deep: #059669;
-  --fm-sky: #0ea5e9;
-  --fm-night: #111827;
-  --fm-success: #047857;
-  --fm-warning: #b45309;
-  --fm-danger: #dc2626;
+  --fm-card-soft: rgba(0,0,0,0.025);
+  --fm-card-emerald: rgba(255,212,0,0.08);
+  --fm-text: #000000;
+  --fm-text-soft: rgba(0,0,0,0.68);
+  --fm-text-muted: rgba(0,0,0,0.48);
+  --fm-border: rgba(0,0,0,0.10);
+  --fm-emerald: #ffd400;
+  --fm-emerald-deep: #ffd400;
+  --fm-sky: #ffd400;
+  --fm-night: #000000;
+  --fm-success: #ffd400;
+  --fm-warning: #ffd400;
+  --fm-danger: #ffd400;
 
   color-scheme: light;
   background:
-    radial-gradient(circle at 8% 0%, rgba(5,150,105, 0.09), transparent 26rem),
-    radial-gradient(circle at 94% 18%, rgba(14, 165, 233, 0.07), transparent 24rem),
+    radial-gradient(circle at 8% 0%, rgba(255,212,0,0.09), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(255,212,0,0.07), transparent 24rem),
     var(--fm-app-bg) !important;
   color: var(--fm-text) !important;
 }
@@ -1759,10 +1759,10 @@ html:not(.dark) .featmusic-app-light {
 html:not(.dark) .featmusic-app-light > header,
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome {
   color-scheme: dark;
-  background: rgba(17, 24, 39, 0.97) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: rgba(24,24,24,0.97) !important;
+  border-color: rgba(255,255,255,0.1) !important;
   color: #ffffff !important;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.16) !important;
+  box-shadow: 0 10px 28px rgba(23,23,23,0.16) !important;
 }
 
 html:not(.dark) .featmusic-app-light > header [class~="text-white"],
@@ -1776,35 +1776,35 @@ html:not(.dark) .featmusic-app-light > header [class~="text-zinc-400"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-200"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-300"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-400"] {
-  color: #cbd5e1 !important;
+  color: #d4d4d4 !important;
 }
 
 html:not(.dark) .featmusic-app-light > header [class~="text-zinc-500"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-500"] {
-  color: #94a3b8 !important;
+  color: #a1a1a1 !important;
 }
 
-html:not(.dark) .featmusic-app-light > header [class~="text-emerald-100"],
-html:not(.dark) .featmusic-app-light > header [class~="text-emerald-200"],
-html:not(.dark) .featmusic-app-light > header [class~="text-emerald-300"],
-html:not(.dark) .featmusic-app-light > header [class~="text-emerald-400"],
-html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-100"],
-html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-200"],
-html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-300"],
-html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-emerald-400"] {
-  color: #6ee7b7 !important;
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-400"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-400"] {
+  color: #f2d45c !important;
 }
 
-html:not(.dark) .featmusic-app-light > header [class~="text-red-300"],
-html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-red-300"] {
-  color: #fca5a5 !important;
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-300"] {
+  color: #fbe487 !important;
 }
 
 html:not(.dark) .featmusic-app-light > header [class~="border-white/10"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="border-white/10"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="border-white/15"],
 html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="border-white/20"] {
-  border-color: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(255,255,255,0.14) !important;
 }
 
 /* Superficies principales y tarjetas. */
@@ -1817,22 +1817,22 @@ html:not(.dark) .featmusic-app-light [class~="bg-black/35"],
 html:not(.dark) .featmusic-app-light [class~="bg-black/40"],
 html:not(.dark) .featmusic-app-light [class~="bg-black/45"],
 html:not(.dark) .featmusic-app-light [class~="bg-zinc-950"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#07110d]/95"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#07110d]/98"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#07120e]/90"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#08140f]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#08140f]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#081712]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#081712]/95"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#091711]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[#091711]/95"] {
-  background-color: rgba(255, 255, 255, 0.96) !important;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07) !important;
+html:not(.dark) .featmusic-app-light [class~="bg-[#0f0f0f]/95"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#0f0f0f]/98"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#0f0f0f]/90"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#111111]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#111111]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#131313]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#131313]/95"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#141414]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#141414]/95"] {
+  background-color: rgba(255,255,255,0.96) !important;
+  box-shadow: 0 12px 32px rgba(23,23,23,0.07) !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="bg-[#06100c]/92"] {
-  background-color: rgba(244, 246, 250, 0.94) !important;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05) !important;
+html:not(.dark) .featmusic-app-light [class~="bg-[#0e0e0e]/92"] {
+  background-color: rgba(246,246,246,0.94) !important;
+  box-shadow: 0 8px 22px rgba(23,23,23,0.05) !important;
 }
 
 html:not(.dark) .featmusic-app-light [class~="bg-white/5"],
@@ -1847,21 +1847,21 @@ html:not(.dark) .featmusic-app-light [class~="bg-white/[0.045]"],
 html:not(.dark) .featmusic-app-light [class~="bg-white/[0.05]"],
 html:not(.dark) .featmusic-app-light [class~="bg-white/[0.055]"],
 html:not(.dark) .featmusic-app-light [class~="bg-white/[0.06]"] {
-  background-color: #f8fafc !important;
+  background-color: #fafafa !important;
 }
 
 html:not(.dark) .featmusic-app-light [class~="bg-white/10"],
 html:not(.dark) .featmusic-app-light [class~="bg-white/15"] {
-  background-color: #eef2f7 !important;
+  background-color: #f2f2f2 !important;
 }
 
 /* Gradientes oscuros de cards convertidos en superficies claras con profundidad. */
-html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(155deg,rgba(16,185,129,0.16),rgba(22,17,29,0.96)_35%,rgba(7,6,10,0.98))]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(16,185,129,0.035))]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(16,185,129,0.035))]"],
-html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(16,185,129,0.045))]"] {
-  background: linear-gradient(145deg, #ffffff 0%, #fbfdff 58%, #ecfdf5 100%) !important;
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.09) !important;
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(155deg,rgba(221,180,18,0.16),rgba(19,19,19,0.96)_35%,rgba(7,7,7,0.98))]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(221,180,18,0.035))]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(221,180,18,0.035))]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(221,180,18,0.045))]"] {
+  background: linear-gradient(145deg, #ffffff 0%, #fdfdfd 58%, #f9f9f9 100%) !important;
+  box-shadow: 0 18px 48px rgba(23,23,23,0.09) !important;
 }
 
 /* Bordes claros y separación visual. */
@@ -1894,7 +1894,7 @@ html:not(.dark) .featmusic-app-light [class~="text-zinc-100"] {
 html:not(.dark) .featmusic-app-light [class~="text-zinc-200"],
 html:not(.dark) .featmusic-app-light [class~="text-zinc-300"],
 html:not(.dark) .featmusic-app-light [class~="text-zinc-300/80"] {
-  color: #334155 !important;
+  color: #3f3f3f !important;
 }
 
 html:not(.dark) .featmusic-app-light [class~="text-zinc-400"],
@@ -1907,64 +1907,64 @@ html:not(.dark) .featmusic-app-light [class~="text-zinc-700"] {
   color: var(--fm-text-muted) !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="text-emerald-100"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-100/70"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-100/80"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-100/90"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-200"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-200/55"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-200/85"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-300"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-300/70"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-300/80"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-400"] {
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100/70"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100/80"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100/90"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200/55"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200/85"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/70"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/80"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-400"] {
   color: var(--fm-emerald-deep) !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="text-red-100"],
-html:not(.dark) .featmusic-app-light [class~="text-red-200"],
-html:not(.dark) .featmusic-app-light [class~="text-red-200/60"],
-html:not(.dark) .featmusic-app-light [class~="text-red-300"],
-html:not(.dark) .featmusic-app-light [class~="text-red-300/80"],
-html:not(.dark) .featmusic-app-light [class~="text-red-400"] {
-  color: #b91c1c !important;
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200/60"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/80"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-400"] {
+  color: #e4ba13 !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="text-emerald-200"],
-html:not(.dark) .featmusic-app-light [class~="text-emerald-300"] {
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"] {
   color: var(--fm-success) !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="text-sky-100"],
-html:not(.dark) .featmusic-app-light [class~="text-sky-200"],
-html:not(.dark) .featmusic-app-light [class~="text-sky-300"],
-html:not(.dark) .featmusic-app-light [class~="text-sky-300/70"] {
-  color: #0369a1 !important;
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/70"] {
+  color: #d2a804 !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="text-amber-200"],
-html:not(.dark) .featmusic-app-light [class~="text-amber-300"] {
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"] {
   color: var(--fm-warning) !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="text-emerald-300"] {
-  color: #047857 !important;
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"] {
+  color: #b49106 !important;
 }
 
 /* Botones sólidos, avatares y mensajes enviados mantienen texto blanco. */
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500"][class~="text-white"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-600"][class~="text-white"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-400"][class~="text-white"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500"][class~="text-white"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-400"][class~="text-white"],
-html:not(.dark) .featmusic-app-light [class~="bg-sky-400"][class~="text-white"],
-html:not(.dark) .featmusic-app-light [class~="from-emerald-700"],
-html:not(.dark) .featmusic-app-light [class~="to-emerald-600"] {
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-600"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-400"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-400"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-400"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="from-yellow-700"],
+html:not(.dark) .featmusic-app-light [class~="to-yellow-600"] {
   color: #ffffff !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500"] [class~="text-emerald-100/70"] {
-  color: rgba(255, 255, 255, 0.72) !important;
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500"] [class~="text-yellow-100/70"] {
+  color: rgba(255,255,255,0.72) !important;
 }
 
 /* Campos y controles. */
@@ -1978,7 +1978,7 @@ html:not(.dark) .featmusic-app-light select {
 
 html:not(.dark) .featmusic-app-light input::placeholder,
 html:not(.dark) .featmusic-app-light textarea::placeholder {
-  color: #94a3b8 !important;
+  color: #a1a1a1 !important;
 }
 
 html:not(.dark) .featmusic-app-light select option {
@@ -1996,46 +1996,46 @@ html:not(.dark) .featmusic-app-light input[type="radio"] {
 }
 
 /* Estados y acentos con fondos suaves. */
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/5"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/10"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/12"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/15"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/20"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.035]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.045]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.05]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.06]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.065]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.07]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.08]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.09]"] {
-  background-color: #d1fae5 !important;
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/5"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/12"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/20"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.035]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.045]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.05]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.06]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.065]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.07]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.08]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.09]"] {
+  background-color: #f0f0f0 !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="bg-sky-500/10"],
-html:not(.dark) .featmusic-app-light [class~="bg-sky-500/15"],
-html:not(.dark) .featmusic-app-light [class~="bg-sky-500/[0.06]"] {
-  background-color: #e0f2fe !important;
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.06]"] {
+  background-color: #efefef !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/10"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.07]"],
-html:not(.dark) .featmusic-app-light [class~="bg-emerald-500/[0.08]"] {
-  background-color: #ecfdf5 !important;
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.07]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.08]"] {
+  background-color: #f9f9f9 !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="bg-amber-500/10"] {
-  background-color: #fff7ed !important;
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"] {
+  background-color: #f8f8f8 !important;
 }
 
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/10"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/15"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/[0.04]"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/[0.05]"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/[0.055]"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/[0.06]"],
-html:not(.dark) .featmusic-app-light [class~="bg-red-500/[0.07]"] {
-  background-color: #fef2f2 !important;
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.04]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.05]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.055]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.06]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.07]"] {
+  background-color: #f5f5f5 !important;
 }
 
 /* Hover más limpio sobre superficies claras. */
@@ -2046,7 +2046,7 @@ html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.018]"]:hover,
 html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.025]"]:hover,
 html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.035]"]:hover,
 html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.08]"]:hover {
-  background-color: #ecfdf5 !important;
+  background-color: #f9f9f9 !important;
 }
 
 html:not(.dark) .featmusic-app-light [class~="hover:text-white"]:hover,
@@ -2073,17 +2073,17 @@ html:not(.dark) .featmusic-app-light [role="dialog"]:not([class~="bg-transparent
 /* Sombras y scrollbars suaves. */
 html:not(.dark) .featmusic-app-light [class~="shadow-2xl"]:not([role="dialog"]),
 html:not(.dark) .featmusic-app-light [class~="shadow-xl"]:not([role="dialog"]) {
-  --tw-shadow-color: rgba(15, 23, 42, 0.1) !important;
+  --tw-shadow-color: rgba(23,23,23,0.1) !important;
 }
 
 html:not(.dark) .featmusic-app-light * {
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #d4d4d4 transparent;
 }
 
 @media (max-width: 640px) {
   html:not(.dark) .featmusic-app-light {
     background:
-      radial-gradient(circle at 50% -5%, rgba(5,150,105, 0.08), transparent 18rem),
+      radial-gradient(circle at 50% -5%, rgba(201,162,7,0.08), transparent 18rem),
       var(--fm-app-bg) !important;
   }
 }
@@ -2184,9 +2184,9 @@ html:not(.dark) .featmusic-app-light * {
 .feat-reel-shade {
   z-index: -4;
   background:
-    radial-gradient(circle at 50% 36%, rgba(52, 211, 153, 0.19), transparent 31%),
-    radial-gradient(circle at 16% 84%, rgba(5, 150, 105, 0.16), transparent 34%),
-    linear-gradient(180deg, rgba(1, 10, 7, 0.46), rgba(1, 8, 6, 0.76) 64%, rgba(0, 4, 3, 0.96));
+    radial-gradient(circle at 50% 36%, rgba(238,199,43,0.19), transparent 31%),
+    radial-gradient(circle at 16% 84%, rgba(201,162,7,0.16), transparent 34%),
+    linear-gradient(180deg, rgba(8,8,8,0.46), rgba(6,6,6,0.76) 64%, rgba(3,3,3,0.96));
 }
 
 .feat-reel-grid {
@@ -2195,8 +2195,8 @@ html:not(.dark) .featmusic-app-light * {
   height: calc(100% + 3rem);
   left: -5%;
   background-image:
-    linear-gradient(rgba(110, 231, 183, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(110, 231, 183, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(242,212,92,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242,212,92,0.035) 1px, transparent 1px);
   background-size: 2.75rem 2.75rem;
   opacity: 0.45;
   mask-image: linear-gradient(to bottom, transparent, black 24%, black 72%, transparent);
@@ -2219,7 +2219,7 @@ html:not(.dark) .featmusic-app-light * {
   left: 8%;
   width: 9rem;
   height: 9rem;
-  background: rgba(16, 185, 129, 0.48);
+  background: rgba(221,180,18,0.48);
   animation: feat-reel-orbit 9s ease-in-out infinite;
 }
 
@@ -2228,7 +2228,7 @@ html:not(.dark) .featmusic-app-light * {
   right: 4%;
   width: 11rem;
   height: 11rem;
-  background: rgba(6, 95, 70, 0.42);
+  background: rgba(161,130,10,0.42);
   animation: feat-reel-orbit 11s -3.5s ease-in-out infinite reverse;
 }
 
@@ -2237,7 +2237,7 @@ html:not(.dark) .featmusic-app-light * {
   left: 36%;
   width: 8rem;
   height: 8rem;
-  background: rgba(45, 212, 191, 0.24);
+  background: rgba(238,198,39,0.24);
   animation: feat-reel-orbit 10s -5s ease-in-out infinite;
 }
 
@@ -2270,7 +2270,7 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .feat-reel-disc:focus-visible {
-  outline: 2px solid rgba(110, 231, 183, 0.9);
+  outline: 2px solid rgba(242,212,92,0.9);
   outline-offset: 0.45rem;
 }
 
@@ -2288,10 +2288,10 @@ html:not(.dark) .featmusic-app-light * {
   background: conic-gradient(
     from 45deg,
     transparent 0 12%,
-    rgba(52, 211, 153, 0.88) 22%,
-    rgba(167, 243, 208, 0.2) 34%,
+    rgba(238,199,43,0.88) 22%,
+    rgba(245,223,135,0.2) 34%,
     transparent 48% 64%,
-    rgba(16, 185, 129, 0.75) 76%,
+    rgba(221,180,18,0.75) 76%,
     transparent 90%
   );
   filter: blur(0.3px);
@@ -2301,10 +2301,10 @@ html:not(.dark) .featmusic-app-light * {
 .feat-reel-disc::after {
   inset: -1.65rem;
   z-index: -2;
-  border: 1px solid rgba(110, 231, 183, 0.18);
+  border: 1px solid rgba(242,212,92,0.18);
   box-shadow:
-    0 0 2.5rem rgba(16, 185, 129, 0.2),
-    inset 0 0 2rem rgba(16, 185, 129, 0.08);
+    0 0 2.5rem rgba(221,180,18,0.2),
+    inset 0 0 2rem rgba(221,180,18,0.08);
   animation: feat-reel-ring-breathe 3.2s ease-in-out infinite;
 }
 
@@ -2314,10 +2314,10 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .feat-reel-player[data-playing="true"] .feat-reel-disc::after {
-  border-color: rgba(110, 231, 183, 0.42);
+  border-color: rgba(242,212,92,0.42);
   box-shadow:
-    0 0 3.6rem rgba(16, 185, 129, 0.36),
-    inset 0 0 2.8rem rgba(16, 185, 129, 0.12);
+    0 0 3.6rem rgba(221,180,18,0.36),
+    inset 0 0 2.8rem rgba(221,180,18,0.12);
   animation-duration: 1.55s;
 }
 
@@ -2325,7 +2325,7 @@ html:not(.dark) .featmusic-app-light * {
   position: absolute;
   inset: 8%;
   border-radius: inherit;
-  background: radial-gradient(circle, rgba(52, 211, 153, 0.3), transparent 68%);
+  background: radial-gradient(circle, rgba(238,199,43,0.3), transparent 68%);
   filter: blur(1rem);
   opacity: 0.65;
   transition: opacity 300ms ease;
@@ -2339,21 +2339,21 @@ html:not(.dark) .featmusic-app-light * {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255,255,255,0.18);
   border-radius: inherit;
   background:
-    radial-gradient(circle at 38% 30%, rgba(110, 231, 183, 0.28), transparent 38%),
-    linear-gradient(145deg, #0f3b2c, #03110c 70%);
+    radial-gradient(circle at 38% 30%, rgba(242,212,92,0.28), transparent 38%),
+    linear-gradient(145deg, #313131, #0e0e0e 70%);
   box-shadow:
-    inset 0 0 0 0.45rem rgba(0, 0, 0, 0.18),
-    0 1.4rem 4rem rgba(0, 0, 0, 0.48);
+    inset 0 0 0 0.45rem rgba(0,0,0,0.18),
+    0 1.4rem 4rem rgba(0,0,0,0.48);
 }
 
 .feat-reel-disc-cover::after {
   position: absolute;
   inset: 0;
   content: "";
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 42%, rgba(0, 0, 0, 0.28));
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 42%, rgba(0,0,0,0.28));
   pointer-events: none;
 }
 
@@ -2379,7 +2379,7 @@ html:not(.dark) .featmusic-app-light * {
   font-size: clamp(2.4rem, 9vw, 4.5rem);
   font-weight: 950;
   letter-spacing: -0.06em;
-  color: rgba(209, 250, 229, 0.9);
+  color: rgba(240,240,240,0.9);
 }
 
 .feat-reel-disc-control {
@@ -2389,12 +2389,12 @@ html:not(.dark) .featmusic-app-light * {
   width: 4.25rem;
   height: 4.25rem;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255,255,255,0.28);
   border-radius: 999px;
-  background: rgba(1, 12, 8, 0.68);
+  background: rgba(9,9,9,0.68);
   box-shadow:
-    0 0 0 0.45rem rgba(16, 185, 129, 0.11),
-    0 0 2.4rem rgba(16, 185, 129, 0.38);
+    0 0 0 0.45rem rgba(255,212,0,0.11),
+    0 0 2.4rem rgba(221,180,18,0.38);
   backdrop-filter: blur(14px);
   transition: transform 180ms ease, background 180ms ease;
 }
@@ -2404,7 +2404,7 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .feat-reel-player[data-playing="true"] .feat-reel-disc-control {
-  background: rgba(5, 150, 105, 0.7);
+  background: rgba(201,162,7,0.7);
 }
 
 .feat-reel-wave-shell {
@@ -2413,12 +2413,12 @@ html:not(.dark) .featmusic-app-light * {
   height: 3.25rem;
   margin-top: 1.35rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 1rem;
   background:
-    linear-gradient(90deg, rgba(16, 185, 129, 0.12) var(--reel-progress), rgba(0, 0, 0, 0.24) var(--reel-progress)),
-    rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    linear-gradient(90deg, rgba(221,180,18,0.12) var(--reel-progress), rgba(0,0,0,0.24) var(--reel-progress)),
+    rgba(0,0,0,0.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
   backdrop-filter: blur(16px);
 }
 
@@ -2435,15 +2435,15 @@ html:not(.dark) .featmusic-app-light * {
   height: var(--bar-height);
   min-height: 0.2rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255,255,255,0.22);
   transform: scaleY(0.56);
   transform-origin: center;
   transition: background 180ms ease, opacity 180ms ease;
 }
 
 .feat-reel-wave span.is-progress {
-  background: linear-gradient(to top, #10b981, #a7f3d0);
-  box-shadow: 0 0 0.5rem rgba(52, 211, 153, 0.32);
+  background: linear-gradient(to top, #ddb412, #f5df87);
+  box-shadow: 0 0 0.5rem rgba(238,199,43,0.32);
 }
 
 .feat-reel-player[data-playing="true"] .feat-reel-wave span {
@@ -2465,10 +2465,10 @@ html:not(.dark) .featmusic-app-light * {
   align-items: center;
   min-height: 1.65rem;
   padding: 0.25rem 0.65rem;
-  border: 1px solid rgba(110, 231, 183, 0.22);
+  border: 1px solid rgba(242,212,92,0.22);
   border-radius: 999px;
-  color: rgba(209, 250, 229, 0.92);
-  background: rgba(16, 185, 129, 0.1);
+  color: rgba(240,240,240,0.92);
+  background: rgba(221,180,18,0.1);
   font-size: 0.625rem;
   font-weight: 900;
   line-height: 1rem;
@@ -2476,15 +2476,15 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .feat-reel-chip-muted {
-  border-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.52);
-  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.52);
+  background: rgba(0,0,0,0.2);
 }
 
 .feat-reel-details[open] > summary {
-  border-color: rgba(110, 231, 183, 0.36);
-  color: rgb(209 250 229);
-  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(242,212,92,0.36);
+  color: rgb(240 240 240);
+  background: rgba(221,180,18,0.14);
 }
 
 .feat-reel-proposal > div {
@@ -2600,20 +2600,20 @@ html:not(.dark) .featmusic-app-light * {
 .featmusic-app-light .feat-reel-tab {
   border: 0 !important;
   border-radius: 0 !important;
-  color: rgba(255, 255, 255, 0.66) !important;
+  color: rgba(255,255,255,0.66) !important;
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
   font-weight: 500 !important;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.72);
+  text-shadow: 0 1px 12px rgba(0,0,0,0.72);
 }
 
 .feat-reel-tab:hover,
 .feat-reel-tab:focus-visible,
 .featmusic-app-light .feat-reel-tab:hover,
 .featmusic-app-light .feat-reel-tab:focus-visible {
-  color: rgba(255, 255, 255, 0.9) !important;
+  color: rgba(255,255,255,0.9) !important;
   background: transparent !important;
   background-color: transparent !important;
   outline: none;
@@ -2629,13 +2629,13 @@ html:not(.dark) .featmusic-app-light * {
 
 .feat-reel-position,
 .featmusic-app-light .feat-reel-position {
-  color: rgba(255, 255, 255, 0.48) !important;
+  color: rgba(255,255,255,0.48) !important;
   background: transparent !important;
   background-color: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
   font-weight: 600;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 10px rgba(0,0,0,0.7);
 }
 /* FEATMUSIC_REEL_TABS_OVERLAY_V1_END */
 
@@ -2692,8 +2692,8 @@ html:not(.dark) .featmusic-app-light * {
   border: 0 !important;
   border-radius: 999px;
   color: #ffffff !important;
-  background: rgba(5, 150, 105, 0.82) !important;
-  box-shadow: 0 0 1.4rem rgba(16, 185, 129, 0.28);
+  background: rgba(201,162,7,0.82) !important;
+  box-shadow: 0 0 1.4rem rgba(221,180,18,0.28);
   cursor: pointer;
   outline: none;
   transition:
@@ -2708,12 +2708,12 @@ html:not(.dark) .featmusic-app-light * {
 .featmusic-app-light .feat-reel-linear-toggle:hover,
 .featmusic-app-light .feat-reel-linear-toggle:focus-visible {
   color: #ffffff !important;
-  background: rgba(16, 185, 129, 0.96) !important;
-  box-shadow: 0 0 1.8rem rgba(52, 211, 153, 0.38);
+  background: rgba(221,180,18,0.96) !important;
+  box-shadow: 0 0 1.8rem rgba(238,199,43,0.38);
 }
 
 .feat-reel-linear-toggle:focus-visible {
-  outline: 2px solid rgba(167, 243, 208, 0.92);
+  outline: 2px solid rgba(245,223,135,0.92);
   outline-offset: 0.22rem;
 }
 
@@ -2737,8 +2737,8 @@ html:not(.dark) .featmusic-app-light * {
   left: 0;
   height: 0.18rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.24);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  background: rgba(255,255,255,0.24);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.5);
   transform: translateY(-50%);
 }
 
@@ -2747,8 +2747,8 @@ html:not(.dark) .featmusic-app-light * {
   inset: 0 auto 0 0;
   width: var(--reel-progress);
   border-radius: inherit;
-  background: linear-gradient(90deg, #10b981, #6ee7b7);
-  box-shadow: 0 0 0.7rem rgba(52, 211, 153, 0.46);
+  background: linear-gradient(90deg, #ddb412, #f2d45c);
+  box-shadow: 0 0 0.7rem rgba(238,199,43,0.46);
 }
 
 .feat-reel-linear-thumb {
@@ -2757,12 +2757,12 @@ html:not(.dark) .featmusic-app-light * {
   left: var(--reel-progress);
   width: 0.68rem;
   height: 0.68rem;
-  border: 2px solid rgba(236, 253, 245, 0.98);
+  border: 2px solid rgba(249,249,249,0.98);
   border-radius: 999px;
-  background: #10b981;
+  background: #ddb412;
   box-shadow:
-    0 0 0 0.18rem rgba(16, 185, 129, 0.2),
-    0 0 1rem rgba(52, 211, 153, 0.62);
+    0 0 0 0.18rem rgba(221,180,18,0.2),
+    0 0 1rem rgba(238,199,43,0.62);
   transform: translate(-50%, -50%);
   transition:
     width 140ms ease,
@@ -2773,8 +2773,8 @@ html:not(.dark) .featmusic-app-light * {
 
 .feat-reel-linear-player[data-playing="true"] .feat-reel-linear-thumb {
   box-shadow:
-    0 0 0 0.24rem rgba(16, 185, 129, 0.24),
-    0 0 1.25rem rgba(110, 231, 183, 0.72);
+    0 0 0 0.24rem rgba(221,180,18,0.24),
+    0 0 1.25rem rgba(242,212,92,0.72);
 }
 
 .feat-reel-linear-player[data-scrubbing="true"] .feat-reel-linear-thumb {
@@ -2790,11 +2790,11 @@ html:not(.dark) .featmusic-app-light * {
   z-index: 3;
   min-width: 4.5rem;
   padding: 0.42rem 0.58rem;
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255,255,255,0.13);
   border-radius: 0.65rem;
-  color: rgba(255, 255, 255, 0.96) !important;
-  background: rgba(0, 0, 0, 0.62) !important;
-  box-shadow: 0 0.55rem 1.5rem rgba(0, 0, 0, 0.34);
+  color: rgba(255,255,255,0.96) !important;
+  background: rgba(0,0,0,0.62) !important;
+  box-shadow: 0 0.55rem 1.5rem rgba(0,0,0,0.34);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   font-size: 0.64rem;
@@ -2919,14 +2919,14 @@ html:not(.dark) .featmusic-app-light * {
   background: conic-gradient(
     from 24deg,
     transparent 0 10%,
-    rgba(52, 211, 153, 0.95) 17%,
-    rgba(167, 243, 208, 0.18) 28%,
+    rgba(238,199,43,0.95) 17%,
+    rgba(245,223,135,0.18) 28%,
     transparent 39% 57%,
-    rgba(16, 185, 129, 0.78) 68%,
-    rgba(110, 231, 183, 0.22) 77%,
+    rgba(221,180,18,0.78) 68%,
+    rgba(242,212,92,0.22) 77%,
     transparent 88%
   );
-  filter: drop-shadow(0 0 0.75rem rgba(16, 185, 129, 0.35));
+  filter: drop-shadow(0 0 0.75rem rgba(221,180,18,0.35));
   opacity: 0.62;
   animation: feat-reel-artist-orbit 8s linear infinite;
 }
@@ -2934,15 +2934,15 @@ html:not(.dark) .featmusic-app-light * {
 .feat-reel-artist-visual::after {
   inset: -1.55rem;
   z-index: -4;
-  border: 1px solid rgba(110, 231, 183, 0.2);
+  border: 1px solid rgba(242,212,92,0.2);
   background: radial-gradient(
     circle,
-    rgba(16, 185, 129, 0.14),
+    rgba(221,180,18,0.14),
     transparent 64%
   );
   box-shadow:
-    0 0 2.8rem rgba(16, 185, 129, 0.24),
-    inset 0 0 2.2rem rgba(52, 211, 153, 0.08);
+    0 0 2.8rem rgba(221,180,18,0.24),
+    inset 0 0 2.2rem rgba(238,199,43,0.08);
   animation: feat-reel-artist-pulse 3.4s ease-in-out infinite;
 }
 
@@ -2955,14 +2955,14 @@ html:not(.dark) .featmusic-app-light * {
 
 .feat-reel-artist-ring-one {
   inset: -0.95rem;
-  border: 1px dashed rgba(167, 243, 208, 0.3);
+  border: 1px dashed rgba(245,223,135,0.3);
   animation: feat-reel-artist-orbit-reverse 12s linear infinite;
 }
 
 .feat-reel-artist-ring-two {
   inset: -2.05rem;
-  border: 1px solid rgba(16, 185, 129, 0.12);
-  box-shadow: 0 0 1.8rem rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(221,180,18,0.12);
+  box-shadow: 0 0 1.8rem rgba(238,199,43,0.12);
   animation: feat-reel-artist-pulse 4.8s -1.2s ease-in-out infinite;
 }
 
@@ -2970,19 +2970,19 @@ html:not(.dark) .featmusic-app-light * {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border: 1px solid rgba(236, 253, 245, 0.28);
+  border: 1px solid rgba(249,249,249,0.28);
   border-radius: 999px;
   background:
     radial-gradient(
       circle at 35% 26%,
-      rgba(110, 231, 183, 0.3),
+      rgba(242,212,92,0.3),
       transparent 38%
     ),
-    linear-gradient(145deg, #0d3d2c, #020a07 72%);
+    linear-gradient(145deg, #323232, #080808 72%);
   box-shadow:
-    inset 0 0 0 0.42rem rgba(0, 0, 0, 0.2),
-    0 1.35rem 4rem rgba(0, 0, 0, 0.5),
-    0 0 2.2rem rgba(16, 185, 129, 0.22);
+    inset 0 0 0 0.42rem rgba(0,0,0,0.2),
+    0 1.35rem 4rem rgba(0,0,0,0.5),
+    0 0 2.2rem rgba(221,180,18,0.22);
 }
 
 .feat-reel-artist-photo::after {
@@ -2991,9 +2991,9 @@ html:not(.dark) .featmusic-app-light * {
   content: "";
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.14),
+    rgba(255,255,255,0.14),
     transparent 40%,
-    rgba(0, 0, 0, 0.3)
+    rgba(0,0,0,0.3)
   );
   pointer-events: none;
 }
@@ -3014,11 +3014,11 @@ html:not(.dark) .featmusic-app-light * {
   inset: 0;
   display: grid;
   place-items: center;
-  color: rgba(236, 253, 245, 0.94);
+  color: rgba(249,249,249,0.94);
   font-size: clamp(2.2rem, 8vw, 4.1rem);
   font-weight: 950;
   letter-spacing: -0.06em;
-  text-shadow: 0 0 1.5rem rgba(16, 185, 129, 0.5);
+  text-shadow: 0 0 1.5rem rgba(221,180,18,0.5);
 }
 
 .feat-reel-artist-spark {
@@ -3027,10 +3027,10 @@ html:not(.dark) .featmusic-app-light * {
   width: 0.52rem;
   height: 0.52rem;
   border-radius: 999px;
-  background: #a7f3d0;
+  background: #f5df87;
   box-shadow:
-    0 0 0 0.25rem rgba(16, 185, 129, 0.12),
-    0 0 1rem rgba(110, 231, 183, 0.95);
+    0 0 0 0.25rem rgba(221,180,18,0.12),
+    0 0 1rem rgba(242,212,92,0.95);
   pointer-events: none;
 }
 
@@ -3054,10 +3054,10 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-visual::after {
-  border-color: rgba(110, 231, 183, 0.48);
+  border-color: rgba(242,212,92,0.48);
   box-shadow:
-    0 0 3.8rem rgba(16, 185, 129, 0.4),
-    inset 0 0 2.8rem rgba(52, 211, 153, 0.13);
+    0 0 3.8rem rgba(221,180,18,0.4),
+    inset 0 0 2.8rem rgba(238,199,43,0.13);
   animation-duration: 1.6s;
 }
 
@@ -3067,7 +3067,7 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-ring-one {
-  border-color: rgba(167, 243, 208, 0.48);
+  border-color: rgba(245,223,135,0.48);
   animation-duration: 7s;
 }
 
@@ -3145,8 +3145,8 @@ html:not(.dark) .featmusic-app-light * {
     padding: 0;
     background: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.42),
-      rgba(0, 0, 0, 0.08) 62%,
+      rgba(0,0,0,0.42),
+      rgba(0,0,0,0.08) 62%,
       transparent
     );
   }
@@ -3199,16 +3199,16 @@ html:not(.dark) .featmusic-app-light * {
   blancas, pero aumenta el contraste con un gris neutro más profundo.
 */
 .featmusic-app-light.featmusic-page-contrast {
-  --fm-app-bg: #d8dee7;
+  --fm-app-bg: #dddddd;
   background:
-    radial-gradient(circle at 8% 0%, rgba(5, 150, 105, 0.055), transparent 26rem),
-    radial-gradient(circle at 94% 18%, rgba(14, 165, 233, 0.04), transparent 24rem),
+    radial-gradient(circle at 8% 0%, rgba(201,162,7,0.055), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(241,199,29,0.04), transparent 24rem),
     var(--fm-app-bg) !important;
 }
 
 /* Asegura que el área completa conserve el nuevo fondo al desplazarse. */
 .featmusic-page-contrast {
-  background-color: #d8dee7 !important;
+  background-color: #dddddd !important;
 }
 /* FEATMUSIC_FONDOS_MAYOR_CONTRASTE_V1_END */
 
@@ -3226,7 +3226,7 @@ html:not(.dark) .featmusic-app-light * {
   .featmusic-profile-cover
   .featmusic-cover-identity-text {
   color: #ffffff !important;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.72);
 }
 /* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1_END */
 
@@ -3245,14 +3245,14 @@ html:not(.dark) .featmusic-app-light * {
   .featmusic-explore-cover
   .featmusic-explore-cover-text {
   color: #ffffff !important;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.72);
 }
 
 .featmusic-app-light
   .featmusic-explore-cover
   .featmusic-explore-cover-chip {
-  border-color: rgba(255, 255, 255, 0.22) !important;
-  background-color: rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  background-color: rgba(0,0,0,0.4) !important;
   color: #ffffff !important;
 }
 /* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_END */
@@ -3277,14 +3277,14 @@ html:not(.dark) .featmusic-app-light * {
   .featmusic-idea-cover-content
   :is(h1, h2, h3, h4, p, span, a, button) {
   color: #ffffff !important;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.76);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.76);
 }
 
 .featmusic-app-light
   .featmusic-idea-cover
   .featmusic-idea-cover-content
   input[type="range"] {
-  accent-color: #34d399;
+  accent-color: #eec72b;
 }
 
 /* En Inicio la portada de la idea reemplaza al fondo difuminado del artista. */
@@ -3306,17 +3306,17 @@ html:not(.dark) .featmusic-app-light * {
     linear-gradient(
       90deg,
       #000000 0%,
-      rgba(0, 0, 0, 0.98) 16%,
-      rgba(0, 0, 0, 0.78) 38%,
-      rgba(0, 0, 0, 0.38) 64%,
-      rgba(0, 0, 0, 0.08) 82%,
-      rgba(0, 0, 0, 0) 100%
+      rgba(0,0,0,0.98) 16%,
+      rgba(0,0,0,0.78) 38%,
+      rgba(0,0,0,0.38) 64%,
+      rgba(0,0,0,0.08) 82%,
+      rgba(0,0,0,0) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.08) 0%,
-      rgba(0, 0, 0, 0.22) 52%,
-      rgba(0, 0, 0, 0.9) 100%
+      rgba(0,0,0,0.08) 0%,
+      rgba(0,0,0,0.22) 52%,
+      rgba(0,0,0,0.9) 100%
     );
 }
 
@@ -3334,10 +3334,10 @@ html:not(.dark) .featmusic-app-light * {
 .featmusic-app-light
   .featmusic-idea-cover
   .featmusic-audio-toggle {
-  border-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(255,255,255,0.96) !important;
   background: #ffffff !important;
   color: #050505 !important;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.3) !important;
 }
 
 .featmusic-idea-cover .featmusic-audio-toggle:hover,
@@ -3349,11 +3349,11 @@ html:not(.dark) .featmusic-app-light * {
   .featmusic-idea-cover
   .featmusic-audio-toggle:focus-visible {
   border-color: #ffffff !important;
-  background: #f8fafc !important;
+  background: #fafafa !important;
   color: #000000 !important;
   box-shadow:
-    0 6px 22px rgba(0, 0, 0, 0.34),
-    0 0 0 3px rgba(255, 255, 255, 0.2) !important;
+    0 6px 22px rgba(0,0,0,0.34),
+    0 0 0 3px rgba(255,255,255,0.2) !important;
 }
 
 /* Inicio / reels: solo cambia cuando la publicación tiene portada propia. */
@@ -3364,7 +3364,7 @@ html:not(.dark) .featmusic-app-light * {
   border: 0 !important;
   background: #ffffff !important;
   color: #050505 !important;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.34) !important;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.34) !important;
 }
 
 .feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle:hover,
@@ -3375,11 +3375,11 @@ html:not(.dark) .featmusic-app-light * {
 .featmusic-app-light
   .feat-reel-card[data-idea-cover="true"]
   .feat-reel-linear-toggle:focus-visible {
-  background: #f8fafc !important;
+  background: #fafafa !important;
   color: #000000 !important;
   box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.38),
-    0 0 0 3px rgba(255, 255, 255, 0.2) !important;
+    0 6px 24px rgba(0,0,0,0.38),
+    0 0 0 3px rgba(255,255,255,0.2) !important;
 }
 /* FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1_END */
 
@@ -3432,11 +3432,11 @@ html:not(.dark) .featmusic-app-light * {
   .featmusic-idea-cover
   .featmusic-idea-cover-content
   .featmusic-description-toggle:focus-visible {
-  border-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(255,255,255,0.96) !important;
   background: #ffffff !important;
   color: #050505 !important;
   text-shadow: none !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.24) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.24) !important;
 }
 
 .featmusic-app-light
@@ -3466,7 +3466,7 @@ html:not(.dark) .featmusic-app-light * {
 
 /* FEATMUSIC_COMPARTIR_PERFIL_REDESSOCIALES_V1_START */
 .featmusic-share-backdrop {
-  background: rgba(2, 6, 23, 0.72) !important;
+  background: rgba(6,6,6,0.72) !important;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   animation: featmusicShareFade 180ms ease-out both;
@@ -3493,10 +3493,10 @@ html:not(.dark) .featmusic-app-light * {
   justify-content: center;
   gap: 0.4rem;
   border-radius: 0.9rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e7e7e7;
   background: #ffffff;
   padding: 0.7rem 0.2rem;
-  color: #475569;
+  color: #535353;
   font-size: 0.58rem;
   font-weight: 800;
   line-height: 1;
@@ -3513,14 +3513,14 @@ html:not(.dark) .featmusic-app-light * {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  box-shadow: 0 7px 16px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 7px 16px rgba(23,23,23,0.12);
 }
 
 .featmusic-share-network:hover,
 .featmusic-share-network:focus-visible {
   transform: translateY(-2px);
-  border-color: #a7f3d0;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.09);
+  border-color: #f5df87;
+  box-shadow: 0 10px 24px rgba(23,23,23,0.09);
   outline: none;
 }
 
@@ -3584,7 +3584,7 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .featmusic-more-dropdown {
-  background: rgba(7, 17, 13, 0.98) !important;
+  background: rgba(15,15,15,0.98) !important;
   color: #ffffff !important;
 }
 
@@ -3594,14 +3594,14 @@ html:not(.dark) .featmusic-app-light * {
 }
 
 .featmusic-app-light .featmusic-more-dropdown [class~="text-zinc-500"] {
-  color: #71717a !important;
+  color: #727272 !important;
 }
 
 .featmusic-secondary-page {
   min-width: 0;
   overflow-x: clip;
-  background: #d8dee7 !important;
-  color: #172033;
+  background: #dddddd !important;
+  color: #1f1f1f;
 }
 
 .featmusic-secondary-page a,
@@ -3688,11 +3688,11 @@ html:not(.dark) .featmusic-app-light * {
   color: #ffffff !important;
 }
 
-.featmusic-solid-black-chrome [class~="text-emerald-400"],
+.featmusic-solid-black-chrome [class~="text-yellow-400"],
 .featmusic-secondary-page
   .featmusic-solid-black-chrome
-  [class~="text-emerald-400"] {
-  color: #34d399 !important;
+  [class~="text-yellow-400"] {
+  color: #eec72b !important;
 }
 
 .featmusic-secondary-back-link,
@@ -3730,35 +3730,35 @@ html:not(.dark) .featmusic-app-light * {
 */
 html.dark {
   color-scheme: dark;
-  background: #050a08;
+  background: #000000;
 }
 
 html.dark body {
-  background: #050a08;
-  color: #f4f7f6;
+  background: #000000;
+  color: #ffffff;
 }
 
 html.dark .featmusic-app-light,
 html.dark .featmusic-app-light.featmusic-page-contrast,
 html.dark .featmusic-page-contrast,
 html.dark .featmusic-secondary-page {
-  --fm-app-bg: #050a08;
-  --fm-card: #0c1512;
-  --fm-card-soft: #111c18;
-  --fm-card-emerald: #0b2119;
-  --fm-text: #f4f7f6;
-  --fm-text-soft: #a7b4af;
-  --fm-text-muted: #73817b;
-  --fm-border: rgba(255, 255, 255, 0.1);
-  --fm-emerald: #34d399;
-  --fm-emerald-deep: #10b981;
+  --fm-app-bg: #000000;
+  --fm-card: rgba(255,255,255,0.045);
+  --fm-card-soft: rgba(255,255,255,0.075);
+  --fm-card-emerald: rgba(255,212,0,0.08);
+  --fm-text: #ffffff;
+  --fm-text-soft: rgba(255,255,255,0.72);
+  --fm-text-muted: rgba(255,255,255,0.50);
+  --fm-border: rgba(255,255,255,0.12);
+  --fm-emerald: #ffd400;
+  --fm-emerald-deep: #ffd400;
   color-scheme: dark;
   background:
-    radial-gradient(circle at 8% 0%, rgba(16, 185, 129, 0.11), transparent 26rem),
-    radial-gradient(circle at 94% 18%, rgba(14, 165, 233, 0.055), transparent 24rem),
-    #050a08 !important;
-  background-color: #050a08 !important;
-  color: #f4f7f6 !important;
+    radial-gradient(circle at 8% 0%, rgba(255,212,0,0.11), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(255,212,0,0.055), transparent 24rem),
+    #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 /* Superficies claras usadas por componentes agregados después del tema inicial. */
@@ -3772,41 +3772,41 @@ html.dark [class~="bg-white/50"],
 html.dark [class~="bg-slate-50"],
 html.dark [class~="bg-slate-50/50"],
 html.dark [class~="bg-slate-100"],
-html.dark [class~="bg-[#f4f6fa]"] {
-  background-color: #0c1512 !important;
-  color: #f4f7f6;
+html.dark [class~="bg-[#f6f6f6]"] {
+  background-color: #131313 !important;
+  color: #f6f6f6;
 }
 
 html.dark [class~="bg-slate-200"],
-html.dark [class~="bg-[#d8dee7]"] {
-  background-color: #111c18 !important;
+html.dark [class~="bg-[#dddddd]"] {
+  background-color: #191919 !important;
 }
 
-html.dark [class~="bg-emerald-50"],
-html.dark [class~="bg-emerald-50/50"],
-html.dark [class~="bg-emerald-50/60"],
-html.dark [class~="bg-emerald-50/70"],
-html.dark [class~="bg-emerald-100"] {
-  background-color: rgba(16, 185, 129, 0.12) !important;
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-50/50"],
+html.dark [class~="bg-yellow-50/60"],
+html.dark [class~="bg-yellow-50/70"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(221,180,18,0.12) !important;
 }
 
-html.dark [class~="bg-red-50"],
-html.dark [class~="bg-red-100"] {
-  background-color: rgba(239, 68, 68, 0.12) !important;
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(240,206,71,0.12) !important;
 }
 
-html.dark [class~="bg-amber-50"],
-html.dark [class~="bg-amber-100"] {
-  background-color: rgba(245, 158, 11, 0.12) !important;
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(246,203,30,0.12) !important;
 }
 
-html.dark [class~="bg-sky-50"],
-html.dark [class~="bg-sky-100"] {
-  background-color: rgba(14, 165, 233, 0.12) !important;
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(241,199,29,0.12) !important;
 }
 
 /* Textos oscuros convertidos a una jerarquía legible sobre fondos oscuros. */
-html.dark [class~="text-[#172033]"],
+html.dark [class~="text-[#1f1f1f]"],
 html.dark [class~="text-slate-950"],
 html.dark [class~="text-slate-900"],
 html.dark [class~="text-slate-800"],
@@ -3814,44 +3814,44 @@ html.dark [class~="text-slate-700"],
 html.dark [class~="text-zinc-950"],
 html.dark [class~="text-zinc-900"],
 html.dark [class~="text-zinc-800"] {
-  color: #f4f7f6 !important;
+  color: #f6f6f6 !important;
 }
 
 html.dark [class~="text-slate-600"],
 html.dark [class~="text-slate-500"],
 html.dark [class~="text-zinc-700"],
 html.dark [class~="text-zinc-600"] {
-  color: #a7b4af !important;
+  color: #b1b1b1 !important;
 }
 
 html.dark [class~="text-slate-400"] {
-  color: #83918b !important;
+  color: #8e8e8e !important;
 }
 
-html.dark [class~="text-emerald-950"],
-html.dark [class~="text-emerald-900"],
-html.dark [class~="text-emerald-800"],
-html.dark [class~="text-emerald-700"],
-html.dark [class~="text-emerald-600"] {
-  color: #6ee7b7 !important;
+html.dark [class~="text-yellow-950"],
+html.dark [class~="text-yellow-900"],
+html.dark [class~="text-yellow-800"],
+html.dark [class~="text-yellow-700"],
+html.dark [class~="text-yellow-600"] {
+  color: #f2d45c !important;
 }
 
-html.dark [class~="text-red-900"],
-html.dark [class~="text-red-800"],
-html.dark [class~="text-red-700"],
-html.dark [class~="text-red-600"],
-html.dark [class~="text-red-500"] {
-  color: #fca5a5 !important;
+html.dark [class~="text-yellow-900"],
+html.dark [class~="text-yellow-800"],
+html.dark [class~="text-yellow-700"],
+html.dark [class~="text-yellow-600"],
+html.dark [class~="text-yellow-500"] {
+  color: #fbe487 !important;
 }
 
-html.dark [class~="text-amber-900"],
-html.dark [class~="text-amber-800"],
-html.dark [class~="text-amber-700"] {
-  color: #fcd34d !important;
+html.dark [class~="text-yellow-900"],
+html.dark [class~="text-yellow-800"],
+html.dark [class~="text-yellow-700"] {
+  color: #fcd84a !important;
 }
 
-html.dark [class~="text-sky-700"] {
-  color: #7dd3fc !important;
+html.dark [class~="text-yellow-700"] {
+  color: #fcdf6b !important;
 }
 
 /* Bordes, divisores, aros y sombras. */
@@ -3859,39 +3859,39 @@ html.dark [class~="border-slate-100"],
 html.dark [class~="border-slate-200"],
 html.dark [class~="border-slate-300"],
 html.dark [class~="border-slate-300/70"] {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255,255,255,0.1) !important;
 }
 
-html.dark [class~="border-emerald-200"],
-html.dark [class~="border-emerald-300"] {
-  border-color: rgba(52, 211, 153, 0.26) !important;
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(238,199,43,0.26) !important;
 }
 
-html.dark [class~="border-red-100"],
-html.dark [class~="border-red-200"],
-html.dark [class~="border-red-300"] {
-  border-color: rgba(248, 113, 113, 0.28) !important;
+html.dark [class~="border-yellow-100"],
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(247,218,100,0.28) !important;
 }
 
-html.dark [class~="border-amber-200"],
-html.dark [class~="border-amber-300"] {
-  border-color: rgba(251, 191, 36, 0.28) !important;
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(251,210,46,0.28) !important;
 }
 
-html.dark [class~="border-sky-200"],
-html.dark [class~="border-sky-300"] {
-  border-color: rgba(56, 189, 248, 0.28) !important;
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(248,211,61,0.28) !important;
 }
 
 html.dark [class~="divide-slate-200"] > :not(:last-child),
 html.dark [class~="divide-slate-300"] > :not(:last-child) {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255,255,255,0.1) !important;
 }
 
-html.dark [class~="ring-emerald-100"],
-html.dark [class~="focus:ring-emerald-100"]:focus,
-html.dark [class~="focus-within:ring-emerald-100"]:focus-within {
-  --tw-ring-color: rgba(52, 211, 153, 0.26) !important;
+html.dark [class~="ring-yellow-100"],
+html.dark [class~="focus:ring-yellow-100"]:focus,
+html.dark [class~="focus-within:ring-yellow-100"]:focus-within {
+  --tw-ring-color: rgba(238,199,43,0.26) !important;
 }
 
 /* Campos nativos y menús desplegables. */
@@ -3907,55 +3907,55 @@ html.dark .featmusic-app-light select,
 html.dark .featmusic-secondary-page input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
 html.dark .featmusic-secondary-page textarea,
 html.dark .featmusic-secondary-page select {
-  border-color: rgba(255, 255, 255, 0.12);
-  background-color: #0c1512;
-  color: #f4f7f6;
+  border-color: rgba(255,255,255,0.12);
+  background-color: #131313;
+  color: #f6f6f6;
 }
 
 html.dark input::placeholder,
 html.dark textarea::placeholder {
-  color: #73817b !important;
+  color: #7e7e7e !important;
 }
 
 html.dark select option {
-  background: #0c1512;
-  color: #f4f7f6;
+  background: #131313;
+  color: #f6f6f6;
 }
 
 /* Estados interactivos que antes volvían a superficies claras. */
 html.dark [class~="hover:bg-slate-50"]:hover,
 html.dark [class~="hover:bg-slate-100"]:hover,
-html.dark [class~="hover:bg-emerald-50"]:hover,
-html.dark [class~="hover:bg-emerald-50/50"]:hover,
-html.dark [class~="hover:bg-emerald-50/60"]:hover,
-html.dark [class~="hover:bg-emerald-100"]:hover {
-  background-color: rgba(16, 185, 129, 0.13) !important;
+html.dark [class~="hover:bg-yellow-50"]:hover,
+html.dark [class~="hover:bg-yellow-50/50"]:hover,
+html.dark [class~="hover:bg-yellow-50/60"]:hover,
+html.dark [class~="hover:bg-yellow-100"]:hover {
+  background-color: rgba(221,180,18,0.13) !important;
 }
 
-html.dark [class~="hover:bg-red-50"]:hover {
-  background-color: rgba(239, 68, 68, 0.14) !important;
+html.dark [class~="hover:bg-yellow-50"]:hover {
+  background-color: rgba(240,206,71,0.14) !important;
 }
 
-html.dark [class~="hover:bg-sky-50"]:hover {
-  background-color: rgba(14, 165, 233, 0.14) !important;
+html.dark [class~="hover:bg-yellow-50"]:hover {
+  background-color: rgba(241,199,29,0.14) !important;
 }
 
 html.dark [class~="open:bg-white"][open],
-html.dark .group[open] [class~="group-open:bg-emerald-50"] {
-  background-color: #0c1512 !important;
+html.dark .group[open] [class~="group-open:bg-yellow-50"] {
+  background-color: #131313 !important;
 }
 
-html.dark [class~="open:border-emerald-200"][open],
-html.dark .group[open] [class~="group-open:border-emerald-200"] {
-  border-color: rgba(52, 211, 153, 0.3) !important;
+html.dark [class~="open:border-yellow-200"][open],
+html.dark .group[open] [class~="group-open:border-yellow-200"] {
+  border-color: rgba(238,199,43,0.3) !important;
 }
 
-html.dark [class~="file:bg-emerald-100"]::file-selector-button {
-  background-color: rgba(16, 185, 129, 0.15) !important;
+html.dark [class~="file:bg-yellow-100"]::file-selector-button {
+  background-color: rgba(221,180,18,0.15) !important;
 }
 
-html.dark [class~="file:text-emerald-700"]::file-selector-button {
-  color: #6ee7b7 !important;
+html.dark [class~="file:text-yellow-700"]::file-selector-button {
+  color: #f2d45c !important;
 }
 
 html.dark [class~="hover:text-slate-900"]:hover,
@@ -3963,37 +3963,37 @@ html.dark [class~="hover:text-slate-950"]:hover {
   color: #ffffff !important;
 }
 
-html.dark [class~="hover:text-emerald-700"]:hover,
-html.dark [class~="hover:text-emerald-800"]:hover,
-html.dark .group:hover [class~="group-hover:text-emerald-700"] {
-  color: #6ee7b7 !important;
+html.dark [class~="hover:text-yellow-700"]:hover,
+html.dark [class~="hover:text-yellow-800"]:hover,
+html.dark .group:hover [class~="group-hover:text-yellow-700"] {
+  color: #f2d45c !important;
 }
 
-html.dark [class~="hover:text-red-700"]:hover {
-  color: #fca5a5 !important;
+html.dark [class~="hover:text-yellow-700"]:hover {
+  color: #fbe487 !important;
 }
 
 html.dark [class~="disabled:bg-slate-50"]:disabled,
 html.dark [class~="disabled:bg-slate-100"]:disabled {
-  background-color: #111c18 !important;
+  background-color: #191919 !important;
 }
 
 html.dark [class~="disabled:border-slate-200"]:disabled {
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255,255,255,0.08) !important;
 }
 
 /* Elementos claros que no se expresan mediante utilidades de Tailwind. */
 html.dark .featmusic-share-sheet,
 html.dark .featmusic-share-network {
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  background: #0c1512 !important;
-  color: #cbd5e1 !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #131313 !important;
+  color: #d4d4d4 !important;
 }
 
 html.dark .featmusic-share-network:hover,
 html.dark .featmusic-share-network:focus-visible {
-  border-color: rgba(52, 211, 153, 0.4) !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34) !important;
+  border-color: rgba(238,199,43,0.4) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.34) !important;
 }
 
 /* Los controles blancos sobre portadas siguen siendo blancos por contraste. */
@@ -4027,7 +4027,7 @@ html.dark .featmusic-idea-cover {
 }
 
 html.dark * {
-  scrollbar-color: #33413b transparent;
+  scrollbar-color: #3e3e3e transparent;
 }
 
 @media (prefers-reduced-motion: no-preference) {

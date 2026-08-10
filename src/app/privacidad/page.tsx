@@ -81,12 +81,12 @@ const secciones = [
 
 export default function PrivacidadPage() {
   return (
-    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#d8dee7] text-slate-900">
+    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#dddddd] text-slate-900">
       <EncabezadoSecundario />
 
       <article className="featmusic-legal-copy mx-auto max-w-4xl px-4 py-8 sm:py-12">
         <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_20px_55px_rgba(15,23,42,.09)] sm:p-9">
-          <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-amber-800">
+          <span className="inline-flex rounded-full border border-yellow-200 bg-yellow-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-yellow-800">
             Borrador pendiente de revisión legal
           </span>
           <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-950">
@@ -114,7 +114,7 @@ export default function PrivacidadPage() {
                       key={punto}
                       className="flex gap-3 text-sm leading-7 text-slate-600"
                     >
-                      <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                      <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-500" />
                       <span>{punto}</span>
                     </li>
                   ))}
@@ -123,7 +123,7 @@ export default function PrivacidadPage() {
             ))}
           </div>
 
-          <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-6 text-amber-900">
+          <div className="mt-8 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-xs leading-6 text-yellow-900">
             Este documento no reemplaza una revisión profesional. También debe
             coordinarse con los formularios de autorización, cookies, proveedores
             tecnológicos y procedimientos internos de atención de titulares.

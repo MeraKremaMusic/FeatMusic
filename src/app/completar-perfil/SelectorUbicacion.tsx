@@ -20,7 +20,7 @@ type RespuestaUbicaciones = {
 };
 
 const claseSelector =
-  "w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 text-white outline-none transition focus:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-50";
+  "w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 text-white outline-none transition focus:border-yellow-500 disabled:cursor-not-allowed disabled:opacity-50";
 
 function normalizar(valor: string) {
   return valor
@@ -299,14 +299,14 @@ export default function SelectorUbicacion({
       </div>
 
       {sinCiudadesRegistradas ? (
-        <p className="text-xs text-amber-300">
+        <p className="text-xs text-yellow-300">
           El catálogo no tiene ciudades para este territorio; por eso se habilitó
           la escritura manual.
         </p>
       ) : null}
 
       {error ? (
-        <p role="alert" className="text-sm text-red-300">
+        <p role="alert" className="text-sm text-yellow-300">
           {error}
         </p>
       ) : null}

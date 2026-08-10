@@ -261,15 +261,15 @@ function IconoDescripcion({
 function CargandoArtistas() {
   return (
     <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-600/15 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(221,180,18,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(221,180,18,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-600/15 blur-3xl" />
 
       <div className="relative flex flex-col items-center text-center">
         <div className="relative flex h-20 w-20 items-center justify-center">
-          <span className="absolute inset-0 rounded-full border border-emerald-400/20 bg-emerald-500/5" />
-          <span className="absolute inset-1 animate-ping rounded-full border border-emerald-400/30" />
-          <span className="absolute inset-3 animate-pulse rounded-full bg-emerald-500/15" />
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-emerald-300/30 bg-emerald-500/15 text-emerald-200 shadow-[0_0_35px_rgba(16,185,129,0.25)]">
+          <span className="absolute inset-0 rounded-full border border-yellow-400/20 bg-yellow-500/5" />
+          <span className="absolute inset-1 animate-ping rounded-full border border-yellow-400/30" />
+          <span className="absolute inset-3 animate-pulse rounded-full bg-yellow-500/15" />
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-yellow-300/30 bg-yellow-500/15 text-yellow-200 shadow-[0_0_35px_rgba(16,185,129,0.25)]">
             <IconoUsuarios className="h-7 w-7" />
           </div>
         </div>
@@ -281,9 +281,9 @@ function CargandoArtistas() {
           Preparando nuevas conexiones musicales
         </p>
         <div className="mt-5 flex items-center gap-1.5" aria-hidden="true">
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-300 [animation-delay:-0.3s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-300 [animation-delay:-0.15s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-300" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-yellow-300 [animation-delay:-0.3s]" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-yellow-300 [animation-delay:-0.15s]" />
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-yellow-300" />
         </div>
       </div>
     </section>
@@ -305,7 +305,7 @@ function TarjetaEstadistica({
 }) {
   return (
     <article className="flex min-w-0 items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-emerald-400/20 bg-emerald-500/10 text-emerald-300 md:h-8 md:w-8">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-yellow-400/20 bg-yellow-500/10 text-yellow-300 md:h-8 md:w-8">
         {icono}
       </div>
 
@@ -322,7 +322,7 @@ function TarjetaEstadistica({
       </div>
 
       {nota && (
-        <span className="ml-auto hidden rounded-full border border-emerald-400/15 bg-emerald-500/[0.07] px-2 py-0.5 text-[8px] font-bold text-emerald-300/70 xl:inline-flex">
+        <span className="ml-auto hidden rounded-full border border-yellow-400/15 bg-yellow-500/[0.07] px-2 py-0.5 text-[8px] font-bold text-yellow-300/70 xl:inline-flex">
           Próximamente
         </span>
       )}
@@ -340,7 +340,7 @@ function FotoArtista({ artista }: { artista: ArtistaExplorar }) {
         className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border text-sm font-black shadow-[0_10px_25px_rgba(0,0,0,0.2)] ${
           tienePortada
             ? "featmusic-explore-cover-text border-white/30 bg-black/45 text-white backdrop-blur-sm"
-            : "border-emerald-400/25 bg-emerald-500/10 text-emerald-200"
+            : "border-yellow-400/25 bg-yellow-500/10 text-yellow-200"
         }`}
       >
         {iniciales(artista.nombreArtistico)}
@@ -489,10 +489,10 @@ function BotonSeguirArtista({
             : `Seguir a ${nombreArtistico}`
         }
         title={siguiendo ? "Dejar de seguir" : "Seguir artista"}
-        className={`inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border px-2 text-[9px] font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-65 ${
+        className={`inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border px-2 text-[9px] font-black transition focus:outline-none focus:ring-2 focus:ring-yellow-500/40 disabled:cursor-wait disabled:opacity-65 ${
           siguiendo
-            ? "border-emerald-300/30 bg-emerald-500/10 text-emerald-200 hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-300"
-            : "border-emerald-500 bg-emerald-600 text-white shadow-[0_6px_16px_rgba(5,150,105,0.22)] hover:bg-emerald-700"
+            ? "border-yellow-300/30 bg-yellow-500/10 text-yellow-200 hover:border-yellow-400/30 hover:bg-yellow-500/10 hover:text-yellow-300"
+            : "border-yellow-500 bg-yellow-600 text-white shadow-[0_6px_16px_rgba(5,150,105,0.22)] hover:bg-yellow-700"
         }`}
       >
         <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>
@@ -502,7 +502,7 @@ function BotonSeguirArtista({
       {error && (
         <span
           role="alert"
-          className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-red-400/20 bg-[#0b1a14]/95 px-2.5 py-2 text-[9px] font-semibold leading-3.5 text-red-200 shadow-xl backdrop-blur"
+          className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-yellow-400/20 bg-[#161616]/95 px-2.5 py-2 text-[9px] font-semibold leading-3.5 text-yellow-200 shadow-xl backdrop-blur"
         >
           {error}
         </span>
@@ -536,12 +536,12 @@ function TarjetaArtista({
 
   return (
     <article
-      className={`group relative flex h-full min-h-[290px] flex-col overflow-visible rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(16,185,129,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-emerald-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)] ${
+      className={`group relative flex h-full min-h-[290px] flex-col overflow-visible rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(221,180,18,0.035))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-yellow-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)] ${
         descripcionAbiertaEnTarjeta ? "z-40" : "z-0 hover:z-20"
       }`}
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
-        <div className="absolute -right-14 -top-16 h-32 w-32 rounded-full bg-emerald-500/[0.08] blur-3xl transition duration-300 group-hover:bg-emerald-500/[0.12]" />
+        <div className="absolute -right-14 -top-16 h-32 w-32 rounded-full bg-yellow-500/[0.08] blur-3xl transition duration-300 group-hover:bg-yellow-500/[0.12]" />
       </div>
 
       <div
@@ -564,7 +564,7 @@ function TarjetaArtista({
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
+                  "linear-gradient(90deg, #000000 0%, rgba(0,0,0,0.98) 16%, rgba(0,0,0,0.78) 38%, rgba(0,0,0,0.38) 64%, rgba(0,0,0,0.08) 82%, rgba(0,0,0,0) 100%)",
               }}
             />
           </div>
@@ -590,7 +590,7 @@ function TarjetaArtista({
                   className={`mt-0.5 truncate text-[11px] font-semibold ${
                     portadaPerfilVisible
                       ? "featmusic-explore-cover-text text-white"
-                      : "text-emerald-300"
+                      : "text-yellow-300"
                   }`}
                 >
                   @{artista.nombreUsuario}
@@ -630,7 +630,7 @@ function TarjetaArtista({
             className={`rounded-full border px-2.5 py-1 text-[9px] font-bold ${
               portadaPerfilVisible
                 ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
-                : "border-emerald-400/20 bg-emerald-500/[0.09] text-emerald-200"
+                : "border-yellow-400/20 bg-yellow-500/[0.09] text-yellow-200"
             }`}
           >
             {formatearRol(artista.rol)}
@@ -738,10 +738,10 @@ function TarjetaArtista({
                             descripcionAbierta ? null : idea.id,
                           )
                         }
-                        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-400/40 sm:text-[8px] ${
+                        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-yellow-400/40 sm:text-[8px] ${
                           descripcionAbierta
-                            ? "border-emerald-300/35 bg-emerald-500/20 text-emerald-100"
-                            : "border-white/[0.08] bg-[#07120e]/90 text-zinc-500 hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200"
+                            ? "border-yellow-300/35 bg-yellow-500/20 text-yellow-100"
+                            : "border-white/[0.08] bg-[#0f0f0f]/90 text-zinc-500 hover:border-yellow-400/25 hover:bg-yellow-500/10 hover:text-yellow-200"
                         }`}
                       >
                         <IconoDescripcion className="h-2.5 w-2.5" />
@@ -753,17 +753,17 @@ function TarjetaArtista({
                           id={`descripcion-idea-${idea.id}`}
                           role="dialog"
                           aria-label={`Descripción de ${idea.titulo}`}
-                          className="absolute bottom-7 right-0 z-50 max-h-[min(420px,70vh)] w-[min(300px,calc(100vw-3rem))] overflow-y-auto rounded-xl border border-emerald-400/20 bg-[#081712]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl [scrollbar-width:thin]"
+                          className="absolute bottom-7 right-0 z-50 max-h-[min(420px,70vh)] w-[min(300px,calc(100vw-3rem))] overflow-y-auto rounded-xl border border-yellow-400/20 bg-[#131313]/95 p-3 text-left shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl [scrollbar-width:thin]"
                         >
-                          <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-emerald-400/20 bg-[#081712]" />
+                          <div className="absolute -bottom-1.5 right-4 h-3 w-3 rotate-45 border-b border-r border-yellow-400/20 bg-[#131313]" />
 
                           <div className="relative">
                             <div className="flex items-center gap-2">
-                              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-300">
+                              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-yellow-500/10 text-yellow-300">
                                 <IconoDescripcion className="h-3.5 w-3.5" />
                               </span>
                               <div className="min-w-0">
-                                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-300">
+                                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-yellow-300">
                                   Descripción
                                 </p>
                                 <p className="truncate text-[10px] font-bold text-zinc-200">
@@ -784,7 +784,7 @@ function TarjetaArtista({
 
                             {hayDatosColaboracion && (
                               <div className="mt-3 border-t border-white/[0.08] pt-3">
-                                <p className="text-[8px] font-black uppercase tracking-[0.14em] text-emerald-300">
+                                <p className="text-[8px] font-black uppercase tracking-[0.14em] text-yellow-300">
                                   Tipo de colaboración
                                 </p>
                                 <ResumenColaboracionIdea
@@ -832,7 +832,7 @@ function TarjetaArtista({
 
       <Link
         href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-        className="relative flex items-center justify-center rounded-b-2xl border-t border-emerald-500/20 bg-emerald-600 px-4 py-3 text-center text-[11px] font-black text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
+        className="relative flex items-center justify-center rounded-b-2xl border-t border-yellow-500/20 bg-yellow-600 px-4 py-3 text-center text-[11px] font-black text-white transition hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
       >
         <span>Ver perfil</span>
       </Link>
@@ -1002,7 +1002,7 @@ export default function ArtistasClient({
     Number(soloConIdeas);
 
   return (
-    <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#06100c] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#0e0e0e] pb-20 text-white lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-50">
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <div className="flex min-w-0 items-center gap-0.5">
@@ -1011,7 +1011,7 @@ export default function ArtistasClient({
               href={sesionActiva ? "/artistas/mi-perfil" : "/"}
               className="text-lg font-black tracking-tight"
             >
-              Feat<span className="text-emerald-400">Music</span>
+              Feat<span className="text-yellow-400">Music</span>
             </Link>
           </div>
 
@@ -1030,7 +1030,7 @@ export default function ArtistasClient({
           ) : (
             <Link
               href="/iniciar-sesion"
-              className="rounded-lg border border-emerald-400/50 px-3 py-1.5 text-[10px] font-bold text-emerald-200 transition hover:bg-emerald-500/10"
+              className="rounded-lg border border-yellow-400/50 px-3 py-1.5 text-[10px] font-bold text-yellow-200 transition hover:bg-yellow-500/10"
             >
               Iniciar sesión
             </Link>
@@ -1064,7 +1064,7 @@ export default function ArtistasClient({
           </section>
 
           <section className="relative mt-3" data-filtros-artistas>
-            <div className="flex min-w-0 items-center rounded-xl border border-white/10 bg-black/35 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-sm transition focus-within:border-emerald-400/35">
+            <div className="flex min-w-0 items-center rounded-xl border border-white/10 bg-black/35 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-sm transition focus-within:border-yellow-400/35">
               <div className="flex min-w-0 flex-1 items-center gap-2 px-2.5">
                 <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
                 <input
@@ -1083,15 +1083,15 @@ export default function ArtistasClient({
                 aria-controls="panel-filtros-artistas"
                 title="Filtros"
                 onClick={() => setFiltrosAbiertos((actual) => !actual)}
-                className={`relative inline-flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-emerald-400/40 ${
+                className={`relative inline-flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-yellow-400/40 ${
                   filtrosAbiertos || cantidadFiltrosActivos > 0
-                    ? "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
-                    : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200"
+                    ? "border-yellow-400/35 bg-yellow-500/15 text-yellow-200"
+                    : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-yellow-400/25 hover:bg-yellow-500/10 hover:text-yellow-200"
                 }`}
               >
                 <IconoFiltro className="h-4 w-4" />
                 {cantidadFiltrosActivos > 0 && (
-                  <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white">
+                  <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-[#0e0e0e] bg-yellow-500 px-1 text-[8px] font-black leading-none text-white">
                     {cantidadFiltrosActivos}
                   </span>
                 )}
@@ -1129,7 +1129,7 @@ export default function ArtistasClient({
                     </p>
                   </div>
                   {cantidadFiltrosActivos > 0 && (
-                    <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[8px] font-black text-emerald-700">
+                    <span className="rounded-full border border-yellow-200 bg-yellow-50 px-2 py-1 text-[8px] font-black text-yellow-700">
                       {cantidadFiltrosActivos} activos
                     </span>
                   )}
@@ -1140,7 +1140,7 @@ export default function ArtistasClient({
                     value={pais}
                     onChange={(evento) => setPais(evento.target.value)}
                     aria-label="Filtrar por país"
-                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100"
                   >
                     <option value="">Todos los países</option>
                     {opciones.paises.map((opcion) => (
@@ -1152,7 +1152,7 @@ export default function ArtistasClient({
                     value={ciudad}
                     onChange={(evento) => setCiudad(evento.target.value)}
                     aria-label="Filtrar por ciudad"
-                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100"
                   >
                     <option value="">Todas las ciudades</option>
                     {opciones.ciudades.map((opcion) => (
@@ -1164,7 +1164,7 @@ export default function ArtistasClient({
                     value={genero}
                     onChange={(evento) => setGenero(evento.target.value)}
                     aria-label="Filtrar por género"
-                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100"
                   >
                     <option value="">Todos los géneros</option>
                     {opciones.generos.map((opcion) => (
@@ -1176,7 +1176,7 @@ export default function ArtistasClient({
                     value={rol}
                     onChange={(evento) => setRol(evento.target.value)}
                     aria-label="Filtrar por rol"
-                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                    className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100"
                   >
                     <option value="">Todos los roles</option>
                     {opciones.roles.map((opcion) => (
@@ -1185,13 +1185,13 @@ export default function ArtistasClient({
                   </select>
                 </div>
 
-                <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[10px] font-semibold text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50/60">
+                <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[10px] font-semibold text-slate-700 transition hover:border-yellow-200 hover:bg-yellow-50/60">
                   <span>Mostrar solo artistas con ideas</span>
                   <input
                     type="checkbox"
                     checked={soloConIdeas}
                     onChange={(evento) => setSoloConIdeas(evento.target.checked)}
-                    className="h-4 w-4 cursor-pointer rounded border-slate-300 bg-white accent-emerald-500"
+                    className="h-4 w-4 cursor-pointer rounded border-slate-300 bg-white accent-yellow-500"
                   />
                 </label>
 
@@ -1207,7 +1207,7 @@ export default function ArtistasClient({
                   <button
                     type="button"
                     onClick={() => setFiltrosAbiertos(false)}
-                    className="rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-[10px] font-black text-white shadow-sm transition hover:bg-emerald-700"
+                    className="rounded-lg border border-yellow-600 bg-yellow-600 px-4 py-2 text-[10px] font-black text-white shadow-sm transition hover:bg-yellow-700"
                   >
                     Listo
                   </button>
@@ -1229,9 +1229,9 @@ export default function ArtistasClient({
           </div>
 
           {errorCarga ? (
-            <section className="mt-5 rounded-2xl border border-red-400/20 bg-red-500/[0.05] px-5 py-14 text-center">
-              <h2 className="text-base font-bold text-red-200">No se pudieron cargar los artistas</h2>
-              <p className="mt-2 text-xs text-red-200/60">Revisa la conexión con la base de datos e inténtalo nuevamente.</p>
+            <section className="mt-5 rounded-2xl border border-yellow-400/20 bg-yellow-500/[0.05] px-5 py-14 text-center">
+              <h2 className="text-base font-bold text-yellow-200">No se pudieron cargar los artistas</h2>
+              <p className="mt-2 text-xs text-yellow-200/60">Revisa la conexión con la base de datos e inténtalo nuevamente.</p>
             </section>
           ) : artistasIniciales.length === 0 ? (
             <section className="mt-5 rounded-2xl border border-white/10 bg-black/35 px-5 py-14 text-center text-sm font-semibold text-zinc-400">
@@ -1243,7 +1243,7 @@ export default function ArtistasClient({
               <button
                 type="button"
                 onClick={limpiarFiltros}
-                className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-200"
+                className="mt-4 rounded-xl border border-yellow-400/30 bg-yellow-500/10 px-4 py-2 text-xs font-bold text-yellow-200"
               >
                 Limpiar búsqueda
               </button>

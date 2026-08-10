@@ -136,22 +136,22 @@ function IconoCheck() {
 
 export default function PlanesPage() {
   return (
-    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#171006] text-white">
+    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#111111] text-white">
       <EncabezadoSecundario />
 
-      <section className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden border-b border-amber-200/10 bg-[#171006]">
+      <section className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden border-b border-yellow-200/10 bg-[#111111]">
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(245,158,11,0.22),transparent_30%),radial-gradient(circle_at_88%_82%,rgba(202,138,4,0.16),transparent_32%),linear-gradient(145deg,#1d1307,#100c08_55%,#211807)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(246,203,30,0.22),transparent_30%),radial-gradient(circle_at_88%_82%,rgba(237,191,5,0.16),transparent_32%),linear-gradient(145deg,#141414,#100c08_55%,#191919)]"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(30deg,rgba(253,230,138,0.15)_12%,transparent_12.5%,transparent_87%,rgba(253,230,138,0.15)_87.5%)] [background-size:72px_42px]"
+          className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(30deg,rgba(253,225,115,0.15)_12%,transparent_12.5%,transparent_87%,rgba(253,225,115,0.15)_87.5%)] [background-size:72px_42px]"
         />
 
         <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:py-16">
           <header className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex rounded-full border border-amber-300/25 bg-amber-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">
+            <span className="inline-flex rounded-full border border-yellow-300/25 bg-yellow-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-yellow-300">
               Planes FeatMusic
             </span>
 
@@ -159,7 +159,7 @@ export default function PlanesPage() {
               Elige el espacio que necesita tu música.
             </h1>
 
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-amber-50/65 sm:text-base">
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-yellow-50/65 sm:text-base">
               Publica tus ideas, recibe propuestas y amplía tu capacidad a
               medida que crece tu catálogo musical.
             </p>
@@ -171,23 +171,23 @@ export default function PlanesPage() {
                 key={plan.id}
                 className={`group relative flex min-h-[470px] flex-col overflow-hidden rounded-3xl border p-6 backdrop-blur-sm transition duration-500 hover:-translate-y-2 sm:p-7 ${
                   plan.id === "gratuito"
-                    ? "border-amber-200/20 bg-[linear-gradient(145deg,rgba(36,24,5,0.94),rgba(10,8,5,0.9))] hover:border-amber-300/45"
+                    ? "border-yellow-200/20 bg-[linear-gradient(145deg,rgba(25,25,25,0.94),rgba(8,8,8,0.9))] hover:border-yellow-300/45"
                     : plan.id === "creator"
-                      ? "border-amber-300/50 bg-[linear-gradient(145deg,rgba(52,31,5,0.98),rgba(17,10,8,0.94))] shadow-[0_24px_75px_rgba(245,158,11,0.18)] hover:border-amber-200/75"
-                      : "border-emerald-200/25 bg-[linear-gradient(145deg,rgba(22,12,20,0.96),rgba(30,15,40,0.92))] hover:border-emerald-300/50"
+                      ? "border-yellow-300/50 bg-[linear-gradient(145deg,rgba(34,34,34,0.98),rgba(11,11,11,0.94))] shadow-[0_24px_75px_rgba(245,158,11,0.18)] hover:border-yellow-200/75"
+                      : "border-yellow-200/25 bg-[linear-gradient(145deg,rgba(15,15,15,0.96),rgba(20,20,20,0.92))] hover:border-yellow-300/50"
                 }`}
               >
                 <span
                   aria-hidden="true"
                   className={`absolute -right-10 -top-12 h-40 w-40 rounded-full blur-3xl transition duration-500 group-hover:scale-125 ${
                     plan.id === "pro"
-                      ? "bg-emerald-500/18"
-                      : "bg-amber-400/18"
+                      ? "bg-yellow-500/18"
+                      : "bg-yellow-400/18"
                   }`}
                 />
 
                 {plan.destacado && (
-                  <span className="absolute right-5 top-5 rounded-full border border-amber-200/30 bg-amber-300/15 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-amber-200">
+                  <span className="absolute right-5 top-5 rounded-full border border-yellow-200/30 bg-yellow-300/15 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-yellow-200">
                     Más popular
                   </span>
                 )}
@@ -196,8 +196,8 @@ export default function PlanesPage() {
                   <span
                     className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border ${
                       plan.id === "pro"
-                        ? "border-emerald-300/25 bg-emerald-400/10 text-emerald-300"
-                        : "border-amber-300/25 bg-amber-400/10 text-amber-300"
+                        ? "border-yellow-300/25 bg-yellow-400/10 text-yellow-300"
+                        : "border-yellow-300/25 bg-yellow-400/10 text-yellow-300"
                     }`}
                   >
                     <IconoPlan tipo={plan.id} />
@@ -207,8 +207,8 @@ export default function PlanesPage() {
                     <p
                       className={`text-[10px] font-black uppercase tracking-[0.18em] ${
                         plan.id === "pro"
-                          ? "text-emerald-300"
-                          : "text-amber-300"
+                          ? "text-yellow-300"
+                          : "text-yellow-300"
                       }`}
                     >
                       {plan.nombre}
@@ -235,7 +235,7 @@ export default function PlanesPage() {
                   <h2 className="text-xl font-black text-white">
                     {plan.espacios}
                   </h2>
-                  <p className="mt-3 min-h-[84px] text-sm leading-6 text-amber-50/65">
+                  <p className="mt-3 min-h-[84px] text-sm leading-6 text-yellow-50/65">
                     {plan.descripcion}
                   </p>
                 </div>
@@ -250,8 +250,8 @@ export default function PlanesPage() {
                         <span
                           className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
                             plan.id === "pro"
-                              ? "bg-emerald-400/15 text-emerald-300"
-                              : "bg-amber-400/15 text-amber-300"
+                              ? "bg-yellow-400/15 text-yellow-300"
+                              : "bg-yellow-400/15 text-yellow-300"
                           }`}
                         >
                           <IconoCheck />
@@ -266,15 +266,15 @@ export default function PlanesPage() {
                   aria-hidden="true"
                   className={`absolute inset-x-7 bottom-0 h-px bg-gradient-to-r from-transparent ${
                     plan.id === "pro"
-                      ? "via-emerald-300/65"
-                      : "via-amber-300/65"
+                      ? "via-yellow-300/65"
+                      : "via-yellow-300/65"
                   } to-transparent opacity-50 transition duration-500 group-hover:opacity-100`}
                 />
               </article>
             ))}
           </div>
 
-          <p className="mx-auto mt-7 max-w-2xl text-center text-[10px] leading-5 text-amber-50/45">
+          <p className="mx-auto mt-7 max-w-2xl text-center text-[10px] leading-5 text-yellow-50/45">
             Esta sección presenta la estructura de los planes. La activación de
             pagos y suscripciones se conectará cuando el sistema de cobros esté
             disponible.

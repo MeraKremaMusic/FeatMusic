@@ -45,14 +45,14 @@ export default async function RegistroPage({
         </Link>
 
         <div className="mt-8 rounded-3xl border border-zinc-800 bg-zinc-950 p-7 sm:p-10">
-          <p className="text-sm font-semibold text-emerald-400">Crea tu cuenta</p>
+          <p className="text-sm font-semibold text-yellow-400">Crea tu cuenta</p>
           <h1 className="mt-3 text-4xl font-bold">Empieza a colaborar</h1>
           <p className="mt-3 text-zinc-400">
             Regístrate en menos de un minuto. Completarás tu perfil después de verificar tu correo.
           </p>
 
           {mensaje ? (
-            <p role="alert" className="mt-6 rounded-xl border border-red-900 bg-red-950/50 p-4 text-sm text-red-200">
+            <p role="alert" className="mt-6 rounded-xl border border-yellow-900 bg-yellow-950/50 p-4 text-sm text-yellow-200">
               {mensaje}
             </p>
           ) : null}
@@ -68,7 +68,7 @@ export default async function RegistroPage({
                 {roles.map((rol) => (
                   <label key={rol.valor} className="group cursor-pointer">
                     <input className="peer sr-only" type="radio" name="rolPrincipal" value={rol.valor} required />
-                    <span className="block h-full rounded-2xl border border-zinc-800 bg-black p-4 transition peer-checked:border-emerald-400 peer-checked:bg-emerald-500/10 group-hover:border-zinc-600">
+                    <span className="block h-full rounded-2xl border border-zinc-800 bg-black p-4 transition peer-checked:border-yellow-400 peer-checked:bg-yellow-500/10 group-hover:border-zinc-600">
                       <span className="block font-semibold">{rol.etiqueta}</span>
                       <span className="mt-2 block text-xs leading-5 text-zinc-500">{rol.descripcion}</span>
                     </span>
@@ -78,18 +78,18 @@ export default async function RegistroPage({
             </fieldset>
 
             <label className="flex items-start gap-3 text-sm text-zinc-400">
-              <input required type="checkbox" name="aceptaTerminos" className="mt-1 accent-emerald-600" />
+              <input required type="checkbox" name="aceptaTerminos" className="mt-1 accent-yellow-600" />
               <span>Acepto los términos de uso y la política de privacidad de FeatMusic.</span>
             </label>
 
-            <button type="submit" className="w-full rounded-full bg-emerald-600 px-6 py-4 font-semibold transition hover:bg-emerald-500">
+            <button type="submit" className="w-full rounded-full bg-yellow-600 px-6 py-4 font-semibold transition hover:bg-yellow-500">
               Crear cuenta y verificar correo
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-400">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/iniciar-sesion" className="font-medium text-emerald-300 hover:text-emerald-200">
+            <Link href="/iniciar-sesion" className="font-medium text-yellow-300 hover:text-yellow-200">
               Inicia sesión
             </Link>
           </p>
@@ -119,7 +119,7 @@ function Campo({
         name={name}
         autoComplete={type === "email" ? "email" : "new-password"}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none transition placeholder:text-zinc-600 focus:border-emerald-500"
+        className="w-full rounded-xl border border-zinc-800 bg-black px-4 py-3 outline-none transition placeholder:text-zinc-600 focus:border-yellow-500"
       />
     </label>
   );

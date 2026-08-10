@@ -463,17 +463,17 @@ function IconoFlecha() {
 
 export default function AyudaPage() {
   return (
-    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#d8dee7] text-slate-900">
+    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#dddddd] text-slate-900">
       <EncabezadoSecundario />
 
-      <section className="relative overflow-hidden border-b border-slate-300/70 bg-[linear-gradient(145deg,#07120e,#020504)] text-white">
+      <section className="relative overflow-hidden border-b border-slate-300/70 bg-[linear-gradient(145deg,#0f0f0f,#040404)] text-white">
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(16,185,129,.22),transparent_30%),radial-gradient(circle_at_88%_80%,rgba(52,211,153,.12),transparent_28%)]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(221,180,18,.22),transparent_30%),radial-gradient(circle_at_88%_80%,rgba(238,199,43,.12),transparent_28%)]"
         />
 
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-          <span className="inline-flex rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">
+          <span className="inline-flex rounded-full border border-yellow-300/20 bg-yellow-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-yellow-300">
             Centro de ayuda
           </span>
 
@@ -495,9 +495,9 @@ export default function AyudaPage() {
               <a
                 key={categoria.id}
                 href={`#${categoria.id}`}
-                className="group flex min-h-16 touch-manipulation items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.055] px-4 py-3 transition hover:-translate-y-0.5 hover:border-emerald-300/35 hover:bg-emerald-400/10"
+                className="group flex min-h-16 touch-manipulation items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.055] px-4 py-3 transition hover:-translate-y-0.5 hover:border-yellow-300/35 hover:bg-yellow-400/10"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300/20 bg-emerald-400/10 text-emerald-300">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-300/20 bg-yellow-400/10 text-yellow-300">
                   <IconoCategoria tipo={categoria.icono} />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -508,7 +508,7 @@ export default function AyudaPage() {
                     {categoria.preguntas.length} respuestas
                   </span>
                 </span>
-                <span className="text-white/35 transition group-hover:translate-x-0.5 group-hover:text-emerald-300">
+                <span className="text-white/35 transition group-hover:translate-x-0.5 group-hover:text-yellow-300">
                   <IconoFlecha />
                 </span>
               </a>
@@ -521,7 +521,7 @@ export default function AyudaPage() {
         <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_20px_55px_rgba(15,23,42,.08)] sm:p-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-700">
                 Guía rápida
               </span>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">
@@ -562,7 +562,7 @@ export default function AyudaPage() {
               className="scroll-mt-24 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_16px_45px_rgba(15,23,42,.065)] sm:p-7"
             >
               <header className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-yellow-200 bg-yellow-50 text-yellow-700">
                   <IconoCategoria tipo={categoria.icono} className="h-6 w-6" />
                 </span>
                 <div>
@@ -579,11 +579,11 @@ export default function AyudaPage() {
                 {categoria.preguntas.map((item) => (
                   <details
                     key={item.pregunta}
-                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 open:border-emerald-200 open:bg-white"
+                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 open:border-yellow-200 open:bg-white"
                   >
                     <summary className="flex min-h-14 cursor-pointer list-none touch-manipulation items-center justify-between gap-4 px-4 py-3 text-sm font-black text-slate-900 marker:hidden">
                       <span>{item.pregunta}</span>
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base text-emerald-700 transition group-open:rotate-45 group-open:border-emerald-200 group-open:bg-emerald-50">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base text-yellow-700 transition group-open:rotate-45 group-open:border-yellow-200 group-open:bg-yellow-50">
                         +
                       </span>
                     </summary>
@@ -594,7 +594,7 @@ export default function AyudaPage() {
                       </p>
 
                       {item.nota && (
-                        <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[10px] font-semibold leading-5 text-amber-900">
+                        <p className="mt-3 rounded-xl border border-yellow-200 bg-yellow-50 px-3 py-2.5 text-[10px] font-semibold leading-5 text-yellow-900">
                           Importante: {item.nota}
                         </p>
                       )}
@@ -606,7 +606,7 @@ export default function AyudaPage() {
               <div className="mt-5 text-right">
                 <a
                   href="#top"
-                  className="inline-flex touch-manipulation items-center gap-1 text-[10px] font-black text-emerald-700 hover:text-emerald-800"
+                  className="inline-flex touch-manipulation items-center gap-1 text-[10px] font-black text-yellow-700 hover:text-yellow-800"
                 >
                   Volver arriba
                   <span aria-hidden="true">↑</span>
@@ -619,7 +619,7 @@ export default function AyudaPage() {
         <section className="mt-6 overflow-hidden rounded-[28px] border border-slate-900 bg-slate-950 p-6 text-white shadow-[0_20px_55px_rgba(15,23,42,.18)] sm:p-8">
           <div className="grid gap-6 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
             <div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-300">
                 Accesos útiles
               </span>
               <h2 className="mt-2 text-2xl font-black tracking-tight">
@@ -635,14 +635,14 @@ export default function AyudaPage() {
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
               <Link
                 href="/reportar-usuario"
-                className="flex min-h-12 touch-manipulation items-center justify-between rounded-xl border border-red-300/15 bg-red-400/[0.08] px-4 text-xs font-black text-red-100 transition hover:border-red-300/30 hover:bg-red-400/15"
+                className="flex min-h-12 touch-manipulation items-center justify-between rounded-xl border border-yellow-300/15 bg-yellow-400/[0.08] px-4 text-xs font-black text-yellow-100 transition hover:border-yellow-300/30 hover:bg-yellow-400/15"
               >
                 Reportar un usuario
                 <IconoFlecha />
               </Link>
               <Link
                 href="/planes"
-                className="flex min-h-12 touch-manipulation items-center justify-between rounded-xl border border-amber-300/15 bg-amber-400/[0.08] px-4 text-xs font-black text-amber-100 transition hover:border-amber-300/30 hover:bg-amber-400/15"
+                className="flex min-h-12 touch-manipulation items-center justify-between rounded-xl border border-yellow-300/15 bg-yellow-400/[0.08] px-4 text-xs font-black text-yellow-100 transition hover:border-yellow-300/30 hover:bg-yellow-400/15"
               >
                 Ver planes
                 <IconoFlecha />

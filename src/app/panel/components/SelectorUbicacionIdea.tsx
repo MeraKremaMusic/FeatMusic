@@ -29,7 +29,7 @@ type RespuestaUbicaciones = {
 };
 
 const CLASE_SELECTOR =
-  "mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none transition focus:border-emerald-400/40 disabled:cursor-not-allowed disabled:opacity-45";
+  "mt-2 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-zinc-200 outline-none transition focus:border-yellow-400/40 disabled:cursor-not-allowed disabled:opacity-45";
 
 async function consultarUbicaciones(params?: {
   pais?: string;
@@ -212,7 +212,7 @@ export default function SelectorUbicacionIdea({
               setCiudades([]);
               setError("");
             }}
-            className="shrink-0 text-[9px] font-bold text-zinc-500 transition hover:text-emerald-200 disabled:opacity-40"
+            className="shrink-0 text-[9px] font-bold text-zinc-500 transition hover:text-yellow-200 disabled:opacity-40"
           >
             Limpiar
           </button>
@@ -314,7 +314,7 @@ export default function SelectorUbicacionIdea({
       </div>
 
       {error ? (
-        <p role="alert" className="mt-2 text-[10px] text-red-300">
+        <p role="alert" className="mt-2 text-[10px] text-yellow-300">
           {error}
         </p>
       ) : null}

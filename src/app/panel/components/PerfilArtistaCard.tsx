@@ -168,7 +168,7 @@ function BotonPlataforma({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-400/20 bg-emerald-500/[0.07] px-2.5 py-1.5 text-[10px] font-bold text-emerald-200 transition hover:border-emerald-400/40 hover:bg-emerald-500/15 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/20 bg-yellow-500/[0.07] px-2.5 py-1.5 text-[10px] font-bold text-yellow-200 transition hover:border-yellow-400/40 hover:bg-yellow-500/15 focus:outline-none focus:ring-2 focus:ring-yellow-500/40"
     >
       <IconoPlataforma plataforma={plataforma} />
       {children}
@@ -576,7 +576,7 @@ export default function PerfilArtistaCard({
           <button
             type="button"
             onClick={abrirModal}
-            className="flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500/30 sm:text-[10px]"
+            className="flex min-h-12 min-w-0 items-center justify-center gap-1.5 px-1.5 py-3 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-yellow-50 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500/30 sm:text-[10px]"
           >
             <svg
               aria-hidden="true"
@@ -595,10 +595,10 @@ export default function PerfilArtistaCard({
           </button>
         </>
       ) : (
-        <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#07110d]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
+        <article className="flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-white/15 bg-[#0f0f0f]/95 p-5 shadow-2xl shadow-black/35 lg:rounded-[18px] lg:p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-4">
-            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-600 text-2xl font-black shadow-lg shadow-black/30">
+            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-2xl font-black shadow-lg shadow-black/30">
               {perfil.fotoPerfil ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -619,20 +619,20 @@ export default function PerfilArtistaCard({
                   <span
                     title="Cuenta verificada"
                     aria-label="Cuenta verificada"
-                    className="ml-1.5 inline-flex h-4 w-4 shrink-0 translate-y-[-1px] items-center justify-center rounded-full bg-emerald-500 text-[8px] font-black text-white align-middle"
+                    className="ml-1.5 inline-flex h-4 w-4 shrink-0 translate-y-[-1px] items-center justify-center rounded-full bg-yellow-500 text-[8px] font-black text-white align-middle"
                   >
                     ✓
                   </span>
                 )}
               </h2>
-              <p className="mt-0.5 truncate text-[11px] text-emerald-300">
+              <p className="mt-0.5 truncate text-[11px] text-yellow-300">
                 @{usuarioVisible}
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 <span className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-zinc-300">
                   {rol}
                 </span>
-                <span className="rounded-md border border-emerald-400/20 bg-emerald-500/[0.07] px-2 py-1 text-[10px] text-emerald-200">
+                <span className="rounded-md border border-yellow-400/20 bg-yellow-500/[0.07] px-2 py-1 text-[10px] text-yellow-200">
                   {tipoColaboracion}
                 </span>
               </div>
@@ -647,7 +647,7 @@ export default function PerfilArtistaCard({
               onClick={abrirModal}
               title="Editar perfil"
               aria-label="Editar perfil"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-emerald-300 transition hover:bg-emerald-500/15 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-yellow-300 transition hover:bg-yellow-500/15 hover:text-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500/40"
             >
               <svg
                 aria-hidden="true"
@@ -809,7 +809,7 @@ export default function PerfilArtistaCard({
                     type="button"
                     onClick={() => inputArchivoRef.current?.click()}
                     disabled={guardando}
-                    className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-600 text-xl font-black text-white disabled:opacity-60"
+                    className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-xl font-black text-white disabled:opacity-60"
                   >
                     {vistaPrevia ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -864,7 +864,7 @@ export default function PerfilArtistaCard({
                       type="button"
                       onClick={quitarPortadaSeleccionada}
                       disabled={guardando}
-                      className="shrink-0 rounded-lg border border-red-400/20 px-2.5 py-1.5 text-[10px] font-bold text-red-300 transition hover:bg-red-500/10 disabled:opacity-60"
+                      className="shrink-0 rounded-lg border border-yellow-400/20 px-2.5 py-1.5 text-[10px] font-bold text-yellow-300 transition hover:bg-yellow-500/10 disabled:opacity-60"
                     >
                       Quitar
                     </button>
@@ -875,7 +875,7 @@ export default function PerfilArtistaCard({
                   type="button"
                   onClick={() => inputPortadaRef.current?.click()}
                   disabled={guardando}
-                  className="relative mt-3 flex h-32 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/40 text-sm font-semibold text-zinc-300 transition hover:border-emerald-400/40 disabled:opacity-60"
+                  className="relative mt-3 flex h-32 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/40 text-sm font-semibold text-zinc-300 transition hover:border-yellow-400/40 disabled:opacity-60"
                 >
                   {vistaPreviaPortada ? (
                     <>
@@ -922,7 +922,7 @@ export default function PerfilArtistaCard({
                     required
                     disabled={guardando}
                     autoComplete="nickname"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                   />
                 </label>
 
@@ -930,7 +930,7 @@ export default function PerfilArtistaCard({
                   <span className="text-sm font-semibold text-zinc-200">
                     Nombre de usuario
                   </span>
-                  <div className="mt-2 flex overflow-hidden rounded-xl border border-white/10 bg-black/40 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20">
+                  <div className="mt-2 flex overflow-hidden rounded-xl border border-white/10 bg-black/40 focus-within:border-yellow-500 focus-within:ring-2 focus-within:ring-yellow-500/20">
                     <span className="flex items-center border-r border-white/10 px-3 text-sm text-zinc-500">@</span>
                     <input
                       value={nombreUsuario}
@@ -949,7 +949,7 @@ export default function PerfilArtistaCard({
               <label className="block">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-zinc-200">Biografía</span>
-                  <span className={`text-xs ${biografia.length > 80 ? "text-red-400" : "text-zinc-500"}`}>
+                  <span className={`text-xs ${biografia.length > 80 ? "text-yellow-400" : "text-zinc-500"}`}>
                     {biografia.length}/80
                   </span>
                 </div>
@@ -960,7 +960,7 @@ export default function PerfilArtistaCard({
                   rows={4}
                   disabled={guardando}
                   placeholder="Cuéntales a otros artistas quién eres y qué tipo de música haces."
-                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm leading-6 text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                  className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm leading-6 text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                 />
               </label>
 
@@ -976,7 +976,7 @@ export default function PerfilArtistaCard({
                       maxLength={500}
                       disabled={guardando}
                       placeholder="https://open.spotify.com/artist/..."
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                     />
                   </label>
 
@@ -989,7 +989,7 @@ export default function PerfilArtistaCard({
                       maxLength={500}
                       disabled={guardando}
                       placeholder="https://www.youtube.com/@artista"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                     />
                   </label>
 
@@ -1002,7 +1002,7 @@ export default function PerfilArtistaCard({
                       maxLength={500}
                       disabled={guardando}
                       placeholder="https://www.instagram.com/artista"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                     />
                   </label>
                 </div>
@@ -1017,7 +1017,7 @@ export default function PerfilArtistaCard({
                     value={distribuidoraSeleccionada}
                     onChange={(event) => setDistribuidoraSeleccionada(event.target.value)}
                     disabled={guardando}
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                   >
                     <option value="">Sin especificar</option>
                     {DISTRIBUIDORAS.map((distribuidora) => (
@@ -1038,7 +1038,7 @@ export default function PerfilArtistaCard({
                       maxLength={120}
                       disabled={guardando}
                       placeholder="Nombre de la distribuidora"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                     />
                   </label>
                 )}
@@ -1051,7 +1051,7 @@ export default function PerfilArtistaCard({
                     value={softwareSeleccionado}
                     onChange={(event) => setSoftwareSeleccionado(event.target.value)}
                     disabled={guardando}
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                   >
                     <option value="">Sin especificar</option>
                     {SOFTWARES_MUSICA.map((software) => (
@@ -1074,20 +1074,20 @@ export default function PerfilArtistaCard({
                       maxLength={120}
                       disabled={guardando}
                       placeholder="Nombre del software musical"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 disabled:opacity-60"
                     />
                   </label>
                 )}
               </div>
 
               {error && (
-                <p role="alert" className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2.5 text-sm text-red-300">
+                <p role="alert" className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2.5 text-sm text-yellow-300">
                   {error}
                 </p>
               )}
 
               {exito && (
-                <p role="status" className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-300">
+                <p role="status" className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2.5 text-sm text-yellow-300">
                   {exito}
                 </p>
               )}
@@ -1109,7 +1109,7 @@ export default function PerfilArtistaCard({
                     !USUARIO_REGEX.test(normalizarUsuario(nombreUsuario)) ||
                     biografia.length > 80
                   }
-                  className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-xl bg-yellow-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {guardando ? "Guardando..." : "Guardar cambios"}
                 </button>

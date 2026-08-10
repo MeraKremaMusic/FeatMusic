@@ -27,12 +27,12 @@ export default async function ReportarUsuarioPage({
     typeof parametros.usuario === "string" ? parametros.usuario : "";
 
   return (
-    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#d8dee7] text-slate-900">
+    <main className="featmusic-secondary-page min-h-[100dvh] bg-[#dddddd] text-slate-900">
       <EncabezadoSecundario />
 
       <section className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <div className="mb-5">
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-700">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-700">
             Seguridad de la comunidad
           </span>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950">
@@ -49,7 +49,7 @@ export default async function ReportarUsuarioPage({
           <FormularioReporteUsuario usuarioInicial={usuarioInicial} />
         ) : (
           <div className="rounded-[28px] border border-slate-200 bg-white p-7 text-center shadow-[0_20px_55px_rgba(15,23,42,.09)]">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-xl text-red-700">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-50 text-xl text-yellow-700">
               !
             </span>
             <h2 className="mt-4 text-lg font-black text-slate-950">
@@ -61,7 +61,7 @@ export default async function ReportarUsuarioPage({
             </p>
             <Link
               href="/iniciar-sesion"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-black text-white transition hover:bg-emerald-700"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-yellow-600 px-5 py-2.5 text-xs font-black text-white transition hover:bg-yellow-700"
             >
               Iniciar sesión
             </Link>

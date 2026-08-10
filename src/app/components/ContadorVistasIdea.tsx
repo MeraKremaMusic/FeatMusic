@@ -84,7 +84,7 @@ export default function ContadorVistasIdea({
 
   const clase = `inline-flex items-center gap-1.5 text-[9px] font-semibold text-zinc-500 ${
     esPropietario
-      ? "cursor-pointer rounded-lg transition hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-400/35"
+      ? "cursor-pointer rounded-lg transition hover:text-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-400/35"
       : ""
   } ${className}`;
 

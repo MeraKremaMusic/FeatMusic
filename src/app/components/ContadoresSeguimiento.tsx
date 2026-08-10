@@ -35,9 +35,9 @@ export default function ContadoresSeguimiento({
     >
       <Link
         href={`/artistas/${usuarioCodificado}/seguidores`}
-        className="group rounded-md outline-none transition hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+        className="group rounded-md outline-none transition hover:text-yellow-700 focus-visible:ring-2 focus-visible:ring-yellow-500/30"
       >
-        <span className="font-black text-slate-900 transition group-hover:text-emerald-700">
+        <span className="font-black text-slate-900 transition group-hover:text-yellow-700">
           {formatearCantidad(seguidores)}
         </span>{" "}
         {seguidores === 1 ? "seguidor" : "seguidores"}
@@ -49,9 +49,9 @@ export default function ContadoresSeguimiento({
 
       <Link
         href={`/artistas/${usuarioCodificado}/siguiendo`}
-        className="group rounded-md outline-none transition hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+        className="group rounded-md outline-none transition hover:text-yellow-700 focus-visible:ring-2 focus-visible:ring-yellow-500/30"
       >
-        <span className="font-black text-slate-900 transition group-hover:text-emerald-700">
+        <span className="font-black text-slate-900 transition group-hover:text-yellow-700">
           {formatearCantidad(siguiendo)}
         </span>{" "}
         siguiendo

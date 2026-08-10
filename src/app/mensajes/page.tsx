@@ -183,13 +183,13 @@ export default async function MensajesPage() {
   });
 
   return (
-    <main className="featmusic-app-light featmusic-page-contrast min-h-[100dvh] bg-[#06100c] pb-20 text-white lg:pb-0">
+    <main className="featmusic-app-light featmusic-page-contrast min-h-[100dvh] bg-[#0e0e0e] pb-20 text-white lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-40">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <div className="flex min-w-0 items-center gap-0.5">
             <MenuMasMovil />
             <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
-              Feat<span className="text-emerald-400">Music</span>
+              Feat<span className="text-yellow-400">Music</span>
             </Link>
           </div>
 
@@ -210,7 +210,7 @@ export default async function MensajesPage() {
       <div className="mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
               <IconoMensajes />
             </span>
             <div>
@@ -221,14 +221,14 @@ export default async function MensajesPage() {
             </div>
           </div>
 
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-black text-emerald-200">
+          <span className="rounded-full border border-yellow-400/20 bg-yellow-500/10 px-3 py-1 text-[10px] font-black text-yellow-200">
             {conversaciones.length}
           </span>
         </div>
 
         {conversaciones.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-black/35 px-5 py-16 text-center">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
               <IconoMensajes />
             </span>
             <p className="mt-4 text-sm font-black text-zinc-200">
@@ -240,7 +240,7 @@ export default async function MensajesPage() {
             </p>
             <Link
               href="/artistas/mi-perfil?seccion=recibidas"
-              className="mt-4 inline-flex rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-3 py-2 text-[10px] font-black text-emerald-200 transition hover:bg-emerald-500/20"
+              className="mt-4 inline-flex rounded-lg border border-yellow-400/25 bg-yellow-500/10 px-3 py-2 text-[10px] font-black text-yellow-200 transition hover:bg-yellow-500/20"
             >
               Ver propuestas
             </Link>
@@ -267,7 +267,7 @@ export default async function MensajesPage() {
                   href={`/mensajes/${conversacion.id}`}
                   className={`flex items-center gap-3 rounded-2xl border p-3 transition ${
                     noLeidos > 0
-                      ? "border-emerald-400/35 bg-emerald-500/[0.07] shadow-[0_0_25px_rgba(16,185,129,0.08)]"
+                      ? "border-yellow-400/35 bg-yellow-500/[0.07] shadow-[0_0_25px_rgba(16,185,129,0.08)]"
                       : "border-white/10 bg-black/35 hover:border-white/20 hover:bg-white/[0.035]"
                   }`}
                 >
@@ -278,7 +278,7 @@ export default async function MensajesPage() {
                       className="h-12 w-12 shrink-0 rounded-full object-cover"
                     />
                   ) : (
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-emerald-400/20 bg-emerald-500/10 text-[11px] font-black text-emerald-200">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-500/10 text-[11px] font-black text-yellow-200">
                       {iniciales(nombre)}
                     </span>
                   )}
@@ -311,7 +311,7 @@ export default async function MensajesPage() {
                       {conversacion._count.propuestas === 1 ? "" : "s"}
                     </span>
                     {noLeidos > 0 && (
-                      <span className="flex min-h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[8px] font-black text-white">
+                      <span className="flex min-h-5 min-w-5 items-center justify-center rounded-full bg-yellow-500 px-1.5 text-[8px] font-black text-white">
                         {noLeidos > 99 ? "99+" : noLeidos}
                       </span>
                     )}

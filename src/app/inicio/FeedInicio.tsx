@@ -73,7 +73,7 @@ function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-200/25 bg-emerald-400/15 text-xs font-black text-emerald-100 shadow-lg shadow-black/30">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-yellow-200/25 bg-yellow-400/15 text-xs font-black text-yellow-100 shadow-lg shadow-black/30">
         {iniciales(artista.nombreArtistico)}
       </span>
     );
@@ -333,7 +333,7 @@ function TarjetaFeed({
         onPointerUp={finalizarToque}
         onPointerCancel={cancelarToque}
         style={estiloFondo}
-        className="feat-reel-card relative mx-auto flex h-full w-full max-w-[760px] flex-col overflow-hidden bg-[#020907] shadow-[0_26px_90px_rgba(0,0,0,0.55)] transition duration-300 sm:rounded-[30px]"
+        className="feat-reel-card relative mx-auto flex h-full w-full max-w-[760px] flex-col overflow-hidden bg-[#070707] shadow-[0_26px_90px_rgba(0,0,0,0.55)] transition duration-300 sm:rounded-[30px]"
       >
         <div className="feat-reel-cover-bg" aria-hidden="true" />
         <div className="feat-reel-shade" aria-hidden="true" />
@@ -445,7 +445,7 @@ function TarjetaFeed({
                   </span>
 
                   {oportunidad.esSeguido && (
-                    <span className="shrink-0 rounded-full border border-emerald-200/20 bg-emerald-400/10 px-2 py-0.5 text-[8px] font-black text-emerald-100">
+                    <span className="shrink-0 rounded-full border border-yellow-200/20 bg-yellow-400/10 px-2 py-0.5 text-[8px] font-black text-yellow-100">
                       Siguiendo
                     </span>
                   )}
@@ -477,7 +477,7 @@ function TarjetaFeed({
                   type="button"
                   aria-expanded={descripcionExpandida}
                   onClick={alternarDescripcion}
-                  className="mt-1 inline-flex items-center text-[11px] font-black text-white/90 transition hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/70"
+                  className="mt-1 inline-flex items-center text-[11px] font-black text-white/90 transition hover:text-yellow-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/70"
                 >
                   {descripcionExpandida ? "Cerrar" : "Leer más"}
                 </button>
@@ -513,7 +513,7 @@ function EstadoVacio({ vista }: { vista: VistaFeed }) {
           </p>
           <Link
             href="/artistas"
-            className="mt-5 inline-flex rounded-xl border border-emerald-300/30 bg-emerald-500/15 px-4 py-2.5 text-xs font-black text-emerald-100"
+            className="mt-5 inline-flex rounded-xl border border-yellow-300/30 bg-yellow-500/15 px-4 py-2.5 text-xs font-black text-yellow-100"
           >
             Explorar oportunidades
           </Link>
@@ -534,7 +534,7 @@ function EstadoVacio({ vista }: { vista: VistaFeed }) {
           </p>
           <Link
             href="/artistas"
-            className="mt-5 inline-flex rounded-xl border border-emerald-300/30 bg-emerald-500/15 px-4 py-2.5 text-xs font-black text-emerald-100"
+            className="mt-5 inline-flex rounded-xl border border-yellow-300/30 bg-yellow-500/15 px-4 py-2.5 text-xs font-black text-yellow-100"
           >
             Explorar artistas
           </Link>
@@ -716,8 +716,8 @@ export default function FeedInicio({
   ];
 
   return (
-    <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden bg-[#020806] lg:h-[calc(100vh-48px)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.13),transparent_36%)]" />
+    <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden bg-[#070707] lg:h-[calc(100vh-48px)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(221,180,18,0.13),transparent_36%)]" />
 
       <div className="feat-reel-tabs pointer-events-none absolute inset-x-0 top-0 z-30 px-3 pt-2.5 sm:px-5 sm:pt-3">
         <div className="pointer-events-auto mx-auto flex max-w-[760px] items-center gap-2">

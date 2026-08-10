@@ -220,7 +220,7 @@ function FotoOportunidad({ oportunidad }: { oportunidad: OportunidadMusical }) {
 
   if (!artista.fotoPerfil || fallo) {
     return (
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-xs font-black text-emerald-200">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-yellow-400/25 bg-yellow-500/10 text-xs font-black text-yellow-200">
         {iniciales(artista.nombreArtistico)}
       </div>
     );
@@ -280,8 +280,8 @@ function TarjetaOportunidad({
   const perfilHref = `/artistas/${encodeURIComponent(artista.nombreUsuario)}`;
 
   return (
-    <article data-vista-idea className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(16,185,129,0.045))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-emerald-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
-      <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-emerald-500/[0.08] blur-3xl transition group-hover:bg-emerald-500/[0.13]" />
+    <article data-vista-idea className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(221,180,18,0.045))] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-yellow-400/25 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)]">
+      <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-yellow-500/[0.08] blur-3xl transition group-hover:bg-yellow-500/[0.13]" />
       <RegistrarVistaIdea
         ideaId={oportunidad.id}
         sesionActiva={sesionActiva}
@@ -299,11 +299,11 @@ function TarjetaOportunidad({
               <div className="min-w-0">
                 <Link
                   href={perfilHref}
-                  className="block truncate text-sm font-black text-white transition hover:text-emerald-200"
+                  className="block truncate text-sm font-black text-white transition hover:text-yellow-200"
                 >
                   {artista.nombreArtistico}
                 </Link>
-                <p className="mt-0.5 truncate text-[10px] font-semibold text-emerald-300">
+                <p className="mt-0.5 truncate text-[10px] font-semibold text-yellow-300">
                   @{artista.nombreUsuario}
                 </p>
               </div>
@@ -330,7 +330,7 @@ function TarjetaOportunidad({
       <div className="relative flex flex-1 flex-col p-3.5 sm:p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-300/80">
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-yellow-300/80">
               Oportunidad musical
             </p>
             <h2 className="mt-1 break-words text-base font-black leading-tight text-white sm:text-[17px]">
@@ -350,7 +350,7 @@ function TarjetaOportunidad({
             <span
               className={`rounded-full border px-2.5 py-1 text-[9px] font-black ${
                 cuposDisponibles > 0
-                  ? "border-emerald-400/20 bg-emerald-500/[0.08] text-emerald-200"
+                  ? "border-yellow-400/20 bg-yellow-500/[0.08] text-yellow-200"
                   : "border-zinc-400/15 bg-white/[0.04] text-zinc-500"
               }`}
             >
@@ -399,7 +399,7 @@ function TarjetaOportunidad({
             />
             <span
               className={`inline-flex items-center gap-1 ${
-                restantes <= 7 ? "text-amber-300" : "text-zinc-500"
+                restantes <= 7 ? "text-yellow-300" : "text-zinc-500"
               }`}
             >
               <IconoReloj className="h-3 w-3" />
@@ -412,7 +412,7 @@ function TarjetaOportunidad({
           <div className="mt-2.5 flex items-center justify-end">
             <Link
               href={`${perfilHref}#idea-${oportunidad.id}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.025] px-3 py-1.5 text-[10px] font-bold text-zinc-300 transition hover:border-emerald-400/25 hover:bg-emerald-500/[0.08] hover:text-emerald-100"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.025] px-3 py-1.5 text-[10px] font-bold text-zinc-300 transition hover:border-yellow-400/25 hover:bg-yellow-500/[0.08] hover:text-yellow-100"
             >
               Ver artista
               <IconoFlecha className="h-3 w-3" />
@@ -582,7 +582,7 @@ export default function OportunidadesMusicales({
   }
 
   const claseSelect =
-    "w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100";
+    "w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2.5 py-2.5 text-[11px] text-slate-700 shadow-sm outline-none transition focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100";
 
   return (
     <div className="min-w-0">
@@ -590,7 +590,7 @@ export default function OportunidadesMusicales({
         ref={contenedorFiltrosRef}
         className="relative mt-3"
       >
-        <div className="flex min-w-0 items-center rounded-xl border border-white/10 bg-black/35 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-sm transition focus-within:border-emerald-400/35">
+        <div className="flex min-w-0 items-center rounded-xl border border-white/10 bg-black/35 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-sm transition focus-within:border-yellow-400/35">
           <div className="flex min-w-0 flex-1 items-center gap-2 px-2.5">
             <IconoBuscar className="h-4 w-4 shrink-0 text-zinc-500" />
             <input
@@ -609,16 +609,16 @@ export default function OportunidadesMusicales({
             aria-controls="filtros-oportunidades"
             title="Filtros"
             onClick={() => setFiltrosAbiertos((abiertos) => !abiertos)}
-            className={`relative inline-flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-emerald-400/40 ${
+            className={`relative inline-flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-yellow-400/40 ${
               filtrosAbiertos || cantidadFiltrosActivos > 0
-                ? "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
-                : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-emerald-400/25 hover:bg-emerald-500/10 hover:text-emerald-200"
+                ? "border-yellow-400/35 bg-yellow-500/15 text-yellow-200"
+                : "border-white/10 bg-white/[0.035] text-zinc-400 hover:border-yellow-400/25 hover:bg-yellow-500/10 hover:text-yellow-200"
             }`}
           >
             <IconoFiltro className="h-4 w-4" />
 
             {cantidadFiltrosActivos > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-emerald-500 px-1 text-[8px] font-black leading-none text-white">
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-[#0e0e0e] bg-yellow-500 px-1 text-[8px] font-black leading-none text-white">
                 {cantidadFiltrosActivos}
               </span>
             )}
@@ -648,7 +648,7 @@ export default function OportunidadesMusicales({
           >
             <div className="flex items-center justify-between gap-4 border-b border-slate-200 px-4 py-3">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-700">
+                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-yellow-700">
                   Filtros
                 </p>
                 <p className="mt-0.5 text-[10px] text-slate-500">
@@ -657,7 +657,7 @@ export default function OportunidadesMusicales({
               </div>
 
               {cantidadFiltrosActivos > 0 && (
-                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[9px] font-bold text-emerald-700">
+                <span className="rounded-full border border-yellow-200 bg-yellow-50 px-2 py-1 text-[9px] font-bold text-yellow-700">
                   {cantidadFiltrosActivos} activos
                 </span>
               )}
@@ -775,7 +775,7 @@ export default function OportunidadesMusicales({
               <button
                 type="button"
                 onClick={() => setFiltrosAbiertos(false)}
-                className="rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-[10px] font-black text-white shadow-sm transition hover:bg-emerald-700"
+                className="rounded-lg border border-yellow-600 bg-yellow-600 px-4 py-2 text-[10px] font-black text-white shadow-sm transition hover:bg-yellow-700"
               >
                 Listo
               </button>
@@ -800,11 +800,11 @@ export default function OportunidadesMusicales({
       </div>
 
       {errorCarga ? (
-        <section className="mt-5 rounded-2xl border border-red-400/20 bg-red-500/[0.05] px-5 py-14 text-center">
-          <h2 className="text-base font-bold text-red-200">
+        <section className="mt-5 rounded-2xl border border-yellow-400/20 bg-yellow-500/[0.05] px-5 py-14 text-center">
+          <h2 className="text-base font-bold text-yellow-200">
             No se pudieron cargar las oportunidades
           </h2>
-          <p className="mt-2 text-xs text-red-200/60">
+          <p className="mt-2 text-xs text-yellow-200/60">
             Revisa la conexión con la base de datos e inténtalo nuevamente.
           </p>
         </section>
@@ -825,7 +825,7 @@ export default function OportunidadesMusicales({
           <button
             type="button"
             onClick={limpiarFiltros}
-            className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-200"
+            className="mt-4 rounded-xl border border-yellow-400/30 bg-yellow-500/10 px-4 py-2 text-xs font-bold text-yellow-200"
           >
             Limpiar búsqueda
           </button>

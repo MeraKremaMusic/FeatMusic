@@ -76,7 +76,7 @@ const claseInactiva =
   "text-zinc-400 hover:bg-white/5 hover:text-white";
 
 const claseActiva =
-  "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30";
+  "bg-yellow-500/15 text-yellow-200 ring-1 ring-inset ring-yellow-400/30";
 
 type NavegacionEscritorioProps = {
   mostrarDesde?: "md" | "lg";
@@ -138,7 +138,7 @@ export default function NavegacionEscritorio({
         <span className="relative flex">
           <Icono tipo="mensajes" />
           {mensajesNoLeidos > 0 && (
-            <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#06100c] bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+            <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-[#0e0e0e] bg-yellow-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-yellow-950/50">
               {etiquetaMensajes}
             </span>
           )}

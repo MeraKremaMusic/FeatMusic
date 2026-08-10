@@ -172,8 +172,8 @@ export default function ResumenColaboracionIdea({
           key={`${detalle}-${indice}`}
           className={
             compacta
-              ? "rounded-full border border-emerald-400/15 bg-emerald-500/[0.065] px-2 py-0.5 text-[8px] font-semibold text-emerald-200/85"
-              : "rounded-full border border-emerald-400/20 bg-emerald-500/[0.08] px-2.5 py-1 text-[9px] font-semibold text-emerald-100/90 sm:text-[10px]"
+              ? "rounded-full border border-yellow-400/15 bg-yellow-500/[0.065] px-2 py-0.5 text-[8px] font-semibold text-yellow-200/85"
+              : "rounded-full border border-yellow-400/20 bg-yellow-500/[0.08] px-2.5 py-1 text-[9px] font-semibold text-yellow-100/90 sm:text-[10px]"
           }
         >
           {detalle}

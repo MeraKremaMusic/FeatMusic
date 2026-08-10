@@ -85,7 +85,7 @@ function claseOpcion(activa: boolean) {
   return [
     "flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 transition",
     activa
-      ? "text-emerald-300"
+      ? "text-yellow-300"
       : "text-zinc-500 hover:text-zinc-200",
   ].join(" ");
 }
@@ -186,7 +186,7 @@ export default function MenuMovilPanel({
           aria-haspopup="dialog"
           aria-expanded={publicarAbierto}
           data-featmusic-publicar-sin-circulo-v1="true"
-          className="group flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-emerald-300"
+          className="group flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-zinc-500 transition hover:text-yellow-300"
         >
           <Icono tipo="mas" className="h-6 w-6" />
           <span className="truncate text-[9px] font-semibold">Publicar</span>
@@ -207,7 +207,7 @@ export default function MenuMovilPanel({
           <span className="relative flex">
             <Icono tipo="mensajes" />
             {mensajesNoLeidos > 0 && (
-              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-black bg-red-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-red-950/50">
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-black bg-yellow-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-yellow-950/50">
                 {etiquetaMensajes}
               </span>
             )}
@@ -230,7 +230,7 @@ export default function MenuMovilPanel({
           <span className="relative flex">
             <Icono tipo="perfil" />
             {notificacionesNoLeidas > 0 && (
-              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-black bg-emerald-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-emerald-950/50">
+              <span className="absolute -right-3 -top-2 flex min-h-4 min-w-4 items-center justify-center rounded-full border border-black bg-yellow-500 px-1 text-[7px] font-black leading-none text-white shadow-lg shadow-yellow-950/50">
                 {etiquetaPerfil}
               </span>
             )}

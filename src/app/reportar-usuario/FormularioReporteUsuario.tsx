@@ -93,7 +93,7 @@ export default function FormularioReporteUsuario({
       onSubmit={enviar}
       className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_20px_55px_rgba(15,23,42,.09)] sm:p-7"
     >
-      <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-xs leading-6 text-red-900">
+      <div className="rounded-2xl border border-yellow-100 bg-yellow-50 px-4 py-3 text-xs leading-6 text-yellow-900">
         Los reportes falsos o enviados para hostigar también pueden afectar la
         seguridad de la comunidad. Describe hechos concretos y evita compartir
         contraseñas o información sensible.
@@ -103,7 +103,7 @@ export default function FormularioReporteUsuario({
         <span className="text-xs font-black text-slate-800">
           Usuario que deseas reportar
         </span>
-        <div className="mt-2 flex items-center rounded-xl border border-slate-200 bg-slate-50 px-3 focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-100">
+        <div className="mt-2 flex items-center rounded-xl border border-slate-200 bg-slate-50 px-3 focus-within:border-yellow-400 focus-within:ring-2 focus-within:ring-yellow-100">
           <span className="text-sm font-black text-slate-400">@</span>
           <input
             value={nombreUsuario}
@@ -125,7 +125,7 @@ export default function FormularioReporteUsuario({
         <select
           value={motivo}
           onChange={(evento) => setMotivo(evento.target.value)}
-          className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-900 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+          className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-900 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
         >
           {MOTIVOS.map((opcion) => (
             <option key={opcion.valor} value={opcion.valor}>
@@ -146,12 +146,12 @@ export default function FormularioReporteUsuario({
           minLength={20}
           maxLength={1000}
           placeholder="Incluye detalles claros: qué ocurrió, dónde lo viste y por qué consideras que incumple las reglas."
-          className="mt-2 w-full resize-y rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm leading-6 text-slate-900 outline-none placeholder:text-slate-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+          className="mt-2 w-full resize-y rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm leading-6 text-slate-900 outline-none placeholder:text-slate-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
           required
         />
         <span
           className={`mt-1 block text-right text-[10px] font-semibold ${
-            caracteresRestantes < 100 ? "text-amber-700" : "text-slate-400"
+            caracteresRestantes < 100 ? "text-yellow-700" : "text-slate-400"
           }`}
         >
           {caracteresRestantes} caracteres disponibles
@@ -163,8 +163,8 @@ export default function FormularioReporteUsuario({
           role="status"
           className={`mt-5 rounded-xl border px-4 py-3 text-xs font-semibold leading-5 ${
             estado === "exito"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-              : "border-red-200 bg-red-50 text-red-800"
+              ? "border-yellow-200 bg-yellow-50 text-yellow-800"
+              : "border-yellow-200 bg-yellow-50 text-yellow-800"
           }`}
         >
           {mensaje}
@@ -174,7 +174,7 @@ export default function FormularioReporteUsuario({
       <button
         type="submit"
         disabled={!formularioValido || estado === "enviando"}
-        className="mt-5 flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl bg-red-600 px-4 py-3 text-sm font-black text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-5 flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl bg-yellow-600 px-4 py-3 text-sm font-black text-white transition hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {estado === "enviando" ? "Enviando reporte…" : "Enviar reporte"}
       </button>
