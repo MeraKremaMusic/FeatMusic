@@ -771,7 +771,7 @@ export default function PerfilArtistaCard({
         typeof document !== "undefined" &&
         createPortal(
         <div
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+          className="featmusic-edit-profile-backdrop fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-4"
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) cerrarModal();
