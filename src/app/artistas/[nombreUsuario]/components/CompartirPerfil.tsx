@@ -315,7 +315,7 @@ export default function CompartirPerfil({
 
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#FFD400]">
                     Haz crecer tu comunidad
                   </p>
                   <h2
@@ -366,7 +366,7 @@ export default function CompartirPerfil({
                   )}
 
                   <div className="min-w-0">
-                    <span className="inline-flex rounded-full border border-emerald-300/30 bg-emerald-400/15 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.16em] text-emerald-200 backdrop-blur-sm">
+                    <span className="inline-flex rounded-full border border-[#FFD400]/50 bg-[#FFD400] px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.16em] text-black backdrop-blur-sm">
                       Perfil de artista
                     </span>
                     <h3 className="mt-1 truncate text-lg font-black text-white">
@@ -390,7 +390,7 @@ export default function CompartirPerfil({
                     Escucha ideas y colabora
                   </span>
                   <span className="text-sm font-black tracking-tight text-white">
-                    Feat<span className="text-emerald-400">Music</span>
+                    Feat<span className="text-[#FFD400]">Music</span>
                   </span>
                 </div>
               </div>
@@ -399,7 +399,7 @@ export default function CompartirPerfil({
                 type="button"
                 onClick={compartirNativo}
                 disabled={compartiendo}
-                className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-4 py-3 text-sm font-black text-white shadow-[0_12px_26px_rgba(16,185,129,.28)] transition hover:bg-emerald-600 disabled:cursor-wait disabled:opacity-70"
+                className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#FFD400] px-4 py-3 text-sm font-black text-black shadow-[0_12px_26px_rgba(255,212,0,.24)] transition hover:bg-[#e6bf00] disabled:cursor-wait disabled:opacity-70"
               >
                 <IconoCompartir className="h-5 w-5" />
                 {compartiendo ? "Abriendo opciones…" : "Compartir en mis aplicaciones"}
@@ -505,7 +505,7 @@ export default function CompartirPerfil({
                 <button
                   type="button"
                   onClick={copiarEnlace}
-                  className="shrink-0 text-[10px] font-black text-emerald-700 hover:text-emerald-800"
+                  className="shrink-0 text-[10px] font-black text-[#FFD400] hover:text-[#e6bf00]"
                 >
                   Copiar
                 </button>
