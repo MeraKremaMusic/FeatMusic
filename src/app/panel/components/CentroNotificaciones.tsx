@@ -129,30 +129,30 @@ function IconoTipo({
 
 function claseTipo(tipo: string) {
   if (tipo === "NUEVO_SEGUIDOR") {
-    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
   }
 
   if (tipo === "NUEVA_IDEA_SEGUIDO") {
-    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
   }
 
   if (tipo === "PROPUESTA_ACEPTADA") {
-    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
   }
 
   if (tipo === "PROPUESTA_RECHAZADA") {
-    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
   }
 
   if (tipo === "CAMBIOS_SOLICITADOS") {
-    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
   }
 
   if (tipo === "REINTENTO_PERMITIDO") {
-    return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
   }
 
-  return "border-yellow-400/20 bg-yellow-500/10 text-yellow-300";
+  return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
 }
 
 function formatearTiempo(fecha: string) {
@@ -254,6 +254,7 @@ function resolverEnlaceNotificacion(notificacion: NotificacionCentro) {
   return enlace;
 }
 
+// FEATMUSIC_NOTIFICACIONES_MODO_CLARO_V1
 export default function CentroNotificaciones({
   variante = "icono",
 }: CentroNotificacionesProps) {
@@ -377,9 +378,9 @@ export default function CentroNotificaciones({
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo"
-        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-white/10 bg-[#0f0f0f]/98 shadow-[0_-24px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-black/10 bg-white shadow-[0_-24px_70px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_-24px_70px_rgba(0,0,0,0.65)] sm:hidden"
       >
-        <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-white/15" />
+        <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-black/15 dark:bg-white/15" />
         <ContenidoCentro
           cargando={cargando}
           error={error}
@@ -398,7 +399,7 @@ export default function CentroNotificaciones({
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo-escritorio"
-        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0f0f0f]/98 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:flex"
+        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_24px_80px_rgba(0,0,0,0.65)] sm:flex"
         style={{
           top: posicionEscritorio.top,
           left: posicionEscritorio.left,
@@ -491,10 +492,10 @@ function ContenidoCentro({
 }) {
   return (
     <>
-      <header className="flex items-start justify-between gap-4 border-b border-white/[0.08] px-4 pb-3 pt-4 sm:px-5">
+      <header className="flex items-start justify-between gap-4 border-b border-black/[0.08] px-4 pb-3 pt-4 dark:border-white/[0.08] sm:px-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-yellow-400 bg-yellow-400 text-black dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300">
               <IconoCampana />
             </span>
             <div>
@@ -504,11 +505,11 @@ function ContenidoCentro({
                     ? "centro-notificaciones-titulo-escritorio"
                     : "centro-notificaciones-titulo"
                 }
-                className="text-sm font-black text-white"
+                className="text-sm font-black text-black dark:text-white"
               >
                 Notificaciones
               </h2>
-              <p className="mt-0.5 text-[10px] text-zinc-500">
+              <p className="mt-0.5 text-[10px] text-zinc-600 dark:text-zinc-500">
                 {totalNoLeidas === 0
                   ? "Estás al día"
                   : `${totalNoLeidas} sin leer`}
@@ -521,19 +522,19 @@ function ContenidoCentro({
           type="button"
           onClick={onCerrar}
           aria-label="Cerrar"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-xl text-zinc-500 transition hover:bg-white/5 hover:text-white"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-xl text-zinc-600 transition hover:bg-black/5 hover:text-black dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-white"
         >
           ×
         </button>
       </header>
 
-      <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-2.5 sm:px-5">
-        <label className="inline-flex cursor-pointer items-center gap-2 text-[10px] font-semibold text-zinc-400">
+      <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] px-4 py-2.5 dark:border-white/[0.06] sm:px-5">
+        <label className="inline-flex cursor-pointer items-center gap-2 text-[10px] font-semibold text-zinc-700 dark:text-zinc-400">
           <input
             type="checkbox"
             checked={soloNoLeidas}
             onChange={(evento) => onSoloNoLeidas(evento.target.checked)}
-            className="h-3.5 w-3.5 rounded border-white/20 bg-black accent-yellow-500"
+            className="h-3.5 w-3.5 rounded border-black/20 bg-white accent-yellow-500 dark:border-white/20 dark:bg-black"
           />
           Solo no leídas
         </label>
@@ -542,7 +543,7 @@ function ContenidoCentro({
           type="button"
           onClick={onMarcarTodas}
           disabled={totalNoLeidas === 0}
-          className="text-[10px] font-bold text-yellow-300 transition hover:text-yellow-200 disabled:cursor-not-allowed disabled:text-zinc-700"
+          className="text-[10px] font-bold text-yellow-600 transition hover:text-yellow-700 disabled:cursor-not-allowed disabled:text-zinc-400 dark:text-yellow-300 dark:hover:text-yellow-200 dark:disabled:text-zinc-700"
         >
           Marcar todas como leídas
         </button>
@@ -554,37 +555,37 @@ function ContenidoCentro({
             {[0, 1, 2].map((item) => (
               <div
                 key={item}
-                className="h-20 animate-pulse rounded-xl bg-white/[0.035]"
+                className="h-20 animate-pulse rounded-xl bg-black/[0.04] dark:bg-white/[0.035]"
               />
             ))}
           </div>
         ) : error && notificaciones.length === 0 ? (
           <div className="px-5 py-12 text-center">
-            <p className="text-xs font-semibold text-yellow-200">{error}</p>
+            <p className="text-xs font-semibold text-yellow-700 dark:text-yellow-200">{error}</p>
             <button
               type="button"
               onClick={onRecargar}
-              className="mt-4 rounded-lg border border-white/10 px-3 py-2 text-[10px] font-bold text-zinc-300"
+              className="mt-4 rounded-lg border border-black/10 px-3 py-2 text-[10px] font-bold text-zinc-800 transition hover:bg-black/5 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
             >
               Intentar nuevamente
             </button>
           </div>
         ) : notificaciones.length === 0 ? (
           <div className="px-5 py-14 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/15 bg-yellow-500/[0.06] text-yellow-300/70">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/40 bg-yellow-400/15 text-yellow-600 dark:border-yellow-400/15 dark:bg-yellow-500/[0.06] dark:text-yellow-300/70">
               <IconoCampana className="h-5 w-5" />
             </div>
-            <p className="mt-3 text-xs font-bold text-zinc-300">
+            <p className="mt-3 text-xs font-bold text-black dark:text-zinc-300">
               {soloNoLeidas
                 ? "No tienes notificaciones sin leer"
                 : "Todavía no tienes notificaciones"}
             </p>
-            <p className="mt-1 text-[10px] leading-5 text-zinc-600">
+            <p className="mt-1 text-[10px] leading-5 text-zinc-600 dark:text-zinc-600">
               Aquí aparecerán propuestas, decisiones, cambios y mensajes.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-white/[0.06]">
+          <div className="divide-y divide-black/[0.06] dark:divide-white/[0.06]">
             {notificaciones.map((notificacion) => {
               const noLeida = !notificacion.leidaEn;
 
@@ -595,8 +596,8 @@ function ContenidoCentro({
                   onClick={() => onAbrir(notificacion)}
                   className={`relative flex w-full items-start gap-3 px-4 py-3.5 text-left transition sm:px-5 ${
                     noLeida
-                      ? "bg-yellow-500/[0.045] hover:bg-yellow-500/[0.075]"
-                      : "hover:bg-white/[0.025]"
+                      ? "bg-yellow-400/[0.10] hover:bg-yellow-400/[0.16] dark:bg-yellow-500/[0.045] dark:hover:bg-yellow-500/[0.075]"
+                      : "hover:bg-black/[0.03] dark:hover:bg-white/[0.025]"
                   }`}
                 >
                   {noLeida && (
@@ -607,10 +608,10 @@ function ContenidoCentro({
                     <img
                       src={notificacion.actor.fotoPerfil}
                       alt=""
-                      className="h-9 w-9 shrink-0 rounded-xl border border-white/10 object-cover"
+                      className="h-9 w-9 shrink-0 rounded-xl border border-black/10 object-cover dark:border-white/10"
                     />
                   ) : notificacion.actor ? (
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-400/15 bg-yellow-500/[0.07] text-[10px] font-black text-yellow-200">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-400/40 bg-yellow-400/15 text-[10px] font-black text-yellow-700 dark:border-yellow-400/15 dark:bg-yellow-500/[0.07] dark:text-yellow-200">
                       {iniciales(notificacion.actor.nombreVisible)}
                     </span>
                   ) : (
@@ -631,24 +632,24 @@ function ContenidoCentro({
                       <span
                         className={`block text-[11px] leading-4 ${
                           noLeida
-                            ? "font-black text-zinc-100"
-                            : "font-bold text-zinc-300"
+                            ? "font-black text-black dark:text-zinc-100"
+                            : "font-bold text-zinc-800 dark:text-zinc-300"
                         }`}
                       >
                         {notificacion.titulo}
                       </span>
-                      <span className="shrink-0 text-[8px] font-semibold text-zinc-600">
+                      <span className="shrink-0 text-[8px] font-semibold text-zinc-500 dark:text-zinc-600">
                         {formatearTiempo(notificacion.creadoEn)}
                       </span>
                     </span>
 
                     {notificacion.actor && (
-                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-yellow-300/80">
+                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-yellow-600 dark:text-yellow-300/80">
                         {notificacion.actor.nombreVisible}
                       </span>
                     )}
 
-                    <span className="mt-1 block text-[10px] leading-4 text-zinc-500">
+                    <span className="mt-1 block text-[10px] leading-4 text-zinc-600 dark:text-zinc-500">
                       {notificacion.mensaje}
                     </span>
                   </span>
@@ -660,7 +661,7 @@ function ContenidoCentro({
       </div>
 
       {error && notificaciones.length > 0 && (
-        <div className="border-t border-yellow-400/10 bg-yellow-500/[0.04] px-4 py-2 text-[9px] text-yellow-200">
+        <div className="border-t border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-[9px] text-yellow-700 dark:border-yellow-400/10 dark:bg-yellow-500/[0.04] dark:text-yellow-200">
           {error}
         </div>
       )}
