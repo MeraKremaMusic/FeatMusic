@@ -3,6 +3,7 @@
 // FEATMUSIC_PORTADA_RECARGA_SEGURA_V2
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import type { ChangeEvent, FormEvent, ReactNode } from "react";
 
@@ -766,7 +767,9 @@ export default function PerfilArtistaCard({
         </article>
       )}
 
-      {modalAbierto && (
+      {modalAbierto &&
+        typeof document !== "undefined" &&
+        createPortal(
         <div
           className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-4"
           role="presentation"
@@ -1116,7 +1119,8 @@ export default function PerfilArtistaCard({
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
