@@ -608,7 +608,17 @@ export default function SeccionesPerfilPrivado({
         />
       </div>
 
-      {pestana === "ACTIVAS" && <div>{ideasActivas}</div>}
+      {pestana === "ACTIVAS" && (
+        <div className="mt-3 sm:mt-4">
+          <div className="mb-3 px-1">
+            <p className="text-[10px] font-semibold text-slate-500 sm:text-[11px]">
+              Ideas que has publicado y siguen activas.
+            </p>
+          </div>
+
+          {ideasActivas}
+        </div>
+      )}
 
       {pestana === "ENVIADAS" && (
         <div className="mt-3 sm:mt-4">
