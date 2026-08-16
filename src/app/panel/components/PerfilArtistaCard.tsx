@@ -781,7 +781,7 @@ export default function PerfilArtistaCard({
             role="dialog"
             aria-modal="true"
             aria-labelledby="editar-perfil-titulo"
-            className="max-h-[94dvh] w-full overflow-y-auto rounded-t-[24px] border border-white/10 bg-zinc-950 p-5 shadow-2xl sm:max-w-xl sm:rounded-2xl sm:p-6"
+            className="featmusic-app-light featmusic-edit-profile-dialog max-h-[94dvh] w-full overflow-y-auto rounded-t-[24px] border border-white/10 bg-zinc-950 p-5 shadow-2xl sm:max-w-xl sm:rounded-2xl sm:p-6"
           >
             <div className="flex items-start justify-between gap-4">
               <div>

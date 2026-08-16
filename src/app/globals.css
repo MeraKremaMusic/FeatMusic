@@ -4178,16 +4178,18 @@ html.dark .featmusic-profile-social-button {
 }
 /* FEATMUSIC_REDES_SOCIALES_OSCURAS_PERFIL_V1_END */
 
-/* FEATMUSIC_EDITAR_PERFIL_FONDO_GRIS_CLARO_V1_START */
+/* FEATMUSIC_EDITAR_PERFIL_VENTANA_GRIS_CLARO_V2_START */
 /*
   Editar perfil:
-  - Modo claro: fondo exterior gris, igual al tono general de páginas claras.
-  - Modo oscuro: conserva el fondo oscuro/translúcido original del componente.
+  - Modo claro: la VENTANA del editor usa el gris #dddddd.
+  - La capa exterior conserva su apariencia original.
+  - Los controles internos heredan el tema claro normal de FeatMusic.
+  - Modo oscuro: conserva exactamente el fondo oscuro actual.
 */
-html:not(.dark) .featmusic-edit-profile-backdrop {
+html:not(.dark) .featmusic-edit-profile-dialog {
   background: #dddddd !important;
   background-color: #dddddd !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.10) !important;
 }
-/* FEATMUSIC_EDITAR_PERFIL_FONDO_GRIS_CLARO_V1_END */
+/* FEATMUSIC_EDITAR_PERFIL_VENTANA_GRIS_CLARO_V2_END */
