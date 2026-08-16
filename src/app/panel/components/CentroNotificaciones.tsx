@@ -378,7 +378,7 @@ export default function CentroNotificaciones({
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo"
-        className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-black/10 bg-white shadow-[0_-24px_70px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_-24px_70px_rgba(0,0,0,0.65)] sm:hidden"
+        className="featmusic-notifications-panel fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-black/10 bg-white shadow-[0_-24px_70px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_-24px_70px_rgba(0,0,0,0.65)] sm:hidden"
       >
         <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-black/15 dark:bg-white/15" />
         <ContenidoCentro
@@ -399,7 +399,7 @@ export default function CentroNotificaciones({
         role="dialog"
         aria-modal="true"
         aria-labelledby="centro-notificaciones-titulo-escritorio"
-        className="fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_24px_80px_rgba(0,0,0,0.65)] sm:flex"
+        className="featmusic-notifications-panel fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_24px_80px_rgba(0,0,0,0.65)] sm:flex"
         style={{
           top: posicionEscritorio.top,
           left: posicionEscritorio.left,

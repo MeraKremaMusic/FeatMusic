@@ -4193,3 +4193,192 @@ html:not(.dark) .featmusic-edit-profile-dialog {
   border-color: rgba(0, 0, 0, 0.10) !important;
 }
 /* FEATMUSIC_EDITAR_PERFIL_VENTANA_GRIS_CLARO_V2_END */
+
+/* FEATMUSIC_NOTIFICACIONES_CLARO_FORZADO_V2_START */
+/*
+  Centro de Notificaciones - modo claro real de FeatMusic.
+
+  El panel se renderiza mediante createPortal(document.body), por lo que no
+  hereda .featmusic-app-light. Estas reglas usan directamente html:not(.dark)
+  y tienen prioridad sobre variantes dark: que pueda activar el navegador por
+  la preferencia de color del sistema.
+*/
+
+html:not(.dark) .featmusic-notifications-panel {
+  color-scheme: light !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.10) !important;
+  color: #000000 !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Separadores y bordes */
+html:not(.dark) .featmusic-notifications-panel header,
+html:not(.dark) .featmusic-notifications-panel header + div {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="border-black/10"],
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="border-black/20"] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="divide-black/[0.06]"]
+  > :not(:last-child) {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Fondos claros que deben ganar incluso si el SO está en oscuro */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-white"] {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-black/15"] {
+  background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-black/[0.04]"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400"] {
+  background-color: #ffd400 !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400/15"] {
+  background-color: rgba(255, 212, 0, 0.15) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400/[0.10]"] {
+  background-color: rgba(255, 212, 0, 0.10) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400/10"] {
+  background-color: rgba(255, 212, 0, 0.10) !important;
+}
+
+/* Texto principal */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-black"] {
+  color: #000000 !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-800"] {
+  color: #27272a !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-700"] {
+  color: #3f3f46 !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-600"] {
+  color: #52525b !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-500"] {
+  color: #71717a !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-400"] {
+  color: #71717a !important;
+}
+
+/* Amarillos de énfasis: más oscuros cuando son texto sobre blanco */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-yellow-600"],
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-yellow-700"] {
+  color: #a67c00 !important;
+}
+
+/* Cuando el amarillo tiene fondo sólido, el contenido debe ser negro */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400"][class~="text-black"] {
+  color: #000000 !important;
+}
+
+/* Checkbox */
+html:not(.dark)
+  .featmusic-notifications-panel
+  input[type="checkbox"] {
+  color-scheme: light !important;
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+  accent-color: #ffd400 !important;
+}
+
+/* Filas sin leer */
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="bg-yellow-400/[0.10]"] {
+  background-color: rgba(255, 212, 0, 0.10) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="bg-yellow-400/[0.10]"]:hover {
+  background-color: rgba(255, 212, 0, 0.16) !important;
+}
+
+/* Hover de filas/botones normales */
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="hover:bg-black/[0.03]"]:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="hover:bg-black/5"]:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Error inferior */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="border-yellow-400/30"] {
+  border-color: rgba(255, 212, 0, 0.35) !important;
+}
+
+/*
+  Modo oscuro:
+  no se redefine aquí. Cuando html.dark está activo, estas reglas dejan de
+  aplicar y el componente conserva las clases y reglas oscuras que ya tenía.
+*/
+/* FEATMUSIC_NOTIFICACIONES_CLARO_FORZADO_V2_END */
