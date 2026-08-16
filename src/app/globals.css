@@ -3212,23 +3212,43 @@ html:not(.dark) .featmusic-app-light * {
 }
 /* FEATMUSIC_FONDOS_MAYOR_CONTRASTE_V1_END */
 
-/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1_START */
+/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V2_START */
 /*
-  La identidad que aparece sobre la portada debe conservar blanco puro aunque
-  el tema claro reinterprete las utilidades text-white. El borde permanece
-  transparente para conservar el tamaño de la tarjeta sin mostrar una línea.
+  Identidad del perfil según el estado de la portada:
+  - Tema claro sin portada: negro sólido sobre fondo blanco.
+  - Con portada: blanco puro para conservar contraste sobre la imagen.
+  - Tema oscuro sin portada: blanco, como el resto de la interfaz oscura.
 */
 .featmusic-app-light .featmusic-profile-cover {
   border-color: transparent !important;
 }
 
-.featmusic-app-light
+html:not(.dark)
+  .featmusic-app-light
+  .featmusic-no-cover-identity-text {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark)
+  .featmusic-app-light
+  .featmusic-profile-cover
+  .featmusic-cover-identity-text,
+html.dark
+  .featmusic-app-light
   .featmusic-profile-cover
   .featmusic-cover-identity-text {
   color: #ffffff !important;
   text-shadow: 0 1px 8px rgba(0,0,0,0.72);
 }
-/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V1_END */
+
+html.dark
+  .featmusic-app-light
+  .featmusic-no-cover-identity-text {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V2_END */
 
 
 /* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_START */
