@@ -9,6 +9,7 @@ type DescripcionPropuestaRecibidaProps = {
   nombreRemitente: string;
   nombreUsuario: string | null;
   fecha: string;
+  intento: number;
   descripcion: string | null;
 };
 
@@ -53,6 +54,7 @@ export default function DescripcionPropuestaRecibida({
   nombreRemitente,
   nombreUsuario,
   fecha,
+  intento,
   descripcion,
 }: DescripcionPropuestaRecibidaProps) {
   const [abierta, setAbierta] = useState(false);
@@ -178,6 +180,15 @@ export default function DescripcionPropuestaRecibida({
                     </p>
                     <p className="mt-1.5 text-[11px] font-semibold text-slate-700 sm:text-xs">
                       {fecha}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
+                      Intento
+                    </p>
+                    <p className="mt-1.5 text-[11px] font-semibold text-slate-700 sm:text-xs">
+                      Intento {intento}
                     </p>
                   </div>
 

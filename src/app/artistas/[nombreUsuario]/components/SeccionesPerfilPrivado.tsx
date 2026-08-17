@@ -911,48 +911,6 @@ export default function SeccionesPerfilPrivado({
                               className={indicePropuesta > 0 ? "border-t border-slate-200" : ""}
                             >
                               <div className="p-3 sm:p-3.5">
-                                <div className="flex items-start justify-between gap-2.5">
-                                  <div className="flex min-w-0 items-start gap-2.5">
-                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-400 text-[9px] font-black text-black">
-                                      {indicePropuesta + 1}
-                                    </span>
-
-                                    <div className="min-w-0">
-                                      <p className="truncate text-[11px] font-black text-slate-900 sm:text-xs">
-                                        Propuesta de {nombreArtista(remitente)}
-                                      </p>
-                                      <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                                        <span
-                                          className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
-                                            propuesta.estado,
-                                          )}`}
-                                        >
-                                          {etiquetaEstado(propuesta.estado)}
-                                        </span>
-                                        <span className="text-[8px] text-slate-400 sm:text-[9px]">
-                                          {formatearFecha(propuesta.creadoEn)}
-                                        </span>
-                                        <span className="text-[8px] text-slate-400 sm:text-[9px]">
-                                          · Intento {propuesta.numeroIntento}
-                                        </span>
-                                        {mensajes > 0 && (
-                                          <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
-                                            {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
-                                          </span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <DescripcionPropuestaRecibida
-                                    tituloIdea={idea.titulo}
-                                    nombreRemitente={nombreArtista(remitente)}
-                                    nombreUsuario={remitente.nombreUsuario}
-                                    fecha={formatearFecha(propuesta.creadoEn)}
-                                    descripcion={propuesta.mensaje}
-                                  />
-                                </div>
-
                                 {propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" && (
                                   <div className="mt-2.5 border-l-2 border-sky-300 pl-2.5">
                                     <p className="text-[8px] font-black uppercase tracking-[0.12em] text-sky-700">
@@ -969,15 +927,80 @@ export default function SeccionesPerfilPrivado({
                                     <ReproductorAudio
                                       id={`perfil-propuesta-recibida-${propuesta.id}`}
                                       src={propuesta.audioUrl}
-                                      titulo="Audio de la propuesta"
+                                      titulo={`Propuesta de ${nombreArtista(remitente)}`}
                                       duracionSegundos={propuesta.duracionSegundos}
                                       numero={indicePropuesta + 1}
+                                      elementoJuntoTitulo={
+                                        <DescripcionPropuestaRecibida
+                                          tituloIdea={idea.titulo}
+                                          nombreRemitente={nombreArtista(remitente)}
+                                          nombreUsuario={remitente.nombreUsuario}
+                                          fecha={formatearFecha(propuesta.creadoEn)}
+                                          intento={propuesta.numeroIntento}
+                                          descripcion={propuesta.mensaje}
+                                        />
+                                      }
+                                      detalleMetadatos={
+                                        <div className="flex flex-wrap items-center gap-1.5">
+                                          <span
+                                            className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                              propuesta.estado,
+                                            )}`}
+                                          >
+                                            {etiquetaEstado(propuesta.estado)}
+                                          </span>
+                                          {mensajes > 0 && (
+                                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                              {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                            </span>
+                                          )}
+                                        </div>
+                                      }
                                       className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
                                     />
                                   ) : (
-                                    <p className="text-[9px] font-semibold text-slate-500">
-                                      {textoAudioNoDisponible(propuesta.estado)}
-                                    </p>
+                                    <div className="min-w-0">
+                                      <div className="flex items-start gap-2">
+                                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-400 text-[9px] font-black text-black">
+                                          {indicePropuesta + 1}
+                                        </span>
+
+                                        <div className="min-w-0 flex-1">
+                                          <div className="flex min-w-0 items-center justify-between gap-2">
+                                            <p className="min-w-0 truncate text-[11px] font-bold text-slate-900">
+                                              Propuesta de {nombreArtista(remitente)}
+                                            </p>
+                                            <DescripcionPropuestaRecibida
+                                              tituloIdea={idea.titulo}
+                                              nombreRemitente={nombreArtista(remitente)}
+                                              nombreUsuario={remitente.nombreUsuario}
+                                              fecha={formatearFecha(propuesta.creadoEn)}
+                                              intento={propuesta.numeroIntento}
+                                              descripcion={propuesta.mensaje}
+                                            />
+                                          </div>
+
+                                          <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                                            <span
+                                              className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                                propuesta.estado,
+                                              )}`}
+                                            >
+                                              {etiquetaEstado(propuesta.estado)}
+                                            </span>
+                                            {mensajes > 0 && (
+                                              <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                                {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                              </span>
+                                            )}
+                                          </div>
+
+                                          <p className="mt-2 text-[9px] font-semibold text-slate-500">
+                                            {textoAudioNoDisponible(propuesta.estado)}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
                                   )}
                                 </div>
                               </div>
