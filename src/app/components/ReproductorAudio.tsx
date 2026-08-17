@@ -183,7 +183,7 @@ export default function ReproductorAudio({
                 )}
               </div>
 
-              {(metadatos.length > 0 || detalleMetadatos) && (
+              {(metadatos.length > 0 || (detalleMetadatos && !elementoBajoDuracion)) && (
                 <div className="mt-0.5 min-w-0">
                   {metadatos.length > 0 && (
                     <p className="truncate text-[9px] font-medium text-zinc-500">
@@ -191,7 +191,7 @@ export default function ReproductorAudio({
                     </p>
                   )}
 
-                  {detalleMetadatos && (
+                  {detalleMetadatos && !elementoBajoDuracion && (
                     <div
                       className={`min-w-0 ${
                         metadatos.length > 0 ? "mt-0.5" : ""
@@ -204,15 +204,21 @@ export default function ReproductorAudio({
               )}
             </div>
 
-            <div className="flex shrink-0 flex-col items-end">
-              <span className="pt-0.5 text-[9px] font-semibold tabular-nums text-zinc-500">
-                {formatearTiempo(tiempoActual)} / {formatearTiempo(duracionSegura)}
-              </span>
-              {elementoBajoDuracion && (
-                <div className="mt-0.5">{elementoBajoDuracion}</div>
-              )}
-            </div>
+            <span className="shrink-0 pt-0.5 text-[9px] font-semibold tabular-nums text-zinc-500">
+              {formatearTiempo(tiempoActual)} / {formatearTiempo(duracionSegura)}
+            </span>
           </div>
+
+          {elementoBajoDuracion && (
+            <div className="mt-0.5 flex min-w-0 items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                {detalleMetadatos}
+              </div>
+              <div className="shrink-0 whitespace-nowrap">
+                {elementoBajoDuracion}
+              </div>
+            </div>
+          )}
 
           <input
             type="range"
