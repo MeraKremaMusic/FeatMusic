@@ -99,7 +99,7 @@ export default function DescripcionPropuestaRecibida({
             <button
               type="button"
               aria-label="Cerrar descripción de la propuesta"
-              className="fixed inset-x-0 top-12 z-40 bg-slate-950/20 backdrop-blur-[5px]"
+              className="fixed inset-x-0 top-0 z-40 bg-slate-950/20 backdrop-blur-[5px]"
               style={{
                 bottom: "var(--featmusic-menu-movil-altura, 0px)",
               }}
