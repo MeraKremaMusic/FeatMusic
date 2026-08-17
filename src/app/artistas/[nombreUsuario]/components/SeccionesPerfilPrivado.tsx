@@ -862,13 +862,13 @@ export default function SeccionesPerfilPrivado({
                                       )}
                                     </div>
                                   }
-                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_.featmusic-audio-toggle]:!border-transparent [&_.featmusic-audio-toggle]:!bg-yellow-400 [&_.featmusic-audio-toggle]:!text-black [&_.featmusic-audio-toggle:hover]:!bg-yellow-300 [&_.featmusic-audio-title]:!text-white [&_.featmusic-audio-number]:!inline-flex [&_.featmusic-audio-number]:!h-6 [&_.featmusic-audio-number]:!w-6 [&_.featmusic-audio-number]:items-center [&_.featmusic-audio-number]:justify-center [&_.featmusic-audio-number]:rounded-lg [&_.featmusic-audio-number]:!bg-yellow-400 [&_.featmusic-audio-number]:!text-black"
+                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_.featmusic-audio-toggle]:!border-transparent [&_.featmusic-audio-toggle]:!bg-white [&_.featmusic-audio-toggle]:!text-black [&_.featmusic-audio-toggle:hover]:!bg-zinc-100 [&_.featmusic-audio-title]:!text-white [&_.featmusic-audio-number]:!inline-flex [&_.featmusic-audio-number]:!h-6 [&_.featmusic-audio-number]:!w-6 [&_.featmusic-audio-number]:items-center [&_.featmusic-audio-number]:justify-center [&_.featmusic-audio-number]:rounded-lg [&_.featmusic-audio-number]:!bg-yellow-400 [&_.featmusic-audio-number]:!text-black"
                                 />
                               ) : (
                                 <div className="min-w-0">
-                                  <div className="flex items-start gap-2">
-                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-transparent !bg-yellow-400 text-[9px] font-black !text-black">
-                                      {indiceIdea + 1}
+                                  <div className="flex items-center gap-2">
+                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-transparent !bg-yellow-400 text-[9px] font-black tabular-nums !text-black">
+                                      {String(indiceIdea + 1).padStart(2, "0")}
                                     </span>
 
                                     <div className="min-w-0 flex-1">
