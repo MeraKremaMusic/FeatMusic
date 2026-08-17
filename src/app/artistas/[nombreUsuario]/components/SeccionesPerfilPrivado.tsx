@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
 import DescripcionPropuestaRecibida from "./DescripcionPropuestaRecibida";
+import DescripcionPropuestaEnviada from "./DescripcionPropuestaEnviada";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
 type EstadoPropuesta =
@@ -51,6 +52,7 @@ export type PropuestaEnviadaPerfil = PropuestaBase & {
   idea: {
     id: number;
     titulo: string;
+    portadaUrl: string | null;
     usuario: ArtistaResumen;
   };
 };
@@ -513,6 +515,18 @@ export default function SeccionesPerfilPrivado({
     return mapa;
   }, [recibidas]);
 
+  const propuestasEnviadasPorIdea = useMemo(() => {
+    const mapa = new Map<number, PropuestaEnviadaPerfil[]>();
+
+    for (const propuesta of enviadas) {
+      const actuales = mapa.get(propuesta.idea.id) ?? [];
+      actuales.push(propuesta);
+      mapa.set(propuesta.idea.id, actuales);
+    }
+
+    return Array.from(mapa.values());
+  }, [enviadas]);
+
   useEffect(() => {
     const aplicarPestanaDesdeUrl = () => {
       const pestanaUrl = leerPestanaDesdeUrl();
@@ -746,7 +760,7 @@ export default function SeccionesPerfilPrivado({
         <div className="mt-3 sm:mt-4">
           <div className="mb-3 px-1">
             <p className="text-[10px] font-semibold text-slate-500 sm:text-[11px]">
-              Propuestas que enviaste a las ideas de otros artistas.
+              Ideas a las que enviaste propuestas y el estado de cada una.
             </p>
           </div>
 
@@ -763,150 +777,224 @@ export default function SeccionesPerfilPrivado({
               amarillo
             />
           ) : (
-            <div className="grid gap-2.5">
-              {enviadas.map((propuesta, indice) => {
-                const destinatario = propuesta.idea.usuario;
-                const mensajes = propuesta.conversacionId
-                  ? porConversacion[propuesta.conversacionId] ?? 0
-                  : 0;
+            <div className="grid gap-3">
+              {propuestasEnviadasPorIdea.map((propuestasIdea) => {
+                const primera = propuestasIdea[0];
+                const idea = primera.idea;
+                const destinatario = idea.usuario;
+                const portada = idea.portadaUrl?.trim() || null;
                 const rutaIdea = destinatario.nombreUsuario?.trim()
                   ? `/artistas/${encodeURIComponent(
                       destinatario.nombreUsuario.trim(),
-                    )}#idea-${propuesta.idea.id}`
+                    )}#idea-${idea.id}`
                   : null;
 
                 return (
                   <article
-                    key={propuesta.id}
+                    key={idea.id}
                     className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.05)]"
                   >
-                    <div className="p-3 sm:p-3.5">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex min-w-0 items-center gap-2.5">
-                          <Avatar artista={destinatario} />
-                          <div className="min-w-0">
-                            <EnlaceArtista artista={destinatario} />
-                            {rutaIdea ? (
-                              <Link
-                                href={rutaIdea}
-                                className="mt-0.5 block truncate text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
-                              >
-                                Para “{propuesta.idea.titulo}”
-                              </Link>
-                            ) : (
-                              <p className="mt-0.5 truncate text-[9px] text-slate-500 sm:text-[10px]">
-                                Para “{propuesta.idea.titulo}”
-                              </p>
-                            )}
-                            <p className="mt-0.5 text-[8px] text-slate-400 sm:text-[9px]">
-                              {formatearFecha(propuesta.creadoEn)} · Intento {propuesta.numeroIntento}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex shrink-0 flex-col items-end gap-1">
-                          <span
-                            className={`rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
-                              propuesta.estado,
-                            )}`}
-                          >
-                            {etiquetaEstado(propuesta.estado)}
-                          </span>
-                          {mensajes > 0 && (
-                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
-                              {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <p className="mt-2.5 rounded-lg bg-slate-50 px-2.5 py-2 text-[9px] font-semibold leading-4 text-slate-600 sm:text-[10px]">
-                        {textoEstadoEnviado(propuesta.estado)}
-                      </p>
-
-                      {propuesta.mensaje && (
-                        <p className="mt-2.5 whitespace-pre-wrap text-[9px] leading-4 text-slate-600 sm:text-[10px]">
-                          {propuesta.mensaje}
-                        </p>
-                      )}
-
-                      {propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" && (
-                        <div className="mt-2.5 border-l-2 border-sky-300 pl-2.5">
-                          <p className="text-[8px] font-black uppercase tracking-[0.12em] text-sky-700">
-                            Respuesta del artista
-                          </p>
-                          <p className="mt-1 whitespace-pre-wrap text-[9px] leading-4 text-slate-600 sm:text-[10px]">
-                            {propuesta.motivoDecision}
-                          </p>
-                        </div>
-                      )}
-
-                      <div className="mt-3 border-t border-slate-100 pt-3">
-                        {propuesta.audioUrl ? (
-                          <ReproductorAudio
-                            id={`perfil-propuesta-enviada-${propuesta.id}`}
-                            src={propuesta.audioUrl}
-                            titulo={`Propuesta para ${nombreArtista(destinatario)}`}
-                            duracionSegundos={propuesta.duracionSegundos}
-                            numero={indice + 1}
-                            className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                    <div
+                      className={`relative overflow-hidden px-3 py-3.5 sm:px-4 sm:py-4 ${
+                        portada ? "bg-black" : "bg-slate-950"
+                      }`}
+                    >
+                      {portada && (
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0"
+                        >
+                          <img
+                            src={portada}
+                            alt=""
+                            className="h-full w-full object-cover object-center"
+                            loading="lazy"
                           />
-                        ) : (
-                          <p className="text-[9px] font-semibold text-slate-500">
-                            {textoAudioNoDisponible(propuesta.estado)}
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              background:
+                                "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 24%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.30) 78%, rgba(0,0,0,0.12) 100%)",
+                            }}
+                          />
+                        </div>
+                      )}
+
+                      <div className="relative z-10 flex min-w-0 items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-yellow-400 sm:text-[9px]">
+                            Idea a la que enviaste
                           </p>
-                        )}
+                          <h3 className="mt-0.5 truncate text-sm font-black !text-white sm:text-base">
+                            {idea.titulo}
+                          </h3>
+                          <p className="mt-0.5 truncate text-[9px] font-semibold !text-white/75 sm:text-[10px]">
+                            De {nombreArtista(destinatario)}
+                          </p>
+                        </div>
+
+                        <span className="shrink-0 rounded-full border border-yellow-400 bg-yellow-400 px-2.5 py-1 text-[8px] font-black text-black sm:text-[9px]">
+                          {propuestasIdea.length} {propuestasIdea.length === 1 ? "propuesta" : "propuestas"}
+                        </span>
                       </div>
                     </div>
 
-                    {(rutaIdea ||
-                      propuesta.conversacionId ||
-                      propuesta.estado === "PENDIENTE") && (
-                      <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
-                        {rutaIdea && (
-                          <Link
-                            href={rutaIdea}
-                            className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-slate-600 transition hover:bg-slate-50 hover:text-emerald-700 ${
+                    <div>
+                      {propuestasIdea.map((propuesta, indicePropuesta) => {
+                        const mensajes = propuesta.conversacionId
+                          ? porConversacion[propuesta.conversacionId] ?? 0
+                          : 0;
+                        const procesando = procesandoId === propuesta.id;
+
+                        return (
+                          <div
+                            key={propuesta.id}
+                            className="border-t border-slate-200"
+                          >
+                            <div className="p-3 sm:p-3.5">
+                              {propuesta.audioUrl ? (
+                                <ReproductorAudio
+                                  id={`perfil-propuesta-enviada-${propuesta.id}`}
+                                  src={propuesta.audioUrl}
+                                  titulo={`Propuesta para ${nombreArtista(destinatario)}`}
+                                  duracionSegundos={propuesta.duracionSegundos}
+                                  numero={indicePropuesta + 1}
+                                  elementoBajoDuracion={
+                                    <DescripcionPropuestaEnviada
+                                      tituloIdea={idea.titulo}
+                                      nombreDestinatario={nombreArtista(destinatario)}
+                                      nombreUsuario={destinatario.nombreUsuario}
+                                      fecha={formatearFecha(propuesta.creadoEn)}
+                                      intento={propuesta.numeroIntento}
+                                      descripcion={propuesta.mensaje}
+                                      estado={etiquetaEstado(propuesta.estado)}
+                                      respuesta={propuesta.motivoDecision}
+                                    />
+                                  }
+                                  detalleMetadatos={
+                                    <div className="flex flex-wrap items-center gap-1.5">
+                                      <span
+                                        className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                          propuesta.estado,
+                                        )}`}
+                                      >
+                                        {etiquetaEstado(propuesta.estado)}
+                                      </span>
+                                      {mensajes > 0 && (
+                                        <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                          {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                        </span>
+                                      )}
+                                    </div>
+                                  }
+                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
+                                />
+                              ) : (
+                                <div className="min-w-0">
+                                  <div className="flex items-start gap-2">
+                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-400 text-[9px] font-black text-black">
+                                      {indicePropuesta + 1}
+                                    </span>
+
+                                    <div className="min-w-0 flex-1">
+                                      <p className="truncate text-[11px] font-bold text-slate-900">
+                                        Propuesta para {nombreArtista(destinatario)}
+                                      </p>
+
+                                      <div className="mt-1 flex min-w-0 items-center justify-between gap-2">
+                                        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                                          <span
+                                            className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                              propuesta.estado,
+                                            )}`}
+                                          >
+                                            {etiquetaEstado(propuesta.estado)}
+                                          </span>
+                                          {mensajes > 0 && (
+                                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                              {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                            </span>
+                                          )}
+                                        </div>
+
+                                        <DescripcionPropuestaEnviada
+                                          tituloIdea={idea.titulo}
+                                          nombreDestinatario={nombreArtista(destinatario)}
+                                          nombreUsuario={destinatario.nombreUsuario}
+                                          fecha={formatearFecha(propuesta.creadoEn)}
+                                          intento={propuesta.numeroIntento}
+                                          descripcion={propuesta.mensaje}
+                                          estado={etiquetaEstado(propuesta.estado)}
+                                          respuesta={propuesta.motivoDecision}
+                                        />
+                                      </div>
+
+                                      <p className="mt-2 text-[9px] font-semibold text-slate-500">
+                                        {textoAudioNoDisponible(propuesta.estado)}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {(rutaIdea ||
                               propuesta.conversacionId ||
-                              propuesta.estado === "PENDIENTE"
-                                ? "border-r border-slate-200"
-                                : ""
-                            }`}
-                          >
-                            Ver idea
-                          </Link>
-                        )}
-                        {propuesta.conversacionId && (
-                          <Link
-                            href={`/mensajes/${propuesta.conversacionId}`}
-                            className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50 ${
-                              propuesta.estado === "PENDIENTE"
-                                ? "border-r border-slate-200"
-                                : ""
-                            }`}
-                          >
-                            Abrir chat
-                            {mensajes > 0 && (
-                              <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
-                                {etiquetaCantidad(mensajes)}
-                              </span>
+                              propuesta.estado === "PENDIENTE") && (
+                              <div className="flex min-h-[30px] border-t border-slate-200 bg-white">
+                                {rutaIdea && (
+                                  <Link
+                                    href={rutaIdea}
+                                    className={`flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 sm:gap-1.5 sm:text-[10px] ${
+                                      propuesta.conversacionId ||
+                                      propuesta.estado === "PENDIENTE"
+                                        ? "border-r border-yellow-500"
+                                        : ""
+                                    }`}
+                                  >
+                                    <IconoIdea className="h-3.5 w-3.5 shrink-0" />
+                                    <span>Ver idea</span>
+                                  </Link>
+                                )}
+
+                                {propuesta.conversacionId && (
+                                  <Link
+                                    href={`/mensajes/${propuesta.conversacionId}`}
+                                    className={`flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 sm:gap-1.5 sm:text-[10px] ${
+                                      propuesta.estado === "PENDIENTE"
+                                        ? "border-r border-yellow-500"
+                                        : ""
+                                    }`}
+                                  >
+                                    <IconoChat className="h-3.5 w-3.5 shrink-0" />
+                                    <span>Abrir chat</span>
+                                    {mensajes > 0 && (
+                                      <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
+                                        {etiquetaCantidad(mensajes)}
+                                      </span>
+                                    )}
+                                  </Link>
+                                )}
+
+                                {propuesta.estado === "PENDIENTE" && (
+                                  <button
+                                    type="button"
+                                    disabled={procesando}
+                                    onClick={() => cancelarPropuesta(propuesta.id)}
+                                    className="flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
+                                  >
+                                    <IconoRechazar className="h-3.5 w-3.5 shrink-0" />
+                                    <span>
+                                      {procesando ? "Cancelando…" : "Cancelar envío"}
+                                    </span>
+                                  </button>
+                                )}
+                              </div>
                             )}
-                          </Link>
-                        )}
-                        {propuesta.estado === "PENDIENTE" && (
-                          <button
-                            type="button"
-                            disabled={procesandoId !== null}
-                            onClick={() => cancelarPropuesta(propuesta.id)}
-                            className="flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                            {procesandoId === propuesta.id
-                              ? "Cancelando…"
-                              : "Cancelar envío"}
-                          </button>
-                        )}
-                      </div>
-                    )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </article>
                 );
               })}

@@ -617,6 +617,7 @@ export default async function PerfilPublicoPage({
             select: {
               id: true,
               titulo: true,
+              portadaUrl: true,
               usuario: {
                 select: {
                   id: true,
