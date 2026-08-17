@@ -4230,6 +4230,38 @@ html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-ac
 }
 /* FEATMUSIC_EDITAR_PERFIL_MODO_CLARO_V3_END */
 
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_V4_START */
+/* Quitar: amarillo sólido únicamente en modo claro. */
+html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+}
+
+/* Guardar cambios: mismo amarillo FeatMusic y texto negro en claro y oscuro. */
+.featmusic-edit-profile-dialog .featmusic-edit-profile-save {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+}
+
+.featmusic-edit-profile-dialog .featmusic-edit-profile-save:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_V4_END */
+
 /* FEATMUSIC_NOTIFICACIONES_CLARO_FORZADO_V2_START */
 /*
   Centro de Notificaciones - modo claro real de FeatMusic.

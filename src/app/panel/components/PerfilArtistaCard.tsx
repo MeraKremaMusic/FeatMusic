@@ -867,7 +867,7 @@ export default function PerfilArtistaCard({
                       type="button"
                       onClick={quitarPortadaSeleccionada}
                       disabled={guardando}
-                      className="shrink-0 rounded-lg border border-yellow-400/20 px-2.5 py-1.5 text-[10px] font-bold text-yellow-300 transition hover:bg-yellow-500/10 disabled:opacity-60"
+                      className="featmusic-edit-profile-remove shrink-0 rounded-lg border border-yellow-400/20 px-2.5 py-1.5 text-[10px] font-bold text-yellow-300 transition hover:bg-yellow-500/10 disabled:opacity-60"
                     >
                       Quitar
                     </button>
@@ -1112,7 +1112,7 @@ export default function PerfilArtistaCard({
                     !USUARIO_REGEX.test(normalizarUsuario(nombreUsuario)) ||
                     biografia.length > 80
                   }
-                  className="featmusic-edit-profile-yellow-action rounded-xl bg-yellow-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="featmusic-edit-profile-yellow-action featmusic-edit-profile-save rounded-xl bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {guardando ? "Guardando..." : "Guardar cambios"}
                 </button>
