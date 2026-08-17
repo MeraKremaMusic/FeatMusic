@@ -120,11 +120,11 @@ export default function DescripcionIdea({
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2.5">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-300 bg-yellow-400 text-black">
                       <IconoDescripcion className="h-4.5 w-4.5" />
                     </span>
                     <div className="min-w-0">
-                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-700">
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-yellow-600">
                         Detalles de la idea
                       </p>
                       <h3
@@ -141,7 +141,7 @@ export default function DescripcionIdea({
                     type="button"
                     aria-label="Cerrar"
                     onClick={() => setAbierta(false)}
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-300/60"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-yellow-400 hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-300/60"
                   >
                     <IconoCerrar />
                   </button>
@@ -160,8 +160,8 @@ export default function DescripcionIdea({
                   )}
 
                   {textoColaboracion && (
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 px-3.5 py-3">
-                      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-emerald-700">
+                    <div className="rounded-xl border border-yellow-300 bg-yellow-50/80 px-3.5 py-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-yellow-600">
                         Colaboración buscada
                       </p>
                       <p className="mt-1.5 text-[11px] leading-[1.15rem] text-slate-700 sm:text-xs sm:leading-5">
@@ -186,10 +186,10 @@ export default function DescripcionIdea({
         aria-controls={panelId}
         title="Ver descripción"
         onClick={() => setAbierta(true)}
-        className={`featmusic-description-toggle inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-300/60 sm:text-[8px] ${
+        className={`featmusic-description-toggle inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[8px] ${
           abierta
-            ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-            : "border-slate-200 bg-white/95 text-slate-500 shadow-sm hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800"
+            ? "border-yellow-400 bg-yellow-400 text-black"
+            : "border-slate-200 bg-white/95 text-slate-500 shadow-sm hover:border-yellow-400 hover:bg-yellow-50 hover:text-black"
         }`}
       >
         <IconoDescripcion className="h-2.5 w-2.5" />

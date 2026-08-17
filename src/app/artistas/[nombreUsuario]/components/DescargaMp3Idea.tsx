@@ -193,11 +193,11 @@ export default function DescargaMp3Idea({
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2.5">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-300 bg-yellow-400 text-black">
                       <IconoDescarga className="h-4.5 w-4.5" />
                     </span>
                     <div className="min-w-0">
-                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-700">
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-yellow-600">
                         Descargar audio
                       </p>
                       <h3
@@ -218,7 +218,7 @@ export default function DescargaMp3Idea({
                       setAbierta(false);
                       setErrorDescarga(null);
                     }}
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-yellow-400 hover:bg-yellow-50 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <IconoCerrar />
                   </button>
@@ -258,7 +258,7 @@ export default function DescargaMp3Idea({
                     type="button"
                     disabled={descargando}
                     onClick={descargarMp3}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-emerald-600 bg-emerald-600 px-3 py-2.5 text-[10px] font-black text-white transition hover:border-emerald-700 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-yellow-400 bg-yellow-400 px-3 py-2.5 text-[10px] font-black text-black transition hover:border-yellow-300 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <IconoDescarga className="h-3.5 w-3.5" />
                     {descargando
@@ -287,7 +287,7 @@ export default function DescargaMp3Idea({
           setErrorDescarga(null);
           setAbierta(true);
         }}
-        className="flex min-h-11 w-full items-center justify-center gap-1.5 bg-white px-1.5 py-2 text-[9px] font-black text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-300/60 sm:text-[10px]"
+        className="flex min-h-11 w-full items-center justify-center gap-1.5 bg-white px-1.5 py-2 text-[9px] font-black text-slate-700 transition hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-300/60 sm:text-[10px]"
       >
         <IconoDescarga className="h-3.5 w-3.5 shrink-0" />
         <span>MP3</span>
