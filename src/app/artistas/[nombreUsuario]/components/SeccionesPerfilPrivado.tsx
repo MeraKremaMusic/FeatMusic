@@ -1108,7 +1108,7 @@ export default function SeccionesPerfilPrivado({
                               </div>
 
                               {propuesta.estado === "PENDIENTE" ? (
-                                <div className="flex min-h-[50px] border-t border-slate-200 bg-white">
+                                <div className="flex min-h-[30px] border-t border-slate-200 bg-white">
                                   <button
                                     type="button"
                                     disabled={procesando}
@@ -1160,7 +1160,7 @@ export default function SeccionesPerfilPrivado({
                                   </button>
                                 </div>
                               ) : propuesta.estado === "ACEPTADA" ? (
-                                <div className="flex min-h-[50px] border-t border-slate-200 bg-white">
+                                <div className="flex min-h-[20px] border-t border-slate-200 bg-white">
                                   {propuesta.audioUrl && (
                                     <a
                                       href={`/api/propuestas/${propuesta.id}/descargar`}
