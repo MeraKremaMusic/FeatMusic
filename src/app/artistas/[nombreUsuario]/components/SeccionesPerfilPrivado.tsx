@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
+import DescripcionPropuestaRecibida from "./DescripcionPropuestaRecibida";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
 
 type EstadoPropuesta =
@@ -872,12 +873,6 @@ export default function SeccionesPerfilPrivado({
                         </div>
                       </div>
 
-                      {propuesta.mensaje && (
-                        <p className="mt-2.5 whitespace-pre-wrap text-[9px] leading-4 text-slate-600 sm:text-[10px]">
-                          {propuesta.mensaje}
-                        </p>
-                      )}
-
                       {propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" && (
                         <div className="mt-2.5 border-l-2 border-sky-300 pl-2.5">
                           <p className="text-[8px] font-black uppercase tracking-[0.12em] text-sky-700">
@@ -889,7 +884,17 @@ export default function SeccionesPerfilPrivado({
                         </div>
                       )}
 
-                      <div className="mt-3 border-t border-slate-100 pt-3">
+                      <div className="mt-3 border-t border-slate-100 pt-2">
+                        <div className="mb-2 flex justify-end">
+                          <DescripcionPropuestaRecibida
+                            tituloIdea={propuesta.idea.titulo}
+                            nombreRemitente={nombreArtista(remitente)}
+                            nombreUsuario={remitente.nombreUsuario}
+                            fecha={formatearFecha(propuesta.creadoEn)}
+                            descripcion={propuesta.mensaje}
+                          />
+                        </div>
+
                         {propuesta.audioUrl ? (
                           <ReproductorAudio
                             id={`perfil-propuesta-recibida-${propuesta.id}`}
