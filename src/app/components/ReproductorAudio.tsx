@@ -157,7 +157,7 @@ export default function ReproductorAudio({
     >
       <div className="flex min-w-0 items-center gap-2.5">
         {typeof numero === "number" && (
-          <span className="w-5 shrink-0 text-center text-[9px] font-black tabular-nums text-zinc-600">
+          <span className="featmusic-audio-number w-5 shrink-0 text-center text-[9px] font-black tabular-nums text-zinc-600">
             {numero.toString().padStart(2, "0")}
           </span>
         )}

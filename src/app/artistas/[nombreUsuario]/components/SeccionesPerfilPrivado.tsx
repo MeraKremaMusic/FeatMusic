@@ -778,7 +778,7 @@ export default function SeccionesPerfilPrivado({
             />
           ) : (
             <div className="grid gap-3">
-              {propuestasEnviadasPorIdea.map((propuestasIdea) => {
+              {propuestasEnviadasPorIdea.map((propuestasIdea, indiceIdea) => {
                 const primera = propuestasIdea[0];
                 const idea = primera.idea;
                 const destinatario = idea.usuario;
@@ -833,7 +833,7 @@ export default function SeccionesPerfilPrivado({
                                   src={propuesta.audioUrl}
                                   titulo={`Propuesta para ${nombreArtista(destinatario)}`}
                                   duracionSegundos={propuesta.duracionSegundos}
-                                  numero={indicePropuesta + 1}
+                                  numero={indiceIdea + 1}
                                   elementoBajoDuracion={
                                     <DescripcionPropuestaEnviada
                                       tituloIdea={idea.titulo}
@@ -862,13 +862,13 @@ export default function SeccionesPerfilPrivado({
                                       )}
                                     </div>
                                   }
-                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_.featmusic-audio-title]:!text-white"
+                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_.featmusic-audio-toggle]:!border-transparent [&_.featmusic-audio-toggle]:!bg-yellow-400 [&_.featmusic-audio-toggle]:!text-black [&_.featmusic-audio-toggle:hover]:!bg-yellow-300 [&_.featmusic-audio-title]:!text-white [&_.featmusic-audio-number]:!inline-flex [&_.featmusic-audio-number]:!h-6 [&_.featmusic-audio-number]:!w-6 [&_.featmusic-audio-number]:items-center [&_.featmusic-audio-number]:justify-center [&_.featmusic-audio-number]:rounded-lg [&_.featmusic-audio-number]:!bg-yellow-400 [&_.featmusic-audio-number]:!text-black"
                                 />
                               ) : (
                                 <div className="min-w-0">
                                   <div className="flex items-start gap-2">
-                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-400 text-[9px] font-black text-black">
-                                      {indicePropuesta + 1}
+                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-transparent !bg-yellow-400 text-[9px] font-black !text-black">
+                                      {indiceIdea + 1}
                                     </span>
 
                                     <div className="min-w-0 flex-1">
@@ -917,7 +917,7 @@ export default function SeccionesPerfilPrivado({
                             {(rutaIdea ||
                               propuesta.conversacionId ||
                               propuesta.estado === "PENDIENTE") && (
-                              <div className="flex min-h-[30px] border-t border-slate-200 bg-white">
+                              <div className="flex min-h-[30px] bg-white">
                                 {rutaIdea && (
                                   <Link
                                     href={rutaIdea}
