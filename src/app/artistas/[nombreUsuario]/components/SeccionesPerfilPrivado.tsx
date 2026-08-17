@@ -794,51 +794,6 @@ export default function SeccionesPerfilPrivado({
                     key={idea.id}
                     className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.05)]"
                   >
-                    <div
-                      className={`relative overflow-hidden px-3 py-3.5 sm:px-4 sm:py-4 ${
-                        portada ? "bg-black" : "bg-slate-950"
-                      }`}
-                    >
-                      {portada && (
-                        <div
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-0"
-                        >
-                          <img
-                            src={portada}
-                            alt=""
-                            className="h-full w-full object-cover object-center"
-                            loading="lazy"
-                          />
-                          <div
-                            className="absolute inset-0"
-                            style={{
-                              background:
-                                "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 24%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.30) 78%, rgba(0,0,0,0.12) 100%)",
-                            }}
-                          />
-                        </div>
-                      )}
-
-                      <div className="relative z-10 flex min-w-0 items-center justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-yellow-400 sm:text-[9px]">
-                            Idea a la que enviaste
-                          </p>
-                          <h3 className="mt-0.5 truncate text-sm font-black !text-white sm:text-base">
-                            {idea.titulo}
-                          </h3>
-                          <p className="mt-0.5 truncate text-[9px] font-semibold !text-white/75 sm:text-[10px]">
-                            De {nombreArtista(destinatario)}
-                          </p>
-                        </div>
-
-                        <span className="shrink-0 rounded-full border border-yellow-400 bg-yellow-400 px-2.5 py-1 text-[8px] font-black text-black sm:text-[9px]">
-                          {propuestasIdea.length} {propuestasIdea.length === 1 ? "propuesta" : "propuestas"}
-                        </span>
-                      </div>
-                    </div>
-
                     <div>
                       {propuestasIdea.map((propuesta, indicePropuesta) => {
                         const mensajes = propuesta.conversacionId
@@ -849,9 +804,29 @@ export default function SeccionesPerfilPrivado({
                         return (
                           <div
                             key={propuesta.id}
-                            className="border-t border-slate-200"
+                            className={indicePropuesta > 0 ? "border-t border-slate-200" : ""}
                           >
-                            <div className="p-3 sm:p-3.5">
+                            <div
+                              className={`relative overflow-hidden ${
+                                portada ? "bg-black" : "bg-slate-950"
+                              }`}
+                            >
+                              {portada && (
+                                <div
+                                  aria-hidden="true"
+                                  className="pointer-events-none absolute inset-0"
+                                >
+                                  <img
+                                    src={portada}
+                                    alt=""
+                                    className="h-full w-full object-cover object-center"
+                                    loading="lazy"
+                                  />
+                                  <div className="absolute inset-0 bg-black/70" />
+                                </div>
+                              )}
+
+                              <div className="relative z-10 p-3 sm:p-3.5">
                               {propuesta.audioUrl ? (
                                 <ReproductorAudio
                                   id={`perfil-propuesta-enviada-${propuesta.id}`}
@@ -887,7 +862,7 @@ export default function SeccionesPerfilPrivado({
                                       )}
                                     </div>
                                   }
-                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
+                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_span]:!text-white"
                                 />
                               ) : (
                                 <div className="min-w-0">
@@ -897,7 +872,7 @@ export default function SeccionesPerfilPrivado({
                                     </span>
 
                                     <div className="min-w-0 flex-1">
-                                      <p className="truncate text-[11px] font-bold text-slate-900">
+                                      <p className="truncate text-[11px] font-bold !text-white">
                                         Propuesta para {nombreArtista(destinatario)}
                                       </p>
 
@@ -929,13 +904,14 @@ export default function SeccionesPerfilPrivado({
                                         />
                                       </div>
 
-                                      <p className="mt-2 text-[9px] font-semibold text-slate-500">
+                                      <p className="mt-2 text-[9px] font-semibold !text-white/75">
                                         {textoAudioNoDisponible(propuesta.estado)}
                                       </p>
                                     </div>
                                   </div>
                                 </div>
                               )}
+                              </div>
                             </div>
 
                             {(rutaIdea ||
