@@ -831,7 +831,7 @@ export default function PerfilArtistaCard({
                       type="button"
                       onClick={() => inputArchivoRef.current?.click()}
                       disabled={guardando}
-                      className="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-zinc-200 transition hover:bg-white/5 disabled:opacity-60"
+                      className="featmusic-edit-profile-yellow-action rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-zinc-200 transition hover:bg-white/5 disabled:opacity-60"
                     >
                       Seleccionar imagen
                     </button>
@@ -889,12 +889,12 @@ export default function PerfilArtistaCard({
                         className="absolute inset-0 h-full w-full object-cover"
                       />
                       <span className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-transparent" />
-                      <span className="relative z-10 rounded-lg bg-black/45 px-3 py-2 text-xs font-bold text-white backdrop-blur-sm">
+                      <span className="featmusic-edit-profile-yellow-action relative z-10 rounded-lg bg-black/45 px-3 py-2 text-xs font-bold text-white backdrop-blur-sm">
                         Cambiar portada
                       </span>
                     </>
                   ) : (
-                    <span>Seleccionar portada</span>
+                    <span className="featmusic-edit-profile-yellow-action rounded-lg px-3 py-2 text-xs font-bold">Seleccionar portada</span>
                   )}
                 </button>
 
@@ -1112,7 +1112,7 @@ export default function PerfilArtistaCard({
                     !USUARIO_REGEX.test(normalizarUsuario(nombreUsuario)) ||
                     biografia.length > 80
                   }
-                  className="rounded-xl bg-yellow-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="featmusic-edit-profile-yellow-action rounded-xl bg-yellow-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {guardando ? "Guardando..." : "Guardar cambios"}
                 </button>
