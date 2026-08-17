@@ -141,7 +141,7 @@ export default function DescripcionIdea({
                     type="button"
                     aria-label="Cerrar"
                     onClick={() => setAbierta(false)}
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-yellow-400 hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-300/60"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-yellow-400 hover:bg-yellow-50 hover:text-black"
                   >
                     <IconoCerrar />
                   </button>
@@ -160,11 +160,11 @@ export default function DescripcionIdea({
                   )}
 
                   {textoColaboracion && (
-                    <div className="rounded-xl border border-yellow-300 bg-yellow-50/80 px-3.5 py-3">
-                      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-yellow-600">
+                    <div className="rounded-xl border border-yellow-400 bg-yellow-400 px-3.5 py-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-black">
                         Colaboración buscada
                       </p>
-                      <p className="mt-1.5 text-[11px] leading-[1.15rem] text-slate-700 sm:text-xs sm:leading-5">
+                      <p className="mt-1.5 text-[11px] leading-[1.15rem] text-black sm:text-xs sm:leading-5">
                         {textoColaboracion}
                       </p>
                     </div>
