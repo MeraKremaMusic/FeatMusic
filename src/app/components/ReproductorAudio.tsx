@@ -17,6 +17,7 @@ type ReproductorAudioProps = {
   numero?: number;
   detalleMetadatos?: ReactNode;
   elementoJuntoTitulo?: ReactNode;
+  elementoBajoDuracion?: ReactNode;
   className?: string;
 };
 
@@ -71,6 +72,7 @@ export default function ReproductorAudio({
   numero,
   detalleMetadatos,
   elementoJuntoTitulo,
+  elementoBajoDuracion,
   className = "",
 }: ReproductorAudioProps) {
   const reactId = useId();
@@ -202,9 +204,14 @@ export default function ReproductorAudio({
               )}
             </div>
 
-            <span className="shrink-0 pt-0.5 text-[9px] font-semibold tabular-nums text-zinc-500">
-              {formatearTiempo(tiempoActual)} / {formatearTiempo(duracionSegura)}
-            </span>
+            <div className="flex shrink-0 flex-col items-end">
+              <span className="pt-0.5 text-[9px] font-semibold tabular-nums text-zinc-500">
+                {formatearTiempo(tiempoActual)} / {formatearTiempo(duracionSegura)}
+              </span>
+              {elementoBajoDuracion && (
+                <div className="mt-0.5">{elementoBajoDuracion}</div>
+              )}
+            </div>
           </div>
 
           <input

@@ -908,7 +908,7 @@ export default function SeccionesPerfilPrivado({
                           return (
                             <div
                               key={propuesta.id}
-                              className={indicePropuesta > 0 ? "border-t border-slate-200" : ""}
+                              className="border-t border-slate-200"
                             >
                               <div className="p-3 sm:p-3.5">
                                 {propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" && (
@@ -922,7 +922,7 @@ export default function SeccionesPerfilPrivado({
                                   </div>
                                 )}
 
-                                <div className="mt-3 border-t border-slate-100 pt-2.5">
+                                <div className={propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" ? "mt-3" : ""}>
                                   {propuesta.audioUrl ? (
                                     <ReproductorAudio
                                       id={`perfil-propuesta-recibida-${propuesta.id}`}
@@ -930,7 +930,7 @@ export default function SeccionesPerfilPrivado({
                                       titulo={`Propuesta de ${nombreArtista(remitente)}`}
                                       duracionSegundos={propuesta.duracionSegundos}
                                       numero={indicePropuesta + 1}
-                                      elementoJuntoTitulo={
+                                      elementoBajoDuracion={
                                         <DescripcionPropuestaRecibida
                                           tituloIdea={idea.titulo}
                                           nombreRemitente={nombreArtista(remitente)}
@@ -966,10 +966,26 @@ export default function SeccionesPerfilPrivado({
                                         </span>
 
                                         <div className="min-w-0 flex-1">
-                                          <div className="flex min-w-0 items-center justify-between gap-2">
-                                            <p className="min-w-0 truncate text-[11px] font-bold text-slate-900">
-                                              Propuesta de {nombreArtista(remitente)}
-                                            </p>
+                                          <p className="truncate text-[11px] font-bold text-slate-900">
+                                            Propuesta de {nombreArtista(remitente)}
+                                          </p>
+
+                                          <div className="mt-1 flex min-w-0 items-center justify-between gap-2">
+                                            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                                              <span
+                                                className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                                  propuesta.estado,
+                                                )}`}
+                                              >
+                                                {etiquetaEstado(propuesta.estado)}
+                                              </span>
+                                              {mensajes > 0 && (
+                                                <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                                  {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                                </span>
+                                              )}
+                                            </div>
+
                                             <DescripcionPropuestaRecibida
                                               tituloIdea={idea.titulo}
                                               nombreRemitente={nombreArtista(remitente)}
@@ -978,21 +994,6 @@ export default function SeccionesPerfilPrivado({
                                               intento={propuesta.numeroIntento}
                                               descripcion={propuesta.mensaje}
                                             />
-                                          </div>
-
-                                          <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                                            <span
-                                              className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
-                                                propuesta.estado,
-                                              )}`}
-                                            >
-                                              {etiquetaEstado(propuesta.estado)}
-                                            </span>
-                                            {mensajes > 0 && (
-                                              <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
-                                                {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
-                                              </span>
-                                            )}
                                           </div>
 
                                           <p className="mt-2 text-[9px] font-semibold text-slate-500">
