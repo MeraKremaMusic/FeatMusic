@@ -564,6 +564,9 @@ export default async function PerfilPublicoPage({
           idea: {
             usuarioId: artista.id,
           },
+          estado: {
+            notIn: ["RECHAZADA", "RECHAZANDO"],
+          },
         },
         orderBy: { creadoEn: "desc" },
         take: 30,

@@ -483,7 +483,12 @@ export default function SeccionesPerfilPrivado({
   propuestasEnviadasIniciales: PropuestaEnviadaPerfil[];
 }) {
   const [pestana, setPestana] = useState<PestanaPerfil>("ACTIVAS");
-  const [recibidas, setRecibidas] = useState(propuestasRecibidasIniciales);
+  const [recibidas, setRecibidas] = useState(
+    propuestasRecibidasIniciales.filter(
+      (propuesta) =>
+        propuesta.estado !== "RECHAZADA" && propuesta.estado !== "RECHAZANDO",
+    ),
+  );
   const [enviadas, setEnviadas] = useState(propuestasEnviadasIniciales);
   const [procesandoId, setProcesandoId] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -591,8 +596,12 @@ export default function SeccionesPerfilPrivado({
         throw new Error(data.mensaje || "No se pudo actualizar la propuesta.");
       }
 
-      setRecibidas((actuales) =>
-        actuales.map((propuesta) =>
+      setRecibidas((actuales) => {
+        if (payload.accion === "RECHAZAR") {
+          return actuales.filter((propuesta) => propuesta.id !== propuestaId);
+        }
+
+        return actuales.map((propuesta) =>
           propuesta.id === propuestaId
             ? {
                 ...propuesta,
@@ -616,8 +625,8 @@ export default function SeccionesPerfilPrivado({
                   : propuesta.decisionEn,
               }
             : propuesta,
-        ),
-      );
+        );
+      });
 
       setModal(null);
       setMotivo("");
