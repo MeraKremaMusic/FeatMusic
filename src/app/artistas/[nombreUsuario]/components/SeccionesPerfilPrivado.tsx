@@ -876,7 +876,7 @@ export default function SeccionesPerfilPrivado({
                           <p className="text-[8px] font-black uppercase tracking-[0.14em] text-yellow-400 sm:text-[9px]">
                             Idea publicada
                           </p>
-                          <h3 className="mt-0.5 truncate text-sm font-black text-white sm:text-base">
+                          <h3 className="mt-0.5 truncate text-sm font-black !text-white sm:text-base">
                             {idea.titulo}
                           </h3>
                         </div>
@@ -1021,7 +1021,7 @@ export default function SeccionesPerfilPrivado({
                                         numeroIntento: propuesta.numeroIntento,
                                       });
                                     }}
-                                    className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-red-700 transition hover:bg-red-50 disabled:opacity-50 sm:text-[9px]"
+                                    className="flex min-w-0 flex-1 items-center justify-center border-r border-yellow-500 !bg-yellow-400 px-1.5 py-2 text-center text-[8px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:text-[9px]"
                                   >
                                     Rechazar
                                   </button>
@@ -1039,7 +1039,7 @@ export default function SeccionesPerfilPrivado({
                                           numeroIntento: propuesta.numeroIntento,
                                         });
                                       }}
-                                      className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-sky-700 transition hover:bg-sky-50 disabled:opacity-50 sm:text-[9px]"
+                                      className="flex min-w-0 flex-1 items-center justify-center border-r border-yellow-500 !bg-yellow-400 px-1.5 py-2 text-center text-[8px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:text-[9px]"
                                     >
                                       Solicitar cambios
                                     </button>
@@ -1050,7 +1050,7 @@ export default function SeccionesPerfilPrivado({
                                     onClick={() =>
                                       enviarDecision(propuesta.id, { accion: "ACEPTAR" })
                                     }
-                                    className="flex min-w-0 flex-1 items-center justify-center px-1.5 py-2 text-center text-[8px] font-black leading-tight text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 sm:text-[9px]"
+                                    className="flex min-w-0 flex-1 items-center justify-center !bg-yellow-400 px-1.5 py-2 text-center text-[8px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:text-[9px]"
                                   >
                                     {procesando ? "Procesando…" : "Aceptar"}
                                   </button>
