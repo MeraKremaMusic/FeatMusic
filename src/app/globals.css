@@ -4182,8 +4182,8 @@ html.dark .featmusic-profile-social-button {
 /*
   Editar perfil:
   - Modo claro: ventana blanca, textos negros y controles claros.
-  - Acciones principales: amarillo FeatMusic con texto negro.
-  - Modo oscuro: no se redefine aquí y conserva su diseño actual.
+  - Acciones principales: amarillo FeatMusic con texto negro en claro y oscuro.
+  - El resto del modo oscuro conserva su diseño actual.
 */
 html:not(.dark) .featmusic-edit-profile-dialog {
   color-scheme: light !important;
@@ -4215,14 +4215,14 @@ html:not(.dark) .featmusic-edit-profile-dialog [class~="border-white/10"] {
   border-color: rgba(0, 0, 0, 0.12) !important;
 }
 
-html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
   background: #ffd400 !important;
   background-color: #ffd400 !important;
   border-color: #ffd400 !important;
   color: #000000 !important;
 }
 
-html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
   background: #f2c900 !important;
   background-color: #f2c900 !important;
   border-color: #f2c900 !important;
@@ -4231,15 +4231,15 @@ html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-ac
 /* FEATMUSIC_EDITAR_PERFIL_MODO_CLARO_V3_END */
 
 /* FEATMUSIC_EDITAR_PERFIL_BOTONES_V4_START */
-/* Quitar: amarillo sólido únicamente en modo claro. */
-html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+/* Quitar: amarillo sólido con texto negro en claro y oscuro. */
+.featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
   background: #ffd400 !important;
   background-color: #ffd400 !important;
   border-color: #ffd400 !important;
   color: #000000 !important;
 }
 
-html:not(.dark) .featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+.featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
   background: #f2c900 !important;
   background-color: #f2c900 !important;
   border-color: #f2c900 !important;
