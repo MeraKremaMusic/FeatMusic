@@ -175,7 +175,7 @@ export default function ReproductorAudio({
           <div className="flex min-w-0 items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
               <div className="flex min-w-0 items-center gap-1.5">
-                <p className="min-w-0 truncate text-[11px] font-bold text-zinc-100">
+                <p className="featmusic-audio-title min-w-0 truncate text-[11px] font-bold text-zinc-100">
                   {titulo}
                 </p>
                 {elementoJuntoTitulo && (
