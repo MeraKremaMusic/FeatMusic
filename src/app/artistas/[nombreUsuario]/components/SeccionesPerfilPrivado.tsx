@@ -1115,7 +1115,7 @@ export default function SeccionesPerfilPrivado({
               maxLength={500}
               rows={5}
               autoFocus
-              className="mt-4 w-full resize-none rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="mt-4 w-full resize-none rounded-xl border border-yellow-300 bg-slate-50 px-3 py-2.5 text-xs text-slate-800 outline-none transition focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
               placeholder="Escribe el motivo..."
             />
 
@@ -1125,7 +1125,7 @@ export default function SeccionesPerfilPrivado({
                   type="checkbox"
                   checked={permiteReintento}
                   onChange={(event) => setPermiteReintento(event.target.checked)}
-                  className="mt-0.5 h-4 w-4 accent-emerald-600"
+                  className="mt-0.5 h-4 w-4 accent-yellow-400"
                 />
                 <span className="text-[10px] leading-4 text-slate-600">
                   Permitir que este artista envíe un nuevo intento.
@@ -1150,7 +1150,7 @@ export default function SeccionesPerfilPrivado({
                 type="button"
                 disabled={procesandoId !== null}
                 onClick={confirmarModal}
-                className="h-9 rounded-lg border border-emerald-600 bg-emerald-600 px-3 text-[10px] font-black text-white transition hover:bg-emerald-700 disabled:opacity-50"
+                className="h-9 rounded-lg border border-yellow-400 bg-yellow-400 px-3 text-[10px] font-black text-black transition hover:border-yellow-300 hover:bg-yellow-300 disabled:opacity-50"
               >
                 {procesandoId !== null ? "Procesando…" : "Confirmar"}
               </button>
