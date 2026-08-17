@@ -4450,3 +4450,43 @@ html:not(.dark)
   aplicar y el componente conserva las clases y reglas oscuras que ya tenía.
 */
 /* FEATMUSIC_NOTIFICACIONES_CLARO_FORZADO_V2_END */
+
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V5_START */
+/*
+  Corrección final de botones de Editar perfil SOLO en modo claro.
+  Estas reglas tienen mayor especificidad que los conversores globales
+  de bg-black/45, text-zinc-200 y text-yellow-300.
+*/
+html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V5_END */
+
