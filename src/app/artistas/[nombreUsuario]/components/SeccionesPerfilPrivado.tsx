@@ -878,16 +878,43 @@ export default function SeccionesPerfilPrivado({
                             titulo={`Propuesta de ${nombreArtista(remitente)}`}
                             duracionSegundos={propuesta.duracionSegundos}
                             numero={indice + 1}
-                            elementoJuntoTitulo={
-                              <span
-                                className={`rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
-                                  propuesta.estado,
-                                )}`}
-                              >
-                                {etiquetaEstado(propuesta.estado)}
-                              </span>
-                            }
                             detalleMetadatos={
+                              <div className="flex min-w-0 items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setPestana("ACTIVAS");
+                                    window.setTimeout(() => {
+                                      document
+                                        .getElementById(`idea-${propuesta.idea.id}`)
+                                        ?.scrollIntoView({
+                                          behavior: "smooth",
+                                          block: "center",
+                                        });
+                                    }, 80);
+                                  }}
+                                  className="min-w-0 flex-1 truncate text-left text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
+                                >
+                                  Para “{propuesta.idea.titulo}”
+                                </button>
+                                <span
+                                  className={`shrink-0 rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
+                                    propuesta.estado,
+                                  )}`}
+                                >
+                                  {etiquetaEstado(propuesta.estado)}
+                                </span>
+                              </div>
+                            }
+                            className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                          />
+                        ) : (
+                          <div className="min-w-0">
+                            <p className="truncate text-[11px] font-bold text-zinc-100">
+                              Propuesta de {nombreArtista(remitente)}
+                            </p>
+
+                            <div className="mt-0.5 flex min-w-0 items-center gap-1.5">
                               <button
                                 type="button"
                                 onClick={() => {
@@ -901,19 +928,10 @@ export default function SeccionesPerfilPrivado({
                                       });
                                   }, 80);
                                 }}
-                                className="block max-w-full truncate text-left text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
+                                className="min-w-0 flex-1 truncate text-left text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
                               >
                                 Para “{propuesta.idea.titulo}”
                               </button>
-                            }
-                            className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
-                          />
-                        ) : (
-                          <div className="min-w-0">
-                            <div className="flex min-w-0 items-center gap-1.5">
-                              <p className="min-w-0 truncate text-[11px] font-bold text-zinc-100">
-                                Propuesta de {nombreArtista(remitente)}
-                              </p>
                               <span
                                 className={`shrink-0 rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
                                   propuesta.estado,
@@ -922,24 +940,6 @@ export default function SeccionesPerfilPrivado({
                                 {etiquetaEstado(propuesta.estado)}
                               </span>
                             </div>
-
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setPestana("ACTIVAS");
-                                window.setTimeout(() => {
-                                  document
-                                    .getElementById(`idea-${propuesta.idea.id}`)
-                                    ?.scrollIntoView({
-                                      behavior: "smooth",
-                                      block: "center",
-                                    });
-                                }, 80);
-                              }}
-                              className="mt-0.5 block max-w-full truncate text-left text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
-                            >
-                              Para “{propuesta.idea.titulo}”
-                            </button>
 
                             <p className="mt-2 text-[9px] font-semibold text-slate-500">
                               {textoAudioNoDisponible(propuesta.estado)}
