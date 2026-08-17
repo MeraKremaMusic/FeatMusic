@@ -4457,7 +4457,7 @@ html:not(.dark)
   Estas reglas tienen mayor especificidad que los conversores globales
   de bg-black/45, text-zinc-200 y text-yellow-300.
 */
-html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
   background: #ffd400 !important;
   background-color: #ffd400 !important;
   border-color: #ffd400 !important;
@@ -4465,7 +4465,7 @@ html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-e
   -webkit-text-fill-color: #000000 !important;
 }
 
-html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
   background: #f2c900 !important;
   background-color: #f2c900 !important;
   border-color: #f2c900 !important;
@@ -4473,7 +4473,7 @@ html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-e
   -webkit-text-fill-color: #000000 !important;
 }
 
-html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
   background: #ffd400 !important;
   background-color: #ffd400 !important;
   border-color: #ffd400 !important;
@@ -4481,7 +4481,7 @@ html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-e
   -webkit-text-fill-color: #000000 !important;
 }
 
-html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
   background: #f2c900 !important;
   background-color: #f2c900 !important;
   border-color: #f2c900 !important;
@@ -4489,4 +4489,45 @@ html:not(.dark) .featmusic-app-light .featmusic-edit-profile-dialog .featmusic-e
   -webkit-text-fill-color: #000000 !important;
 }
 /* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V5_END */
+
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V6_START */
+/*
+  Corrección definitiva SOLO para modo claro.
+  .featmusic-app-light y .featmusic-edit-profile-dialog están en el mismo
+  elemento, por eso el selector debe unir ambas clases sin espacio.
+*/
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V6_END */
 
