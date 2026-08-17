@@ -956,7 +956,7 @@ export default function SeccionesPerfilPrivado({
                                           )}
                                         </div>
                                       }
-                                      className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                                      className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
                                     />
                                   ) : (
                                     <div className="min-w-0">
