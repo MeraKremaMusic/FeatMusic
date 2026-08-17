@@ -264,6 +264,98 @@ function IconoRecibir({ className = "h-3.5 w-3.5" }: { className?: string }) {
   );
 }
 
+function IconoRechazar({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+    >
+      <path d="m6 6 12 12" />
+      <path d="M18 6 6 18" />
+    </svg>
+  );
+}
+
+function IconoCambios({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 7h-7" />
+      <path d="m17 4 3 3-3 3" />
+      <path d="M4 17h7" />
+      <path d="m7 14-3 3 3 3" />
+    </svg>
+  );
+}
+
+function IconoAceptar({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.1}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m5 12 4 4L19 6" />
+    </svg>
+  );
+}
+
+function IconoDescargar({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3v12" />
+      <path d="m7 10 5 5 5-5" />
+      <path d="M5 20h14" />
+    </svg>
+  );
+}
+
+function IconoChat({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 5h14v10H9l-4 4V5Z" />
+      <path d="M8 9h8" />
+      <path d="M8 12h5" />
+    </svg>
+  );
+}
+
 function BotonPestana({
   activa,
   etiqueta,
@@ -1007,7 +1099,7 @@ export default function SeccionesPerfilPrivado({
                               </div>
 
                               {propuesta.estado === "PENDIENTE" ? (
-                                <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
+                                <div className="flex min-h-[50px] border-t border-slate-200 bg-white">
                                   <button
                                     type="button"
                                     disabled={procesando}
@@ -1021,9 +1113,10 @@ export default function SeccionesPerfilPrivado({
                                         numeroIntento: propuesta.numeroIntento,
                                       });
                                     }}
-                                    className="flex min-w-0 flex-1 items-center justify-center border-r border-yellow-500 !bg-yellow-400 px-1.5 py-2 text-center text-[8px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:text-[9px]"
+                                    className="flex min-w-0 flex-1 items-center justify-center gap-1 border-r border-yellow-500 !bg-yellow-400 px-2 py-2.5 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                   >
-                                    Rechazar
+                                    <IconoRechazar className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                                    <span>Rechazar</span>
                                   </button>
                                   {propuesta.numeroIntento < 2 && (
                                     <button
@@ -1039,9 +1132,10 @@ export default function SeccionesPerfilPrivado({
                                           numeroIntento: propuesta.numeroIntento,
                                         });
                                       }}
-                                      className="flex min-w-0 flex-1 items-center justify-center border-r border-yellow-500 !bg-yellow-400 px-1.5 py-2 text-center text-[8px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:text-[9px]"
+                                      className="flex min-w-0 flex-1 items-center justify-center gap-1 border-r border-yellow-500 !bg-yellow-400 px-2 py-2.5 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                     >
-                                      Solicitar cambios
+                                      <IconoCambios className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                                      <span>Solicitar cambios</span>
                                     </button>
                                   )}
                                   <button
@@ -1050,31 +1144,34 @@ export default function SeccionesPerfilPrivado({
                                     onClick={() =>
                                       enviarDecision(propuesta.id, { accion: "ACEPTAR" })
                                     }
-                                    className="flex min-w-0 flex-1 items-center justify-center !bg-yellow-400 px-1.5 py-2 text-center text-[8px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:text-[9px]"
+                                    className="flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2.5 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                   >
-                                    {procesando ? "Procesando…" : "Aceptar"}
+                                    <IconoAceptar className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                                    <span>{procesando ? "Procesando…" : "Aceptar"}</span>
                                   </button>
                                 </div>
                               ) : propuesta.estado === "ACEPTADA" ? (
-                                <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
+                                <div className="flex min-h-[50px] border-t border-slate-200 bg-white">
                                   {propuesta.audioUrl && (
                                     <a
                                       href={`/api/propuestas/${propuesta.id}/descargar`}
-                                      className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-sky-700 transition hover:bg-sky-50 ${
+                                      className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 !bg-yellow-400 px-3 py-3 text-center text-[10px] font-black !text-black transition hover:!bg-yellow-300 sm:text-[11px] ${
                                         propuesta.conversacionId
                                           ? "border-r border-slate-200"
                                           : ""
                                       }`}
                                     >
-                                      Descargar MP3
+                                      <IconoDescargar className="h-4 w-4 shrink-0" />
+                                      <span>MP3</span>
                                     </a>
                                   )}
                                   {propuesta.conversacionId && (
                                     <Link
                                       href={`/mensajes/${propuesta.conversacionId}`}
-                                      className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50"
+                                      className="flex min-w-0 flex-1 items-center justify-center gap-1.5 !bg-yellow-400 px-3 py-3 text-center text-[10px] font-black !text-black transition hover:!bg-yellow-300 sm:text-[11px]"
                                     >
-                                      Abrir chat
+                                      <IconoChat className="h-4 w-4 shrink-0" />
+                                      <span>Abrir chat</span>
                                       {mensajes > 0 && (
                                         <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
                                           {etiquetaCantidad(mensajes)}
