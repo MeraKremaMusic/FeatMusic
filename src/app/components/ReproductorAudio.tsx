@@ -16,6 +16,7 @@ type ReproductorAudioProps = {
   duracionSegundos?: number | null;
   numero?: number;
   detalleMetadatos?: ReactNode;
+  elementoJuntoTitulo?: ReactNode;
   className?: string;
 };
 
@@ -69,6 +70,7 @@ export default function ReproductorAudio({
   duracionSegundos = 0,
   numero,
   detalleMetadatos,
+  elementoJuntoTitulo,
   className = "",
 }: ReproductorAudioProps) {
   const reactId = useId();
@@ -169,10 +171,15 @@ export default function ReproductorAudio({
 
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 items-start justify-between gap-2">
-            <div className="min-w-0">
-              <p className="truncate text-[11px] font-bold text-zinc-100">
-                {titulo}
-              </p>
+            <div className="min-w-0 flex-1">
+              <div className="flex min-w-0 items-center gap-1.5">
+                <p className="min-w-0 truncate text-[11px] font-bold text-zinc-100">
+                  {titulo}
+                </p>
+                {elementoJuntoTitulo && (
+                  <div className="shrink-0">{elementoJuntoTitulo}</div>
+                )}
+              </div>
 
               {(metadatos.length > 0 || detalleMetadatos) && (
                 <div className="mt-0.5 min-w-0">
