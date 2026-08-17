@@ -647,6 +647,12 @@ export default async function PerfilPublicoPage({
     }),
   );
 
+  const ideasRecibidasIniciales = artista.ideas.map((idea) => ({
+    id: idea.id,
+    titulo: idea.titulo,
+    portadaUrl: idea.portadaUrl?.trim() || null,
+  }));
+
   const nombreArtistico =
     artista.nombreArtistico?.trim() || artista.nombre?.trim() || "Artista";
   const usuarioVisible =
@@ -1125,6 +1131,7 @@ export default async function PerfilPublicoPage({
             {esPerfilPropio ? (
               <SeccionesPerfilPrivado
                 ideasActivas={tarjetasIdeasActivas}
+                ideasRecibidasIniciales={ideasRecibidasIniciales}
                 cantidadIdeasActivas={artista.ideas.length}
                 propuestasRecibidasIniciales={propuestasRecibidasIniciales}
                 propuestasEnviadasIniciales={propuestasEnviadasIniciales}

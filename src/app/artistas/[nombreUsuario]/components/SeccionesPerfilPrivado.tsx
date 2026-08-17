@@ -55,6 +55,12 @@ export type PropuestaEnviadaPerfil = PropuestaBase & {
   };
 };
 
+export type IdeaRecibidasPerfil = {
+  id: number;
+  titulo: string;
+  portadaUrl: string | null;
+};
+
 type PestanaPerfil = "ACTIVAS" | "ENVIADAS" | "RECIBIDAS";
 
 type RespuestaActualizacion = {
@@ -373,11 +379,13 @@ function valorUrlPestana(pestana: PestanaPerfil) {
 
 export default function SeccionesPerfilPrivado({
   ideasActivas,
+  ideasRecibidasIniciales,
   cantidadIdeasActivas,
   propuestasRecibidasIniciales,
   propuestasEnviadasIniciales,
 }: {
   ideasActivas: ReactNode;
+  ideasRecibidasIniciales: IdeaRecibidasPerfil[];
   cantidadIdeasActivas: number;
   propuestasRecibidasIniciales: PropuestaRecibidaPerfil[];
   propuestasEnviadasIniciales: PropuestaEnviadaPerfil[];
@@ -395,6 +403,18 @@ export default function SeccionesPerfilPrivado({
   const [motivo, setMotivo] = useState("");
   const [permiteReintento, setPermiteReintento] = useState(false);
   const { porConversacion } = useNotificacionesChat();
+
+  const propuestasPorIdea = useMemo(() => {
+    const mapa = new Map<number, PropuestaRecibidaPerfil[]>();
+
+    for (const propuesta of recibidas) {
+      const actuales = mapa.get(propuesta.idea.id) ?? [];
+      actuales.push(propuesta);
+      mapa.set(propuesta.idea.id, actuales);
+    }
+
+    return mapa;
+  }, [recibidas]);
 
   useEffect(() => {
     const aplicarPestanaDesdeUrl = () => {
@@ -798,7 +818,7 @@ export default function SeccionesPerfilPrivado({
         <div className="mt-3 sm:mt-4">
           <div className="mb-3 px-1">
             <p className="text-[10px] font-semibold text-slate-500 sm:text-[11px]">
-              Propuestas que otros artistas enviaron a tus ideas.
+              Tus ideas publicadas y las propuestas que ha recibido cada una.
             </p>
           </div>
 
@@ -808,225 +828,243 @@ export default function SeccionesPerfilPrivado({
             </p>
           )}
 
-          {recibidas.length === 0 ? (
+          {ideasRecibidasIniciales.length === 0 ? (
             <EstadoVacio
-              titulo="Todavía no has recibido propuestas"
-              descripcion="Cuando otro artista envíe una colaboración a una de tus ideas, aparecerá aquí."
+              titulo="Aún no tienes ideas activas"
+              descripcion="Publica una idea y aquí podrás ver las propuestas agrupadas por canción."
               amarillo
             />
           ) : (
-            <div className="grid gap-2.5">
-              {recibidas.map((propuesta, indice) => {
-                const remitente = propuesta.remitente;
-                const mensajes = propuesta.conversacionId
-                  ? porConversacion[propuesta.conversacionId] ?? 0
-                  : 0;
-                const procesando = procesandoId === propuesta.id;
+            <div className="grid gap-3">
+              {ideasRecibidasIniciales.map((idea) => {
+                const propuestasIdea = propuestasPorIdea.get(idea.id) ?? [];
+                const portada = idea.portadaUrl?.trim() || null;
 
                 return (
                   <article
-                    key={propuesta.id}
+                    key={idea.id}
                     className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.05)]"
                   >
-                    <div className="p-3 sm:p-3.5">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex min-w-0 items-center gap-2.5">
-                          <Avatar artista={remitente} />
-                          <div className="min-w-0">
-                            <EnlaceArtista artista={remitente} />
-                            <p className="mt-0.5 text-[8px] text-slate-400 sm:text-[9px]">
-                              {formatearFecha(propuesta.creadoEn)} · Intento {propuesta.numeroIntento}
-                            </p>
-                          </div>
-                        </div>
-
-                        {mensajes > 0 && (
-                          <div className="flex shrink-0 flex-col items-end gap-1">
-                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
-                              {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" && (
-                        <div className="mt-2.5 border-l-2 border-sky-300 pl-2.5">
-                          <p className="text-[8px] font-black uppercase tracking-[0.12em] text-sky-700">
-                            Motivo enviado
-                          </p>
-                          <p className="mt-1 whitespace-pre-wrap text-[9px] leading-4 text-slate-600 sm:text-[10px]">
-                            {propuesta.motivoDecision}
-                          </p>
+                    <div
+                      className={`relative overflow-hidden px-3 py-3.5 sm:px-4 sm:py-4 ${
+                        portada ? "bg-black" : "bg-slate-950"
+                      }`}
+                    >
+                      {portada && (
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0"
+                        >
+                          <img
+                            src={portada}
+                            alt=""
+                            className="h-full w-full object-cover object-center"
+                            loading="lazy"
+                          />
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              background:
+                                "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 24%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.30) 78%, rgba(0,0,0,0.12) 100%)",
+                            }}
+                          />
                         </div>
                       )}
 
-                      <div className="mt-3 border-t border-slate-100 pt-2">
-                        <div className="mb-2 flex justify-end">
-                          <DescripcionPropuestaRecibida
-                            tituloIdea={propuesta.idea.titulo}
-                            nombreRemitente={nombreArtista(remitente)}
-                            nombreUsuario={remitente.nombreUsuario}
-                            fecha={formatearFecha(propuesta.creadoEn)}
-                            descripcion={propuesta.mensaje}
-                          />
+                      <div className="relative z-10 flex min-w-0 items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-yellow-400 sm:text-[9px]">
+                            Idea publicada
+                          </p>
+                          <h3 className="mt-0.5 truncate text-sm font-black text-white sm:text-base">
+                            {idea.titulo}
+                          </h3>
                         </div>
 
-                        {propuesta.audioUrl ? (
-                          <ReproductorAudio
-                            id={`perfil-propuesta-recibida-${propuesta.id}`}
-                            src={propuesta.audioUrl}
-                            titulo={`Propuesta de ${nombreArtista(remitente)}`}
-                            duracionSegundos={propuesta.duracionSegundos}
-                            numero={indice + 1}
-                            detalleMetadatos={
-                              <div className="flex min-w-0 items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setPestana("ACTIVAS");
-                                    window.setTimeout(() => {
-                                      document
-                                        .getElementById(`idea-${propuesta.idea.id}`)
-                                        ?.scrollIntoView({
-                                          behavior: "smooth",
-                                          block: "center",
-                                        });
-                                    }, 80);
-                                  }}
-                                  className="min-w-0 flex-1 truncate text-left text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
-                                >
-                                  Para “{propuesta.idea.titulo}”
-                                </button>
-                                <span
-                                  className={`shrink-0 rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
-                                    propuesta.estado,
-                                  )}`}
-                                >
-                                  {etiquetaEstado(propuesta.estado)}
-                                </span>
-                              </div>
-                            }
-                            className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
-                          />
-                        ) : (
-                          <div className="min-w-0">
-                            <p className="truncate text-[11px] font-bold text-zinc-100">
-                              Propuesta de {nombreArtista(remitente)}
-                            </p>
-
-                            <div className="mt-0.5 flex min-w-0 items-center gap-1.5">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setPestana("ACTIVAS");
-                                  window.setTimeout(() => {
-                                    document
-                                      .getElementById(`idea-${propuesta.idea.id}`)
-                                      ?.scrollIntoView({
-                                        behavior: "smooth",
-                                        block: "center",
-                                      });
-                                  }, 80);
-                                }}
-                                className="min-w-0 flex-1 truncate text-left text-[9px] font-semibold text-emerald-700 hover:underline sm:text-[10px]"
-                              >
-                                Para “{propuesta.idea.titulo}”
-                              </button>
-                              <span
-                                className={`shrink-0 rounded-full border px-2 py-0.5 text-[8px] font-bold ${claseEstado(
-                                  propuesta.estado,
-                                )}`}
-                              >
-                                {etiquetaEstado(propuesta.estado)}
-                              </span>
-                            </div>
-
-                            <p className="mt-2 text-[9px] font-semibold text-slate-500">
-                              {textoAudioNoDisponible(propuesta.estado)}
-                            </p>
-                          </div>
-                        )}
+                        <span className="shrink-0 rounded-full border border-yellow-400 bg-yellow-400 px-2.5 py-1 text-[8px] font-black text-black sm:text-[9px]">
+                          {propuestasIdea.length} {propuestasIdea.length === 1 ? "propuesta" : "propuestas"}
+                        </span>
                       </div>
                     </div>
 
-                    {propuesta.estado === "PENDIENTE" ? (
-                      <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
-                        <button
-                          type="button"
-                          disabled={procesando}
-                          onClick={() => {
-                            setError("");
-                            setMotivo("");
-                            setPermiteReintento(false);
-                            setModal({
-                              propuestaId: propuesta.id,
-                              accion: "RECHAZAR",
-                              numeroIntento: propuesta.numeroIntento,
-                            });
-                          }}
-                          className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-red-700 transition hover:bg-red-50 disabled:opacity-50 sm:text-[9px]"
-                        >
-                          Rechazar
-                        </button>
-                        {propuesta.numeroIntento < 2 && (
-                          <button
-                            type="button"
-                            disabled={procesando}
-                            onClick={() => {
-                              setError("");
-                              setMotivo("");
-                              setPermiteReintento(false);
-                              setModal({
-                                propuestaId: propuesta.id,
-                                accion: "SOLICITAR_CAMBIOS",
-                                numeroIntento: propuesta.numeroIntento,
-                              });
-                            }}
-                            className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-sky-700 transition hover:bg-sky-50 disabled:opacity-50 sm:text-[9px]"
-                          >
-                            Solicitar cambios
-                          </button>
-                        )}
-                        <button
-                          type="button"
-                          disabled={procesando}
-                          onClick={() =>
-                            enviarDecision(propuesta.id, { accion: "ACEPTAR" })
-                          }
-                          className="flex min-w-0 flex-1 items-center justify-center px-1.5 py-2 text-center text-[8px] font-black leading-tight text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 sm:text-[9px]"
-                        >
-                          {procesando ? "Procesando…" : "Aceptar"}
-                        </button>
+                    {propuestasIdea.length === 0 ? (
+                      <div className="px-4 py-8 text-center sm:py-9">
+                        <p className="text-[11px] font-black text-slate-700 sm:text-xs">
+                          No has recibido ninguna propuesta
+                        </p>
+                        <p className="mx-auto mt-1 max-w-sm text-[9px] leading-4 text-slate-500 sm:text-[10px]">
+                          Cuando otro artista envíe una propuesta a esta idea, aparecerá aquí.
+                        </p>
                       </div>
-                    ) : propuesta.estado === "ACEPTADA" ? (
-                      <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
-                        {propuesta.audioUrl && (
-                          <a
-                            href={`/api/propuestas/${propuesta.id}/descargar`}
-                            className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-sky-700 transition hover:bg-sky-50 ${
-                              propuesta.conversacionId
-                                ? "border-r border-slate-200"
-                                : ""
-                            }`}
-                          >
-                            Descargar MP3
-                          </a>
-                        )}
-                        {propuesta.conversacionId && (
-                          <Link
-                            href={`/mensajes/${propuesta.conversacionId}`}
-                            className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50"
-                          >
-                            Abrir chat
-                            {mensajes > 0 && (
-                              <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
-                                {etiquetaCantidad(mensajes)}
-                              </span>
-                            )}
-                          </Link>
-                        )}
+                    ) : (
+                      <div>
+                        {propuestasIdea.map((propuesta, indicePropuesta) => {
+                          const remitente = propuesta.remitente;
+                          const mensajes = propuesta.conversacionId
+                            ? porConversacion[propuesta.conversacionId] ?? 0
+                            : 0;
+                          const procesando = procesandoId === propuesta.id;
+
+                          return (
+                            <div
+                              key={propuesta.id}
+                              className={indicePropuesta > 0 ? "border-t border-slate-200" : ""}
+                            >
+                              <div className="p-3 sm:p-3.5">
+                                <div className="flex items-start justify-between gap-2.5">
+                                  <div className="flex min-w-0 items-start gap-2.5">
+                                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-400 text-[9px] font-black text-black">
+                                      {indicePropuesta + 1}
+                                    </span>
+
+                                    <div className="min-w-0">
+                                      <p className="truncate text-[11px] font-black text-slate-900 sm:text-xs">
+                                        Propuesta de {nombreArtista(remitente)}
+                                      </p>
+                                      <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                                        <span
+                                          className={`rounded-full border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                            propuesta.estado,
+                                          )}`}
+                                        >
+                                          {etiquetaEstado(propuesta.estado)}
+                                        </span>
+                                        <span className="text-[8px] text-slate-400 sm:text-[9px]">
+                                          {formatearFecha(propuesta.creadoEn)}
+                                        </span>
+                                        <span className="text-[8px] text-slate-400 sm:text-[9px]">
+                                          · Intento {propuesta.numeroIntento}
+                                        </span>
+                                        {mensajes > 0 && (
+                                          <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                            {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <DescripcionPropuestaRecibida
+                                    tituloIdea={idea.titulo}
+                                    nombreRemitente={nombreArtista(remitente)}
+                                    nombreUsuario={remitente.nombreUsuario}
+                                    fecha={formatearFecha(propuesta.creadoEn)}
+                                    descripcion={propuesta.mensaje}
+                                  />
+                                </div>
+
+                                {propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" && (
+                                  <div className="mt-2.5 border-l-2 border-sky-300 pl-2.5">
+                                    <p className="text-[8px] font-black uppercase tracking-[0.12em] text-sky-700">
+                                      Motivo enviado
+                                    </p>
+                                    <p className="mt-1 whitespace-pre-wrap text-[9px] leading-4 text-slate-600 sm:text-[10px]">
+                                      {propuesta.motivoDecision}
+                                    </p>
+                                  </div>
+                                )}
+
+                                <div className="mt-3 border-t border-slate-100 pt-2.5">
+                                  {propuesta.audioUrl ? (
+                                    <ReproductorAudio
+                                      id={`perfil-propuesta-recibida-${propuesta.id}`}
+                                      src={propuesta.audioUrl}
+                                      titulo="Audio de la propuesta"
+                                      duracionSegundos={propuesta.duracionSegundos}
+                                      numero={indicePropuesta + 1}
+                                      className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8"
+                                    />
+                                  ) : (
+                                    <p className="text-[9px] font-semibold text-slate-500">
+                                      {textoAudioNoDisponible(propuesta.estado)}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              {propuesta.estado === "PENDIENTE" ? (
+                                <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
+                                  <button
+                                    type="button"
+                                    disabled={procesando}
+                                    onClick={() => {
+                                      setError("");
+                                      setMotivo("");
+                                      setPermiteReintento(false);
+                                      setModal({
+                                        propuestaId: propuesta.id,
+                                        accion: "RECHAZAR",
+                                        numeroIntento: propuesta.numeroIntento,
+                                      });
+                                    }}
+                                    className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-red-700 transition hover:bg-red-50 disabled:opacity-50 sm:text-[9px]"
+                                  >
+                                    Rechazar
+                                  </button>
+                                  {propuesta.numeroIntento < 2 && (
+                                    <button
+                                      type="button"
+                                      disabled={procesando}
+                                      onClick={() => {
+                                        setError("");
+                                        setMotivo("");
+                                        setPermiteReintento(false);
+                                        setModal({
+                                          propuestaId: propuesta.id,
+                                          accion: "SOLICITAR_CAMBIOS",
+                                          numeroIntento: propuesta.numeroIntento,
+                                        });
+                                      }}
+                                      className="flex min-w-0 flex-1 items-center justify-center border-r border-slate-200 px-1.5 py-2 text-center text-[8px] font-black leading-tight text-sky-700 transition hover:bg-sky-50 disabled:opacity-50 sm:text-[9px]"
+                                    >
+                                      Solicitar cambios
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    disabled={procesando}
+                                    onClick={() =>
+                                      enviarDecision(propuesta.id, { accion: "ACEPTAR" })
+                                    }
+                                    className="flex min-w-0 flex-1 items-center justify-center px-1.5 py-2 text-center text-[8px] font-black leading-tight text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 sm:text-[9px]"
+                                  >
+                                    {procesando ? "Procesando…" : "Aceptar"}
+                                  </button>
+                                </div>
+                              ) : propuesta.estado === "ACEPTADA" ? (
+                                <div className="flex min-h-[44px] border-t border-slate-200 bg-white">
+                                  {propuesta.audioUrl && (
+                                    <a
+                                      href={`/api/propuestas/${propuesta.id}/descargar`}
+                                      className={`flex min-w-0 flex-1 items-center justify-center px-2 py-3 text-center text-[9px] font-black text-sky-700 transition hover:bg-sky-50 ${
+                                        propuesta.conversacionId
+                                          ? "border-r border-slate-200"
+                                          : ""
+                                      }`}
+                                    >
+                                      Descargar MP3
+                                    </a>
+                                  )}
+                                  {propuesta.conversacionId && (
+                                    <Link
+                                      href={`/mensajes/${propuesta.conversacionId}`}
+                                      className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-2 py-3 text-center text-[9px] font-black text-emerald-700 transition hover:bg-emerald-50"
+                                    >
+                                      Abrir chat
+                                      {mensajes > 0 && (
+                                        <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] text-white">
+                                          {etiquetaCantidad(mensajes)}
+                                        </span>
+                                      )}
+                                    </Link>
+                                  )}
+                                </div>
+                              ) : null}
+                            </div>
+                          );
+                        })}
                       </div>
-                    ) : null}
+                    )}
                   </article>
                 );
               })}
