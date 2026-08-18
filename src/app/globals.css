@@ -4606,3 +4606,38 @@ body > .featmusic-notifications-panel
 }
 
 /* FEATMUSIC_NOTIFICACIONES_COLOR_EXACTO_V3_END */
+
+/* FEATMUSIC_VISTAS_MODO_OSCURO_V1_START */
+/*
+  Ventana "Artistas que vieron tu publicación".
+  SOLO modo oscuro: todos los textos quedan blancos, excepto los dos acentos
+  amarillos y los botones Seguir/Siguiendo, que usan amarillo + negro.
+  El modo claro no se modifica.
+*/
+html.dark .featmusic-viewers-dialog,
+html.dark .featmusic-viewers-dialog * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html.dark .featmusic-viewers-dialog .featmusic-viewers-accent {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+}
+
+html.dark .featmusic-viewers-dialog .featmusic-viewers-follow-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_VISTAS_MODO_OSCURO_V1_END */

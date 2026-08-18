@@ -246,11 +246,11 @@ export default function ListaArtistasVieronIdea({
         role="dialog"
         aria-modal="true"
         aria-labelledby={`titulo-vistas-${ideaId}`}
-        className="flex max-h-[88dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-black/10 bg-white text-black shadow-[0_30px_100px_rgba(0,0,0,0.28)] dark:border-white/10 dark:bg-[#111111] dark:text-white dark:shadow-[0_30px_100px_rgba(0,0,0,0.65)] sm:rounded-3xl"
+        className="featmusic-viewers-dialog flex max-h-[88dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-black/10 bg-white text-black shadow-[0_30px_100px_rgba(0,0,0,0.28)] dark:border-white/10 dark:bg-[#111111] dark:text-white dark:shadow-[0_30px_100px_rgba(0,0,0,0.65)] sm:rounded-3xl"
       >
         <header className="flex items-start justify-between gap-3 border-b border-black/10 px-4 py-4 dark:border-white/10 sm:px-5">
           <div className="min-w-0">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#ffd400] dark:text-yellow-300">
+            <p className="featmusic-viewers-accent text-[9px] font-black uppercase tracking-[0.18em] text-[#ffd400] dark:text-yellow-300">
               Alcance real
             </p>
             <h2
@@ -339,7 +339,7 @@ export default function ListaArtistasVieronIdea({
                       <h3 className="truncate text-sm font-black text-black dark:text-white">
                         {artista.nombreArtistico}
                       </h3>
-                      <p className="truncate text-[10px] font-semibold text-[#ffd400] dark:text-yellow-300">
+                      <p className="featmusic-viewers-accent truncate text-[10px] font-semibold text-[#ffd400] dark:text-yellow-300">
                         @{artista.nombreUsuario}
                       </p>
                       <p className="mt-0.5 truncate text-[9px] text-black/70 dark:text-zinc-500">
@@ -356,7 +356,7 @@ export default function ListaArtistasVieronIdea({
                       onClick={() => void alternarSeguimiento(artista)}
                       disabled={procesandoId !== null}
                       aria-pressed={artista.siguiendo}
-                      className={`shrink-0 rounded-lg border px-2.5 py-1.5 text-[9px] font-black transition disabled:cursor-wait disabled:opacity-60 ${
+                      className={`featmusic-viewers-follow-button shrink-0 rounded-lg border px-2.5 py-1.5 text-[9px] font-black transition disabled:cursor-wait disabled:opacity-60 ${
                         artista.siguiendo
                           ? "border-black/12 bg-black/[0.045] text-black hover:border-yellow-400/30 dark:border-white/12 dark:bg-white/[0.045] dark:text-zinc-300 dark:hover:border-yellow-400/20 dark:hover:text-yellow-200"
                           : "border-yellow-400/40 bg-yellow-500/12 text-black hover:bg-yellow-500/20 dark:border-yellow-400/30 dark:text-yellow-100"
