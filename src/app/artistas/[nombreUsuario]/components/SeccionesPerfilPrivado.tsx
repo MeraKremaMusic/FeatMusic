@@ -745,6 +745,47 @@ export default function SeccionesPerfilPrivado({
         }
 
 
+        /* FEATMUSIC_ACTIVAS_AMARILLO_RECIBIDAS_OSCURO_V1 */
+        html.dark .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle,
+        html.dark .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle:hover,
+        html.dark .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle:focus-visible {
+          background: #ffffff !important;
+          background-color: #ffffff !important;
+          border: 0 !important;
+          border-color: transparent !important;
+          color: #000000 !important;
+          box-shadow: none !important;
+        }
+
+        html.dark .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle :is(svg, path) {
+          color: #000000 !important;
+          fill: currentColor !important;
+          stroke: currentColor !important;
+        }
+
+        .featmusic-private-profile-sections .featmusic-private-active-section button[title="Descargar MP3"],
+        .featmusic-private-profile-sections .featmusic-private-active-section button[title="Eliminar idea"] {
+          background: #facc15 !important;
+          background-color: #facc15 !important;
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
+        }
+
+        .featmusic-private-profile-sections .featmusic-private-active-section button[title="Descargar MP3"]:hover,
+        .featmusic-private-profile-sections .featmusic-private-active-section button[title="Eliminar idea"]:hover {
+          background: #fde047 !important;
+          background-color: #fde047 !important;
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
+        }
+
+        .featmusic-private-profile-sections .featmusic-private-active-section .grid.grid-cols-3.divide-x > span {
+          background: #facc15 !important;
+          background-color: #facc15 !important;
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
+        }
+
         /* FEATMUSIC_CONTADORES_PESTANAS_OSCURO_V1 */
         html.dark .featmusic-private-profile-sections .featmusic-private-tab[data-active="false"] .featmusic-private-tab-count {
           background: #ffffff !important;
@@ -780,7 +821,7 @@ export default function SeccionesPerfilPrivado({
       </div>
 
       {pestana === "ACTIVAS" && (
-        <div className="mt-3 sm:mt-4">
+        <div className="featmusic-private-active-section mt-3 sm:mt-4">
           <div className="mb-3 px-1">
             <p className="text-[10px] font-semibold text-slate-500 sm:text-[11px]">
               Ideas que has publicado y siguen activas.
