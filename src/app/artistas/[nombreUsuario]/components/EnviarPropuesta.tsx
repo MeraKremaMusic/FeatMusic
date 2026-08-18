@@ -162,6 +162,45 @@ function claseEstado(estado: string) {
   return "border-amber-200 bg-amber-50 text-amber-700";
 }
 
+// FEATMUSIC_MODAL_ELIMINAR_IDEA_MP3_V2
+function IconoEliminarIdea({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 7h16" />
+      <path d="M9 7V4h6v3" />
+      <path d="m6 7 1 13h10l1-13" />
+      <path d="M10 11v5" />
+      <path d="M14 11v5" />
+    </svg>
+  );
+}
+
+function IconoCerrarEliminar({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+    >
+      <path d="m6 6 12 12" />
+      <path d="M18 6 6 18" />
+    </svg>
+  );
+}
+
 export default function EnviarPropuesta({
   ideaId,
   sesionActiva,
@@ -192,6 +231,8 @@ export default function EnviarPropuesta({
   const [totalPropuestas, setTotalPropuestas] = useState(propuestasActuales);
   const [propuestaPropia, setPropuestaPropia] = useState(propuestaUsuario);
   const [eliminandoIdea, setEliminandoIdea] = useState(false);
+  const [modalEliminarAbierto, setModalEliminarAbierto] = useState(false);
+  const [errorEliminarIdea, setErrorEliminarIdea] = useState<string | null>(null);
 
   useEffect(() => {
     setTotalPropuestas(propuestasActuales);
@@ -200,6 +241,27 @@ export default function EnviarPropuesta({
   useEffect(() => {
     setPropuestaPropia(propuestaUsuario);
   }, [propuestaUsuario]);
+
+  useEffect(() => {
+    if (!modalEliminarAbierto) return;
+
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function cerrarConEscape(evento: KeyboardEvent) {
+      if (evento.key === "Escape" && !eliminandoIdea) {
+        setModalEliminarAbierto(false);
+        setErrorEliminarIdea(null);
+      }
+    }
+
+    document.addEventListener("keydown", cerrarConEscape);
+
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      document.removeEventListener("keydown", cerrarConEscape);
+    };
+  }, [modalEliminarAbierto, eliminandoIdea]);
 
   const cancelarAjustesMensaje = useCallback(() => {
     temporizadoresAjusteRef.current.forEach((temporizador) => {
@@ -466,15 +528,22 @@ export default function EnviarPropuesta({
     }
   }
 
+  function abrirModalEliminarIdea() {
+    if (eliminandoIdea) return;
+    setErrorEliminarIdea(null);
+    setModalEliminarAbierto(true);
+  }
+
+  function cerrarModalEliminarIdea() {
+    if (eliminandoIdea) return;
+    setModalEliminarAbierto(false);
+    setErrorEliminarIdea(null);
+  }
+
   async function eliminarIdeaPropia() {
     if (eliminandoIdea) return;
 
-    const confirmado = window.confirm(
-      "¿Eliminar esta idea? Dejará de aparecer en tu perfil y esta acción no se puede deshacer.",
-    );
-
-    if (!confirmado) return;
-
+    setErrorEliminarIdea(null);
     setEliminandoIdea(true);
 
     try {
@@ -490,9 +559,11 @@ export default function EnviarPropuesta({
         throw new Error(data.mensaje ?? "No se pudo eliminar la idea.");
       }
 
+      setModalEliminarAbierto(false);
+      setEliminandoIdea(false);
       router.refresh();
     } catch (errorEliminacion) {
-      window.alert(
+      setErrorEliminarIdea(
         errorEliminacion instanceof Error
           ? errorEliminacion.message
           : "No se pudo eliminar la idea.",
@@ -533,6 +604,100 @@ export default function EnviarPropuesta({
   const claseAccion =
     `${claseSegmento} bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400`;
 
+  const modalEliminarIdea =
+    modalEliminarAbierto && typeof document !== "undefined"
+      ? createPortal(
+          <>
+            <button
+              type="button"
+              aria-label="Cerrar confirmación para eliminar idea"
+              className="fixed inset-x-0 top-12 z-40 bg-slate-950/20 backdrop-blur-[5px]"
+              style={{
+                bottom: "var(--featmusic-menu-movil-altura, 0px)",
+              }}
+              onClick={cerrarModalEliminarIdea}
+              disabled={eliminandoIdea}
+            />
+
+            <div
+              className="pointer-events-none fixed inset-x-0 top-12 z-[45] flex items-center justify-center px-4 py-5"
+              style={{
+                bottom: "var(--featmusic-menu-movil-altura, 0px)",
+              }}
+            >
+              <section
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={`eliminar-idea-${ideaId}-titulo`}
+                className="pointer-events-auto w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-[0_24px_70px_rgba(15,23,42,0.24)] sm:p-5"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-300 bg-yellow-400 text-black">
+                      <IconoEliminarIdea className="h-4.5 w-4.5" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-yellow-600">
+                        Eliminar idea
+                      </p>
+                      <h3
+                        id={`eliminar-idea-${ideaId}-titulo`}
+                        className="text-sm font-black text-slate-900"
+                      >
+                        ¿Eliminar esta idea?
+                      </h3>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    aria-label="Cerrar"
+                    disabled={eliminandoIdea}
+                    onClick={cerrarModalEliminarIdea}
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-yellow-400 hover:bg-yellow-50 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <IconoCerrarEliminar />
+                  </button>
+                </div>
+
+                <p className="mt-4 text-[11px] leading-[1.15rem] text-slate-600 sm:text-xs sm:leading-5">
+                  Dejará de aparecer en tu perfil y esta acción no se puede
+                  deshacer.
+                </p>
+
+                {errorEliminarIdea && (
+                  <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-[10px] leading-4 text-red-700">
+                    {errorEliminarIdea}
+                  </p>
+                )}
+
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    disabled={eliminandoIdea}
+                    onClick={cerrarModalEliminarIdea}
+                    className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[10px] font-black text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Cancelar
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={eliminandoIdea}
+                    onClick={eliminarIdeaPropia}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-yellow-400 bg-yellow-400 px-3 py-2.5 text-[10px] font-black text-black transition hover:border-yellow-300 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <IconoEliminarIdea className="h-3.5 w-3.5" />
+                    {eliminandoIdea ? "Eliminando..." : "Eliminar"}
+                  </button>
+                </div>
+              </section>
+            </div>
+          </>,
+          document.body,
+        )
+      : null;
+
   if (esPropietario) {
     if (variante === "integrada") {
       return (
@@ -540,7 +705,7 @@ export default function EnviarPropuesta({
           <span className={claseCupos}>{textoCupos}</span>
           <button
             type="button"
-            onClick={eliminarIdeaPropia}
+            onClick={abrirModalEliminarIdea}
             disabled={eliminandoIdea}
             className={`${claseSegmento} bg-white text-red-600 transition hover:bg-red-50 hover:text-red-700 disabled:cursor-wait disabled:bg-slate-50 disabled:text-slate-400`}
             aria-label="Eliminar esta idea"
@@ -548,6 +713,7 @@ export default function EnviarPropuesta({
           >
             {eliminandoIdea ? "Eliminando..." : "Eliminar"}
           </button>
+          {modalEliminarIdea}
         </>
       );
     }
