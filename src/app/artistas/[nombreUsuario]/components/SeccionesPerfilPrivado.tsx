@@ -743,6 +743,15 @@ export default function SeccionesPerfilPrivado({
           color: #ffffff !important;
           -webkit-text-fill-color: #ffffff !important;
         }
+
+
+        /* FEATMUSIC_CONTADORES_PESTANAS_OSCURO_V1 */
+        html.dark .featmusic-private-profile-sections .featmusic-private-tab[data-active="false"] .featmusic-private-tab-count {
+          background: #ffffff !important;
+          background-color: #ffffff !important;
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
+        }
       `}</style>
       <div className="grid w-full grid-cols-3 gap-1.5 px-1 pb-1 sm:flex sm:w-auto sm:items-center sm:gap-2 sm:overflow-visible lg:px-0">
         <BotonPestana
@@ -875,7 +884,7 @@ export default function SeccionesPerfilPrivado({
                                   detalleMetadatos={
                                     <div className="flex flex-wrap items-center gap-1.5">
                                       <span
-                                        className={`rounded-none border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                        className={`rounded-none border px-3 py-1 text-[9px] font-bold sm:text-[10px] ${claseEstado(
                                           propuesta.estado,
                                         )}`}
                                       >
@@ -905,7 +914,7 @@ export default function SeccionesPerfilPrivado({
                                       <div className="mt-1 flex min-w-0 items-center justify-between gap-2">
                                         <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                                           <span
-                                            className={`rounded-none border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                            className={`rounded-none border px-3 py-1 text-[9px] font-bold sm:text-[10px] ${claseEstado(
                                               propuesta.estado,
                                             )}`}
                                           >
@@ -1153,7 +1162,7 @@ export default function SeccionesPerfilPrivado({
                                         detalleMetadatos={
                                           <div className="flex flex-wrap items-center gap-1.5">
                                             <span
-                                              className={`rounded-none border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                              className={`rounded-none border px-3 py-1 text-[9px] font-bold sm:text-[10px] ${claseEstado(
                                                 propuesta.estado,
                                               )}`}
                                             >
@@ -1184,7 +1193,7 @@ export default function SeccionesPerfilPrivado({
                                           <div className="mt-1 flex min-w-0 items-center justify-between gap-2">
                                             <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                                               <span
-                                                className={`rounded-none border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                                className={`rounded-none border px-3 py-1 text-[9px] font-bold sm:text-[10px] ${claseEstado(
                                                   propuesta.estado,
                                                 )}`}
                                               >
