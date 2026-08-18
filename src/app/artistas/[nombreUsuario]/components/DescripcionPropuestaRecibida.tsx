@@ -217,7 +217,7 @@ export default function DescripcionPropuestaRecibida({
         aria-controls={panelId}
         title="Ver descripción"
         onClick={() => setAbierta(true)}
-        className="featmusic-description-toggle inline-flex h-[24px] items-center gap-1 rounded-full !border-0 !bg-white px-2 text-[9px] font-bold !text-black shadow-none transition hover:!bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[10px]"
+        className="featmusic-description-toggle featmusic-description-toggle-recibida inline-flex h-[24px] items-center gap-1 rounded-full !border-0 !bg-white px-2 text-[9px] font-bold !text-black shadow-none transition hover:!bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[10px]"
       >
         <IconoDescripcion className="h-2.5 w-2.5" />
         <span>Descripción</span>

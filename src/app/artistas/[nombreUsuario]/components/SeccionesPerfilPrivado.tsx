@@ -377,7 +377,8 @@ function BotonPestana({
     <button
       type="button"
       onClick={onClick}
-      className={`relative flex h-9 w-full min-w-0 items-center justify-center gap-1.5 rounded-lg border px-1 text-[10px] font-black transition sm:h-10 sm:w-auto sm:shrink-0 sm:gap-2 sm:px-3 sm:text-[11px] ${
+      data-active={activa ? "true" : "false"}
+      className={`featmusic-private-tab relative flex h-9 w-full min-w-0 items-center justify-center gap-1.5 rounded-lg border px-1 text-[10px] font-black transition sm:h-10 sm:w-auto sm:shrink-0 sm:gap-2 sm:px-3 sm:text-[11px] ${
         activa
           ? "border-[#FFD400] bg-[#FFD400] text-black shadow-sm"
           : "border-black/15 bg-white text-black/60 hover:border-[#FFD400] hover:bg-[#FFD400]/15 hover:text-black"
@@ -388,7 +389,7 @@ function BotonPestana({
       </span>
       <span className="min-w-0 whitespace-nowrap text-center">{etiqueta}</span>
       <span
-        className={`shrink-0 rounded-full px-1 py-0.5 text-[8px] tabular-nums sm:px-1.5 sm:text-[9px] ${
+        className={`featmusic-private-tab-count shrink-0 rounded-full px-1 py-0.5 text-[8px] tabular-nums sm:px-1.5 sm:text-[9px] ${
           activa ? "bg-black/10 text-black" : "bg-black/5 text-black/60"
         }`}
       >
@@ -717,7 +718,32 @@ export default function SeccionesPerfilPrivado({
   }
 
   return (
-    <div className="min-w-0">
+    <div className="featmusic-private-profile-sections min-w-0">
+      {/* FEATMUSIC_AJUSTES_RECIBIDAS_PESTANAS_CLARO_V1 */}
+      <style>{`
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-description-toggle-recibida {
+          border: 1px solid #a3a3a3 !important;
+        }
+
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle,
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle:hover,
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle:focus-visible {
+          border-color: #52525b !important;
+          color: #000000 !important;
+        }
+
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-received-proposal-player .featmusic-audio-toggle :is(svg, path) {
+          color: #000000 !important;
+          fill: currentColor !important;
+        }
+
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-private-tab[data-active="false"] .featmusic-private-tab-count {
+          background: #a3a3a3 !important;
+          background-color: #a3a3a3 !important;
+          color: #ffffff !important;
+          -webkit-text-fill-color: #ffffff !important;
+        }
+      `}</style>
       <div className="grid w-full grid-cols-3 gap-1.5 px-1 pb-1 sm:flex sm:w-auto sm:items-center sm:gap-2 sm:overflow-visible lg:px-0">
         <BotonPestana
           activa={pestana === "ACTIVAS"}
@@ -1121,7 +1147,7 @@ export default function SeccionesPerfilPrivado({
                                           )}
                                         </div>
                                       }
-                                      className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
+                                      className="featmusic-received-proposal-player !rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
                                     />
                                   ) : (
                                     <div className="min-w-0">
