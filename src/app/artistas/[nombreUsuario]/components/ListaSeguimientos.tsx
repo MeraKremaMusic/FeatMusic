@@ -142,7 +142,7 @@ export default function ListaSeguimientos({
       <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm sm:p-5">
         <Link
           href={`/artistas/${encodeURIComponent(perfil.nombreUsuario)}`}
-          className="inline-flex items-center gap-2 text-[11px] font-bold text-emerald-300 transition hover:text-emerald-200"
+          className="inline-flex items-center gap-2 text-[11px] font-bold text-[#FFD400] transition hover:text-[#F2C900]"
         >
           <span aria-hidden="true">←</span>
           Volver al perfil
@@ -150,7 +150,7 @@ export default function ListaSeguimientos({
 
         <div className="mt-4 flex flex-col gap-3 border-b border-white/[0.08] pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-400">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#FFD400]">
               Comunidad
             </p>
             <h1 className="mt-1 text-xl font-black text-white sm:text-2xl">
@@ -189,11 +189,11 @@ export default function ListaSeguimientos({
             {artistas.map((artista) => (
               <article
                 key={artista.id}
-                className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 transition hover:border-emerald-400/20"
+                className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 transition hover:border-[#FFD400]/20"
               >
                 <Link
                   href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-                  className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-emerald-500/10 text-sm font-black text-emerald-200"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#FFD400]/10 text-sm font-black text-[#FFD400]"
                 >
                   {artista.fotoPerfil ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -209,12 +209,12 @@ export default function ListaSeguimientos({
 
                 <Link
                   href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-                  className="min-w-0 flex-1 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+                  className="min-w-0 flex-1 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400]/40"
                 >
                   <h2 className="truncate text-sm font-black text-white">
                     {artista.nombreArtistico}
                   </h2>
-                  <p className="truncate text-[10px] font-semibold text-emerald-300">
+                  <p className="truncate text-[10px] font-semibold text-[#FFD400]">
                     @{artista.nombreUsuario}
                   </p>
                   <p className="mt-1 truncate text-[10px] text-zinc-500">
@@ -232,11 +232,7 @@ export default function ListaSeguimientos({
                     onClick={() => void alternar(artista)}
                     disabled={procesandoId === artista.id}
                     aria-pressed={artista.siguiendo}
-                    className={`shrink-0 rounded-lg border px-3 py-2 text-[10px] font-black transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-wait disabled:opacity-60 ${
-                      artista.siguiendo
-                        ? "border-white/15 bg-white/[0.05] text-zinc-200 hover:border-red-400/25 hover:text-red-200"
-                        : "border-emerald-400/30 bg-emerald-500/10 text-emerald-200 hover:bg-emerald-500/20"
-                    }`}
+                    className="shrink-0 rounded-lg border border-[#FFD400] bg-[#FFD400] px-3 py-2 text-[10px] font-black text-black transition hover:border-[#F2C900] hover:bg-[#F2C900] focus:outline-none focus:ring-2 focus:ring-[#FFD400]/40 disabled:cursor-wait disabled:opacity-60"
                   >
                     {procesandoId === artista.id
                       ? "..."
