@@ -1115,40 +1115,64 @@ export default function SeccionesPerfilPrivado({
 
                                 <div className={propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" ? "mt-3" : ""}>
                                   {propuesta.audioUrl ? (
-                                    <ReproductorAudio
-                                      id={`perfil-propuesta-recibida-${propuesta.id}`}
-                                      src={propuesta.audioUrl}
-                                      titulo={`Propuesta de ${nombreArtista(remitente)}`}
-                                      duracionSegundos={propuesta.duracionSegundos}
-                                      numero={indicePropuesta + 1}
-                                      elementoBajoDuracion={
-                                        <DescripcionPropuestaRecibida
-                                          tituloIdea={idea.titulo}
-                                          nombreRemitente={nombreArtista(remitente)}
-                                          nombreUsuario={remitente.nombreUsuario}
-                                          fecha={formatearFecha(propuesta.creadoEn)}
-                                          intento={propuesta.numeroIntento}
-                                          descripcion={propuesta.mensaje}
-                                        />
-                                      }
-                                      detalleMetadatos={
-                                        <div className="flex flex-wrap items-center gap-1.5">
-                                          <span
-                                            className={`rounded-none border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
-                                              propuesta.estado,
-                                            )}`}
-                                          >
-                                            {etiquetaEstado(propuesta.estado)}
-                                          </span>
-                                          {mensajes > 0 && (
-                                            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
-                                              {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
-                                            </span>
-                                          )}
+                                    <div className="featmusic-received-proposal-player-shell relative isolate overflow-hidden">
+                                      {/* FEATMUSIC_FOTO_REMITENTE_RECIBIDAS_V1 */}
+                                      {remitente.fotoPerfil && (
+                                        <div
+                                          aria-hidden="true"
+                                          className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[52%] overflow-hidden"
+                                          style={{
+                                            clipPath:
+                                              "polygon(34% 0, 100% 0, 100% 100%, 0 100%)",
+                                            WebkitMaskImage:
+                                              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.18) 18%, #000 56%, #000 100%)",
+                                            maskImage:
+                                              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.18) 18%, #000 56%, #000 100%)",
+                                          }}
+                                        >
+                                          <img
+                                            src={remitente.fotoPerfil}
+                                            alt=""
+                                            className="h-full w-full object-cover object-center"
+                                          />
                                         </div>
-                                      }
-                                      className="featmusic-received-proposal-player !rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
-                                    />
+                                      )}
+
+                                      <ReproductorAudio
+                                        id={`perfil-propuesta-recibida-${propuesta.id}`}
+                                        src={propuesta.audioUrl}
+                                        titulo={`Propuesta de ${nombreArtista(remitente)}`}
+                                        duracionSegundos={propuesta.duracionSegundos}
+                                        numero={indicePropuesta + 1}
+                                        elementoBajoDuracion={
+                                          <DescripcionPropuestaRecibida
+                                            tituloIdea={idea.titulo}
+                                            nombreRemitente={nombreArtista(remitente)}
+                                            nombreUsuario={remitente.nombreUsuario}
+                                            fecha={formatearFecha(propuesta.creadoEn)}
+                                            intento={propuesta.numeroIntento}
+                                            descripcion={propuesta.mensaje}
+                                          />
+                                        }
+                                        detalleMetadatos={
+                                          <div className="flex flex-wrap items-center gap-1.5">
+                                            <span
+                                              className={`rounded-none border px-2 py-0.5 text-[7px] font-bold sm:text-[8px] ${claseEstado(
+                                                propuesta.estado,
+                                              )}`}
+                                            >
+                                              {etiquetaEstado(propuesta.estado)}
+                                            </span>
+                                            {mensajes > 0 && (
+                                              <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[7px] font-black text-white">
+                                                {etiquetaCantidad(mensajes)} nuevo{mensajes === 1 ? "" : "s"}
+                                              </span>
+                                            )}
+                                          </div>
+                                        }
+                                        className="featmusic-received-proposal-player relative z-10 !rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8"
+                                      />
+                                    </div>
                                   ) : (
                                     <div className="min-w-0">
                                       <div className="flex items-start gap-2">
