@@ -793,6 +793,19 @@ export default function SeccionesPerfilPrivado({
           color: #000000 !important;
           -webkit-text-fill-color: #000000 !important;
         }
+
+        /* FEATMUSIC_BORDES_BOTONES_TARJETAS_V1 */
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-private-active-section .grid.grid-cols-3.divide-x > :not([hidden]) ~ :not([hidden]),
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-private-sent-actions .border-r,
+        html:not(.dark) .featmusic-private-profile-sections .featmusic-private-received-actions .border-r {
+          border-color: #ffffff !important;
+        }
+
+        html.dark .featmusic-private-profile-sections .featmusic-private-active-section .grid.grid-cols-3.divide-x > :not([hidden]) ~ :not([hidden]),
+        html.dark .featmusic-private-profile-sections .featmusic-private-sent-actions .border-r,
+        html.dark .featmusic-private-profile-sections .featmusic-private-received-actions .border-r {
+          border-color: #000000 !important;
+        }
       `}</style>
       <div className="grid w-full grid-cols-3 gap-1.5 px-1 pb-1 sm:flex sm:w-auto sm:items-center sm:gap-2 sm:overflow-visible lg:px-0">
         <BotonPestana
@@ -993,7 +1006,7 @@ export default function SeccionesPerfilPrivado({
                             {(rutaIdea ||
                               propuesta.conversacionId ||
                               propuesta.estado === "PENDIENTE") && (
-                              <div className="flex h-[30px] bg-white">
+                              <div className="featmusic-private-sent-actions flex h-[30px] bg-white">
                                 {rutaIdea && (
                                   <Link
                                     href={rutaIdea}
@@ -1268,7 +1281,7 @@ export default function SeccionesPerfilPrivado({
                               </div>
 
                               {propuesta.estado === "PENDIENTE" ? (
-                                <div className="flex h-[30px] border-t border-slate-200 bg-white">
+                                <div className="featmusic-private-received-actions flex h-[30px] border-t border-slate-200 bg-white">
                                   <button
                                     type="button"
                                     disabled={procesando}
@@ -1320,7 +1333,7 @@ export default function SeccionesPerfilPrivado({
                                   </button>
                                 </div>
                               ) : propuesta.estado === "ACEPTADA" ? (
-                                <div className="flex h-[30px] border-t border-slate-200 bg-white">
+                                <div className="featmusic-private-received-actions flex h-[30px] border-t border-slate-200 bg-white">
                                   {propuesta.audioUrl && (
                                     <a
                                       href={`/api/propuestas/${propuesta.id}/descargar`}
