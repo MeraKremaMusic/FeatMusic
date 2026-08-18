@@ -4641,3 +4641,26 @@ html.dark .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover {
   -webkit-text-fill-color: #000000 !important;
 }
 /* FEATMUSIC_VISTAS_MODO_OSCURO_V1_END */
+
+/* FEATMUSIC_VISTAS_MODO_CLARO_BOTON_SEGUIR_V1_START */
+/*
+  Ventana "Artistas que vieron tu publicación".
+  SOLO modo claro: Seguir y Siguiendo usan el mismo botón amarillo con texto negro.
+  El modo oscuro conserva sus reglas existentes.
+*/
+html:not(.dark) .featmusic-viewers-dialog .featmusic-viewers-follow-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_VISTAS_MODO_CLARO_BOTON_SEGUIR_V1_END */
