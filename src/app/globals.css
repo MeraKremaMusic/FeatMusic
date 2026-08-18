@@ -4531,3 +4531,33 @@ html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-ed
 }
 /* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V6_END */
 
+/* FEATMUSIC_TIEMPO_AUDIO_BLANCO_MENU_CLARO_SOLIDO_V1_START */
+/*
+  Enviadas y Recibidas: el contador de tiempo del audio permanece blanco
+  sólido en ambos temas y gana una sombra discreta para conservar contraste
+  sobre portadas e imágenes.
+*/
+.featmusic-sent-proposal-player .featmusic-audio-time,
+.featmusic-received-proposal-player .featmusic-audio-time {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85) !important;
+}
+
+/*
+  Barra inferior móvil SOLO en modo claro: mantiene el gris oscuro visual que
+  ya tenía, pero ahora es completamente sólido. Nada del contenido que se
+  desplaza por detrás puede transparentarse a través del menú.
+*/
+html:not(.dark) .featmusic-app-light .featmusic-mobile-bottom-nav {
+  background: #181818 !important;
+  background-color: #181818 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  isolation: isolate;
+}
+/* FEATMUSIC_TIEMPO_AUDIO_BLANCO_MENU_CLARO_SOLIDO_V1_END */

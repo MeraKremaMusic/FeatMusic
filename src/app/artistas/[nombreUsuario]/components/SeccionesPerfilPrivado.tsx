@@ -957,7 +957,7 @@ export default function SeccionesPerfilPrivado({
                                       )}
                                     </div>
                                   }
-                                  className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_.featmusic-audio-toggle]:!border-transparent [&_.featmusic-audio-toggle]:!bg-white [&_.featmusic-audio-toggle]:!text-black [&_.featmusic-audio-toggle:hover]:!bg-zinc-100 [&_.featmusic-audio-title]:!text-white [&_.featmusic-audio-number]:!inline-flex [&_.featmusic-audio-number]:!h-6 [&_.featmusic-audio-number]:!w-6 [&_.featmusic-audio-number]:items-center [&_.featmusic-audio-number]:justify-center [&_.featmusic-audio-number]:rounded-lg [&_.featmusic-audio-number]:!bg-transparent [&_.featmusic-audio-number]:!text-white"
+                                  className="featmusic-sent-proposal-player !rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_.featmusic-audio-toggle]:h-8 [&_.featmusic-audio-toggle]:w-8 [&_.featmusic-audio-toggle]:!border-transparent [&_.featmusic-audio-toggle]:!bg-white [&_.featmusic-audio-toggle]:!text-black [&_.featmusic-audio-toggle:hover]:!bg-zinc-100 [&_.featmusic-audio-title]:!text-white [&_.featmusic-audio-number]:!inline-flex [&_.featmusic-audio-number]:!h-6 [&_.featmusic-audio-number]:!w-6 [&_.featmusic-audio-number]:items-center [&_.featmusic-audio-number]:justify-center [&_.featmusic-audio-number]:rounded-lg [&_.featmusic-audio-number]:!bg-transparent [&_.featmusic-audio-number]:!text-white"
                                 />
                               ) : (
                                 <div className="min-w-0">

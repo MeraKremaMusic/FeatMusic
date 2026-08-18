@@ -204,7 +204,7 @@ export default function ReproductorAudio({
               )}
             </div>
 
-            <span className="shrink-0 pt-0.5 text-[9px] font-semibold tabular-nums text-zinc-500">
+            <span className="featmusic-audio-time shrink-0 pt-0.5 text-[9px] font-semibold tabular-nums text-zinc-500">
               {formatearTiempo(tiempoActual)} / {formatearTiempo(duracionSegura)}
             </span>
           </div>
