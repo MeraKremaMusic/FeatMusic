@@ -186,7 +186,7 @@ export default function DescripcionIdea({
         aria-controls={panelId}
         title="Ver descripción"
         onClick={() => setAbierta(true)}
-        className={`featmusic-description-toggle inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[8px] ${
+        className={`featmusic-description-toggle inline-flex h-[30px] items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[8px] ${
           abierta
             ? "border-yellow-400 bg-yellow-400 text-black"
             : "border-slate-200 bg-white/95 text-slate-500 shadow-sm hover:border-yellow-400 hover:bg-yellow-50 hover:text-black"

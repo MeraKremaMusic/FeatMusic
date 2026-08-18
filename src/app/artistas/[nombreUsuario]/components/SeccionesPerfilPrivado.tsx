@@ -917,11 +917,11 @@ export default function SeccionesPerfilPrivado({
                             {(rutaIdea ||
                               propuesta.conversacionId ||
                               propuesta.estado === "PENDIENTE") && (
-                              <div className="flex min-h-[30px] bg-white">
+                              <div className="flex h-[30px] bg-white">
                                 {rutaIdea && (
                                   <Link
                                     href={rutaIdea}
-                                    className={`flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 sm:gap-1.5 sm:text-[10px] ${
+                                    className={`flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-0 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 sm:gap-1.5 sm:text-[10px] ${
                                       propuesta.conversacionId ||
                                       propuesta.estado === "PENDIENTE"
                                         ? "border-r border-yellow-500"
@@ -936,7 +936,7 @@ export default function SeccionesPerfilPrivado({
                                 {propuesta.conversacionId && (
                                   <Link
                                     href={`/mensajes/${propuesta.conversacionId}`}
-                                    className={`flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 sm:gap-1.5 sm:text-[10px] ${
+                                    className={`flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-0 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 sm:gap-1.5 sm:text-[10px] ${
                                       propuesta.estado === "PENDIENTE"
                                         ? "border-r border-yellow-500"
                                         : ""
@@ -957,7 +957,7 @@ export default function SeccionesPerfilPrivado({
                                     type="button"
                                     disabled={procesando}
                                     onClick={() => cancelarPropuesta(propuesta.id)}
-                                    className="flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
+                                    className="flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-0 text-center text-[9px] font-black !text-black transition hover:!bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                   >
                                     <IconoRechazar className="h-3.5 w-3.5 shrink-0" />
                                     <span>
@@ -1172,7 +1172,7 @@ export default function SeccionesPerfilPrivado({
                               </div>
 
                               {propuesta.estado === "PENDIENTE" ? (
-                                <div className="flex min-h-[30px] border-t border-slate-200 bg-white">
+                                <div className="flex h-[30px] border-t border-slate-200 bg-white">
                                   <button
                                     type="button"
                                     disabled={procesando}
@@ -1186,7 +1186,7 @@ export default function SeccionesPerfilPrivado({
                                         numeroIntento: propuesta.numeroIntento,
                                       });
                                     }}
-                                    className="flex min-w-0 flex-1 items-center justify-center gap-1 border-r border-yellow-500 !bg-yellow-400 px-2 py-2.5 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
+                                    className="flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1 border-r border-yellow-500 !bg-yellow-400 px-2 py-0 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                   >
                                     <IconoRechazar className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                                     <span>Rechazar</span>
@@ -1205,7 +1205,7 @@ export default function SeccionesPerfilPrivado({
                                           numeroIntento: propuesta.numeroIntento,
                                         });
                                       }}
-                                      className="flex min-w-0 flex-1 items-center justify-center gap-1 border-r border-yellow-500 !bg-yellow-400 px-2 py-2.5 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
+                                      className="flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1 border-r border-yellow-500 !bg-yellow-400 px-2 py-0 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                     >
                                       <IconoCambios className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                                       <span>Solicitar cambios</span>
@@ -1217,18 +1217,18 @@ export default function SeccionesPerfilPrivado({
                                     onClick={() =>
                                       enviarDecision(propuesta.id, { accion: "ACEPTAR" })
                                     }
-                                    className="flex min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-2.5 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
+                                    className="flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1 !bg-yellow-400 px-2 py-0 text-center text-[9px] font-black leading-tight !text-black transition hover:!bg-yellow-300 disabled:opacity-50 sm:gap-1.5 sm:text-[10px]"
                                   >
                                     <IconoAceptar className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                                     <span>{procesando ? "Procesando…" : "Aceptar"}</span>
                                   </button>
                                 </div>
                               ) : propuesta.estado === "ACEPTADA" ? (
-                                <div className="flex min-h-[20px] border-t border-slate-200 bg-white">
+                                <div className="flex h-[30px] border-t border-slate-200 bg-white">
                                   {propuesta.audioUrl && (
                                     <a
                                       href={`/api/propuestas/${propuesta.id}/descargar`}
-                                      className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 !bg-yellow-400 px-3 py-3 text-center text-[10px] font-black !text-black transition hover:!bg-yellow-300 sm:text-[11px] ${
+                                      className={`flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1.5 !bg-yellow-400 px-3 py-0 text-center text-[10px] font-black !text-black transition hover:!bg-yellow-300 sm:text-[11px] ${
                                         propuesta.conversacionId
                                           ? "border-r border-slate-200"
                                           : ""
@@ -1241,7 +1241,7 @@ export default function SeccionesPerfilPrivado({
                                   {propuesta.conversacionId && (
                                     <Link
                                       href={`/mensajes/${propuesta.conversacionId}`}
-                                      className="flex min-w-0 flex-1 items-center justify-center gap-1.5 !bg-yellow-400 px-3 py-3 text-center text-[10px] font-black !text-black transition hover:!bg-yellow-300 sm:text-[11px]"
+                                      className="flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1.5 !bg-yellow-400 px-3 py-0 text-center text-[10px] font-black !text-black transition hover:!bg-yellow-300 sm:text-[11px]"
                                     >
                                       <IconoChat className="h-4 w-4 shrink-0" />
                                       <span>Abrir chat</span>

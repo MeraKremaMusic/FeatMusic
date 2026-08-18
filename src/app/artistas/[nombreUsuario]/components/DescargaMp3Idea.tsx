@@ -287,7 +287,7 @@ export default function DescargaMp3Idea({
           setErrorDescarga(null);
           setAbierta(true);
         }}
-        className="flex min-h-11 w-full items-center justify-center gap-1.5 bg-white px-1.5 py-2 text-[9px] font-black text-slate-700 transition hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-300/60 sm:text-[10px]"
+        className="flex h-[30px] w-full items-center justify-center gap-1.5 bg-white px-1.5 py-0 text-[9px] font-black text-slate-700 transition hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-300/60 sm:text-[10px]"
       >
         <IconoDescarga className="h-3.5 w-3.5 shrink-0" />
         <span>MP3</span>
