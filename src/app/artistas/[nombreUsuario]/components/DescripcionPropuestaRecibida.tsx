@@ -217,11 +217,7 @@ export default function DescripcionPropuestaRecibida({
         aria-controls={panelId}
         title="Ver descripción"
         onClick={() => setAbierta(true)}
-        className={`featmusic-description-toggle inline-flex h-[30px] items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[8px] ${
-          abierta
-            ? "border-yellow-400 bg-yellow-400 text-black"
-            : "border-slate-200 bg-white/95 text-slate-500 shadow-sm hover:border-yellow-400 hover:bg-yellow-50 hover:text-black"
-        }`}
+        className="featmusic-description-toggle inline-flex h-[24px] items-center gap-1 rounded-full !border-0 !bg-white px-2 text-[9px] font-bold !text-black shadow-none transition hover:!bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-yellow-300/60 sm:text-[10px]"
       >
         <IconoDescripcion className="h-2.5 w-2.5" />
         <span>Descripción</span>
