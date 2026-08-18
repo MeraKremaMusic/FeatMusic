@@ -505,11 +505,11 @@ function ContenidoCentro({
                     ? "centro-notificaciones-titulo-escritorio"
                     : "centro-notificaciones-titulo"
                 }
-                className="text-sm font-black text-black dark:text-white"
+                className="featmusic-notifications-copy text-sm font-black text-black dark:text-white"
               >
                 Notificaciones
               </h2>
-              <p className="mt-0.5 text-[10px] text-zinc-600 dark:text-zinc-500">
+              <p className="featmusic-notifications-copy mt-0.5 text-[10px] text-zinc-600 dark:text-zinc-500">
                 {totalNoLeidas === 0
                   ? "Estás al día"
                   : `${totalNoLeidas} sin leer`}
@@ -522,14 +522,14 @@ function ContenidoCentro({
           type="button"
           onClick={onCerrar}
           aria-label="Cerrar"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-xl text-zinc-600 transition hover:bg-black/5 hover:text-black dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-white"
+          className="featmusic-notifications-copy flex h-8 w-8 items-center justify-center rounded-lg text-xl text-zinc-600 transition hover:bg-black/5 hover:text-black dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-white"
         >
           ×
         </button>
       </header>
 
       <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] px-4 py-2.5 dark:border-white/[0.06] sm:px-5">
-        <label className="inline-flex cursor-pointer items-center gap-2 text-[10px] font-semibold text-zinc-700 dark:text-zinc-400">
+        <label className="featmusic-notifications-copy inline-flex cursor-pointer items-center gap-2 text-[10px] font-semibold text-zinc-700 dark:text-zinc-400">
           <input
             type="checkbox"
             checked={soloNoLeidas}
@@ -543,7 +543,7 @@ function ContenidoCentro({
           type="button"
           onClick={onMarcarTodas}
           disabled={totalNoLeidas === 0}
-          className="text-[10px] font-bold text-yellow-600 transition hover:text-yellow-700 disabled:cursor-not-allowed disabled:text-zinc-400 dark:text-yellow-300 dark:hover:text-yellow-200 dark:disabled:text-zinc-700"
+          className="featmusic-notifications-copy text-[10px] font-bold text-yellow-600 transition hover:text-yellow-700 disabled:cursor-not-allowed disabled:text-zinc-400 dark:text-yellow-300 dark:hover:text-yellow-200 dark:disabled:text-zinc-700"
         >
           Marcar todas como leídas
         </button>
@@ -561,11 +561,11 @@ function ContenidoCentro({
           </div>
         ) : error && notificaciones.length === 0 ? (
           <div className="px-5 py-12 text-center">
-            <p className="text-xs font-semibold text-yellow-700 dark:text-yellow-200">{error}</p>
+            <p className="featmusic-notifications-copy text-xs font-semibold text-yellow-700 dark:text-yellow-200">{error}</p>
             <button
               type="button"
               onClick={onRecargar}
-              className="mt-4 rounded-lg border border-black/10 px-3 py-2 text-[10px] font-bold text-zinc-800 transition hover:bg-black/5 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
+              className="featmusic-notifications-copy mt-4 rounded-lg border border-black/10 px-3 py-2 text-[10px] font-bold text-zinc-800 transition hover:bg-black/5 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
             >
               Intentar nuevamente
             </button>
@@ -575,12 +575,12 @@ function ContenidoCentro({
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/40 bg-yellow-400/15 text-yellow-600 dark:border-yellow-400/15 dark:bg-yellow-500/[0.06] dark:text-yellow-300/70">
               <IconoCampana className="h-5 w-5" />
             </div>
-            <p className="mt-3 text-xs font-bold text-black dark:text-zinc-300">
+            <p className="featmusic-notifications-copy mt-3 text-xs font-bold text-black dark:text-zinc-300">
               {soloNoLeidas
                 ? "No tienes notificaciones sin leer"
                 : "Todavía no tienes notificaciones"}
             </p>
-            <p className="mt-1 text-[10px] leading-5 text-zinc-600 dark:text-zinc-600">
+            <p className="featmusic-notifications-copy mt-1 text-[10px] leading-5 text-zinc-600 dark:text-zinc-600">
               Aquí aparecerán propuestas, decisiones, cambios y mensajes.
             </p>
           </div>
@@ -630,7 +630,7 @@ function ContenidoCentro({
                   <span className="min-w-0 flex-1">
                     <span className="flex items-start justify-between gap-3">
                       <span
-                        className={`block text-[11px] leading-4 ${
+                        className={`featmusic-notifications-copy block text-[11px] leading-4 ${
                           noLeida
                             ? "font-black text-black dark:text-zinc-100"
                             : "font-bold text-zinc-800 dark:text-zinc-300"
@@ -638,18 +638,18 @@ function ContenidoCentro({
                       >
                         {notificacion.titulo}
                       </span>
-                      <span className="shrink-0 text-[8px] font-semibold text-zinc-500 dark:text-zinc-600">
+                      <span className="featmusic-notifications-copy shrink-0 text-[8px] font-semibold text-zinc-500 dark:text-zinc-600">
                         {formatearTiempo(notificacion.creadoEn)}
                       </span>
                     </span>
 
                     {notificacion.actor && (
-                      <span className="mt-0.5 block truncate text-[9px] font-semibold text-yellow-600 dark:text-yellow-300/80">
+                      <span className="featmusic-notifications-username mt-0.5 block truncate text-[9px] font-semibold text-yellow-600 dark:text-yellow-300/80">
                         {notificacion.actor.nombreVisible}
                       </span>
                     )}
 
-                    <span className="mt-1 block text-[10px] leading-4 text-zinc-600 dark:text-zinc-500">
+                    <span className="featmusic-notifications-copy mt-1 block text-[10px] leading-4 text-zinc-600 dark:text-zinc-500">
                       {notificacion.mensaje}
                     </span>
                   </span>
@@ -661,7 +661,7 @@ function ContenidoCentro({
       </div>
 
       {error && notificaciones.length > 0 && (
-        <div className="border-t border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-[9px] text-yellow-700 dark:border-yellow-400/10 dark:bg-yellow-500/[0.04] dark:text-yellow-200">
+        <div className="featmusic-notifications-copy border-t border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-[9px] text-yellow-700 dark:border-yellow-400/10 dark:bg-yellow-500/[0.04] dark:text-yellow-200">
           {error}
         </div>
       )}

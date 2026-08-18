@@ -4561,3 +4561,48 @@ html:not(.dark) .featmusic-app-light .featmusic-mobile-bottom-nav {
   isolation: isolate;
 }
 /* FEATMUSIC_TIEMPO_AUDIO_BLANCO_MENU_CLARO_SOLIDO_V1_END */
+
+/* FEATMUSIC_NOTIFICACIONES_COLOR_EXACTO_V3_START */
+/*
+  Ajuste definitivo del Centro de Notificaciones.
+
+  El modal se monta con createPortal(document.body), por eso estas reglas
+  apuntan directamente al panel que queda bajo body y no dependen de
+  .featmusic-app-light.
+*/
+
+/* Modo claro: panel blanco 100% sólido, sin efecto gris/transparente. */
+html:not(.dark) body > .featmusic-notifications-panel {
+  color-scheme: light !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Todo el texto informativo solicitado queda negro en modo claro. */
+html:not(.dark)
+  body > .featmusic-notifications-panel
+  .featmusic-notifications-copy {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* En modo oscuro, ese mismo texto queda blanco. */
+html.dark
+  body > .featmusic-notifications-panel
+  .featmusic-notifications-copy {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Nombre del usuario: amarillo FeatMusic en ambos modos. */
+body > .featmusic-notifications-panel
+  .featmusic-notifications-username {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+}
+
+/* FEATMUSIC_NOTIFICACIONES_COLOR_EXACTO_V3_END */
