@@ -978,14 +978,11 @@ export default async function PerfilPublicoPage({
                 )}
 
                 <div className="grid gap-1.5">
+                  {/* FEATMUSIC_ROL_AMARILLO_V1 */}
                   <span
                     title={`Rol: ${formatearRol(artista.rolPrincipal)}`}
                     aria-label={`Rol: ${formatearRol(artista.rolPrincipal)}`}
-                    className={`featmusic-profile-dark-label flex min-h-7 w-full items-center justify-center rounded-lg border px-1.5 py-1 text-center text-[8px] font-black leading-tight ${
-                      artista.portadaPerfil
-                        ? "border-white/20 bg-black/40 text-white backdrop-blur-sm"
-                        : "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    }`}
+                    className="featmusic-profile-dark-label flex min-h-7 w-full items-center justify-center rounded-lg border !border-yellow-400 !bg-yellow-400 px-1.5 py-1 text-center text-[8px] font-black leading-tight !text-black"
                   >
                     {formatearRol(artista.rolPrincipal)}
                   </span>

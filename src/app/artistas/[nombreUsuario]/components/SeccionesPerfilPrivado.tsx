@@ -806,6 +806,12 @@ export default function SeccionesPerfilPrivado({
         html.dark .featmusic-private-profile-sections .featmusic-private-received-actions .border-r {
           border-color: #000000 !important;
         }
+
+        /* FEATMUSIC_BORDE_MP3_CUPOS_OSCURO_V1 */
+        html.dark .featmusic-private-profile-sections .featmusic-private-active-section button[title="Descargar MP3"] {
+          border-right: 1px solid #000000 !important;
+          border-right-color: #000000 !important;
+        }
       `}</style>
       <div className="grid w-full grid-cols-3 gap-1.5 px-1 pb-1 sm:flex sm:w-auto sm:items-center sm:gap-2 sm:overflow-visible lg:px-0">
         <BotonPestana
