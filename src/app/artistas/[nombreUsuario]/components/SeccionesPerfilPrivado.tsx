@@ -1115,19 +1115,15 @@ export default function SeccionesPerfilPrivado({
 
                                 <div className={propuesta.motivoDecision && propuesta.estado !== "PENDIENTE" ? "mt-3" : ""}>
                                   {propuesta.audioUrl ? (
-                                    <div className="featmusic-received-proposal-player-shell relative isolate overflow-hidden">
-                                      {/* FEATMUSIC_FOTO_REMITENTE_RECIBIDAS_V1 */}
+                                    <div className="featmusic-received-proposal-player-shell relative isolate -my-3 -mr-3 overflow-hidden py-3 pr-3 sm:-my-3.5 sm:-mr-3.5 sm:py-3.5 sm:pr-3.5">
+                                      {/* FEATMUSIC_FOTO_REMITENTE_RECIBIDAS_V2 */}
                                       {remitente.fotoPerfil && (
                                         <div
                                           aria-hidden="true"
                                           className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[52%] overflow-hidden"
                                           style={{
                                             clipPath:
-                                              "polygon(34% 0, 100% 0, 100% 100%, 0 100%)",
-                                            WebkitMaskImage:
-                                              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.18) 18%, #000 56%, #000 100%)",
-                                            maskImage:
-                                              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.18) 18%, #000 56%, #000 100%)",
+                                              "polygon(48% 0, 100% 0, 100% 100%, 14% 100%)",
                                           }}
                                         >
                                           <img
