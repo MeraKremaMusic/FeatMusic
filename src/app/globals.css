@@ -5359,3 +5359,42 @@ html:not(.dark)
   -webkit-text-fill-color: #000000 !important;
 }
 /* FEATMUSIC_EXPLORAR_SIN_PORTADA_SEGUIR_V3_END */
+
+/* FEATMUSIC_EXPLORAR_AJUSTES_FINALES_TARJETAS_V4_START */
+/*
+  Ajustes solicitados para las tarjetas de artistas en Explorar.
+  Los tres primeros afectan SOLO el modo claro.
+*/
+
+/* 1) Géneros SIN portada: borde negro real, fondo transparente y texto negro. */
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 2) Ubicación SIN portada: icono negro. Las tarjetas con portada conservan blanco. */
+html:not(.dark)
+  .featmusic-explore-no-cover-location
+  .featmusic-explore-location-icon {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* 3) @usuario: amarillo limpio, sin sombra, SOLO en modo claro. */
+html:not(.dark) .featmusic-explore-card-username {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+/* FEATMUSIC_EXPLORAR_AJUSTES_FINALES_TARJETAS_V4_END */

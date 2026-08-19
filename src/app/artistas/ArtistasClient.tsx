@@ -671,7 +671,7 @@ function TarjetaArtista({
               className={`featmusic-explore-card-location mt-2 flex min-w-0 items-center gap-1.5 text-[10px] sm:text-[11px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-text text-white"
-                  : "text-zinc-500"
+                  : "featmusic-explore-no-cover-location text-zinc-500"
               }`}
             >
               <IconoUbicacion className="featmusic-explore-location-icon h-3 w-3 shrink-0" />
@@ -778,7 +778,7 @@ function TarjetaArtista({
                   {mostrarDetalle && (
                     <div
                       data-descripcion-idea
-                      className="absolute right-0 top-[31px] z-30"
+                      className="featmusic-explore-description-control absolute right-0 top-[25px] z-30"
                       onMouseEnter={() => onCambiarDescripcion(idea.id)}
                       onMouseLeave={() => onCambiarDescripcion(null)}
                     >
