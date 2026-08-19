@@ -5184,3 +5184,31 @@ html:not(.dark) .featmusic-explore-loading-progress {
   }
 }
 /* FEATMUSIC_EXPLORAR_CARGA_PRO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_STATS_BORDE_TEMA_V1_START */
+/* Tarjeta Artistas / Ideas / Propuestas: borde exterior según el tema. */
+html:not(.dark) .featmusic-explore-stats {
+  border-color: #ffffff !important;
+}
+
+html.dark .featmusic-explore-stats {
+  border-color: #000000 !important;
+}
+
+/* El botón de perfil mantiene amarillo/negro en ambos modos. */
+.featmusic-explore-profile-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-top-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.featmusic-explore-profile-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-top-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EXPLORAR_STATS_BORDE_TEMA_V1_END */

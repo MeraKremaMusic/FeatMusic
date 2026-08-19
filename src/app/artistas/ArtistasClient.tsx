@@ -364,7 +364,7 @@ function TarjetaEstadistica({
 }) {
   return (
     <article className="flex min-w-0 items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white bg-white/35 text-black md:h-8 md:w-8">
+      <div className="featmusic-explore-stat-icon flex h-7 w-7 shrink-0 items-center justify-center text-black md:h-8 md:w-8">
         {icono}
       </div>
 
@@ -891,7 +891,7 @@ function TarjetaArtista({
 
       <Link
         href={`/artistas/${encodeURIComponent(artista.nombreUsuario)}`}
-        className="relative flex items-center justify-center rounded-b-2xl border-t border-yellow-500/20 bg-yellow-600 px-4 py-3 text-center text-[11px] font-black text-white transition hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
+        className="featmusic-explore-profile-button relative flex items-center justify-center rounded-b-2xl border-t border-[#FFD400] bg-[#FFD400] px-4 py-3 text-center text-[11px] font-black text-black transition hover:border-[#F2C900] hover:bg-[#F2C900] focus:outline-none focus:ring-2 focus:ring-[#FFD400]/50 focus:ring-offset-2 focus:ring-offset-transparent"
       >
         <span>Ver perfil</span>
       </Link>
