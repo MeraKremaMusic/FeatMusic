@@ -5482,3 +5482,55 @@ html.dark
   -webkit-text-fill-color: #52525b !important;
 }
 /* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_DEFINITIVO_V6_END */
+
+/* FEATMUSIC_EXPLORAR_REPRODUCTOR_BUSQUEDA_BORDES_V1_START */
+/*
+  Ajustes localizados a la página Explorar.
+*/
+
+/* 1) Reproductor de las tarjetas: mismo Play/Pause en claro y oscuro. */
+.featmusic-explore-card-player .featmusic-audio-toggle,
+.featmusic-explore-card-player .featmusic-audio-toggle:hover,
+.featmusic-explore-card-player .featmusic-audio-toggle:focus-visible {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.featmusic-explore-card-player .featmusic-audio-toggle :is(svg, path) {
+  color: #000000 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* 2) SOLO oscuro: separadores internos de Artistas / Ideas / Propuestas negros. */
+html.dark .featmusic-explore-stats > :not(:last-child) {
+  border-color: #000000 !important;
+}
+
+/*
+  3) SOLO oscuro: el input de Buscar queda transparente.
+  Una regla global de campos oscuros lo pintaba #131313 y producía un
+  rectángulo gris dentro de la barra.
+*/
+html.dark .featmusic-explore-search-input {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+html.dark .featmusic-explore-search-input:-webkit-autofill,
+html.dark .featmusic-explore-search-input:-webkit-autofill:hover,
+html.dark .featmusic-explore-search-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+}
+/* FEATMUSIC_EXPLORAR_REPRODUCTOR_BUSQUEDA_BORDES_V1_END */

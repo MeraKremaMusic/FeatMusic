@@ -772,7 +772,7 @@ function TarjetaArtista({
                     tonalidad={idea.tonalidad}
                     duracionSegundos={idea.duracionSegundos}
                     numero={indice + 1}
-                    className="!rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
+                    className="featmusic-explore-card-player !rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&>div]:gap-2 [&_button]:h-8 [&_button]:w-8 [&_input[type='range']]:mt-5"
                   />
 
                   {mostrarDetalle && (
@@ -1127,7 +1127,7 @@ export default function ArtistasClient({
                   onChange={(evento) => setBusqueda(evento.target.value)}
                   placeholder="Buscar por nombre, usuario, ciudad o país"
                   aria-label="Buscar artistas"
-                  className="h-9 min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
+                  className="featmusic-explore-search-input h-9 min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
                 />
               </div>
 
