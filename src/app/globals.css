@@ -4809,3 +4809,98 @@ html.dark body
   -webkit-text-fill-color: #ffffff !important;
 }
 /* FEATMUSIC_CHAT_DETALLES_PLAYER_TEMA_DEFINITIVO_V3_END */
+
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_CLARO_BLANCO_V4_START */
+/*
+  SOLO modo claro > Chat > Detalles.
+  Reproductor blanco, borde negro, Play/Pause negro y barra blanca.
+  El modo oscuro queda intacto.
+*/
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #000000 !important;
+  border-width: 1px !important;
+}
+
+/* Play / Pause: icono negro. */
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-toggle {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-toggle
+  svg {
+  color: #000000 !important;
+  fill: currentColor !important;
+}
+
+/*
+  Barra blanca. Como el reproductor también es blanco, se conserva una
+  línea negra muy fina alrededor para que la barra siga siendo visible.
+*/
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"] {
+  background: transparent !important;
+  accent-color: #ffffff !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-webkit-slider-thumb {
+  background: #000000 !important;
+  border: 0 !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-moz-range-track {
+  height: 4px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-moz-range-progress {
+  height: 4px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-moz-range-thumb {
+  background: #000000 !important;
+  border: 0 !important;
+}
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_CLARO_BLANCO_V4_END */
