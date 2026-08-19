@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { createPortal } from "react-dom";
 import {
   FormEvent,
@@ -63,20 +62,6 @@ function formatearHora(fecha: string) {
   return new Intl.DateTimeFormat("es-CO", {
     hour: "2-digit",
     minute: "2-digit",
-  }).format(valor);
-}
-
-function formatearFechaCorta(fecha: string) {
-  const valor = new Date(fecha);
-
-  if (Number.isNaN(valor.getTime())) {
-    return "";
-  }
-
-  return new Intl.DateTimeFormat("es-CO", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
   }).format(valor);
 }
 
@@ -530,91 +515,33 @@ export default function ChatClient({
                 </div>
 
                 <div className="min-h-0 flex-1 overflow-y-auto p-4 [scrollbar-width:thin]">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#FFD400]">
-                        <IconoColaboracion />
-                      </span>
-                      <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white">
-                        Colaboraciones
-                      </p>
-                    </div>
-
-                    {otroArtista.nombreUsuario && (
-                      <Link
-                        href={`/artistas/${encodeURIComponent(otroArtista.nombreUsuario)}`}
-                        onClick={() => setDetallesAbiertos(false)}
-                        className="text-[9px] font-black text-[#FFD400] transition hover:text-[#F2C900]"
-                      >
-                        Ver perfil del artista →
-                      </Link>
-                    )}
+                  {/* FEATMUSIC_CHAT_DETALLES_RESUMIDO_V2 */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#FFD400]">
+                      <IconoColaboracion />
+                    </span>
+                    <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white">
+                      Colaboraciones
+                    </p>
                   </div>
 
                   <div className="mt-3 space-y-2">
-                    {colaboraciones.map((colaboracion, indice) => (
-                      <details
-                        key={colaboracion.propuestaId}
-                        open={indice === 0}
-                        className="group overflow-hidden rounded-xl border border-white/10 bg-white/[0.025]"
-                      >
-                        <summary className="cursor-pointer list-none px-3 py-2.5 [&::-webkit-details-marker]:hidden">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="min-w-0">
-                              <p className="truncate text-[11px] font-black text-white">
-                                {colaboracion.ideaTitulo}
-                              </p>
-                              <p className="mt-0.5 truncate text-[8px] font-semibold text-zinc-400">
-                                {colaboracion.bpm} BPM · {colaboracion.tonalidad} ·{" "}
-                                {formatearFechaCorta(colaboracion.aceptadaEn)}
-                              </p>
-                            </div>
-                            <span className="shrink-0 text-[10px] text-zinc-400 transition group-open:rotate-180">
-                              ▾
-                            </span>
-                          </div>
-                        </summary>
-
-                        <div className="border-t border-white/[0.07] p-2.5">
-                          {colaboracion.audioUrl ? (
-                            <>
-                              <ReproductorAudio
-                                id={`chat-propuesta-${colaboracion.propuestaId}`}
-                                src={colaboracion.audioUrl}
-                                titulo="Audio aceptado"
-                                bpm={colaboracion.bpm}
-                                tonalidad={colaboracion.tonalidad}
-                                duracionSegundos={colaboracion.duracionSegundos}
-                                numero={indice + 1}
-                                className="!border-white/[0.07] !bg-black/20 !p-2"
-                              />
-                              <a
-                                href={`/api/propuestas/${colaboracion.propuestaId}/descargar`}
-                                className="mt-2 flex items-center justify-center rounded-lg border border-[#FFD400] bg-[#FFD400] px-3 py-2 text-[9px] font-black text-black transition hover:border-[#F2C900] hover:bg-[#F2C900]"
-                              >
-                                Descargar MP3
-                              </a>
-                            </>
-                          ) : (
-                            <p className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[9px] text-zinc-400">
-                              El audio aceptado no está disponible.
-                            </p>
-                          )}
-
-                          {colaboracion.mensaje && (
-                            <p className="mt-2 whitespace-pre-wrap rounded-lg border border-white/[0.07] bg-black/20 px-2.5 py-2 text-[9px] leading-4 text-zinc-300">
-                              {colaboracion.mensaje}
-                            </p>
-                          )}
-                        </div>
-                      </details>
-                    ))}
+                    {colaboraciones.map((colaboracion, indice) =>
+                      colaboracion.audioUrl ? (
+                        <ReproductorAudio
+                          key={colaboracion.propuestaId}
+                          id={`chat-propuesta-${colaboracion.propuestaId}`}
+                          src={colaboracion.audioUrl}
+                          titulo={`Versión para "${colaboracion.ideaTitulo}" de ${otroArtista.nombreVisible}`}
+                          bpm={colaboracion.bpm}
+                          tonalidad={colaboracion.tonalidad}
+                          duracionSegundos={colaboracion.duracionSegundos}
+                          numero={indice + 1}
+                          className="!border-white/[0.07] !bg-black/20 !p-2"
+                        />
+                      ) : null,
+                    )}
                   </div>
-
-                  <p className="mt-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5 text-[9px] leading-4 text-zinc-400">
-                    Este chat es único para ustedes dos. Las nuevas propuestas
-                    aceptadas entre ambos aparecerán aquí.
-                  </p>
                 </div>
               </section>
             </div>,
