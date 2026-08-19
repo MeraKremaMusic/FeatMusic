@@ -5398,3 +5398,25 @@ html:not(.dark) .featmusic-explore-card-username {
   filter: none !important;
 }
 /* FEATMUSIC_EXPLORAR_AJUSTES_FINALES_TARJETAS_V4_END */
+
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_BLANCO_V5_START */
+/*
+  SOLO modo claro + tarjetas de Explorar SIN portada.
+  Géneros: fondo blanco sólido, borde negro y texto negro.
+  No modifica Rol, tarjetas con portada ni modo oscuro.
+*/
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_BLANCO_V5_END */
