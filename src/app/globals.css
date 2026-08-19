@@ -5298,3 +5298,64 @@ html:not(.dark)
   backdrop-filter: blur(4px) !important;
 }
 /* FEATMUSIC_EXPLORAR_ETIQUETAS_IGUAL_OSCURO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_SIN_PORTADA_SEGUIR_V3_START */
+/*
+  Ajustes definitivos de las tarjetas de artistas en Explorar.
+  - Modo claro, SIN portada: contenido legible sobre fondo blanco.
+  - Icono de ubicación blanco en modo claro, como se solicitó.
+  - Seguir/Siguiendo: amarillo sólido + negro en ambos temas.
+*/
+
+/* 1) Icono de ubicación blanco SOLO en modo claro. */
+html:not(.dark) .featmusic-explore-location-icon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* 2) Tarjetas SIN portada, SOLO modo claro. */
+html:not(.dark) .featmusic-explore-no-cover-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-explore-no-cover-bio {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark)
+  .featmusic-explore-card-role-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 3) Seguir y Siguiendo: mismo diseño en claro y oscuro. */
+.featmusic-explore-follow-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+.featmusic-explore-follow-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EXPLORAR_SIN_PORTADA_SEGUIR_V3_END */

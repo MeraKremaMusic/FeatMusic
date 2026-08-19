@@ -548,11 +548,7 @@ function BotonSeguirArtista({
             : `Seguir a ${nombreArtistico}`
         }
         title={siguiendo ? "Dejar de seguir" : "Seguir artista"}
-        className={`inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border px-2 text-[9px] font-black transition focus:outline-none focus:ring-2 focus:ring-yellow-500/40 disabled:cursor-wait disabled:opacity-65 ${
-          siguiendo
-            ? "border-yellow-300/30 bg-yellow-500/10 text-yellow-200 hover:border-yellow-400/30 hover:bg-yellow-500/10 hover:text-yellow-300"
-            : "border-yellow-500 bg-yellow-600 text-white shadow-[0_6px_16px_rgba(5,150,105,0.22)] hover:bg-yellow-700"
-        }`}
+        className="featmusic-explore-follow-button inline-flex h-7 min-w-[58px] items-center justify-center gap-1 rounded-lg border border-[#FFD400] bg-[#FFD400] px-2 text-[9px] font-black text-black transition hover:border-[#F2C900] hover:bg-[#F2C900] focus:outline-none focus:ring-2 focus:ring-[#FFD400]/40 disabled:cursor-wait disabled:opacity-65"
       >
         <span aria-hidden="true">{siguiendo ? "✓" : "+"}</span>
         {procesando ? "..." : siguiendo ? "Siguiendo" : "Seguir"}
@@ -640,7 +636,7 @@ function TarjetaArtista({
                   className={`featmusic-explore-card-artist-name truncate text-[15px] font-black leading-tight sm:text-base ${
                     portadaPerfilVisible
                       ? "featmusic-explore-cover-text text-white"
-                      : "text-white"
+                      : "featmusic-explore-no-cover-name text-white"
                   }`}
                 >
                   {artista.nombreArtistico}
@@ -678,7 +674,7 @@ function TarjetaArtista({
                   : "text-zinc-500"
               }`}
             >
-              <IconoUbicacion className="h-3 w-3 shrink-0" />
+              <IconoUbicacion className="featmusic-explore-location-icon h-3 w-3 shrink-0" />
               <span className="truncate">{ubicacion}</span>
             </p>
           </div>
@@ -725,7 +721,7 @@ function TarjetaArtista({
             className={`featmusic-explore-card-bio mt-3 [display:-webkit-box] overflow-hidden [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-[10px] leading-4 sm:text-[11px] ${
               portadaPerfilVisible
                 ? "featmusic-explore-cover-text text-white"
-                : "text-zinc-500"
+                : "featmusic-explore-no-cover-bio text-zinc-500"
             }`}
           >
             {artista.biografia?.trim() ||
