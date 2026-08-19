@@ -5534,3 +5534,39 @@ html.dark .featmusic-explore-search-input:-webkit-autofill:focus {
   box-shadow: 0 0 0 1000px transparent inset !important;
 }
 /* FEATMUSIC_EXPLORAR_REPRODUCTOR_BUSQUEDA_BORDES_V1_END */
+
+/* FEATMUSIC_INICIO_ESTABLE_SIN_TITILEO_V1_START */
+/*
+  Entrada estable del feed Inicio. Se reserva la altura del menú antes de que
+  React la mida y se evita que el fondo completo del reel cambie de tamaño/
+  opacidad justo cuando el autoplay comienza.
+*/
+:root {
+  --featmusic-menu-movil-altura: calc(4.25rem + env(safe-area-inset-bottom));
+}
+
+/* El título de la idea debe ser blanco sólido en todos los temas. */
+html body .feat-reel-title,
+html body.featmusic-app-light .feat-reel-title,
+html:not(.dark) body .feat-reel-title,
+html.dark body .feat-reel-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/*
+  El estado de reproducción ya anima el reproductor. Mantener estable el fondo
+  evita el salto visual que ocurría ~180 ms después de abrir Inicio.
+*/
+.feat-reel-card:not([data-idea-cover="true"])[data-playing="true"]
+  .feat-reel-cover-bg {
+  opacity: 0.16 !important;
+  transform: scale(1.18) !important;
+}
+
+.feat-reel-card[data-idea-cover="true"][data-playing="true"]
+  .feat-reel-cover-bg {
+  opacity: 0.7 !important;
+  transform: scale(1.035) !important;
+}
+/* FEATMUSIC_INICIO_ESTABLE_SIN_TITILEO_V1_END */

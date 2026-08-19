@@ -130,6 +130,7 @@ function TarjetaFeed({
   usuarioActualId: number;
 }) {
   const [reproduciendo, setReproduciendo] = useState(false);
+  const [autoplayVisualResuelto, setAutoplayVisualResuelto] = useState(false);
   const [mostrarFeedbackPausa, setMostrarFeedbackPausa] = useState(false);
   const temporizadorFeedbackPausaRef = useRef<number | null>(null);
   const [descripcionExpandida, setDescripcionExpandida] = useState(false);
@@ -160,6 +161,25 @@ function TarjetaFeed({
   useEffect(() => {
     if (!activa) setDescripcionExpandida(false);
   }, [activa]);
+
+  /*
+   * Evita que el icono grande de Play aparezca durante los primeros milisegundos
+   * mientras el autoplay intenta iniciar. Si el navegador bloquea el autoplay,
+   * el control aparece después y sigue disponible normalmente.
+   */
+  useEffect(() => {
+    if (!activa) {
+      setAutoplayVisualResuelto(false);
+      return;
+    }
+
+    setAutoplayVisualResuelto(false);
+    const temporizador = window.setTimeout(() => {
+      setAutoplayVisualResuelto(true);
+    }, 320);
+
+    return () => window.clearTimeout(temporizador);
+  }, [activa, oportunidad.id]);
 
   useEffect(() => {
     if (descripcionExpandida) return;
@@ -346,7 +366,10 @@ function TarjetaFeed({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-20 flex -translate-y-8 items-center justify-center sm:-translate-y-6 lg:translate-y-0"
         >
-          {activa && !reproduciendo && !mostrarFeedbackPausa && (
+          {activa &&
+            autoplayVisualResuelto &&
+            !reproduciendo &&
+            !mostrarFeedbackPausa && (
             <span className="flex items-center justify-center text-white/75 opacity-80 drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)]">
               <IconoPlayCentro />
             </span>

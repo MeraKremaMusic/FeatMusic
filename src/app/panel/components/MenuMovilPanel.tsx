@@ -4,7 +4,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 import { useNotificaciones } from "@/app/components/useNotificaciones";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
@@ -119,7 +119,7 @@ export default function MenuMovilPanel({
   const estaEnMensajes =
     pathname === "/mensajes" || pathname.startsWith("/mensajes/");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const menu = menuRef.current;
     if (!menu) return;
 
@@ -145,7 +145,7 @@ export default function MenuMovilPanel({
     return () => {
       observador?.disconnect();
       window.removeEventListener("resize", actualizarAltura);
-      raiz.style.removeProperty("--featmusic-menu-movil-altura");
+      // Conservamos la última altura conocida durante cambios de ruta para evitar saltos visuales.
     };
   }, []);
 
