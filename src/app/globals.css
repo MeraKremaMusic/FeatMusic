@@ -5212,3 +5212,43 @@ html.dark .featmusic-explore-stats {
   -webkit-text-fill-color: #000000 !important;
 }
 /* FEATMUSIC_EXPLORAR_STATS_BORDE_TEMA_V1_END */
+
+/* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_START */
+/*
+  SOLO modo claro: identidad visual de las tarjetas de artistas en Explorar.
+  El modo oscuro queda intacto.
+*/
+html:not(.dark) .featmusic-explore-card-artist-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+html:not(.dark) .featmusic-explore-card-username {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+html:not(.dark) .featmusic-explore-card-location {
+  color: #a3a3a3 !important;
+  -webkit-text-fill-color: #a3a3a3 !important;
+}
+
+html:not(.dark) .featmusic-explore-card-bio {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* Rol y géneros: mismo tratamiento visual oscuro, incluso en tema claro. */
+html:not(.dark) .featmusic-explore-card-chip {
+  border-color: rgba(255, 255, 255, 0.65) !important;
+  background: rgba(0, 0, 0, 0.40) !important;
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+}
+/* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_END */

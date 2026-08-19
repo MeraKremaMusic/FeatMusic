@@ -637,7 +637,7 @@ function TarjetaArtista({
             <div className="flex min-w-0 items-start justify-between gap-2">
               <div className="min-w-0">
                 <h2
-                  className={`truncate text-[15px] font-black leading-tight sm:text-base ${
+                  className={`featmusic-explore-card-artist-name truncate text-[15px] font-black leading-tight sm:text-base ${
                     portadaPerfilVisible
                       ? "featmusic-explore-cover-text text-white"
                       : "text-white"
@@ -646,7 +646,7 @@ function TarjetaArtista({
                   {artista.nombreArtistico}
                 </h2>
                 <p
-                  className={`mt-0.5 truncate text-[11px] font-semibold ${
+                  className={`featmusic-explore-card-username mt-0.5 truncate text-[11px] font-semibold ${
                     portadaPerfilVisible
                       ? "featmusic-explore-cover-text text-white"
                       : "text-yellow-300"
@@ -672,7 +672,7 @@ function TarjetaArtista({
             </div>
 
             <p
-              className={`mt-2 flex min-w-0 items-center gap-1.5 text-[10px] sm:text-[11px] ${
+              className={`featmusic-explore-card-location mt-2 flex min-w-0 items-center gap-1.5 text-[10px] sm:text-[11px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-text text-white"
                   : "text-zinc-500"
@@ -686,7 +686,7 @@ function TarjetaArtista({
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <span
-            className={`rounded-full border px-2.5 py-1 text-[9px] font-bold ${
+            className={`featmusic-explore-card-chip rounded-full border px-2.5 py-1 text-[9px] font-bold ${
               portadaPerfilVisible
                 ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                 : "border-yellow-400/20 bg-yellow-500/[0.09] text-yellow-200"
@@ -698,7 +698,7 @@ function TarjetaArtista({
           {artista.generos.slice(0, 3).map((genero) => (
             <span
               key={genero}
-              className={`rounded-full border px-2.5 py-1 text-[9px] font-medium ${
+              className={`featmusic-explore-card-chip rounded-full border px-2.5 py-1 text-[9px] font-medium ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                   : "border-white/[0.08] bg-white/[0.035] text-zinc-400"
@@ -710,7 +710,7 @@ function TarjetaArtista({
 
           {artista.generos.length === 0 && (
             <span
-              className={`rounded-full border px-2.5 py-1 text-[9px] ${
+              className={`featmusic-explore-card-chip rounded-full border px-2.5 py-1 text-[9px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                   : "border-white/[0.08] bg-white/[0.025] text-zinc-600"
@@ -722,7 +722,7 @@ function TarjetaArtista({
         </div>
 
           <p
-            className={`mt-3 [display:-webkit-box] overflow-hidden [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-[10px] leading-4 sm:text-[11px] ${
+            className={`featmusic-explore-card-bio mt-3 [display:-webkit-box] overflow-hidden [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-[10px] leading-4 sm:text-[11px] ${
               portadaPerfilVisible
                 ? "featmusic-explore-cover-text text-white"
                 : "text-zinc-500"
