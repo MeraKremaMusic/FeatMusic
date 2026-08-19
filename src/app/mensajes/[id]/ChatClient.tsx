@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { createPortal } from "react-dom";
 import {
   FormEvent,
@@ -340,7 +341,12 @@ export default function ChatClient({
         <div className="shrink-0 border-b border-white/10 px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             {/* FEATMUSIC_CHAT_CABECERA_ARTISTA_V1 */}
-            <div className="flex min-w-0 items-center gap-2.5">
+            {/* FEATMUSIC_CHAT_ARTISTA_ENLACE_PERFIL_V1 */}
+            <Link
+              href={`/artistas/${encodeURIComponent(otroArtista.nombreUsuario ?? "")}`}
+              aria-label={`Ver perfil de ${otroArtista.nombreVisible}`}
+              className="flex min-w-0 items-center gap-2.5 rounded-xl outline-none transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#FFD400]/50"
+            >
               {otroArtista.fotoPerfil ? (
                 <img
                   src={otroArtista.fotoPerfil}
@@ -354,7 +360,7 @@ export default function ChatClient({
               )}
 
               <div className="min-w-0">
-                <p className="truncate text-sm font-black text-white">
+                <p className="truncate text-sm font-black text-black dark:text-white">
                   {otroArtista.nombreVisible}
                 </p>
                 {otroArtista.nombreUsuario && (
@@ -363,7 +369,7 @@ export default function ChatClient({
                   </p>
                 )}
               </div>
-            </div>
+            </Link>
 
             <button
               type="button"
@@ -472,10 +478,10 @@ export default function ChatClient({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="chat-detalles-titulo"
-                className="relative z-[1] flex max-h-[calc(100dvh-32px)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111111] text-white shadow-2xl shadow-black/40"
+                className="featmusic-chat-details-dialog relative z-[1] flex max-h-[calc(100dvh-32px)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-black shadow-2xl shadow-black/20 dark:border-white/10 dark:bg-[#111111] dark:text-white dark:shadow-black/40"
               >
                 {/* FEATMUSIC_CHAT_DETALLES_MODAL_V1 */}
-                <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 p-4">
+                <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200 p-4 dark:border-white/10">
                   <div className="flex min-w-0 items-center gap-3">
                     {otroArtista.fotoPerfil ? (
                       <img
@@ -508,7 +514,7 @@ export default function ChatClient({
                     type="button"
                     aria-label="Cerrar"
                     onClick={() => setDetallesAbiertos(false)}
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-lg font-bold text-white transition hover:border-[#FFD400]/50 hover:bg-[#FFD400] hover:text-black"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-lg font-bold text-black transition hover:border-[#FFD400]/50 hover:bg-[#FFD400] hover:text-black dark:border-white/10 dark:bg-white/[0.04] dark:text-white"
                   >
                     ×
                   </button>
@@ -520,7 +526,7 @@ export default function ChatClient({
                     <span className="text-[#FFD400]">
                       <IconoColaboracion />
                     </span>
-                    <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white">
+                    <p className="text-[9px] font-black uppercase tracking-[0.15em] text-black dark:text-white">
                       Colaboraciones
                     </p>
                   </div>
@@ -537,7 +543,7 @@ export default function ChatClient({
                           tonalidad={colaboracion.tonalidad}
                           duracionSegundos={colaboracion.duracionSegundos}
                           numero={indice + 1}
-                          className="!border-white/[0.07] !bg-black/20 !p-2"
+                          className="!border-slate-200 !bg-slate-50 !p-2 [&_*]:!text-black dark:!border-white/[0.07] dark:!bg-black/20 dark:[&_*]:!text-white"
                         />
                       ) : null,
                     )}
