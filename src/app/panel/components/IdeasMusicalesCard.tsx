@@ -989,7 +989,7 @@ export default function IdeasMusicalesCard({
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-300">
+                <p className="featmusic-publish-kicker text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-300">
                   Nueva publicación
                 </p>
                 <h2 className="mt-1 text-xl font-black text-white">
@@ -1023,7 +1023,7 @@ export default function IdeasMusicalesCard({
                   accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.aiff,.aif,.opus"
                   onChange={seleccionarAudio}
                   disabled={guardando}
-                  className="mt-2 block w-full rounded-xl border border-dashed border-yellow-400/25 bg-yellow-500/[0.05] p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-yellow-500/15 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-yellow-200"
+                  className="featmusic-publish-audio-input mt-2 block w-full rounded-xl border border-dashed border-yellow-400/25 bg-yellow-500/[0.05] p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-[#FFD400] file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-black"
                 />
                 <span className="mt-1.5 block text-[9px] text-zinc-600">
                   50 MB · 4 minutos · MP3, WAV, FLAC, M4A, AAC, OGG, AIFF u
@@ -1337,7 +1337,7 @@ export default function IdeasMusicalesCard({
               <button
                 type="submit"
                 disabled={guardando || leyendoAudio}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-yellow-400/30 bg-yellow-500/20 px-5 py-2.5 text-xs font-bold text-yellow-100 transition hover:border-yellow-300/50 hover:bg-yellow-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+                className="featmusic-publish-submit inline-flex items-center justify-center gap-2 rounded-xl border border-[#FFD400] bg-[#FFD400] px-5 py-2.5 text-xs font-bold text-black transition hover:border-[#F2C900] hover:bg-[#F2C900] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icono tipo="subir" />
                 {guardando ? "Publicando..." : "Publicar idea"}

@@ -4904,3 +4904,42 @@ html:not(.dark) body
   border: 0 !important;
 }
 /* FEATMUSIC_CHAT_DETALLES_PLAYER_CLARO_BLANCO_V4_END */
+
+/* FEATMUSIC_PUBLICAR_BOTONES_AMARILLOS_V1_START */
+.featmusic-publish-audio-input::file-selector-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border: 0 !important;
+}
+
+.featmusic-publish-audio-input::-webkit-file-upload-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border: 0 !important;
+}
+
+.featmusic-publish-submit {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.featmusic-publish-submit:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-publish-kicker {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+}
+/* FEATMUSIC_PUBLICAR_BOTONES_AMARILLOS_V1_END */
