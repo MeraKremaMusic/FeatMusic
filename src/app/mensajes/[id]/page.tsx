@@ -192,19 +192,19 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <Link
             href="/mensajes"
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-zinc-300 transition hover:bg-white/10 hover:text-white"
+            className="order-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-zinc-300 transition hover:bg-white/10 hover:text-white md:order-1"
           >
             ← Mensajes
           </Link>
 
-          <div className="flex min-w-0 items-center gap-0.5">
+          <div className="order-1 flex min-w-0 items-center gap-0.5 md:order-2">
             <MenuMasMovil sesionActiva />
             <Link href="/artistas/mi-perfil" className="text-lg font-black tracking-tight">
-              Feat<span className="text-emerald-400">Music</span>
+              Feat<span className="!text-[#FFD400]">Music</span>
             </Link>
           </div>
 
-          <div className="hidden md:block">
+          <div className="order-3 hidden md:block">
             <MenuMasEscritorio />
           </div>
         </div>

@@ -4664,3 +4664,37 @@ html:not(.dark) .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover
   -webkit-text-fill-color: #000000 !important;
 }
 /* FEATMUSIC_VISTAS_MODO_CLARO_BOTON_SEGUIR_V1_END */
+
+/* FEATMUSIC_CHAT_MOVIL_VIEWPORT_TECLADO_V1_START */
+/*
+  El chat ocupa todo el alto visible por debajo del banner.
+  visualViewport actualiza la variable cuando aparece/desaparece el teclado,
+  por lo que el compositor permanece inmediatamente encima del teclado.
+*/
+@media (max-width: 1023.98px) {
+  .featmusic-chat-mobile-viewport {
+    height: calc(
+      var(--featmusic-chat-viewport-height, 100dvh) - 3.5rem
+    ) !important;
+    min-height: 0 !important;
+    overflow: hidden;
+  }
+
+  .featmusic-chat-mobile-viewport > section {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .featmusic-chat-mobile-viewport textarea {
+    scroll-margin-bottom: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .featmusic-chat-mobile-viewport {
+    min-height: calc(100dvh - 56px);
+    height: auto;
+    overflow: visible;
+  }
+}
+/* FEATMUSIC_CHAT_MOVIL_VIEWPORT_TECLADO_V1_END */

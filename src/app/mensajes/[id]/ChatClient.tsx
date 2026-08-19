@@ -145,6 +145,7 @@ export default function ChatClient({
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState("");
   const [detallesAbiertos, setDetallesAbiertos] = useState(false);
+  const chatViewportRef = useRef<HTMLDivElement | null>(null);
   const finalRef = useRef<HTMLDivElement | null>(null);
 
   const ultimoMensajeIdRef = useRef(
@@ -155,6 +156,38 @@ export default function ChatClient({
     ultimoMensajeIdRef.current = mensajes[mensajes.length - 1]?.id ?? 0;
     finalRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
+
+  // FEATMUSIC_CHAT_VISUAL_VIEWPORT_V1
+  useEffect(() => {
+    const contenedor = chatViewportRef.current;
+    if (!contenedor) return;
+
+    const viewport = window.visualViewport;
+    let frame = 0;
+
+    const actualizarAltoVisible = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const altoVisible = viewport?.height ?? window.innerHeight;
+        contenedor.style.setProperty(
+          "--featmusic-chat-viewport-height",
+          `${Math.round(altoVisible)}px`,
+        );
+      });
+    };
+
+    actualizarAltoVisible();
+    window.addEventListener("resize", actualizarAltoVisible);
+    viewport?.addEventListener("resize", actualizarAltoVisible);
+    viewport?.addEventListener("scroll", actualizarAltoVisible);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", actualizarAltoVisible);
+      viewport?.removeEventListener("resize", actualizarAltoVisible);
+      viewport?.removeEventListener("scroll", actualizarAltoVisible);
+    };
+  }, []);
 
   useEffect(() => {
     void actualizarNotificacionesChat();
@@ -314,8 +347,11 @@ export default function ChatClient({
   }
 
   return (
-    <div className="mx-auto min-h-[calc(100dvh-56px)] max-w-5xl px-3 py-4 lg:px-4">
-      <section className="flex min-h-[70dvh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/35 shadow-xl shadow-black/20 backdrop-blur-sm lg:h-[calc(100dvh-88px)] lg:min-h-0">
+    <div
+      ref={chatViewportRef}
+      className="featmusic-chat-mobile-viewport mx-auto max-w-5xl px-0 py-0 sm:px-3 sm:py-4 lg:px-4"
+    >
+      <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-none border border-x-0 border-white/10 bg-black/35 shadow-xl shadow-black/20 backdrop-blur-sm sm:rounded-2xl sm:border-x lg:h-[calc(100dvh-88px)] lg:min-h-0">
         <div className="shrink-0 border-b border-white/10 px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
@@ -402,6 +438,7 @@ export default function ChatClient({
               onKeyDown={manejarTecla}
               maxLength={2000}
               rows={1}
+              enterKeyHint="send"
               placeholder="Escribe un mensaje…"
               className="max-h-32 min-h-11 flex-1 resize-none rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-xs text-white outline-none transition placeholder:text-zinc-700 focus:border-emerald-400/40"
             />
@@ -409,7 +446,7 @@ export default function ChatClient({
             <button
               type="submit"
               disabled={enviando || contenido.trim().length === 0}
-              className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 px-4 text-[10px] font-black text-white transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 shrink-0 items-center justify-center rounded-xl !bg-[#FFD400] px-4 text-[10px] font-black !text-black transition hover:!bg-[#F2C900] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {enviando ? "Enviando…" : "Enviar"}
             </button>
