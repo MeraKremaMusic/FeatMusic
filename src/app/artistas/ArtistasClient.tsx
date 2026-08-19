@@ -697,7 +697,7 @@ function TarjetaArtista({
               className={`featmusic-explore-card-chip featmusic-explore-card-genre-chip rounded-full border px-2.5 py-1 text-[9px] sm:text-[10px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
-                  : "border-white/[0.08] bg-white/[0.035] text-zinc-400"
+                  : "featmusic-explore-no-cover-genre-chip border-black bg-white text-black"
               }`}
             >
               {genero}
@@ -709,7 +709,7 @@ function TarjetaArtista({
               className={`featmusic-explore-card-chip featmusic-explore-card-genre-chip featmusic-explore-card-empty-genre-chip rounded-full border px-2.5 py-1 text-[9px] sm:text-[10px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
-                  : "border-white/[0.08] bg-white/[0.025] text-zinc-600"
+                  : "featmusic-explore-no-cover-genre-chip featmusic-explore-no-cover-empty-genre-chip border-black bg-white text-black"
               }`}
             >
               Sin géneros

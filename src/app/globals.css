@@ -5420,3 +5420,65 @@ html:not(.dark)
   backdrop-filter: none !important;
 }
 /* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_BLANCO_V5_END */
+
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_DEFINITIVO_V6_START */
+/*
+  Arreglo definitivo.
+
+  La clase featmusic-explore-no-cover-genre-chip SOLO existe en los géneros
+  de tarjetas sin portada. Se usa un selector de alta especificidad para que
+  las antiguas conversiones globales del modo claro no puedan volver a borrar
+  visualmente el fondo ni el borde.
+*/
+html:not(.dark)
+  body
+  .featmusic-app-light
+  .featmusic-explore-card-chip.featmusic-explore-card-genre-chip.featmusic-explore-no-cover-genre-chip {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  border-style: solid !important;
+
+  /* Refuerzo visual del borde para que se distinga incluso sobre tarjeta blanca. */
+  box-shadow: inset 0 0 0 1px #000000 !important;
+
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+
+  opacity: 1 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/*
+  Modo oscuro: recupera explícitamente el aspecto original del género.
+  Esto evita que la nueva clase cambie el diseño oscuro.
+*/
+html.dark
+  body
+  .featmusic-explore-card-chip.featmusic-explore-card-genre-chip.featmusic-explore-no-cover-genre-chip {
+  background: rgba(255, 255, 255, 0.035) !important;
+  background-color: rgba(255, 255, 255, 0.035) !important;
+  background-image: none !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+
+  box-shadow: none !important;
+
+  color: #a1a1aa !important;
+  -webkit-text-fill-color: #a1a1aa !important;
+}
+
+html.dark
+  body
+  .featmusic-explore-card-empty-genre-chip.featmusic-explore-no-cover-empty-genre-chip {
+  background: rgba(255, 255, 255, 0.025) !important;
+  background-color: rgba(255, 255, 255, 0.025) !important;
+  color: #52525b !important;
+  -webkit-text-fill-color: #52525b !important;
+}
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_DEFINITIVO_V6_END */
