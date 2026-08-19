@@ -543,7 +543,7 @@ export default function ChatClient({
                           tonalidad={colaboracion.tonalidad}
                           duracionSegundos={colaboracion.duracionSegundos}
                           numero={indice + 1}
-                          className="featmusic-chat-details-player !border-slate-200 !bg-slate-50 !p-2 [&_*]:!text-black dark:!border-white/[0.07] dark:!bg-black/20 dark:[&_*]:!text-white"
+                          className="featmusic-chat-details-player !p-2"
                         />
                       ) : null,
                     )}

@@ -4739,24 +4739,46 @@ html.dark .featmusic-chat-details-section-title {
   -webkit-text-fill-color: #ffffff !important;
 }
 
-/* Reproductor de colaboraciones dentro de Detalles. */
-html.dark .featmusic-chat-details-player {
-  background: #2f2f2f !important;
-  background-color: #2f2f2f !important;
-  background-image: none !important;
-  border-color: #444444 !important;
-  color-scheme: dark;
-}
-
 /* FEATMUSIC_CHAT_COLORES_DETALLES_EXPLICITOS_V1_END */
 
-/* FEATMUSIC_CHAT_DETALLES_PLAYER_OSCURO_GRIS_V2_START */
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_TEMA_DEFINITIVO_V3_START */
 /*
-  SOLO modo oscuro.
-  El reproductor que aparece dentro de Detalles debe ser gris sólido y todos
-  sus textos deben ser blancos. La mayor especificidad de estas reglas evita
-  que las utilidades !bg-slate-50 / !text-black del modo claro ganen por error.
+  Reproductor usado SOLO dentro de Chat > Detalles.
+  Ya no depende de utilidades Tailwind !bg / !text en ChatClient.
+  Así no existe conflicto entre el modo claro y el modo oscuro.
 */
+
+/* Mantener la apariencia clara actual. */
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player {
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-title,
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-time,
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-number,
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  p {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Modo oscuro: gris sólido y textos blancos. */
 html.dark body
   .featmusic-chat-details-dialog
   .featmusic-chat-details-player {
@@ -4764,8 +4786,6 @@ html.dark body
   background-color: #303030 !important;
   background-image: none !important;
   border-color: #484848 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
   color-scheme: dark;
 }
 
@@ -4788,15 +4808,4 @@ html.dark body
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
-
-/* Metadatos (BPM / tonalidad) que no tienen clase propia. */
-html.dark body
-  .featmusic-chat-details-dialog
-  .featmusic-chat-details-player
-  div
-  > p {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* FEATMUSIC_CHAT_DETALLES_PLAYER_OSCURO_GRIS_V2_END */
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_TEMA_DEFINITIVO_V3_END */
