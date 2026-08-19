@@ -192,7 +192,7 @@ export default async function ConversacionPage({ params }: ContextoPagina) {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <Link
             href="/mensajes"
-            className="order-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-zinc-300 transition hover:bg-white/10 hover:text-white md:order-1"
+            className="order-2 inline-flex items-center px-0 py-2 text-xs font-bold !text-white transition hover:opacity-80 md:order-1"
           >
             ← Mensajes
           </Link>

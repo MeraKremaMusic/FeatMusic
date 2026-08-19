@@ -354,13 +354,30 @@ export default function ChatClient({
       <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-none border border-x-0 border-white/10 bg-black/35 shadow-xl shadow-black/20 backdrop-blur-sm sm:rounded-2xl sm:border-x lg:h-[calc(100dvh-88px)] lg:min-h-0">
         <div className="shrink-0 border-b border-white/10 px-4 py-3">
           <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="truncate text-sm font-black text-white">
-                Conversación con {otroArtista.nombreVisible}
-              </p>
-              <p className="mt-1 text-[9px] font-medium text-zinc-600">
-                Un solo chat para todas las colaboraciones entre ustedes.
-              </p>
+            {/* FEATMUSIC_CHAT_CABECERA_ARTISTA_V1 */}
+            <div className="flex min-w-0 items-center gap-2.5">
+              {otroArtista.fotoPerfil ? (
+                <img
+                  src={otroArtista.fotoPerfil}
+                  alt={`Foto de ${otroArtista.nombreVisible}`}
+                  className="h-10 w-10 shrink-0 rounded-full object-cover"
+                />
+              ) : (
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#FFD400]/30 bg-[#FFD400]/10 text-[10px] font-black text-[#FFD400]">
+                  {iniciales(otroArtista.nombreVisible)}
+                </span>
+              )}
+
+              <div className="min-w-0">
+                <p className="truncate text-sm font-black text-white">
+                  {otroArtista.nombreVisible}
+                </p>
+                {otroArtista.nombreUsuario && (
+                  <p className="mt-0.5 truncate text-[10px] font-bold text-[#FFD400]">
+                    @{otroArtista.nombreUsuario}
+                  </p>
+                )}
+              </div>
             </div>
 
             <button
@@ -397,19 +414,17 @@ export default function ChatClient({
                   className={`flex ${propio ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-3 py-2 sm:max-w-[72%] ${
+                    className={`max-w-[85%] rounded-2xl px-3 py-2 text-black sm:max-w-[72%] ${
                       propio
-                        ? "rounded-br-md bg-emerald-500 text-white"
-                        : "rounded-bl-md border border-white/10 bg-white/[0.06] text-zinc-200"
+                        ? "rounded-br-md bg-[#FFD400]"
+                        : "rounded-bl-md border border-zinc-300 bg-zinc-300"
                     }`}
                   >
                     <p className="whitespace-pre-wrap break-words text-xs leading-5">
                       {mensaje.contenido}
                     </p>
                     <p
-                      className={`mt-1 text-right text-[8px] ${
-                        propio ? "text-emerald-100/70" : "text-zinc-600"
-                      }`}
+                      className="mt-1 text-right text-[8px] text-black/60"
                     >
                       {formatearHora(mensaje.creadoEn)}
                     </p>
@@ -452,10 +467,7 @@ export default function ChatClient({
             </button>
           </div>
 
-          <div className="mt-1 flex items-center justify-between px-1">
-            <p className="text-[8px] text-zinc-700">
-              Enter para enviar · Shift + Enter para otra línea
-            </p>
+          <div className="mt-1 flex justify-end px-1">
             <p className="text-[8px] text-zinc-700">{contenido.length}/2000</p>
           </div>
         </form>
