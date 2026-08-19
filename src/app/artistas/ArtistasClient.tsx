@@ -364,24 +364,24 @@ function TarjetaEstadistica({
 }) {
   return (
     <article className="flex min-w-0 items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-yellow-400/20 bg-yellow-500/10 text-yellow-300 md:h-8 md:w-8">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white bg-white/35 text-black md:h-8 md:w-8">
         {icono}
       </div>
 
       <div className="min-w-0">
-        <p className="truncate text-[8px] font-semibold text-zinc-500 sm:hidden">
+        <p className="truncate text-[8px] font-semibold text-black sm:hidden">
           {tituloMovil}
         </p>
-        <p className="hidden truncate text-[9px] font-semibold text-zinc-500 sm:block lg:text-[10px]">
+        <p className="hidden truncate text-[9px] font-semibold text-black sm:block lg:text-[10px]">
           {titulo}
         </p>
-        <p className="mt-0.5 text-base font-black leading-none text-white md:text-lg">
+        <p className="mt-0.5 text-base font-black leading-none text-black md:text-lg">
           {valor.toLocaleString("es-CO")}
         </p>
       </div>
 
       {nota && (
-        <span className="ml-auto hidden rounded-full border border-yellow-400/15 bg-yellow-500/[0.07] px-2 py-0.5 text-[8px] font-bold text-yellow-300/70 xl:inline-flex">
+        <span className="ml-auto hidden rounded-full border border-white bg-white/35 px-2 py-0.5 text-[8px] font-bold text-black xl:inline-flex">
           Próximamente
         </span>
       )}
@@ -1101,7 +1101,7 @@ export default function ArtistasClient({
         <CargandoArtistas />
       ) : (
         <div className="featmusic-explore-content mx-auto w-full min-w-0 max-w-[1280px] overflow-x-clip px-4 py-4 md:py-5">
-          <section className="grid grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-black/35 backdrop-blur-sm">
+          <section className="featmusic-explore-stats grid grid-cols-3 divide-x divide-white overflow-hidden rounded-xl border border-white bg-[#FFD400]">
             <TarjetaEstadistica
               titulo="Artistas en FeatMusic"
               tituloMovil="Artistas"
