@@ -5442,8 +5442,8 @@ html:not(.dark)
   border-color: #000000 !important;
   border-style: solid !important;
 
-  /* Refuerzo visual del borde para que se distinga incluso sobre tarjeta blanca. */
-  box-shadow: inset 0 0 0 1px #000000 !important;
+  /* Borde fino, con el mismo peso visual que la etiqueta de Rol. */
+  box-shadow: none !important;
 
   color: #000000 !important;
   -webkit-text-fill-color: #000000 !important;
