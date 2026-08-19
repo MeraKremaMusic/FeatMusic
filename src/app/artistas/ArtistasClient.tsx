@@ -698,7 +698,7 @@ function TarjetaArtista({
           {artista.generos.slice(0, 3).map((genero) => (
             <span
               key={genero}
-              className={`featmusic-explore-card-chip rounded-full border px-2.5 py-1 text-[9px] font-medium ${
+              className={`featmusic-explore-card-chip featmusic-explore-card-genre-chip rounded-full border px-2.5 py-1 text-[9px] sm:text-[10px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                   : "border-white/[0.08] bg-white/[0.035] text-zinc-400"
@@ -710,7 +710,7 @@ function TarjetaArtista({
 
           {artista.generos.length === 0 && (
             <span
-              className={`featmusic-explore-card-chip rounded-full border px-2.5 py-1 text-[9px] ${
+              className={`featmusic-explore-card-chip featmusic-explore-card-genre-chip rounded-full border px-2.5 py-1 text-[9px] sm:text-[10px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                   : "border-white/[0.08] bg-white/[0.025] text-zinc-600"

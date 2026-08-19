@@ -5252,3 +5252,22 @@ html:not(.dark) .featmusic-explore-card-chip {
   backdrop-filter: blur(8px) !important;
 }
 /* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_GENEROS_ESTILO_PERFIL_V1_START */
+/*
+  SOLO modo claro > Explorar.
+  Copia el tratamiento visual exacto de featmusic-profile-dark-chip:
+  fondo negro 35%, borde blanco 45%, texto blanco y blur de 8px.
+  No modifica Rol ni el modo oscuro.
+*/
+html:not(.dark) .featmusic-explore-card-genre-chip {
+  background: rgba(0, 0, 0, 0.35) !important;
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+}
+/* FEATMUSIC_EXPLORAR_GENEROS_ESTILO_PERFIL_V1_END */
