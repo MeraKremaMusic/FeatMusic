@@ -4698,3 +4698,54 @@ html:not(.dark) .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover
   }
 }
 /* FEATMUSIC_CHAT_MOVIL_VIEWPORT_TECLADO_V1_END */
+
+/* FEATMUSIC_CHAT_COLORES_DETALLES_EXPLICITOS_V1_START */
+/*
+  Colores explícitos del chat.
+  Se usan selectores basados directamente en html.dark para evitar que
+  reglas globales o utilidades anteriores cambien los colores esperados.
+*/
+
+/* Cabecera de la conversación. */
+html:not(.dark) .featmusic-chat-artist-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-chat-artist-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Nombre del artista dentro de Detalles. */
+html:not(.dark) .featmusic-chat-details-artist-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-chat-details-artist-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Título "Colaboraciones". */
+html:not(.dark) .featmusic-chat-details-section-title {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-chat-details-section-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Reproductor de colaboraciones dentro de Detalles. */
+html.dark .featmusic-chat-details-player {
+  background: #2f2f2f !important;
+  background-color: #2f2f2f !important;
+  background-image: none !important;
+  border-color: #444444 !important;
+  color-scheme: dark;
+}
+
+/* FEATMUSIC_CHAT_COLORES_DETALLES_EXPLICITOS_V1_END */

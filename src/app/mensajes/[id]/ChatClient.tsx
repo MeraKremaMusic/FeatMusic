@@ -360,7 +360,7 @@ export default function ChatClient({
               )}
 
               <div className="min-w-0">
-                <p className="truncate text-sm font-black text-black dark:text-white">
+                <p className="featmusic-chat-artist-name truncate text-sm font-black text-black dark:text-white">
                   {otroArtista.nombreVisible}
                 </p>
                 {otroArtista.nombreUsuario && (
@@ -498,7 +498,7 @@ export default function ChatClient({
                     <div className="min-w-0">
                       <p
                         id="chat-detalles-titulo"
-                        className="truncate text-sm font-black text-white"
+                        className="featmusic-chat-details-artist-name truncate text-sm font-black text-black dark:text-white"
                       >
                         {otroArtista.nombreVisible}
                       </p>
@@ -526,7 +526,7 @@ export default function ChatClient({
                     <span className="text-[#FFD400]">
                       <IconoColaboracion />
                     </span>
-                    <p className="text-[9px] font-black uppercase tracking-[0.15em] text-black dark:text-white">
+                    <p className="featmusic-chat-details-section-title text-[9px] font-black uppercase tracking-[0.15em] text-black dark:text-white">
                       Colaboraciones
                     </p>
                   </div>
@@ -543,7 +543,7 @@ export default function ChatClient({
                           tonalidad={colaboracion.tonalidad}
                           duracionSegundos={colaboracion.duracionSegundos}
                           numero={indice + 1}
-                          className="!border-slate-200 !bg-slate-50 !p-2 [&_*]:!text-black dark:!border-white/[0.07] dark:!bg-black/20 dark:[&_*]:!text-white"
+                          className="featmusic-chat-details-player !border-slate-200 !bg-slate-50 !p-2 [&_*]:!text-black dark:!border-white/[0.07] dark:!bg-black/20 dark:[&_*]:!text-white"
                         />
                       ) : null,
                     )}
