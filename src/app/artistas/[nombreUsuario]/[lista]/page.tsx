@@ -204,7 +204,7 @@ export default async function PaginaListaSeguimientos({
               href={sesion ? "/artistas/mi-perfil" : "/"}
               className="text-lg font-black tracking-tight"
             >
-              Feat<span className="text-emerald-400">Music</span>
+              Feat<span className="text-[#FFD400]">Music</span>
             </Link>
           </div>
 

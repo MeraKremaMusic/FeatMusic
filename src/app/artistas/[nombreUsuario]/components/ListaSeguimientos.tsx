@@ -142,7 +142,7 @@ export default function ListaSeguimientos({
       <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur-sm sm:p-5">
         <Link
           href={`/artistas/${encodeURIComponent(perfil.nombreUsuario)}`}
-          className="inline-flex items-center gap-2 text-[11px] font-bold text-[#FFD400] transition hover:text-[#F2C900]"
+          className="inline-flex items-center gap-2 text-[11px] font-bold text-black transition hover:text-zinc-700 dark:text-[#FFD400] dark:hover:text-[#F2C900]"
         >
           <span aria-hidden="true">←</span>
           Volver al perfil
