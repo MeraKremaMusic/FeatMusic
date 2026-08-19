@@ -4749,3 +4749,54 @@ html.dark .featmusic-chat-details-player {
 }
 
 /* FEATMUSIC_CHAT_COLORES_DETALLES_EXPLICITOS_V1_END */
+
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_OSCURO_GRIS_V2_START */
+/*
+  SOLO modo oscuro.
+  El reproductor que aparece dentro de Detalles debe ser gris sólido y todos
+  sus textos deben ser blancos. La mayor especificidad de estas reglas evita
+  que las utilidades !bg-slate-50 / !text-black del modo claro ganen por error.
+*/
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player {
+  background: #303030 !important;
+  background-color: #303030 !important;
+  background-image: none !important;
+  border-color: #484848 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color-scheme: dark;
+}
+
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-title,
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-time,
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-number,
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Metadatos (BPM / tonalidad) que no tienen clase propia. */
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  div
+  > p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_OSCURO_GRIS_V2_END */
