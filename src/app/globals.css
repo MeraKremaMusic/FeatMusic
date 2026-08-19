@@ -5241,33 +5241,60 @@ html:not(.dark) .featmusic-explore-card-bio {
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
 }
 
-/* Rol y géneros: mismo tratamiento visual oscuro, incluso en tema claro. */
-html:not(.dark) .featmusic-explore-card-chip {
-  border-color: rgba(255, 255, 255, 0.65) !important;
+/* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_ETIQUETAS_IGUAL_OSCURO_V2_START */
+/*
+  SOLO modo claro > Explorar.
+  Cada etiqueta copia el aspecto que ESA MISMA etiqueta tiene en modo oscuro.
+  No toma estilos del perfil y no modifica el modo oscuro.
+*/
+
+/* Rol SIN portada: equivale a border-yellow-400/20 bg-yellow-500/[0.09] text-yellow-200. */
+html:not(.dark)
+  .featmusic-explore-card-role-chip:not(.featmusic-explore-cover-chip) {
+  border-color: rgba(250, 204, 21, 0.20) !important;
+  background: rgba(234, 179, 8, 0.09) !important;
+  background-color: rgba(234, 179, 8, 0.09) !important;
+  color: #fef08a !important;
+  -webkit-text-fill-color: #fef08a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Géneros SIN portada: equivale a border-white/[0.08] bg-white/[0.035] text-zinc-400. */
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip):not(.featmusic-explore-card-empty-genre-chip) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  background-color: rgba(255, 255, 255, 0.035) !important;
+  color: #a1a1aa !important;
+  -webkit-text-fill-color: #a1a1aa !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* “Sin géneros” SIN portada: equivale a border-white/[0.08] bg-white/[0.025] text-zinc-600. */
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+  background-color: rgba(255, 255, 255, 0.025) !important;
+  color: #52525b !important;
+  -webkit-text-fill-color: #52525b !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Con portada: Rol y Géneros conservan exactamente el chip oscuro de Explorar. */
+html:not(.dark)
+  .featmusic-explore-card-chip.featmusic-explore-cover-chip {
+  border-color: rgba(255, 255, 255, 0.20) !important;
   background: rgba(0, 0, 0, 0.40) !important;
   background-color: rgba(0, 0, 0, 0.40) !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  backdrop-filter: blur(4px) !important;
 }
-/* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_END */
-
-/* FEATMUSIC_EXPLORAR_GENEROS_ESTILO_PERFIL_V1_START */
-/*
-  SOLO modo claro > Explorar.
-  Copia el tratamiento visual exacto de featmusic-profile-dark-chip:
-  fondo negro 35%, borde blanco 45%, texto blanco y blur de 8px.
-  No modifica Rol ni el modo oscuro.
-*/
-html:not(.dark) .featmusic-explore-card-genre-chip {
-  background: rgba(0, 0, 0, 0.35) !important;
-  background-color: rgba(0, 0, 0, 0.35) !important;
-  border-color: rgba(255, 255, 255, 0.45) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  backdrop-filter: blur(8px) !important;
-}
-/* FEATMUSIC_EXPLORAR_GENEROS_ESTILO_PERFIL_V1_END */
+/* FEATMUSIC_EXPLORAR_ETIQUETAS_IGUAL_OSCURO_V2_END */

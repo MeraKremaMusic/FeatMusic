@@ -686,7 +686,7 @@ function TarjetaArtista({
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <span
-            className={`featmusic-explore-card-chip rounded-full border px-2.5 py-1 text-[9px] font-bold ${
+            className={`featmusic-explore-card-chip featmusic-explore-card-role-chip rounded-full border px-2.5 py-1 text-[9px] font-bold ${
               portadaPerfilVisible
                 ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                 : "border-yellow-400/20 bg-yellow-500/[0.09] text-yellow-200"
@@ -710,7 +710,7 @@ function TarjetaArtista({
 
           {artista.generos.length === 0 && (
             <span
-              className={`featmusic-explore-card-chip featmusic-explore-card-genre-chip rounded-full border px-2.5 py-1 text-[9px] sm:text-[10px] ${
+              className={`featmusic-explore-card-chip featmusic-explore-card-genre-chip featmusic-explore-card-empty-genre-chip rounded-full border px-2.5 py-1 text-[9px] sm:text-[10px] ${
                 portadaPerfilVisible
                   ? "featmusic-explore-cover-chip featmusic-explore-cover-text border-white/20 bg-black/40 text-white backdrop-blur-sm"
                   : "border-white/[0.08] bg-white/[0.025] text-zinc-600"
