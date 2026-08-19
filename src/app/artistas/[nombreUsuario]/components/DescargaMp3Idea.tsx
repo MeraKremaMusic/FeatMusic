@@ -7,6 +7,9 @@ type DescargaMp3IdeaProps = {
   ideaId: number;
   titulo: string;
   sesionActiva: boolean;
+  descargaUrl?: string;
+  descripcionModal?: string;
+  classNameBoton?: string;
 };
 
 function IconoDescarga({ className = "h-3 w-3" }: { className?: string }) {
@@ -66,6 +69,9 @@ export default function DescargaMp3Idea({
   ideaId,
   titulo,
   sesionActiva,
+  descargaUrl,
+  descripcionModal = "Descarga el MP3, graba tu aporte y vuelve a FeatMusic para enviarlo como propuesta.",
+  classNameBoton = "",
 }: DescargaMp3IdeaProps) {
   const [abierta, setAbierta] = useState(false);
   const [descargando, setDescargando] = useState(false);
@@ -112,11 +118,14 @@ export default function DescargaMp3Idea({
     setErrorDescarga(null);
 
     try {
-      const respuesta = await fetch(`/api/ideas/${ideaId}/descargar`, {
-        method: "GET",
-        cache: "no-store",
-        credentials: "same-origin",
-      });
+      const respuesta = await fetch(
+        descargaUrl ?? `/api/ideas/${ideaId}/descargar`,
+        {
+          method: "GET",
+          cache: "no-store",
+          credentials: "same-origin",
+        },
+      );
 
       if (!respuesta.ok) {
         let mensaje = "No se pudo descargar el MP3.";
@@ -225,8 +234,7 @@ export default function DescargaMp3Idea({
                 </div>
 
                 <p className="mt-4 text-[11px] leading-[1.15rem] text-slate-600 sm:text-xs sm:leading-5">
-                  Descarga el MP3, graba tu aporte y vuelve a FeatMusic para
-                  enviarlo como propuesta.
+                  {descripcionModal}
                 </p>
 
                 {!sesionActiva && (
@@ -287,7 +295,7 @@ export default function DescargaMp3Idea({
           setErrorDescarga(null);
           setAbierta(true);
         }}
-        className="flex h-[30px] w-full items-center justify-center gap-1.5 bg-white px-1.5 py-0 text-[9px] font-black text-slate-700 transition hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-300/60 sm:text-[10px]"
+        className={`flex h-[30px] w-full items-center justify-center gap-1.5 bg-white px-1.5 py-0 text-[9px] font-black text-slate-700 transition hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-300/60 sm:text-[10px] ${classNameBoton}`}
       >
         <IconoDescarga className="h-3.5 w-3.5 shrink-0" />
         <span>MP3</span>

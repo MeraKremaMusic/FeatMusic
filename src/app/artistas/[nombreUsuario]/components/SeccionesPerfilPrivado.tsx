@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import ReproductorAudio from "@/app/components/ReproductorAudio";
+import DescargaMp3Idea from "./DescargaMp3Idea";
 import DescripcionPropuestaRecibida from "./DescripcionPropuestaRecibida";
 import DescripcionPropuestaEnviada from "./DescripcionPropuestaEnviada";
 import { useNotificacionesChat } from "@/app/components/useNotificacionesChat";
@@ -339,25 +340,6 @@ function IconoAceptar({ className = "h-3.5 w-3.5" }: { className?: string }) {
       strokeLinejoin="round"
     >
       <path d="m5 12 4 4L19 6" />
-    </svg>
-  );
-}
-
-function IconoDescargar({ className = "h-3.5 w-3.5" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.9}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 3v12" />
-      <path d="m7 10 5 5 5-5" />
-      <path d="M5 20h14" />
     </svg>
   );
 }
@@ -1484,19 +1466,18 @@ export default function SeccionesPerfilPrivado({
                               ) : propuesta.estado === "ACEPTADA" ? (
                                 <div className="featmusic-private-received-actions flex h-[30px] border-t border-slate-200 bg-white">
                                   {propuesta.audioUrl && (
-                                    <a
-                                      href={`/api/propuestas/${propuesta.id}/descargar`}
-                                      aria-label={`Descargar propuesta ${propuesta.id} en MP3`}
-                                      title="Descargar MP3"
-                                      className={`featmusic-received-mp3-button flex h-[30px] min-w-0 flex-1 items-center justify-center gap-1.5 bg-white px-1.5 py-0 text-[9px] font-black text-slate-700 transition hover:bg-yellow-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-300/60 sm:text-[10px] ${
+                                    <DescargaMp3Idea
+                                      ideaId={propuesta.idea.id}
+                                      titulo={propuesta.idea.titulo}
+                                      sesionActiva
+                                      descargaUrl={`/api/propuestas/${propuesta.id}/descargar`}
+                                      descripcionModal="Descarga el MP3 de la propuesta que aceptaste. La descarga comenzará únicamente cuando confirmes."
+                                      classNameBoton={`featmusic-received-mp3-button min-w-0 flex-1 ${
                                         propuesta.conversacionId
                                           ? "border-r border-slate-200"
                                           : ""
                                       }`}
-                                    >
-                                      <IconoDescargar className="h-3.5 w-3.5 shrink-0" />
-                                      <span>MP3</span>
-                                    </a>
+                                    />
                                   )}
                                   {propuesta.conversacionId && (
                                     <Link
