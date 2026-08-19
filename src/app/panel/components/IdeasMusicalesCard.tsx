@@ -1083,7 +1083,7 @@ export default function IdeasMusicalesCard({
                   accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
                   onChange={seleccionarPortada}
                   disabled={guardando}
-                  className="mt-2 block w-full rounded-xl border border-dashed border-white/15 bg-black/20 p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-white"
+                  className="featmusic-publish-audio-input featmusic-publish-cover-input mt-2 block w-full rounded-xl border border-dashed border-yellow-400/25 bg-yellow-500/[0.05] p-3 text-xs text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-[#FFD400] file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-black"
                 />
 
                 {vistaPreviaPortada && (
