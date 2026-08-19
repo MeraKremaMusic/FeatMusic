@@ -260,30 +260,89 @@ function IconoDescripcion({
 
 function CargandoArtistas() {
   return (
-    <section className="relative flex min-h-[calc(100vh-48px)] items-center justify-center overflow-hidden px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(221,180,18,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(221,180,18,0.055)_1px,transparent_1px)] bg-[size:30px_30px]" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-600/15 blur-3xl" />
-
-      <div className="relative flex flex-col items-center text-center">
-        <div className="relative flex h-20 w-20 items-center justify-center">
-          <span className="absolute inset-0 rounded-full border border-yellow-400/20 bg-yellow-500/5" />
-          <span className="absolute inset-1 animate-ping rounded-full border border-yellow-400/30" />
-          <span className="absolute inset-3 animate-pulse rounded-full bg-yellow-500/15" />
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-yellow-300/30 bg-yellow-500/15 text-yellow-200 shadow-[0_0_35px_rgba(16,185,129,0.25)]">
-            <IconoUsuarios className="h-7 w-7" />
+    <section className="featmusic-explore-loading relative flex min-h-[calc(100dvh-48px)] items-center justify-center overflow-hidden px-4 pb-20 pt-6 lg:pb-6">
+      <div className="relative w-full max-w-[520px]">
+        <div className="flex flex-col items-center text-center">
+          <div className="featmusic-explore-loading-badge inline-flex items-center gap-2 rounded-full border px-3 py-1.5">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFD400] text-black">
+              <IconoUsuarios className="h-4 w-4" />
+            </span>
+            <span className="text-[9px] font-black uppercase tracking-[0.18em]">
+              Explorando FeatMusic
+            </span>
           </div>
-        </div>
 
-        <p className="mt-6 text-base font-bold tracking-tight text-zinc-100">
-          Cargando artistas...
-        </p>
-        <p className="mt-2 text-xs text-zinc-500">
-          Preparando nuevas conexiones musicales
-        </p>
-        <div className="mt-5 flex items-center gap-1.5" aria-hidden="true">
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-yellow-300 [animation-delay:-0.3s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-yellow-300 [animation-delay:-0.15s]" />
-          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-yellow-300" />
+          <div
+            className="featmusic-explore-loading-stack relative mx-auto mt-7 h-[190px] w-full max-w-[420px]"
+            aria-hidden="true"
+          >
+            <article className="featmusic-explore-loading-card featmusic-explore-loading-card--left">
+              <div className="flex items-center gap-3">
+                <span className="featmusic-explore-skeleton h-10 w-10 shrink-0 rounded-full" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <span className="featmusic-explore-skeleton block h-2.5 w-28 max-w-full rounded-full" />
+                  <span className="featmusic-explore-skeleton block h-2 w-16 rounded-full" />
+                </div>
+              </div>
+              <div className="mt-4 space-y-2">
+                <span className="featmusic-explore-skeleton block h-2 w-full rounded-full" />
+                <span className="featmusic-explore-skeleton block h-2 w-2/3 rounded-full" />
+              </div>
+            </article>
+
+            <article className="featmusic-explore-loading-card featmusic-explore-loading-card--right">
+              <div className="flex items-center gap-3">
+                <span className="featmusic-explore-skeleton h-10 w-10 shrink-0 rounded-full" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <span className="featmusic-explore-skeleton block h-2.5 w-24 max-w-full rounded-full" />
+                  <span className="featmusic-explore-skeleton block h-2 w-20 rounded-full" />
+                </div>
+              </div>
+              <div className="mt-4 space-y-2">
+                <span className="featmusic-explore-skeleton block h-2 w-5/6 rounded-full" />
+                <span className="featmusic-explore-skeleton block h-2 w-1/2 rounded-full" />
+              </div>
+            </article>
+
+            <article className="featmusic-explore-loading-card featmusic-explore-loading-card--front">
+              <div className="flex items-center gap-3">
+                <span className="featmusic-explore-skeleton h-11 w-11 shrink-0 rounded-full" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <span className="featmusic-explore-skeleton block h-2.5 w-32 max-w-full rounded-full" />
+                  <span className="featmusic-explore-skeleton block h-2 w-20 rounded-full" />
+                </div>
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#FFD400]" />
+              </div>
+
+              <div className="mt-4 flex items-end justify-between gap-4">
+                <div className="min-w-0 flex-1 space-y-2">
+                  <span className="featmusic-explore-skeleton block h-2 w-full rounded-full" />
+                  <span className="featmusic-explore-skeleton block h-2 w-3/4 rounded-full" />
+                </div>
+                <div className="featmusic-explore-loading-wave flex h-7 shrink-0 items-end gap-1">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <p className="mt-2 text-base font-black tracking-tight">
+            Buscando conexiones...
+          </p>
+          <p className="featmusic-explore-loading-subtitle mt-1.5 text-[11px]">
+            Preparando artistas e ideas para ti
+          </p>
+
+          <div
+            className="featmusic-explore-loading-progress mt-5 h-1 w-36 overflow-hidden rounded-full"
+            aria-hidden="true"
+          >
+            <span className="block h-full w-1/3 rounded-full bg-[#FFD400]" />
+          </div>
         </div>
       </div>
     </section>
@@ -1041,7 +1100,7 @@ export default function ArtistasClient({
       {cargando ? (
         <CargandoArtistas />
       ) : (
-        <div className="mx-auto w-full min-w-0 max-w-[1280px] overflow-x-clip px-4 py-4 md:py-5">
+        <div className="featmusic-explore-content mx-auto w-full min-w-0 max-w-[1280px] overflow-x-clip px-4 py-4 md:py-5">
           <section className="grid grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-black/35 backdrop-blur-sm">
             <TarjetaEstadistica
               titulo="Artistas en FeatMusic"

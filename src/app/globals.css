@@ -4943,3 +4943,244 @@ html:not(.dark) .featmusic-publish-kicker {
   -webkit-text-fill-color: #ffd400 !important;
 }
 /* FEATMUSIC_PUBLICAR_BOTONES_AMARILLOS_V1_END */
+
+/* FEATMUSIC_EXPLORAR_CARGA_PRO_V2_START */
+/*
+  Animación de carga de Explorar:
+  tarjetas skeleton con shimmer y una transición suave hacia el contenido real.
+  El banner y el menú móvil permanecen fuera de este bloque y siempre visibles.
+*/
+.featmusic-explore-loading {
+  animation: featmusic-explore-loading-enter 220ms ease-out both;
+}
+
+.featmusic-explore-loading-badge {
+  border-color: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.045);
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+.featmusic-explore-loading-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(86%, 340px);
+  min-height: 132px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 18px;
+  background: #171717;
+  padding: 16px;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.26);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.featmusic-explore-loading-card--left {
+  z-index: 1;
+  transform: translate(-58%, -48%) rotate(-4deg) scale(0.93);
+  opacity: 0.44;
+  animation: featmusic-explore-card-left 3.8s ease-in-out infinite;
+}
+
+.featmusic-explore-loading-card--right {
+  z-index: 2;
+  transform: translate(-42%, -48%) rotate(4deg) scale(0.93);
+  opacity: 0.44;
+  animation: featmusic-explore-card-right 3.8s ease-in-out infinite;
+}
+
+.featmusic-explore-loading-card--front {
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  animation: featmusic-explore-card-front 3.2s ease-in-out infinite;
+}
+
+.featmusic-explore-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.featmusic-explore-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-130%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 212, 0, 0.04) 28%,
+    rgba(255, 212, 0, 0.30) 50%,
+    rgba(255, 212, 0, 0.04) 72%,
+    transparent 100%
+  );
+  animation: featmusic-explore-shimmer 1.35s ease-in-out infinite;
+}
+
+.featmusic-explore-loading-wave span {
+  display: block;
+  width: 3px;
+  border-radius: 999px;
+  background: #ffd400;
+  transform-origin: bottom;
+  animation: featmusic-explore-wave 900ms ease-in-out infinite alternate;
+}
+
+.featmusic-explore-loading-wave span:nth-child(1) {
+  height: 9px;
+  animation-delay: -0.6s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(2) {
+  height: 18px;
+  animation-delay: -0.45s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(3) {
+  height: 13px;
+  animation-delay: -0.3s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(4) {
+  height: 22px;
+  animation-delay: -0.15s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(5) {
+  height: 11px;
+}
+
+.featmusic-explore-loading-subtitle {
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.featmusic-explore-loading-progress {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.featmusic-explore-loading-progress > span {
+  animation: featmusic-explore-progress 1.25s ease-in-out infinite;
+}
+
+.featmusic-explore-content {
+  animation: featmusic-explore-content-enter 260ms ease-out both;
+}
+
+html:not(.dark) .featmusic-explore-loading-badge {
+  border-color: rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.92);
+  color: #000000;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+html:not(.dark) .featmusic-explore-loading-card {
+  border-color: rgba(0, 0, 0, 0.11);
+  background: #ffffff;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.10);
+}
+
+html:not(.dark) .featmusic-explore-skeleton {
+  background: rgba(0, 0, 0, 0.085);
+}
+
+html:not(.dark) .featmusic-explore-loading-subtitle {
+  color: rgba(0, 0, 0, 0.52);
+}
+
+html:not(.dark) .featmusic-explore-loading-progress {
+  background: rgba(0, 0, 0, 0.10);
+}
+
+@keyframes featmusic-explore-loading-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes featmusic-explore-card-left {
+  0%, 100% {
+    transform: translate(-58%, -48%) rotate(-4deg) scale(0.93);
+  }
+  50% {
+    transform: translate(-60%, -51%) rotate(-5deg) scale(0.93);
+  }
+}
+
+@keyframes featmusic-explore-card-right {
+  0%, 100% {
+    transform: translate(-42%, -48%) rotate(4deg) scale(0.93);
+  }
+  50% {
+    transform: translate(-40%, -51%) rotate(5deg) scale(0.93);
+  }
+}
+
+@keyframes featmusic-explore-card-front {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -53%);
+  }
+}
+
+@keyframes featmusic-explore-shimmer {
+  0% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes featmusic-explore-wave {
+  from {
+    transform: scaleY(0.55);
+    opacity: 0.65;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes featmusic-explore-progress {
+  0% {
+    transform: translateX(-115%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(315%);
+  }
+}
+
+@keyframes featmusic-explore-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featmusic-explore-loading,
+  .featmusic-explore-loading-card,
+  .featmusic-explore-skeleton::after,
+  .featmusic-explore-loading-wave span,
+  .featmusic-explore-loading-progress > span,
+  .featmusic-explore-content {
+    animation: none !important;
+  }
+}
+/* FEATMUSIC_EXPLORAR_CARGA_PRO_V2_END */
