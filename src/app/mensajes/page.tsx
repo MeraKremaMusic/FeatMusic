@@ -210,7 +210,7 @@ export default async function MensajesPage() {
       <div className="mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-500/10 text-yellow-300">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#FFD400] bg-[#FFD400] text-black">
               <IconoMensajes />
             </span>
             <div>
@@ -221,7 +221,7 @@ export default async function MensajesPage() {
             </div>
           </div>
 
-          <span className="rounded-full border border-yellow-400/20 bg-yellow-500/10 px-3 py-1 text-[10px] font-black text-yellow-200">
+          <span className="rounded-full border border-[#FFD400] bg-[#FFD400] px-3 py-1 text-[10px] font-black text-black">
             {conversaciones.length}
           </span>
         </div>
