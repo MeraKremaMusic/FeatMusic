@@ -3,6 +3,7 @@
 // FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
 // FEATMUSIC_QUITAR_PORTADA_IDEAS_EXPLORAR_V1
 // FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
+// FEATMUSIC_DESCRIPCION_EXPLORAR_ESTILO_ACTIVAS_V1
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -793,13 +794,9 @@ function TarjetaArtista({
                             descripcionAbierta ? null : idea.id,
                           )
                         }
-                        className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 text-[7px] font-bold transition focus:outline-none focus:ring-2 focus:ring-yellow-400/40 sm:text-[8px] ${
-                          descripcionAbierta
-                            ? "border-yellow-300/35 bg-yellow-500/20 text-yellow-100"
-                            : "border-white/[0.08] bg-[#0f0f0f]/90 text-zinc-500 hover:border-yellow-400/25 hover:bg-yellow-500/10 hover:text-yellow-200"
-                        }`}
+                        className="inline-flex h-[30px] items-center gap-1.5 rounded-lg bg-white px-2.5 text-[10px] font-bold text-black shadow-sm transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/40"
                       >
-                        <IconoDescripcion className="h-2.5 w-2.5" />
+                        <IconoDescripcion className="h-3.5 w-3.5" />
                         <span>Descripción</span>
                       </button>
 
