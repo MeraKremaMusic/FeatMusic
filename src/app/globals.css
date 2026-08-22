@@ -5571,21 +5571,16 @@ html.dark body .feat-reel-title {
 }
 /* FEATMUSIC_INICIO_ESTABLE_SIN_TITILEO_V1_END */
 
-/* FEATMUSIC_EXPLORAR_BANDERA_VISTAS_V1_START */
+/* FEATMUSIC_INICIO_BANDERA_VISTAS_V1_START */
 /*
-  Ajustes visuales exclusivos de Explorar:
-  - bandera sin borde/outline/sombra;
-  - contador de vistas gris en modo claro.
+  Ajustes exclusivos del feed tipo reels de Inicio.
+  En modo claro el contador se mantiene gris sobre la publicación;
+  el modo oscuro conserva su estilo original.
 */
-.featmusic-explore-country-flag {
-  border: 0 !important;
-  outline: 0 !important;
-  box-shadow: none !important;
-}
-
 html:not(.dark)
   .featmusic-app-light
-  .featmusic-explore-view-count {
-  color: #71717a !important;
+  .featmusic-inicio-view-count {
+  color: #a1a1aa !important;
+  -webkit-text-fill-color: #a1a1aa !important;
 }
-/* FEATMUSIC_EXPLORAR_BANDERA_VISTAS_V1_END */
+/* FEATMUSIC_INICIO_BANDERA_VISTAS_V1_END */

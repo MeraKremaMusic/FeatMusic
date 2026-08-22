@@ -457,7 +457,7 @@ function BanderaPais({
       height={20}
       alt={`Bandera de ${pais}`}
       title={pais}
-      className="featmusic-explore-country-flag h-[18px] w-7 shrink-0 rounded-[3px] border-0 object-cover shadow-none"
+      className="h-[18px] w-7 shrink-0 rounded-[3px] object-cover shadow-sm"
       loading="lazy"
       referrerPolicy="no-referrer"
       onError={() => setFalloImagen(true)}

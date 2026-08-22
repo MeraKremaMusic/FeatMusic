@@ -461,7 +461,7 @@ function TarjetaFeed({
                         height={15}
                         alt={`Bandera de ${artista.pais}`}
                         title={artista.pais}
-                        className="h-[13px] w-[18px] shrink-0 rounded-[2px] object-cover ring-1 ring-white/20"
+                        className="h-[13px] w-[18px] shrink-0 rounded-[2px] border-0 object-cover shadow-none outline-none"
                         loading="lazy"
                       />
                     )}
@@ -513,6 +513,7 @@ function TarjetaFeed({
                 totalInicial={oportunidad.vistasUnicas}
                 esPropietario={usuarioActualId === artista.id}
                 variante="compacta"
+                className="featmusic-inicio-view-count"
               />
             </div>
             </div>
