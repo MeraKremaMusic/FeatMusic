@@ -869,7 +869,7 @@ export default async function PerfilPublicoPage({
         className={
           esPerfilPropio
             ? "mx-auto max-w-[1180px] px-0 pb-3 pt-0 sm:px-4 sm:py-5 md:py-8"
-            : "mx-auto max-w-[1180px] px-3 py-3 sm:px-4 sm:py-5 md:py-8"
+            : "mx-auto max-w-[1180px] px-0 pb-3 pt-0 sm:px-4 sm:py-5 md:py-8"
         }
       >
         <div className="grid gap-3 sm:gap-4 lg:grid-cols-[310px_minmax(0,1fr)]">
@@ -877,7 +877,7 @@ export default async function PerfilPublicoPage({
             className={`relative overflow-hidden p-4 shadow-[0_16px_45px_rgba(15,23,42,0.08)] sm:p-5 ${
               esPerfilPropio
                 ? "rounded-none border-x-0 border-b border-t-0 sm:rounded-2xl sm:border"
-                : "rounded-2xl border"
+                : "rounded-none border-x-0 border-b border-t-0 sm:rounded-2xl sm:border"
             } ${
               artista.portadaPerfil
                 ? "featmusic-profile-cover border-transparent bg-black"
@@ -1127,7 +1127,7 @@ export default async function PerfilPublicoPage({
           </aside>
 
           <section
-            className={`min-w-0 ${esPerfilPropio ? "px-3 sm:px-0" : ""}`}
+            className="min-w-0 px-3 sm:px-0"
           >
             {esPerfilPropio ? (
               <SeccionesPerfilPrivado
