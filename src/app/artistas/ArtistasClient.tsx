@@ -780,7 +780,7 @@ function TarjetaArtista({
                   {mostrarDetalle && (
                     <div
                       data-descripcion-idea
-                      className="featmusic-explore-description-control absolute right-0 top-[10px] z-30"
+                      className="featmusic-explore-description-control absolute right-0 top-[15px] z-30"
                       onMouseEnter={() => onCambiarDescripcion(idea.id)}
                       onMouseLeave={() => onCambiarDescripcion(null)}
                     >
@@ -795,7 +795,7 @@ function TarjetaArtista({
                             descripcionAbierta ? null : idea.id,
                           )
                         }
-                        className="inline-flex h-[30px] items-center gap-1.5 rounded-lg !bg-white px-2.5 text-[10px] font-bold !text-black shadow-sm transition hover:!bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/40"
+                        className="inline-flex h-[26px] items-center gap-1.5 rounded-lg !bg-white px-2.5 text-[10px] font-bold !text-black shadow-sm transition hover:!bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/40"
                       >
                         <IconoDescripcion className="h-3.5 w-3.5" />
                         <span>Descripción</span>
