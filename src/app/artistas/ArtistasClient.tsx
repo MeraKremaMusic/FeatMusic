@@ -4,6 +4,7 @@
 // FEATMUSIC_QUITAR_PORTADA_IDEAS_EXPLORAR_V1
 // FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
 // FEATMUSIC_DESCRIPCION_EXPLORAR_ESTILO_ACTIVAS_V1
+// FEATMUSIC_DESCRIPCION_EXPLORAR_AJUSTE_POSICION_OSCURO_V2
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -456,7 +457,7 @@ function BanderaPais({
       height={20}
       alt={`Bandera de ${pais}`}
       title={pais}
-      className="h-[18px] w-7 shrink-0 rounded-[3px] object-cover shadow-sm"
+      className="featmusic-explore-country-flag h-[18px] w-7 shrink-0 rounded-[3px] border-0 object-cover shadow-none"
       loading="lazy"
       referrerPolicy="no-referrer"
       onError={() => setFalloImagen(true)}
@@ -779,7 +780,7 @@ function TarjetaArtista({
                   {mostrarDetalle && (
                     <div
                       data-descripcion-idea
-                      className="featmusic-explore-description-control absolute right-0 top-[25px] z-30"
+                      className="featmusic-explore-description-control absolute right-0 top-[10px] z-30"
                       onMouseEnter={() => onCambiarDescripcion(idea.id)}
                       onMouseLeave={() => onCambiarDescripcion(null)}
                     >
@@ -794,7 +795,7 @@ function TarjetaArtista({
                             descripcionAbierta ? null : idea.id,
                           )
                         }
-                        className="inline-flex h-[30px] items-center gap-1.5 rounded-lg bg-white px-2.5 text-[10px] font-bold text-black shadow-sm transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/40"
+                        className="inline-flex h-[30px] items-center gap-1.5 rounded-lg !bg-white px-2.5 text-[10px] font-bold !text-black shadow-sm transition hover:!bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/40"
                       >
                         <IconoDescripcion className="h-3.5 w-3.5" />
                         <span>Descripción</span>

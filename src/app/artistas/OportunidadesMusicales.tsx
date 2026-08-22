@@ -251,7 +251,7 @@ function BanderaPais({ codigoPais, pais }: { codigoPais: string; pais: string })
       height={17}
       alt={`Bandera de ${pais}`}
       title={pais}
-      className="h-4 w-6 shrink-0 rounded-[3px] object-cover"
+      className="featmusic-explore-country-flag h-4 w-6 shrink-0 rounded-[3px] border-0 object-cover shadow-none"
       loading="lazy"
       referrerPolicy="no-referrer"
       onError={() => setFallo(true)}
@@ -396,6 +396,7 @@ function TarjetaOportunidad({
               totalInicial={oportunidad.vistasUnicas}
               esPropietario={usuarioActualId === artista.id}
               variante="compacta"
+              className="featmusic-explore-view-count"
             />
             <span
               className={`inline-flex items-center gap-1 ${

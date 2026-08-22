@@ -5570,3 +5570,22 @@ html.dark body .feat-reel-title {
   transform: scale(1.035) !important;
 }
 /* FEATMUSIC_INICIO_ESTABLE_SIN_TITILEO_V1_END */
+
+/* FEATMUSIC_EXPLORAR_BANDERA_VISTAS_V1_START */
+/*
+  Ajustes visuales exclusivos de Explorar:
+  - bandera sin borde/outline/sombra;
+  - contador de vistas gris en modo claro.
+*/
+.featmusic-explore-country-flag {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+html:not(.dark)
+  .featmusic-app-light
+  .featmusic-explore-view-count {
+  color: #71717a !important;
+}
+/* FEATMUSIC_EXPLORAR_BANDERA_VISTAS_V1_END */
