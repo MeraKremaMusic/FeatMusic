@@ -780,7 +780,7 @@ function TarjetaArtista({
                   {mostrarDetalle && (
                     <div
                       data-descripcion-idea
-                      className="featmusic-explore-description-control absolute right-0 top-[15px] z-30"
+                      className="featmusic-explore-description-control absolute right-0 top-[20px] z-30"
                       onMouseEnter={() => onCambiarDescripcion(idea.id)}
                       onMouseLeave={() => onCambiarDescripcion(null)}
                     >
