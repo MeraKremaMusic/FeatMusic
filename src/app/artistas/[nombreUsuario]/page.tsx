@@ -1141,7 +1141,7 @@ export default async function PerfilPublicoPage({
               <>
                 <div className="flex items-center justify-between gap-3 px-1 lg:px-0">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 sm:h-7 sm:w-7">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border !border-yellow-400 !bg-yellow-400 !text-black sm:h-7 sm:w-7">
                       <IconoIdea className="h-3.5 w-3.5" />
                     </span>
                     <h2 className="text-sm font-black text-slate-900 sm:text-base lg:text-lg">
@@ -1149,7 +1149,7 @@ export default async function PerfilPublicoPage({
                     </h2>
                   </div>
                 
-                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="rounded-full border !border-yellow-400 !bg-yellow-400 px-2.5 py-0.5 text-[10px] font-bold !text-black sm:px-3 sm:py-1 sm:text-xs">
                     {artista.ideas.length}
                   </span>
                 </div>

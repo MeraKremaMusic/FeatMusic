@@ -602,7 +602,7 @@ export default function EnviarPropuesta({
     "flex h-[30px] w-full items-center justify-center px-1.5 py-0 text-center text-[9px] font-black leading-tight sm:text-[10px]";
   const claseCupos = `${claseSegmento} bg-white text-slate-600`;
   const claseAccion =
-    `${claseSegmento} bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400`;
+    `${claseSegmento} !bg-yellow-400 !text-black transition hover:!bg-yellow-300 disabled:cursor-not-allowed disabled:!bg-slate-100 disabled:!text-slate-400`;
 
   const modalEliminarIdea =
     modalEliminarAbierto && typeof document !== "undefined"

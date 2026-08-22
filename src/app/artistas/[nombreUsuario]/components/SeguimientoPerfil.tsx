@@ -227,7 +227,7 @@ export default function SeguimientoPerfil({
       className="group relative z-40 inline-flex h-11 w-11 shrink-0 touch-manipulation select-none items-center justify-center rounded-xl bg-transparent p-0 outline-none transition active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400/70 disabled:cursor-wait disabled:opacity-65 [-webkit-tap-highlight-color:transparent]"
     >
       <span
-        className={`pointer-events-none inline-flex h-8 w-8 items-center justify-center rounded-lg border !bg-white shadow-sm transition ${
+        className={`pointer-events-none inline-flex h-8 w-8 items-center justify-center rounded-lg border !border-yellow-400 !bg-yellow-400 !text-black shadow-sm transition hover:!border-yellow-300 hover:!bg-yellow-300 hover:!text-black ${
           siguiendo
             ? "border-emerald-300 text-emerald-700 group-hover:border-red-300 group-hover:!bg-red-50 group-hover:text-red-700"
             : "border-slate-200 text-slate-700 group-hover:border-emerald-300 group-hover:!bg-emerald-50 group-hover:text-emerald-700"
