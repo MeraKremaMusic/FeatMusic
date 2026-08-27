@@ -1,0 +1,683 @@
+"use client";
+
+import { createPortal } from "react-dom";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  actualizarNotificaciones,
+  marcarNotificacionLeida,
+  marcarTodasNotificacionesLeidas,
+  type NotificacionCentro,
+  useNotificaciones,
+} from "@/app/components/useNotificaciones";
+
+
+type CentroNotificacionesProps = {
+  variante?: "icono" | "integrada" | "cabecera";
+};
+
+function IconoCampana({
+  className = "h-4 w-4",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 9a6 6 0 0 0-12 0c0 6-3 7-3 8h18c0-1-3-2-3-8Z" />
+      <path d="M10 21h4" />
+    </svg>
+  );
+}
+
+function IconoTipo({
+  tipo,
+  className = "h-4 w-4",
+}: {
+  tipo: string;
+  className?: string;
+}) {
+  const props = {
+    "aria-hidden": true,
+    viewBox: "0 0 24 24",
+    className,
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  if (tipo === "NUEVO_SEGUIDOR") {
+    return (
+      <svg {...props}>
+        <circle cx="9" cy="8" r="3" />
+        <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+        <path d="M18 8v6M15 11h6" />
+      </svg>
+    );
+  }
+
+  if (tipo === "NUEVA_IDEA_SEGUIDO") {
+    return (
+      <svg {...props}>
+        <path d="M9 18V5l10-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="16" cy="16" r="3" />
+      </svg>
+    );
+  }
+
+  if (tipo === "PROPUESTA_ACEPTADA") {
+    return (
+      <svg {...props}>
+        <circle cx="12" cy="12" r="9" />
+        <path d="m8 12 2.5 2.5L16.5 8.5" />
+      </svg>
+    );
+  }
+
+  if (tipo === "PROPUESTA_RECHAZADA") {
+    return (
+      <svg {...props}>
+        <circle cx="12" cy="12" r="9" />
+        <path d="m9 9 6 6M15 9l-6 6" />
+      </svg>
+    );
+  }
+
+  if (tipo === "CAMBIOS_SOLICITADOS") {
+    return (
+      <svg {...props}>
+        <path d="M4 5h16v12H8l-4 3V5Z" />
+        <path d="M8 9h8M8 13h5" />
+      </svg>
+    );
+  }
+
+  if (tipo === "REINTENTO_PERMITIDO") {
+    return (
+      <svg {...props}>
+        <path d="M20 7v5h-5" />
+        <path d="M19 12a7 7 0 1 0-2 5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...props}>
+      <path d="M9 18h6" />
+      <path d="M10 22h4" />
+      <path d="M8.2 14.5A7 7 0 1 1 15.8 14.5c-1.1.8-1.8 1.8-1.8 3.5h-4c0-1.7-.7-2.7-1.8-3.5Z" />
+    </svg>
+  );
+}
+
+function claseTipo(tipo: string) {
+  if (tipo === "NUEVO_SEGUIDOR") {
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+  }
+
+  if (tipo === "NUEVA_IDEA_SEGUIDO") {
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+  }
+
+  if (tipo === "PROPUESTA_ACEPTADA") {
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+  }
+
+  if (tipo === "PROPUESTA_RECHAZADA") {
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+  }
+
+  if (tipo === "CAMBIOS_SOLICITADOS") {
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+  }
+
+  if (tipo === "REINTENTO_PERMITIDO") {
+    return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+  }
+
+  return "border-yellow-400/40 bg-yellow-400/15 text-yellow-700 dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300";
+}
+
+function formatearTiempo(fecha: string) {
+  const valor = new Date(fecha);
+
+  if (Number.isNaN(valor.getTime())) {
+    return "";
+  }
+
+  const diferenciaSegundos = Math.round(
+    (valor.getTime() - Date.now()) / 1000,
+  );
+  const absoluto = Math.abs(diferenciaSegundos);
+  const formato = new Intl.RelativeTimeFormat("es", {
+    numeric: "auto",
+  });
+
+  if (absoluto < 60) {
+    return "Ahora";
+  }
+
+  if (absoluto < 3600) {
+    return formato.format(Math.round(diferenciaSegundos / 60), "minute");
+  }
+
+  if (absoluto < 86400) {
+    return formato.format(Math.round(diferenciaSegundos / 3600), "hour");
+  }
+
+  if (absoluto < 604800) {
+    return formato.format(Math.round(diferenciaSegundos / 86400), "day");
+  }
+
+  return new Intl.DateTimeFormat("es-CO", {
+    day: "2-digit",
+    month: "short",
+  }).format(valor);
+}
+
+function iniciales(nombre: string) {
+  return (
+    nombre
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((parte) => parte[0]?.toUpperCase())
+      .join("") || "FM"
+  );
+}
+
+// FEATMUSIC_NOTIFICACIONES_PERFIL_PRIVADO_V1
+// FEATMUSIC_RETIRAR_PANEL_VIEJO_NOTIFICACIONES_V1
+const TIPOS_PROPUESTAS_RECIBIDAS = new Set([
+  "PROPUESTA_RECIBIDA",
+  "PROPUESTA_CORREGIDA",
+  "PROPUESTA_REENVIADA",
+]);
+
+const TIPOS_PROPUESTAS_ENVIADAS = new Set([
+  "CAMBIOS_SOLICITADOS",
+  "PROPUESTA_RECHAZADA",
+  "REINTENTO_PERMITIDO",
+  "PROPUESTA_EXPIRADA",
+]);
+
+const TIPOS_IDEAS_PROPIAS = new Set(["IDEA_EXPIRADA"]);
+
+function resolverEnlaceNotificacion(notificacion: NotificacionCentro) {
+  if (TIPOS_PROPUESTAS_RECIBIDAS.has(notificacion.tipo)) {
+    return "/artistas/mi-perfil?seccion=recibidas";
+  }
+
+  if (TIPOS_PROPUESTAS_ENVIADAS.has(notificacion.tipo)) {
+    return "/artistas/mi-perfil?seccion=enviadas";
+  }
+
+  if (TIPOS_IDEAS_PROPIAS.has(notificacion.tipo)) {
+    return "/artistas/mi-perfil?seccion=activas";
+  }
+
+  const enlace = notificacion.enlace?.trim();
+
+  if (!enlace) {
+    return enlace;
+  }
+
+  if (enlace === "/panel" || enlace.startsWith("/panel?")) {
+    return "/artistas/mi-perfil";
+  }
+
+  if (enlace.startsWith("/panel#panel-card-2")) {
+    return "/artistas/mi-perfil?seccion=activas";
+  }
+
+  if (enlace.startsWith("/panel#panel-card-3")) {
+    return "/artistas/mi-perfil?seccion=recibidas";
+  }
+
+  return enlace;
+}
+
+// FEATMUSIC_NOTIFICACIONES_MODO_CLARO_V1
+export default function CentroNotificaciones({
+  variante = "icono",
+}: CentroNotificacionesProps) {
+  const botonRef = useRef<HTMLButtonElement | null>(null);
+  const [montado, setMontado] = useState(false);
+  const [abierto, setAbierto] = useState(false);
+  const [soloNoLeidas, setSoloNoLeidas] = useState(false);
+  const {
+    cargando,
+    error,
+    notificaciones,
+    totalNoLeidas,
+  } = useNotificaciones();
+  const [posicionEscritorio, setPosicionEscritorio] = useState({
+    top: 64,
+    left: 16,
+  });
+  const esIntegrada = variante === "integrada";
+  const esCabecera = variante === "cabecera";
+
+  const actualizarPosicion = useCallback(() => {
+    const boton = botonRef.current;
+
+    if (!boton || typeof window === "undefined") {
+      return;
+    }
+
+    const rect = boton.getBoundingClientRect();
+    const anchoPanel = 390;
+    const margen = 16;
+    const left = Math.min(
+      window.innerWidth - anchoPanel - margen,
+      Math.max(margen, rect.right - anchoPanel),
+    );
+
+    setPosicionEscritorio({
+      top: Math.min(window.innerHeight - 120, rect.bottom + 8),
+      left,
+    });
+  }, []);
+
+  useEffect(() => {
+    setMontado(true);
+  }, []);
+
+  useEffect(() => {
+    if (!abierto) {
+      return;
+    }
+
+    actualizarPosicion();
+    void actualizarNotificaciones();
+
+    window.addEventListener("resize", actualizarPosicion);
+    window.addEventListener("scroll", actualizarPosicion, true);
+
+    return () => {
+      window.removeEventListener("resize", actualizarPosicion);
+      window.removeEventListener("scroll", actualizarPosicion, true);
+    };
+  }, [abierto, actualizarPosicion]);
+
+  useEffect(() => {
+    if (!abierto) {
+      return;
+    }
+
+    const cerrarConEscape = (evento: KeyboardEvent) => {
+      if (evento.key === "Escape") {
+        setAbierto(false);
+      }
+    };
+
+    document.addEventListener("keydown", cerrarConEscape);
+
+    return () => {
+      document.removeEventListener("keydown", cerrarConEscape);
+    };
+  }, [abierto]);
+
+  const notificacionesVisibles = useMemo(
+    () =>
+      soloNoLeidas
+        ? notificaciones.filter((notificacion) => !notificacion.leidaEn)
+        : notificaciones,
+    [notificaciones, soloNoLeidas],
+  );
+
+  async function marcarLeida(id: number) {
+    await marcarNotificacionLeida(id);
+  }
+
+  async function marcarTodas() {
+    await marcarTodasNotificacionesLeidas();
+  }
+
+  async function abrirNotificacion(notificacion: NotificacionCentro) {
+    await marcarLeida(notificacion.id);
+    setAbierto(false);
+
+    const enlace = resolverEnlaceNotificacion(notificacion);
+
+    if (
+      enlace &&
+      enlace.startsWith("/") &&
+      !enlace.startsWith("//")
+    ) {
+      window.location.assign(enlace);
+    }
+  }
+
+  const panel = (
+    <>
+      <button
+        type="button"
+        aria-label="Cerrar centro de notificaciones"
+        className="fixed inset-0 z-[90] cursor-default bg-black/45 backdrop-blur-[1px] sm:bg-black/20"
+        onClick={() => setAbierto(false)}
+      />
+
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="centro-notificaciones-titulo"
+        className="featmusic-notifications-panel fixed inset-x-0 bottom-0 z-[100] flex max-h-[82dvh] flex-col overflow-hidden rounded-t-[26px] border border-black/10 bg-white shadow-[0_-24px_70px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_-24px_70px_rgba(0,0,0,0.65)] sm:hidden"
+      >
+        <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-black/15 dark:bg-white/15" />
+        <ContenidoCentro
+          cargando={cargando}
+          error={error}
+          notificaciones={notificacionesVisibles}
+          totalNoLeidas={totalNoLeidas}
+          soloNoLeidas={soloNoLeidas}
+          onSoloNoLeidas={setSoloNoLeidas}
+          onCerrar={() => setAbierto(false)}
+          onRecargar={() => void actualizarNotificaciones()}
+          onMarcarTodas={() => void marcarTodas()}
+          onAbrir={(notificacion) => void abrirNotificacion(notificacion)}
+        />
+      </section>
+
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="centro-notificaciones-titulo-escritorio"
+        className="featmusic-notifications-panel fixed z-[100] hidden max-h-[min(650px,calc(100vh-32px))] w-[390px] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f0f0f]/98 dark:shadow-[0_24px_80px_rgba(0,0,0,0.65)] sm:flex"
+        style={{
+          top: posicionEscritorio.top,
+          left: posicionEscritorio.left,
+          maxHeight: `calc(100vh - ${posicionEscritorio.top + 16}px)`,
+        }}
+      >
+        <ContenidoCentro
+          escritorio
+          cargando={cargando}
+          error={error}
+          notificaciones={notificacionesVisibles}
+          totalNoLeidas={totalNoLeidas}
+          soloNoLeidas={soloNoLeidas}
+          onSoloNoLeidas={setSoloNoLeidas}
+          onCerrar={() => setAbierto(false)}
+          onRecargar={() => void actualizarNotificaciones()}
+          onMarcarTodas={() => void marcarTodas()}
+          onAbrir={(notificacion) => void abrirNotificacion(notificacion)}
+        />
+      </section>
+    </>
+  );
+
+  return (
+    <>
+      <button
+        ref={botonRef}
+        type="button"
+        onClick={() => {
+          setAbierto((actual) => !actual);
+        }}
+        title="Notificaciones"
+        aria-label={
+          totalNoLeidas > 0
+            ? `${totalNoLeidas} notificaciones sin leer`
+            : "Notificaciones"
+        }
+        aria-expanded={abierto}
+        className={
+          esIntegrada
+            ? "featmusic-profile-dark-control relative flex min-h-10 min-w-0 items-center justify-center gap-1.5 px-1.5 py-2 text-center text-[9px] font-black leading-tight text-slate-600 transition hover:bg-yellow-50 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500/30 sm:min-h-11 sm:py-2.5 sm:text-[10px]"
+            : esCabecera
+              ? "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#FFD400] transition hover:bg-white/10 hover:text-[#FFD400] focus:outline-none focus:ring-2 focus:ring-[#FFD400]/40"
+              : "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-zinc-400 transition hover:bg-yellow-500/15 hover:text-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500/40"
+        }
+      >
+        <IconoCampana
+          className={
+            esIntegrada
+              ? "h-3.5 w-3.5 shrink-0"
+              : esCabecera
+                ? "h-[18px] w-[18px]"
+                : "h-4 w-4"
+          }
+        />
+        {esIntegrada && <span>Notificaciones</span>}
+
+        {totalNoLeidas > 0 && (
+          <span
+            className={
+              esIntegrada
+                ? "absolute right-1.5 top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-white bg-yellow-500 px-1 text-[8px] font-black leading-none text-white shadow-sm"
+                : esCabecera
+                  ? "absolute -right-1 -top-1 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-black bg-[#FFD400] px-1 text-[8px] font-black leading-none text-black shadow-sm"
+                  : "absolute -right-1.5 -top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full border-2 border-[#0f0f0f] bg-yellow-500 px-1 text-[8px] font-black leading-none text-white shadow-lg shadow-yellow-950/40"
+            }
+          >
+            {totalNoLeidas > 99 ? "99+" : totalNoLeidas}
+          </span>
+        )}
+      </button>
+
+      {montado && abierto ? createPortal(panel, document.body) : null}
+    </>
+  );
+}
+
+function ContenidoCentro({
+  escritorio = false,
+  cargando,
+  error,
+  notificaciones,
+  totalNoLeidas,
+  soloNoLeidas,
+  onSoloNoLeidas,
+  onCerrar,
+  onRecargar,
+  onMarcarTodas,
+  onAbrir,
+}: {
+  escritorio?: boolean;
+  cargando: boolean;
+  error: string;
+  notificaciones: NotificacionCentro[];
+  totalNoLeidas: number;
+  soloNoLeidas: boolean;
+  onSoloNoLeidas: (valor: boolean) => void;
+  onCerrar: () => void;
+  onRecargar: () => void;
+  onMarcarTodas: () => void;
+  onAbrir: (notificacion: NotificacionCentro) => void;
+}) {
+  return (
+    <>
+      <header className="flex items-start justify-between gap-4 border-b border-black/[0.08] px-4 pb-3 pt-4 dark:border-white/[0.08] sm:px-5">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-yellow-400 bg-yellow-400 text-black dark:border-yellow-400/20 dark:bg-yellow-500/10 dark:text-yellow-300">
+              <IconoCampana />
+            </span>
+            <div>
+              <h2
+                id={
+                  escritorio
+                    ? "centro-notificaciones-titulo-escritorio"
+                    : "centro-notificaciones-titulo"
+                }
+                className="featmusic-notifications-copy text-sm font-black text-black dark:text-white"
+              >
+                Notificaciones
+              </h2>
+              <p className="featmusic-notifications-copy mt-0.5 text-[10px] text-zinc-600 dark:text-zinc-500">
+                {totalNoLeidas === 0
+                  ? "Estás al día"
+                  : `${totalNoLeidas} sin leer`}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onCerrar}
+          aria-label="Cerrar"
+          className="featmusic-notifications-copy flex h-8 w-8 items-center justify-center rounded-lg text-xl text-zinc-600 transition hover:bg-black/5 hover:text-black dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-white"
+        >
+          ×
+        </button>
+      </header>
+
+      <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] px-4 py-2.5 dark:border-white/[0.06] sm:px-5">
+        <label className="featmusic-notifications-copy inline-flex cursor-pointer items-center gap-2 text-[10px] font-semibold text-zinc-700 dark:text-zinc-400">
+          <input
+            type="checkbox"
+            checked={soloNoLeidas}
+            onChange={(evento) => onSoloNoLeidas(evento.target.checked)}
+            className="h-3.5 w-3.5 rounded border-black/20 bg-white accent-yellow-500 dark:border-white/20 dark:bg-black"
+          />
+          Solo no leídas
+        </label>
+
+        <button
+          type="button"
+          onClick={onMarcarTodas}
+          disabled={totalNoLeidas === 0}
+          className="featmusic-notifications-copy text-[10px] font-bold text-yellow-600 transition hover:text-yellow-700 disabled:cursor-not-allowed disabled:text-zinc-400 dark:text-yellow-300 dark:hover:text-yellow-200 dark:disabled:text-zinc-700"
+        >
+          Marcar todas como leídas
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
+        {cargando && notificaciones.length === 0 ? (
+          <div className="space-y-3 p-4 sm:p-5">
+            {[0, 1, 2].map((item) => (
+              <div
+                key={item}
+                className="h-20 animate-pulse rounded-xl bg-black/[0.04] dark:bg-white/[0.035]"
+              />
+            ))}
+          </div>
+        ) : error && notificaciones.length === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <p className="featmusic-notifications-copy text-xs font-semibold text-yellow-700 dark:text-yellow-200">{error}</p>
+            <button
+              type="button"
+              onClick={onRecargar}
+              className="featmusic-notifications-copy mt-4 rounded-lg border border-black/10 px-3 py-2 text-[10px] font-bold text-zinc-800 transition hover:bg-black/5 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
+            >
+              Intentar nuevamente
+            </button>
+          </div>
+        ) : notificaciones.length === 0 ? (
+          <div className="px-5 py-14 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/40 bg-yellow-400/15 text-yellow-600 dark:border-yellow-400/15 dark:bg-yellow-500/[0.06] dark:text-yellow-300/70">
+              <IconoCampana className="h-5 w-5" />
+            </div>
+            <p className="featmusic-notifications-copy mt-3 text-xs font-bold text-black dark:text-zinc-300">
+              {soloNoLeidas
+                ? "No tienes notificaciones sin leer"
+                : "Todavía no tienes notificaciones"}
+            </p>
+            <p className="featmusic-notifications-copy mt-1 text-[10px] leading-5 text-zinc-600 dark:text-zinc-600">
+              Aquí aparecerán propuestas, decisiones, cambios y mensajes.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-black/[0.06] dark:divide-white/[0.06]">
+            {notificaciones.map((notificacion) => {
+              const noLeida = !notificacion.leidaEn;
+
+              return (
+                <button
+                  key={notificacion.id}
+                  type="button"
+                  onClick={() => onAbrir(notificacion)}
+                  className={`relative flex w-full items-start gap-3 px-4 py-3.5 text-left transition sm:px-5 ${
+                    noLeida
+                      ? "bg-yellow-400/[0.10] hover:bg-yellow-400/[0.16] dark:bg-yellow-500/[0.045] dark:hover:bg-yellow-500/[0.075]"
+                      : "hover:bg-black/[0.03] dark:hover:bg-white/[0.025]"
+                  }`}
+                >
+                  {noLeida && (
+                    <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-yellow-400" />
+                  )}
+
+                  {notificacion.actor?.fotoPerfil ? (
+                    <img
+                      src={notificacion.actor.fotoPerfil}
+                      alt=""
+                      className="h-9 w-9 shrink-0 rounded-xl border border-black/10 object-cover dark:border-white/10"
+                    />
+                  ) : notificacion.actor ? (
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-yellow-400/40 bg-yellow-400/15 text-[10px] font-black text-yellow-700 dark:border-yellow-400/15 dark:bg-yellow-500/[0.07] dark:text-yellow-200">
+                      {iniciales(notificacion.actor.nombreVisible)}
+                    </span>
+                  ) : (
+                    <span
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border ${claseTipo(
+                        notificacion.tipo,
+                      )}`}
+                    >
+                      <IconoTipo
+                        tipo={notificacion.tipo}
+                        className="h-4 w-4"
+                      />
+                    </span>
+                  )}
+
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-start justify-between gap-3">
+                      <span
+                        className={`featmusic-notifications-copy block text-[11px] leading-4 ${
+                          noLeida
+                            ? "font-black text-black dark:text-zinc-100"
+                            : "font-bold text-zinc-800 dark:text-zinc-300"
+                        }`}
+                      >
+                        {notificacion.titulo}
+                      </span>
+                      <span className="featmusic-notifications-copy shrink-0 text-[8px] font-semibold text-zinc-500 dark:text-zinc-600">
+                        {formatearTiempo(notificacion.creadoEn)}
+                      </span>
+                    </span>
+
+                    {notificacion.actor && (
+                      <span className="featmusic-notifications-username mt-0.5 block truncate text-[9px] font-semibold text-yellow-600 dark:text-yellow-300/80">
+                        {notificacion.actor.nombreVisible}
+                      </span>
+                    )}
+
+                    <span className="featmusic-notifications-copy mt-1 block text-[10px] leading-4 text-zinc-600 dark:text-zinc-500">
+                      {notificacion.mensaje}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {error && notificaciones.length > 0 && (
+        <div className="featmusic-notifications-copy border-t border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-[9px] text-yellow-700 dark:border-yellow-400/10 dark:bg-yellow-500/[0.04] dark:text-yellow-200">
+          {error}
+        </div>
+      )}
+    </>
+  );
+}

@@ -1,0 +1,795 @@
+"use client";
+
+import Link from "next/link";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+  type RefObject,
+} from "react";
+
+import BotonGuardarIdea, {
+  EVENTO_CAMBIO_IDEA_GUARDADA,
+  type DetalleCambioIdeaGuardada,
+} from "@/app/components/BotonGuardarIdea";
+import ContadorVistasIdea from "@/app/components/ContadorVistasIdea";
+import RegistrarVistaIdea from "@/app/components/RegistrarVistaIdea";
+import type { OportunidadFeed } from "@/lib/feed-inicio";
+
+import ReproductorReel from "./ReproductorReel";
+
+const MAX_PROPUESTAS = 3;
+const EVENTO_REPRODUCCION = "featmusic:reproducir-audio";
+const EVENTO_ALTERNAR_REEL = "featmusic:alternar-reproduccion-reel";
+
+type VistaFeed = "para-ti" | "siguiendo" | "recientes" | "guardadas";
+
+type FeedInicioProps = {
+  oportunidadesIniciales: OportunidadFeed[];
+  usuarioActualId: number;
+};
+
+function iniciales(nombre: string) {
+  return (
+    nombre
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((parte) => parte[0]?.toUpperCase())
+      .join("") || "FM"
+  );
+}
+
+function formatearRol(rol: string) {
+  const roles: Record<string, string> = {
+    CANTANTE: "Cantante",
+    COMPOSITOR: "Compositor",
+    PRODUCTOR: "Productor",
+    BEATMAKER: "Beatmaker",
+  };
+
+  return roles[rol] ?? rol;
+}
+
+function tiempoPublicacion(creadoEn: string) {
+  const diferencia = Math.max(0, Date.now() - new Date(creadoEn).getTime());
+  const minutos = Math.floor(diferencia / 60_000);
+  const horas = Math.floor(diferencia / 3_600_000);
+  const dias = Math.floor(diferencia / 86_400_000);
+
+  if (minutos < 1) return "Ahora";
+  if (minutos < 60) return `Hace ${minutos} min`;
+  if (horas < 24) return `Hace ${horas} h`;
+  if (dias === 1) return "Ayer";
+  return `Hace ${dias} días`;
+}
+
+function FotoArtista({ oportunidad }: { oportunidad: OportunidadFeed }) {
+  const [fallo, setFallo] = useState(false);
+  const { artista } = oportunidad;
+
+  if (!artista.fotoPerfil || fallo) {
+    return (
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-yellow-200/25 bg-yellow-400/15 text-xs font-black text-yellow-100 shadow-lg shadow-black/30">
+        {iniciales(artista.nombreArtistico)}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={artista.fotoPerfil}
+      alt={`Foto de ${artista.nombreArtistico}`}
+      className="h-11 w-11 shrink-0 rounded-full border border-white/20 object-cover shadow-lg shadow-black/40"
+      loading="lazy"
+      onError={() => setFallo(true)}
+    />
+  );
+}
+
+
+// FEATMUSIC_INDICADORES_PLAY_PAUSA_CENTRO_V1
+// FEATMUSIC_ICONOS_PLAY_PAUSA_SIN_FONDO_V1
+// FEATMUSIC_ICONOS_CENTRADOS_SOBRE_FOTO_V1
+function IconoPlayCentro() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-12 w-12 translate-x-0.5 sm:h-14 sm:w-14"
+      fill="currentColor"
+    >
+      <path d="M8.2 5.5v13l10-6.5-10-6.5Z" />
+    </svg>
+  );
+}
+
+function IconoPausaCentro() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-12 w-12 sm:h-14 sm:w-14"
+      fill="currentColor"
+    >
+      <path d="M7 5.5h3.5v13H7zM13.5 5.5H17v13h-3.5z" />
+    </svg>
+  );
+}
+
+function TarjetaFeed({
+  oportunidad,
+  activa,
+  usuarioActualId,
+}: {
+  oportunidad: OportunidadFeed;
+  activa: boolean;
+  usuarioActualId: number;
+}) {
+  const [reproduciendo, setReproduciendo] = useState(false);
+  const [autoplayVisualResuelto, setAutoplayVisualResuelto] = useState(false);
+  const [mostrarFeedbackPausa, setMostrarFeedbackPausa] = useState(false);
+  const temporizadorFeedbackPausaRef = useRef<number | null>(null);
+  const [descripcionExpandida, setDescripcionExpandida] = useState(false);
+  const [descripcionRecortada, setDescripcionRecortada] = useState(false);
+  const descripcionRef = useRef<HTMLParagraphElement>(null);
+  // FEATMUSIC_DESCRIPCION_SIN_MOVER_VISUAL_V1
+  const informacionCompactaRef = useRef<HTMLDivElement>(null);
+  const [alturaInformacionCompacta, setAlturaInformacionCompacta] =
+    useState<number | null>(null);
+  const gestoToqueRef = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+  } | null>(null);
+  const { artista } = oportunidad;
+  const perfilHref = `/artistas/${encodeURIComponent(artista.nombreUsuario)}`;
+  const cuposDisponibles = Math.max(
+    0,
+    MAX_PROPUESTAS - oportunidad.propuestasActuales,
+  );
+  const imagenFondo = oportunidad.portadaUrl?.trim() || artista.fotoPerfil;
+  const estiloFondo = imagenFondo
+    ? ({
+        "--reel-cover": `url("${imagenFondo.replaceAll('"', '\\"')}")`,
+      } as CSSProperties)
+    : undefined;
+
+  useEffect(() => {
+    if (!activa) setDescripcionExpandida(false);
+  }, [activa]);
+
+  /*
+   * Evita que el icono grande de Play aparezca durante los primeros milisegundos
+   * mientras el autoplay intenta iniciar. Si el navegador bloquea el autoplay,
+   * el control aparece después y sigue disponible normalmente.
+   */
+  useEffect(() => {
+    if (!activa) {
+      setAutoplayVisualResuelto(false);
+      return;
+    }
+
+    setAutoplayVisualResuelto(false);
+    const temporizador = window.setTimeout(() => {
+      setAutoplayVisualResuelto(true);
+    }, 320);
+
+    return () => window.clearTimeout(temporizador);
+  }, [activa, oportunidad.id]);
+
+  useEffect(() => {
+    if (descripcionExpandida) return;
+
+    const descripcion = descripcionRef.current;
+    if (!descripcion) return;
+
+    function medirDescripcion() {
+      const elemento = descripcionRef.current;
+      if (!elemento) return;
+
+      setDescripcionRecortada(
+        elemento.scrollHeight > elemento.clientHeight + 1 ||
+          elemento.scrollWidth > elemento.clientWidth + 1,
+      );
+    }
+
+    const fotograma = window.requestAnimationFrame(medirDescripcion);
+    const observador = new ResizeObserver(medirDescripcion);
+    observador.observe(descripcion);
+
+    return () => {
+      window.cancelAnimationFrame(fotograma);
+      observador.disconnect();
+    };
+  }, [descripcionExpandida, oportunidad.descripcion]);
+
+  useEffect(() => {
+    if (activa) return;
+
+    if (temporizadorFeedbackPausaRef.current !== null) {
+      window.clearTimeout(temporizadorFeedbackPausaRef.current);
+      temporizadorFeedbackPausaRef.current = null;
+    }
+
+    setMostrarFeedbackPausa(false);
+  }, [activa]);
+
+  useEffect(() => {
+    return () => {
+      if (temporizadorFeedbackPausaRef.current !== null) {
+        window.clearTimeout(temporizadorFeedbackPausaRef.current);
+      }
+    };
+  }, []);
+
+  function mostrarIndicadorPausaTemporal() {
+    if (temporizadorFeedbackPausaRef.current !== null) {
+      window.clearTimeout(temporizadorFeedbackPausaRef.current);
+    }
+
+    setMostrarFeedbackPausa(true);
+    temporizadorFeedbackPausaRef.current = window.setTimeout(() => {
+      setMostrarFeedbackPausa(false);
+      temporizadorFeedbackPausaRef.current = null;
+    }, 900);
+  }
+
+  function ocultarIndicadorPausaTemporal() {
+    if (temporizadorFeedbackPausaRef.current !== null) {
+      window.clearTimeout(temporizadorFeedbackPausaRef.current);
+      temporizadorFeedbackPausaRef.current = null;
+    }
+
+    setMostrarFeedbackPausa(false);
+  }
+
+  function alternarDescripcion() {
+    if (!descripcionExpandida) {
+      const alturaActual =
+        informacionCompactaRef.current?.getBoundingClientRect().height;
+
+      if (alturaActual && Number.isFinite(alturaActual)) {
+        setAlturaInformacionCompacta(alturaActual);
+      }
+    }
+
+    setDescripcionExpandida((estadoActual) => !estadoActual);
+  }
+
+  function esZonaInteractiva(objetivo: EventTarget | null) {
+    return (
+      objetivo instanceof Element &&
+      Boolean(
+        objetivo.closest(
+          "a, button, input, select, textarea, [role='button'], [data-no-toggle-reel]",
+        ),
+      )
+    );
+  }
+
+  function iniciarToque(evento: ReactPointerEvent<HTMLElement>) {
+    if (!activa || esZonaInteractiva(evento.target)) {
+      gestoToqueRef.current = null;
+      return;
+    }
+
+    if (evento.pointerType === "mouse" && evento.button !== 0) {
+      gestoToqueRef.current = null;
+      return;
+    }
+
+    gestoToqueRef.current = {
+      pointerId: evento.pointerId,
+      x: evento.clientX,
+      y: evento.clientY,
+    };
+  }
+
+  function moverToque(evento: ReactPointerEvent<HTMLElement>) {
+    const gesto = gestoToqueRef.current;
+    if (!gesto || gesto.pointerId !== evento.pointerId) return;
+
+    const distancia = Math.hypot(
+      evento.clientX - gesto.x,
+      evento.clientY - gesto.y,
+    );
+
+    if (distancia > 12) {
+      gestoToqueRef.current = null;
+    }
+  }
+
+  function cancelarToque() {
+    gestoToqueRef.current = null;
+  }
+
+  function finalizarToque(evento: ReactPointerEvent<HTMLElement>) {
+    const gesto = gestoToqueRef.current;
+    gestoToqueRef.current = null;
+
+    if (
+      !gesto ||
+      gesto.pointerId !== evento.pointerId ||
+      esZonaInteractiva(evento.target)
+    ) {
+      return;
+    }
+
+    const distancia = Math.hypot(
+      evento.clientX - gesto.x,
+      evento.clientY - gesto.y,
+    );
+    if (distancia > 12) return;
+
+    if (reproduciendo) {
+      ocultarIndicadorPausaTemporal();
+    } else {
+      mostrarIndicadorPausaTemporal();
+    }
+
+    window.dispatchEvent(
+      new CustomEvent<string>(EVENTO_ALTERNAR_REEL, {
+        detail: `reel-${oportunidad.id}`,
+      }),
+    );
+  }
+
+  return (
+    <section
+      data-feed-item
+      data-oportunidad-id={oportunidad.id}
+      className="h-full min-h-full snap-start snap-always sm:px-4 sm:py-3 lg:px-8"
+    >
+      <article
+        data-vista-idea
+        data-playing={reproduciendo ? "true" : "false"}
+        data-idea-cover={oportunidad.portadaUrl ? "true" : "false"}
+        onPointerDown={iniciarToque}
+        onPointerMove={moverToque}
+        onPointerUp={finalizarToque}
+        onPointerCancel={cancelarToque}
+        style={estiloFondo}
+        className="feat-reel-card relative mx-auto flex h-full w-full max-w-[760px] flex-col overflow-hidden bg-[#070707] shadow-[0_26px_90px_rgba(0,0,0,0.55)] transition duration-300 sm:rounded-[30px]"
+      >
+        <div className="feat-reel-cover-bg" aria-hidden="true" />
+        <div className="feat-reel-shade" aria-hidden="true" />
+        <div className="feat-reel-grid" aria-hidden="true" />
+        <span className="feat-reel-orb feat-reel-orb-one" aria-hidden="true" />
+        <span className="feat-reel-orb feat-reel-orb-two" aria-hidden="true" />
+        <span className="feat-reel-orb feat-reel-orb-three" aria-hidden="true" />
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20 flex -translate-y-8 items-center justify-center sm:-translate-y-6 lg:translate-y-0"
+        >
+          {activa &&
+            autoplayVisualResuelto &&
+            !reproduciendo &&
+            !mostrarFeedbackPausa && (
+            <span className="flex items-center justify-center text-white/75 opacity-80 drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)]">
+              <IconoPlayCentro />
+            </span>
+          )}
+
+          <span
+            className={`absolute flex items-center justify-center text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.95)] transition-all duration-500 ease-out ${
+              activa && mostrarFeedbackPausa
+                ? "scale-100 opacity-90"
+                : "scale-90 opacity-0"
+            }`}
+          >
+            <IconoPausaCentro />
+          </span>
+        </div>
+
+        <RegistrarVistaIdea
+          ideaId={oportunidad.id}
+          sesionActiva
+          esPropietario={usuarioActualId === artista.id}
+          activa={activa}
+        />
+
+        <div className="feat-reel-content relative z-10 flex min-h-0 flex-1 flex-col px-4 pt-[4.15rem] sm:px-6 sm:pt-[4.5rem]">
+          <header className="flex justify-end">
+            <BotonGuardarIdea
+              ideaId={oportunidad.id}
+              guardadaInicial={oportunidad.guardada}
+              sesionActiva
+              esPropietario={usuarioActualId === artista.id}
+              disponible={cuposDisponibles > 0}
+              variante="icono"
+            />
+          </header>
+
+          <div className="flex min-h-0 flex-1 items-center justify-center py-3 sm:py-5">
+            <ReproductorReel
+              id={`reel-${oportunidad.id}`}
+              src={oportunidad.audioUrl}
+              titulo={oportunidad.titulo}
+              fotoArtista={oportunidad.portadaUrl || artista.fotoPerfil}
+              inicialesArtista={iniciales(artista.nombreArtistico)}
+              activa={activa}
+              duracionSegundos={oportunidad.duracionSegundos}
+              onEstadoChange={setReproduciendo}
+            />
+          </div>
+
+          <div
+            ref={informacionCompactaRef}
+            className="feat-reel-bottom-info relative shrink-0 overflow-visible"
+            style={
+              descripcionExpandida && alturaInformacionCompacta
+                ? { height: `${alturaInformacionCompacta}px` }
+                : undefined
+            }
+          >
+            <div
+              className={
+                descripcionExpandida
+                  ? "absolute inset-x-0 bottom-0"
+                  : undefined
+              }
+            >
+            <div className="flex min-w-0 items-center gap-3">
+              <Link href={perfilHref} className="shrink-0">
+                <FotoArtista oportunidad={oportunidad} />
+              </Link>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <Link
+                    href={perfilHref}
+                    className="max-w-full truncate text-sm font-black !text-white"
+                  >
+                    {artista.nombreArtistico}
+                  </Link>
+
+                  <span className="flex shrink-0 items-center gap-1.5">
+                    <span className="feat-reel-chip feat-reel-chip-muted shrink-0">
+                      {formatearRol(artista.rol)}
+                    </span>
+
+                    {artista.codigoPais && (
+                      <img
+                        src={`https://flagcdn.com/20x15/${artista.codigoPais.toLowerCase()}.png`}
+                        srcSet={`https://flagcdn.com/40x30/${artista.codigoPais.toLowerCase()}.png 2x`}
+                        width={20}
+                        height={15}
+                        alt={`Bandera de ${artista.pais}`}
+                        title={artista.pais}
+                        className="h-[13px] w-[18px] shrink-0 rounded-[2px] border-0 object-cover shadow-none outline-none"
+                        loading="lazy"
+                      />
+                    )}
+                  </span>
+
+                  {oportunidad.esSeguido && (
+                    <span className="shrink-0 rounded-full border border-yellow-200/20 bg-yellow-400/10 px-2 py-0.5 text-[8px] font-black text-yellow-100">
+                      Siguiendo
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-0.5 truncate text-[10px] font-semibold text-white/55">
+                  @{artista.nombreUsuario} · {tiempoPublicacion(oportunidad.creadoEn)}
+                </p>
+              </div>
+            </div>
+
+            <h1 className="feat-reel-title mt-3 line-clamp-2 break-words text-[1.45rem] font-black leading-[1.03] tracking-[-0.025em] text-white sm:text-3xl">
+              {oportunidad.titulo}
+            </h1>
+            <div className="mt-2" data-no-toggle-reel>
+              <p
+                ref={descripcionRef}
+                className={
+                  descripcionExpandida
+                    ? "whitespace-pre-wrap break-words text-[11px] font-medium leading-[1.55] text-white/75 sm:text-xs"
+                    : "line-clamp-1 text-[11px] font-medium text-white/60 sm:text-xs"
+                }
+              >
+                {oportunidad.descripcion}
+              </p>
+
+              {(descripcionRecortada || descripcionExpandida) && (
+                <button
+                  type="button"
+                  aria-expanded={descripcionExpandida}
+                  onClick={alternarDescripcion}
+                  className="mt-1 inline-flex items-center text-[11px] font-black text-white/90 transition hover:text-yellow-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/70"
+                >
+                  {descripcionExpandida ? "Cerrar" : "Leer más"}
+                </button>
+              )}
+            </div>
+
+            <div className="mt-2 flex min-h-5 justify-end text-right text-[10px] font-semibold text-white/55">
+              <ContadorVistasIdea
+                ideaId={oportunidad.id}
+                totalInicial={oportunidad.vistasUnicas}
+                esPropietario={usuarioActualId === artista.id}
+                variante="compacta"
+                className="featmusic-inicio-view-count"
+              />
+            </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  );
+}
+
+function EstadoVacio({ vista }: { vista: VistaFeed }) {
+  if (vista === "guardadas") {
+    return (
+      <div className="flex h-full min-h-full snap-start items-center justify-center px-6 text-center">
+        <section className="max-w-sm rounded-3xl border border-white/10 bg-black/35 p-7 shadow-2xl shadow-black/30">
+          <h2 className="text-lg font-black text-white">
+            Todavía no guardaste oportunidades
+          </h2>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            Guarda las ideas que te interesen para escucharlas o preparar tu propuesta después.
+          </p>
+          <Link
+            href="/artistas"
+            className="mt-5 inline-flex rounded-xl border border-yellow-300/30 bg-yellow-500/15 px-4 py-2.5 text-xs font-black text-yellow-100"
+          >
+            Explorar oportunidades
+          </Link>
+        </section>
+      </div>
+    );
+  }
+
+  if (vista === "siguiendo") {
+    return (
+      <div className="flex h-full min-h-full snap-start items-center justify-center px-6 text-center">
+        <section className="max-w-sm rounded-3xl border border-white/10 bg-black/35 p-7 shadow-2xl shadow-black/30">
+          <h2 className="text-lg font-black text-white">
+            Aún no hay oportunidades de artistas que sigues
+          </h2>
+          <p className="mt-2 text-xs leading-5 text-zinc-500">
+            Sigue artistas que te interesen y sus nuevas ideas aparecerán aquí.
+          </p>
+          <Link
+            href="/artistas"
+            className="mt-5 inline-flex rounded-xl border border-yellow-300/30 bg-yellow-500/15 px-4 py-2.5 text-xs font-black text-yellow-100"
+          >
+            Explorar artistas
+          </Link>
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-full min-h-full snap-start items-center justify-center px-6 text-center">
+      <section className="max-w-sm rounded-3xl border border-white/10 bg-black/35 p-7">
+        <h2 className="text-lg font-black text-white">
+          Todavía no hay oportunidades activas
+        </h2>
+        <p className="mt-2 text-xs leading-5 text-zinc-500">
+          Cuando los artistas publiquen nuevas ideas musicales aparecerán aquí.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function usarOportunidadActiva(
+  contenedorRef: RefObject<HTMLDivElement | null>,
+  ids: number[],
+) {
+  const [activaId, setActivaId] = useState<number | null>(ids[0] ?? null);
+
+  useEffect(() => {
+    setActivaId(ids[0] ?? null);
+  }, [ids]);
+
+  useEffect(() => {
+    const contenedor = contenedorRef.current;
+    if (!contenedor) return;
+
+    const elementos = Array.from(
+      contenedor.querySelectorAll<HTMLElement>("[data-feed-item]"),
+    );
+    if (elementos.length === 0) return;
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        const visible = entradas
+          .filter((entrada) => entrada.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible || visible.intersectionRatio < 0.62) return;
+
+        const id = Number((visible.target as HTMLElement).dataset.oportunidadId);
+        if (Number.isFinite(id)) setActivaId(id);
+      },
+      {
+        root: contenedor,
+        threshold: [0.62, 0.76, 0.9],
+      },
+    );
+
+    elementos.forEach((elemento) => observador.observe(elemento));
+    return () => observador.disconnect();
+  }, [contenedorRef, ids]);
+
+  return activaId;
+}
+
+export default function FeedInicio({
+  oportunidadesIniciales,
+  usuarioActualId,
+}: FeedInicioProps) {
+  const [vista, setVista] = useState<VistaFeed>("para-ti");
+  const [guardadasIds, setGuardadasIds] = useState<Set<number>>(
+    () =>
+      new Set(
+        oportunidadesIniciales
+          .filter((oportunidad) => oportunidad.guardada)
+          .map((oportunidad) => oportunidad.id),
+      ),
+  );
+  const contenedorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setGuardadasIds(
+      new Set(
+        oportunidadesIniciales
+          .filter((oportunidad) => oportunidad.guardada)
+          .map((oportunidad) => oportunidad.id),
+      ),
+    );
+  }, [oportunidadesIniciales]);
+
+  useEffect(() => {
+    function actualizarGuardadas(evento: Event) {
+      const detalle = (evento as CustomEvent<DetalleCambioIdeaGuardada>).detail;
+      if (!detalle) return;
+
+      setGuardadasIds((actuales) => {
+        const siguientes = new Set(actuales);
+        if (detalle.guardada) siguientes.add(detalle.ideaId);
+        else siguientes.delete(detalle.ideaId);
+        return siguientes;
+      });
+    }
+
+    window.addEventListener(EVENTO_CAMBIO_IDEA_GUARDADA, actualizarGuardadas);
+    return () =>
+      window.removeEventListener(
+        EVENTO_CAMBIO_IDEA_GUARDADA,
+        actualizarGuardadas,
+      );
+  }, []);
+
+  const oportunidades = useMemo(() => {
+    const recientes = oportunidadesIniciales
+      .map((oportunidad) => ({
+        ...oportunidad,
+        guardada: guardadasIds.has(oportunidad.id),
+      }))
+      .sort(
+        (a, b) =>
+          new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime(),
+      );
+
+    if (vista === "recientes") return recientes;
+    if (vista === "siguiendo") {
+      return recientes.filter((oportunidad) => oportunidad.esSeguido);
+    }
+    if (vista === "guardadas") {
+      return recientes.filter(
+        (oportunidad) =>
+          oportunidad.guardada && oportunidad.propuestasActuales < MAX_PROPUESTAS,
+      );
+    }
+
+    const recomendadas = recientes.filter(
+      (oportunidad) => oportunidad.compatibilidad.porcentaje >= 40,
+    );
+    const baseParaTi = recomendadas.length > 0 ? recomendadas : recientes;
+
+    return [...baseParaTi].sort((a, b) => {
+      const completaA = a.propuestasActuales >= MAX_PROPUESTAS ? 1 : 0;
+      const completaB = b.propuestasActuales >= MAX_PROPUESTAS ? 1 : 0;
+
+      if (completaA !== completaB) return completaA - completaB;
+      if (b.compatibilidad.porcentaje !== a.compatibilidad.porcentaje) {
+        return b.compatibilidad.porcentaje - a.compatibilidad.porcentaje;
+      }
+
+      return new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime();
+    });
+  }, [guardadasIds, oportunidadesIniciales, vista]);
+
+  const ids = useMemo(
+    () => oportunidades.map((oportunidad) => oportunidad.id),
+    [oportunidades],
+  );
+  const activaId = usarOportunidadActiva(contenedorRef, ids);
+  const indiceActivo = Math.max(
+    0,
+    oportunidades.findIndex((oportunidad) => oportunidad.id === activaId),
+  );
+
+  function cambiarVista(nuevaVista: VistaFeed) {
+    if (nuevaVista === vista) return;
+
+    window.dispatchEvent(
+      new CustomEvent<string>(EVENTO_REPRODUCCION, {
+        detail: `feed-pestana-${nuevaVista}`,
+      }),
+    );
+    setVista(nuevaVista);
+    contenedorRef.current?.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  const pestanas: Array<{ id: VistaFeed; etiqueta: string }> = [
+    { id: "para-ti", etiqueta: "Para ti" },
+    { id: "siguiendo", etiqueta: "Siguiendo" },
+    { id: "recientes", etiqueta: "Recientes" },
+    { id: "guardadas", etiqueta: "Guardadas" },
+  ];
+
+  return (
+    <div className="relative flex h-[calc(100dvh-48px)] min-h-0 flex-col overflow-hidden bg-[#070707] lg:h-[calc(100vh-48px)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(221,180,18,0.13),transparent_36%)]" />
+
+      <div className="feat-reel-tabs pointer-events-none absolute inset-x-0 top-0 z-30 px-3 pt-2.5 sm:px-5 sm:pt-3">
+        <div className="pointer-events-auto mx-auto flex max-w-[760px] items-center gap-2">
+          <div
+            className="grid min-w-0 flex-1 grid-cols-4"
+            role="tablist"
+            aria-label="Feed de oportunidades"
+          >
+            {pestanas.map((pestana) => (
+              <button
+                key={pestana.id}
+                type="button"
+                role="tab"
+                aria-selected={vista === pestana.id}
+                onClick={() => cambiarVista(pestana.id)}
+                className="feat-reel-tab px-1 py-2 text-[10px] transition sm:px-2 sm:text-xs"
+              >
+                {pestana.etiqueta}
+              </button>
+            ))}
+          </div>
+
+          {oportunidades.length > 0 && (
+            <span className="feat-reel-position hidden shrink-0 px-2 py-2 text-[9px] tabular-nums sm:block">
+              {indiceActivo + 1} / {oportunidades.length}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div
+        ref={contenedorRef}
+        className="relative z-10 min-h-0 flex-1 snap-y snap-mandatory overflow-y-auto overscroll-y-contain scroll-smooth touch-pan-y [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {oportunidades.length === 0 ? (
+          <EstadoVacio vista={vista} />
+        ) : (
+          oportunidades.map((oportunidad) => (
+            <TarjetaFeed
+              key={`${vista}-${oportunidad.id}`}
+              oportunidad={oportunidad}
+              activa={activaId === oportunidad.id}
+              usuarioActualId={usuarioActualId}
+            />
+          ))
+        )}
+      </div>
+
+    </div>
+  );
+}

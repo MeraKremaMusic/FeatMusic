@@ -1,0 +1,58 @@
+# FEATMUSIC_GITHUB_CRON_EXPIRAR_PLANES_V2
+name: Expirar planes FeatMusic
+
+on:
+  schedule:
+    # GitHub Actions usa UTC. Ejecutamos al minuto 17 para evitar la
+    # congestión habitual del minuto 00.
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: featmusic-expirar-planes
+  cancel-in-progress: false
+
+jobs:
+  expirar-planes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - name: Validar secreto del cron
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "Falta configurar el secret CRON_SECRET en GitHub Actions."
+            exit 1
+          fi
+
+      - name: Revisar suscripciones vencidas
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -u
+
+          URLS=(
+            "https://www.featmusic.pro/api/cron/suscripciones/expirar"
+            "https://featmusic.pro/api/cron/suscripciones/expirar"
+          )
+
+          for URL in "${URLS[@]}"; do
+            echo "Intentando conexión con: $URL"
+
+            if curl               --ipv4               --location               --fail-with-body               --silent               --show-error               --connect-timeout 15               --max-time 60               --retry 1               --retry-delay 3               --retry-connrefused               --request POST               --header "Authorization: Bearer $CRON_SECRET"               --header "Accept: application/json"               "$URL"; then
+              echo
+              echo "Cron ejecutado correctamente."
+              exit 0
+            fi
+
+            echo
+            echo "No se pudo completar la llamada con $URL."
+          done
+
+          echo "No fue posible conectar con FeatMusic desde GitHub Actions."
+          exit 1

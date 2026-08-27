@@ -1,0 +1,352 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                     Int            @id @default(autoincrement())
+  nombre                 String?
+  nombreArtistico        String?        @map("nombre_artistico")
+  nombreUsuario          String?        @unique @map("nombre_usuario")
+  fotoPerfil             String?        @map("foto_perfil") @db.VarChar(500)
+  portadaPerfil          String?        @map("portada_perfil") @db.VarChar(500)
+  biografia              String?        @db.VarChar(300)
+  spotifyUrl             String?        @map("spotify_url") @db.VarChar(500)
+  youtubeUrl             String?        @map("youtube_url") @db.VarChar(500)
+  instagramUrl           String?        @map("instagram_url") @db.VarChar(500)
+  distribuidoraPreferida String?        @map("distribuidora_preferida") @db.VarChar(120)
+  softwarePreferido      String?        @map("software_preferido") @db.VarChar(120)
+  correo                 String         @unique
+  passwordHash           String         @map("password_hash")
+  pais                   String?
+  departamento           String?        @db.VarChar(120)
+  ciudad                 String?
+  idiomaPrincipal        String?        @map("idioma_principal")
+  rolPrincipal           String         @map("rol_principal")
+  generos                Json?
+  tipoColaboracion       String?        @map("tipo_colaboracion")
+  correoVerificado       Boolean        @default(true) @map("correo_verificado")
+  perfilCompleto         Boolean        @default(false) @map("perfil_completo")
+  plan                   String         @default("GRATUITO") @db.VarChar(20)
+  // FEATMUSIC_ADMIN_FASE1_V1
+  rolSistema             String         @default("USUARIO") @map("rol_sistema") @db.VarChar(20)
+  // FEATMUSIC_ADMIN_FASE2_MODERACION_V1
+  estadoCuenta           String         @default("ACTIVA") @map("estado_cuenta") @db.VarChar(20)
+  suspendidoHasta        DateTime?      @map("suspendido_hasta")
+  motivoRestriccion      String?        @map("motivo_restriccion") @db.VarChar(500)
+  // FEATMUSIC_MI_CUENTA_V1
+  sesionVersion          Int            @default(0) @map("sesion_version")
+  eliminadoEn            DateTime?      @map("eliminado_en")
+  aceptoTerminosEn       DateTime?      @map("acepto_terminos_en")
+  creadoEn               DateTime       @default(now()) @map("creado_en")
+  actualizadoEn          DateTime       @updatedAt @map("actualizado_en")
+  ideas                  Idea[]
+  propuestasEnviadas     Propuesta[]    @relation("PropuestasEnviadas")
+  mensajesEnviados       Mensaje[]      @relation("MensajesEnviados")
+  conversacionesComoA    Conversacion[] @relation("ConversacionUsuarioA")
+  conversacionesComoB    Conversacion[] @relation("ConversacionUsuarioB")
+  notificacionesRecibidas Notificacion[] @relation("NotificacionesUsuario")
+  notificacionesGeneradas Notificacion[] @relation("NotificacionesActor")
+  siguiendo               Seguimiento[] @relation("UsuarioSiguiendo")
+  seguidores              Seguimiento[] @relation("UsuarioSeguidores")
+  vistasIdeas              VistaIdea[]
+  ideasGuardadas           IdeaGuardada[]
+  reportesEnviados         ReporteUsuario[] @relation("ReportesEnviados")
+  reportesRecibidos        ReporteUsuario[] @relation("ReportesRecibidos")
+  moderacionRecibida       AccionModeracion[] @relation("ModeracionUsuario")
+  moderacionEjecutada      AccionModeracion[] @relation("ModeracionAdmin")
+  suscripcionesMercadoPago SuscripcionMercadoPago[]
+
+  @@map("usuarios")
+}
+
+
+model Seguimiento {
+  id         Int      @id @default(autoincrement())
+  seguidorId Int      @map("seguidor_id")
+  seguidoId  Int      @map("seguido_id")
+  creadoEn   DateTime @default(now()) @map("creado_en")
+  seguidor   Usuario  @relation("UsuarioSiguiendo", fields: [seguidorId], references: [id], onDelete: Cascade)
+  seguido    Usuario  @relation("UsuarioSeguidores", fields: [seguidoId], references: [id], onDelete: Cascade)
+
+  @@unique([seguidorId, seguidoId])
+  @@index([seguidorId, creadoEn])
+  @@index([seguidoId, creadoEn])
+  @@map("seguimientos")
+}
+
+model Idea {
+  id               Int         @id @default(autoincrement())
+  usuarioId        Int         @map("usuario_id")
+  titulo           String      @db.VarChar(80)
+  descripcion      String      @db.VarChar(300)
+  bpm              Int
+  tonalidad        String      @db.VarChar(30)
+  rolBuscado       String?     @map("rol_buscado") @db.VarChar(30)
+  generoMusical    String?     @map("genero_musical") @db.VarChar(60)
+  idiomaBuscado    String?     @map("idioma_buscado") @db.VarChar(40)
+  modalidadColaboracion String? @map("modalidad_colaboracion") @db.VarChar(20)
+  paisPreferido    String?     @map("pais_preferido") @db.VarChar(120)
+  departamentoPreferido String? @map("departamento_preferido") @db.VarChar(120)
+  ciudadPreferida  String?     @map("ciudad_preferida") @db.VarChar(120)
+  tipoAcuerdo      String?     @map("tipo_acuerdo") @db.VarChar(30)
+  portadaUrl       String?     @map("portada_url") @db.VarChar(1000)
+  portadaPublicId  String?     @map("portada_public_id") @db.VarChar(255)
+  audioUrl         String      @map("audio_url") @db.VarChar(1000)
+  audioPublicId    String      @unique(map: "ideas_audio_public_id_key") @map("audio_public_id") @db.VarChar(255)
+  duracionSegundos Int         @map("duracion_segundos")
+  formato          String?     @db.VarChar(20)
+  tamanoBytes      Int?        @map("tamano_bytes")
+  estado           String      @default("ACTIVA") @db.VarChar(20)
+  expiraEn         DateTime    @map("expira_en")
+  creadoEn         DateTime    @default(now()) @map("creado_en")
+  actualizadoEn    DateTime    @updatedAt @map("actualizado_en")
+  usuario          Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  propuestas       Propuesta[]
+  vistas            VistaIdea[]
+  guardadas         IdeaGuardada[]
+
+  @@index([usuarioId, estado, expiraEn])
+  @@map("ideas")
+}
+
+
+model IdeaGuardada {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int      @map("usuario_id")
+  ideaId    Int      @map("idea_id")
+  creadoEn  DateTime @default(now()) @map("creado_en")
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, ideaId])
+  @@index([usuarioId, creadoEn])
+  @@index([ideaId])
+  @@map("ideas_guardadas")
+}
+
+model VistaIdea {
+  id        Int      @id @default(autoincrement())
+  ideaId    Int      @map("idea_id")
+  usuarioId Int      @map("usuario_id")
+  vistaEn   DateTime @default(now()) @map("vista_en")
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([ideaId, usuarioId])
+  @@index([ideaId, vistaEn])
+  @@index([usuarioId, vistaEn])
+  @@map("vistas_ideas")
+}
+
+model Propuesta {
+  id               Int           @id @default(autoincrement())
+  ideaId           Int           @map("idea_id")
+  remitenteId      Int           @map("remitente_id")
+  conversacionId   Int?          @map("conversacion_id")
+  mensaje          String?       @db.VarChar(500)
+  audioUrl         String?       @map("audio_url") @db.VarChar(1000)
+  audioPublicId    String?       @map("audio_public_id") @db.VarChar(255)
+  duracionSegundos Int           @map("duracion_segundos")
+  formato          String?       @db.VarChar(20)
+  tamanoBytes      Int?          @map("tamano_bytes")
+  estado           String        @default("PENDIENTE") @db.VarChar(30)
+  motivoDecision   String?       @map("motivo_decision") @db.VarChar(500)
+  permiteReintento Boolean       @default(false) @map("permite_reintento")
+  numeroIntento    Int           @default(1) @map("numero_intento")
+  decisionEn       DateTime?     @map("decision_en")
+  creadoEn         DateTime      @default(now()) @map("creado_en")
+  actualizadoEn    DateTime      @updatedAt @map("actualizado_en")
+  idea             Idea          @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  remitente        Usuario       @relation("PropuestasEnviadas", fields: [remitenteId], references: [id], onDelete: Cascade)
+  conversacion     Conversacion? @relation(fields: [conversacionId], references: [id], onDelete: SetNull)
+
+  @@unique([ideaId, remitenteId])
+  @@index([ideaId, estado, creadoEn])
+  @@index([remitenteId, estado, creadoEn])
+  @@index([conversacionId, estado, creadoEn])
+  @@map("propuestas")
+}
+
+model Conversacion {
+  id                Int        @id @default(autoincrement())
+  usuarioAId        Int        @map("usuario_a_id")
+  usuarioBId        Int        @map("usuario_b_id")
+  ultimoMensajeEn   DateTime?  @map("ultimo_mensaje_en")
+  ultimaActividadEn DateTime   @default(now()) @map("ultima_actividad_en")
+  creadoEn          DateTime   @default(now()) @map("creado_en")
+  actualizadoEn     DateTime   @updatedAt @map("actualizado_en")
+  usuarioA          Usuario    @relation("ConversacionUsuarioA", fields: [usuarioAId], references: [id], onDelete: Cascade)
+  usuarioB          Usuario    @relation("ConversacionUsuarioB", fields: [usuarioBId], references: [id], onDelete: Cascade)
+  propuestas        Propuesta[]
+  mensajes          Mensaje[]
+
+  @@unique([usuarioAId, usuarioBId])
+  @@index([usuarioAId, ultimaActividadEn])
+  @@index([usuarioBId, ultimaActividadEn])
+  @@index([ultimoMensajeEn])
+  @@map("conversaciones")
+}
+
+model Mensaje {
+  id             Int          @id @default(autoincrement())
+  conversacionId Int          @map("conversacion_id")
+  remitenteId    Int          @map("remitente_id")
+  contenido      String       @db.VarChar(2000)
+  creadoEn       DateTime     @default(now()) @map("creado_en")
+  leidoEn        DateTime?    @map("leido_en")
+  conversacion   Conversacion @relation(fields: [conversacionId], references: [id], onDelete: Cascade)
+  remitente      Usuario      @relation("MensajesEnviados", fields: [remitenteId], references: [id], onDelete: Cascade)
+
+  @@index([conversacionId, creadoEn])
+  @@index([remitenteId, creadoEn])
+  @@map("mensajes")
+}
+
+
+model Notificacion {
+  id             Int       @id @default(autoincrement())
+  usuarioId      Int       @map("usuario_id")
+  actorId        Int?      @map("actor_id")
+  tipo           String    @db.VarChar(50)
+  titulo         String    @db.VarChar(160)
+  mensaje        String    @db.VarChar(500)
+  enlace         String?   @db.VarChar(500)
+  entidadTipo    String?   @map("entidad_tipo") @db.VarChar(50)
+  entidadId      Int?      @map("entidad_id")
+  conversacionId Int?      @map("conversacion_id")
+  leidaEn        DateTime? @map("leida_en")
+  creadoEn       DateTime  @default(now()) @map("creado_en")
+  usuario        Usuario   @relation("NotificacionesUsuario", fields: [usuarioId], references: [id], onDelete: Cascade)
+  actor          Usuario?  @relation("NotificacionesActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([usuarioId, leidaEn, creadoEn])
+  @@index([conversacionId, leidaEn])
+  @@index([entidadTipo, entidadId])
+  @@map("notificaciones")
+}
+
+// FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
+model ReporteUsuario {
+  id           Int      @id @default(autoincrement())
+  reportanteId Int      @map("reportante_id")
+  reportadoId  Int      @map("reportado_id")
+  motivo       String   @db.VarChar(50)
+  descripcion  String   @db.VarChar(1000)
+  estado       String   @default("PENDIENTE") @db.VarChar(20)
+  creadoEn     DateTime @default(now()) @map("creado_en")
+  actualizadoEn DateTime @updatedAt @map("actualizado_en")
+  reportante   Usuario  @relation("ReportesEnviados", fields: [reportanteId], references: [id], onDelete: Cascade)
+  reportado    Usuario  @relation("ReportesRecibidos", fields: [reportadoId], references: [id], onDelete: Cascade)
+  accionesModeracion AccionModeracion[]
+
+  @@index([reportanteId, creadoEn])
+  @@index([reportadoId, estado, creadoEn])
+  @@map("reportes_usuarios")
+}
+
+// FEATMUSIC_ADMIN_FASE2_MODERACION_V1
+model AccionModeracion {
+  id               Int            @id @default(autoincrement())
+  usuarioId        Int            @map("usuario_id")
+  adminId          Int            @map("admin_id")
+  reporteId        Int?           @map("reporte_id")
+  accion           String         @db.VarChar(30)
+  motivo           String         @db.VarChar(500)
+  suspendidoHasta  DateTime?      @map("suspendido_hasta")
+  creadoEn         DateTime       @default(now()) @map("creado_en")
+  usuario          Usuario        @relation("ModeracionUsuario", fields: [usuarioId], references: [id], onDelete: Cascade)
+  admin            Usuario        @relation("ModeracionAdmin", fields: [adminId], references: [id], onDelete: Restrict)
+  reporte          ReporteUsuario? @relation(fields: [reporteId], references: [id], onDelete: SetNull)
+
+  @@index([usuarioId, creadoEn])
+  @@index([adminId, creadoEn])
+  @@index([reporteId])
+  @@map("acciones_moderacion")
+}
+
+
+model SuscripcionMercadoPago {
+  id               Int       @id @default(autoincrement())
+  usuarioId        Int       @map("usuario_id")
+  mercadoPagoId    String?   @unique @map("mercadopago_id") @db.VarChar(100)
+  referencia       String    @unique @db.VarChar(160)
+  plan             String    @db.VarChar(20)
+  estado           String    @default("pending") @db.VarChar(30)
+  monto            Int
+  moneda           String    @default("COP") @db.VarChar(10)
+  payerEmail       String?   @map("payer_email") @db.VarChar(255)
+  checkoutUrl      String?   @map("checkout_url") @db.VarChar(1000)
+  ultimoPagoId     String?   @map("ultimo_pago_id") @db.VarChar(100)
+  ultimoPagoEstado String?   @map("ultimo_pago_estado") @db.VarChar(30)
+  // FEATMUSIC_GRACIA_RENOVACION_3_DIAS_V1
+  pagoFallidoEn    DateTime? @map("pago_fallido_en")
+  graciaHasta      DateTime? @map("gracia_hasta")
+  proximoCobroEn   DateTime? @map("proximo_cobro_en")
+  activadaEn        DateTime? @map("activada_en")
+  canceladaEn       DateTime? @map("cancelada_en")
+  beneficiosHasta   DateTime? @map("beneficios_hasta")
+  planProgramado    String?   @map("plan_programado") @db.VarChar(20)
+  montoProgramado   Int?      @map("monto_programado")
+  cambioPlanEn      DateTime? @map("cambio_plan_en")
+  creadoEn          DateTime  @default(now()) @map("creado_en")
+  actualizadoEn    DateTime  @updatedAt @map("actualizado_en")
+  usuario          Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, estado, actualizadoEn])
+  @@index([estado, graciaHasta])
+  @@map("suscripciones_mercadopago")
+}
+
+// FEATMUSIC_RATE_LIMIT_PASSWORDS_V1
+model LimiteSeguridad {
+  id              Int       @id @default(autoincrement())
+  alcance         String    @db.VarChar(50)
+  claveHash       String    @map("clave_hash") @db.Char(64)
+  intentos        Int       @default(0)
+  ventanaIniciaEn DateTime  @map("ventana_inicia_en")
+  bloqueadoHasta  DateTime? @map("bloqueado_hasta")
+  creadoEn        DateTime  @default(now()) @map("creado_en")
+  actualizadoEn   DateTime  @updatedAt @map("actualizado_en")
+
+  @@unique([alcance, claveHash])
+  @@index([bloqueadoHasta])
+  @@index([actualizadoEn])
+  @@map("limites_seguridad")
+}
+
+model RegistroPendiente {
+  id               Int      @id @default(autoincrement())
+  correo           String   @unique
+  passwordHash     String   @map("password_hash")
+  rolPrincipal     String   @map("rol_principal")
+  codigoHash       String   @map("codigo_hash")
+  codigoExpiraEn   DateTime @map("codigo_expira_en")
+  intentosCodigo   Int      @default(0) @map("intentos_codigo")
+  ultimoEnvioEn    DateTime @default(now()) @map("ultimo_envio_en")
+  aceptoTerminosEn DateTime @map("acepto_terminos_en")
+  creadoEn         DateTime @default(now()) @map("creado_en")
+  actualizadoEn    DateTime @updatedAt @map("actualizado_en")
+
+  @@map("registros_pendientes")
+}
+
+model RecuperacionPassword {
+  id             Int      @id @default(autoincrement())
+  correo         String   @unique
+  codigoHash     String   @map("codigo_hash")
+  codigoExpiraEn DateTime @map("codigo_expira_en")
+  intentosCodigo Int      @default(0) @map("intentos_codigo")
+  ultimoEnvioEn  DateTime @default(now()) @map("ultimo_envio_en")
+  creadoEn       DateTime @default(now()) @map("creado_en")
+  actualizadoEn  DateTime @updatedAt @map("actualizado_en")
+
+  @@map("recuperaciones_password")
+}

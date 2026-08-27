@@ -1,0 +1,5920 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+@supports (overflow: clip) {
+  html {
+    overflow-x: clip;
+  }
+}
+
+.home-scroll-section {
+  scroll-margin-top: 4.25rem;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+@media (min-width: 1280px) and (pointer: fine) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+}
+
+body {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@supports (overflow: clip) {
+  body {
+    overflow-x: clip;
+  }
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes badge-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gradient-drift {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes marquee-move {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-hint-travel {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.2rem);
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.98);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes card-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-55px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(55px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes section-title-enter {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+    filter: blur(9px);
+    letter-spacing: 0.015em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    letter-spacing: normal;
+  }
+}
+
+@keyframes waveform-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes icon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(2deg);
+  }
+}
+
+.hero-badge-enter {
+  opacity: 0;
+  animation: badge-enter 600ms 80ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-title-enter,
+.hero-body-enter,
+.hero-actions-enter {
+  opacity: 0;
+  animation: hero-enter 850ms 180ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-title-enter-delay {
+  animation-delay: 330ms;
+}
+
+.hero-body-enter {
+  animation-delay: 520ms;
+}
+
+.hero-actions-enter {
+  animation-delay: 680ms;
+}
+
+.animated-gradient-text {
+  background-size: 200% auto;
+  animation: gradient-drift 5s linear infinite;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-move 34s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.hero-scroll-hint {
+  z-index: 2;
+  color: rgba(244,244,244,0.72);
+}
+
+.hero-scroll-hint > span:first-child {
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 0.9rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+}
+
+.hero-scroll-track {
+  position: relative;
+  display: block;
+  width: 1.35rem;
+  height: 2.1rem;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.22);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.32);
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  width: 0.22rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: #f2d45c;
+  box-shadow: 0 0 12px rgba(238,199,43,0.7);
+  transform: translateX(-50%);
+  animation: scroll-hint-travel 1.8s ease-in-out infinite;
+}
+
+.marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgb(212 212 212);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dynamic-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.dynamic-card::after {
+  position: absolute;
+  inset: -60% auto -60% -45%;
+  width: 28%;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.12),
+    transparent
+  );
+  transform: rotate(18deg) translateX(-280%);
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dynamic-card:hover::after {
+  transform: rotate(18deg) translateX(750%);
+}
+
+.studio-visual img {
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.2s ease;
+}
+
+.studio-visual:hover img {
+  transform: scale(1.035);
+  filter: saturate(1.08) contrast(1.03);
+}
+
+.visual-icon {
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 1rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08),
+    0 12px 30px rgba(0,0,0,0.18);
+}
+
+.visual-icon-compact {
+  margin-bottom: 0;
+}
+
+.visual-icon-violet {
+  color: rgb(254 232 144);
+  background: linear-gradient(145deg, rgba(221,180,18,0.28), rgba(197,161,16,0.16));
+}
+
+.visual-icon-sky {
+  color: rgb(252 223 107);
+  background: linear-gradient(145deg, rgba(241,199,29,0.26), rgba(223,182,18,0.14));
+}
+
+.process-step-card {
+  min-height: 17.25rem;
+  color: #f9f9f9;
+  background: #101010;
+  border-color: #af8f0e;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 22px 60px rgba(0,0,0,0.28);
+  backdrop-filter: none;
+}
+
+.process-step-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(248,211,61,0.92),
+    transparent
+  );
+}
+
+.process-step-card:hover {
+  border-color: #e1b712;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 26px 70px rgba(0,0,0,0.36);
+}
+
+.process-step-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #a2840d;
+}
+
+.process-step-header .visual-icon {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #ffe064;
+  background: #1d1d1d;
+  border-color: #c9a410;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.process-step-header h3 {
+  font-size: 1.1rem;
+  font-weight: 650;
+  line-height: 1.35rem;
+  color: #fbfbfb;
+}
+
+.process-step-index {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.18em;
+  color: #efca37;
+}
+
+.process-step-copy {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding: 1.2rem 0 0.2rem;
+}
+
+.process-step-copy p {
+  font-size: 0.9rem;
+  line-height: 1.55rem;
+  color: #bbbbbb;
+}
+
+.visual-icon-rose {
+  color: rgb(252 229 133);
+  background: linear-gradient(145deg, rgba(244,209,67,0.25), rgba(208,169,17,0.13));
+}
+
+.visual-icon-emerald {
+  color: rgb(242 212 92);
+  background: linear-gradient(145deg, rgba(221,180,18,0.25), rgba(161,130,10,0.14));
+}
+
+.community-role-card {
+  min-height: 14.5rem;
+  color: #f8f8f8;
+  background: #101010;
+  border-color: #424242;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 22px 60px rgba(0,0,0,0.28);
+  backdrop-filter: none;
+}
+
+.community-role-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(238,199,43,0.92),
+    transparent
+  );
+}
+
+.community-role-card:hover {
+  border-color: #cba610;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 26px 70px rgba(0,0,0,0.36);
+}
+
+.community-role-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #333333;
+}
+
+.community-role-header .visual-icon {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #f1d04f;
+  background: #1c1c1c;
+  border-color: #af8f0e;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.community-role-header h3 {
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.35rem;
+  color: #fdfdfd;
+}
+
+.community-role-index {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.18em;
+  color: #ecc219;
+}
+
+.community-role-copy {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding: 1.2rem 0 0.25rem;
+}
+
+.community-role-copy p {
+  font-size: 0.9rem;
+  line-height: 1.55rem;
+  color: #b8b8b8;
+}
+
+.global-feature-card,
+.global-network-card {
+  color: #f7f7f7;
+  background: #0f0f0f;
+  border-color: #ae8e0e;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 20px 54px rgba(0,0,0,0.26);
+  backdrop-filter: none;
+}
+
+.global-feature-card::before,
+.global-network-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(251,220,99,0.92),
+    transparent
+  );
+}
+
+.global-feature-card:hover,
+.global-network-card:hover {
+  border-color: #ddb512;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 24px 64px rgba(0,0,0,0.34);
+}
+
+.global-feature-header {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.global-feature-header .visual-icon,
+.global-network-card .visual-icon {
+  flex: 0 0 auto;
+  width: 2.65rem;
+  height: 2.65rem;
+  color: #fae078;
+  background: #171717;
+  border-color: #c4a010;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.global-feature-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.3rem;
+  color: #fafafa;
+}
+
+.global-feature-index {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.18em;
+  color: #efcb3b;
+}
+
+.global-feature-copy {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding-top: 0.75rem;
+}
+
+.global-feature-copy p {
+  font-size: 0.86rem;
+  line-height: 1.4rem;
+  color: #b1b1b1;
+}
+
+.global-network-card .visual-icon + div {
+  min-width: 0;
+}
+
+.global-network-card p:last-child {
+  color: #b1b1b1;
+}
+
+.visual-icon-amber {
+  color: rgb(252 216 74);
+  background: linear-gradient(145deg, rgba(246,203,30,0.25), rgba(195,159,16,0.14));
+}
+
+.visual-icon-indigo {
+  color: rgb(241 210 84);
+  background: linear-gradient(145deg, rgba(223,182,18,0.28), rgba(196,160,16,0.14));
+}
+
+.steps-grid::before {
+  position: absolute;
+  top: 3.45rem;
+  right: 8%;
+  left: 8%;
+  z-index: -1;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(252,223,107,0.4), transparent);
+}
+
+.waveform-bar,
+.faq-wave-bar {
+  transform-origin: bottom;
+  animation: waveform-pulse 1.8s ease-in-out infinite;
+}
+
+.waveform-bar:nth-child(2n),
+.faq-wave-bar:nth-child(2n) {
+  animation-delay: -0.55s;
+}
+
+.waveform-bar:nth-child(3n),
+.faq-wave-bar:nth-child(3n) {
+  animation-delay: -1.05s;
+}
+
+.cta-icon-float {
+  animation: icon-float 3.2s ease-in-out infinite;
+}
+
+.faq-carousel-track {
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+}
+
+.faq-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.faq-answer-card,
+.faq-clarity-card {
+  color: #fafafa;
+  background: #1e1e1e;
+  border-color: #9b7f0d;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 22px 60px rgba(0,0,0,0.28);
+  backdrop-filter: none;
+}
+
+.faq-answer-card::before,
+.faq-clarity-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(238,198,39,0.95),
+    transparent
+  );
+}
+
+.faq-answer-content {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.faq-answer-header,
+.faq-clarity-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #9b7f0d;
+}
+
+.faq-question-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1rem;
+  letter-spacing: 0.16em;
+  color: #f1d254;
+  text-transform: uppercase;
+}
+
+.faq-question-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1rem;
+  letter-spacing: 0.12em;
+  color: #eabf13;
+}
+
+.faq-answer-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1.1rem;
+}
+
+.faq-answer-copy h3 {
+  max-width: 48rem;
+  font-size: 1.5rem;
+  font-weight: 650;
+  line-height: 1.85rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.faq-answer-copy p {
+  max-width: 48rem;
+  margin-top: 0.8rem;
+  font-size: 1rem;
+  line-height: 1.7rem;
+  color: #c4c4c4;
+}
+
+.faq-clarity-card .visual-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #f1d254;
+  background: #282828;
+  border-color: #a4860d;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+
+.faq-clarity-bars {
+  padding: 0 0.1rem;
+}
+
+.demo-wave-bar {
+  transform-origin: center;
+  transition:
+    height 280ms ease,
+    opacity 280ms ease;
+}
+
+.demo-audio-playing .demo-wave-bar {
+  animation: demo-wave-pulse 860ms ease-in-out infinite alternate;
+}
+
+@keyframes demo-wave-pulse {
+  from {
+    transform: scaleY(0.48);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.scroll-animations-ready .section-title-reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  filter: blur(9px);
+}
+
+.scroll-animations-ready .section-title-reveal.is-visible {
+  animation: section-title-enter 900ms cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
+}
+
+@media (max-width: 767px) {
+  html {
+    scroll-padding-top: 0;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+  }
+
+  .home-scroll-section {
+    height: 100dvh;
+    min-height: 100dvh;
+    scroll-margin-top: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .home-scroll-section:first-of-type {
+    height: 100dvh;
+    min-height: 100dvh;
+    scroll-margin-top: 0;
+  }
+
+  .home-footer {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .mobile-hero-content {
+    padding-top: 5.75rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .mobile-section-content {
+    max-height: 100%;
+    padding: calc(4.25rem + 1.25rem) 1rem 1.25rem;
+    overflow: hidden;
+  }
+
+  .mobile-section-heading > p:first-child,
+  .mobile-demo-intro > p:first-child,
+  .mobile-global-intro > p:first-child,
+  .mobile-faq-heading > div:first-child > p:first-child {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+  }
+
+  .mobile-section-heading h2,
+  .mobile-demo-intro h2,
+  .mobile-global-intro h2,
+  .mobile-faq-heading h2 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.65rem, 7.5vw, 2rem);
+    line-height: 1.05;
+  }
+
+  .mobile-section-heading > p:last-child,
+  .mobile-global-intro > p:nth-of-type(2) {
+    margin-top: 0.7rem;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-card-carousel {
+    display: flex;
+    gap: 0.75rem;
+    padding-right: 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-card-carousel::-webkit-scrollbar,
+  .mobile-demo-pages::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-card-carousel > article {
+    flex: 0 0 calc(100% - 1.75rem);
+    min-height: 0;
+    padding: 1.1rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .mobile-process-carousel,
+  .mobile-community-carousel,
+  .mobile-plans-carousel {
+    margin-top: 1rem;
+  }
+
+  .mobile-process-carousel > article {
+    min-height: 15.5rem;
+    padding: 1.2rem;
+  }
+
+  .mobile-process-carousel .process-step-header h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.3rem;
+  }
+
+  .mobile-process-carousel .process-step-copy {
+    padding-top: 1.05rem;
+  }
+
+  .mobile-process-carousel .process-step-copy p {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-community-carousel > article {
+    min-height: 15.5rem;
+    padding: 1.2rem;
+  }
+
+  .mobile-community-carousel .community-role-header h3 {
+    margin: 0;
+    font-size: 1.18rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-community-carousel .community-role-copy {
+    padding-top: 1.1rem;
+  }
+
+  .mobile-community-carousel .community-role-copy p {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  .mobile-plans-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .mobile-plans-content .mobile-section-heading {
+    flex: none;
+  }
+
+  .mobile-plans-carousel {
+    flex: 0 0 auto;
+    align-items: stretch;
+    height: clamp(22rem, calc(100dvh - 18rem), 29rem);
+    min-height: 0;
+    margin-top: 1.25rem;
+    margin-right: -1rem;
+    margin-left: -1rem;
+    padding: 0.35rem 2.5rem 0.55rem;
+    scroll-padding-inline: 2.5rem;
+  }
+
+  .mobile-plans-carousel > article {
+    flex-basis: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 1.35rem;
+    border-radius: 0;
+    scroll-snap-align: center;
+    opacity: 0.58;
+    filter: saturate(0.72);
+    transform: scale(0.94);
+    animation: none !important;
+    transition:
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 320ms ease,
+      filter 320ms ease,
+      box-shadow 420ms ease;
+    backdrop-filter: none;
+  }
+
+  .mobile-plans-carousel > article.is-active {
+    z-index: 2;
+    opacity: 1;
+    filter: saturate(1);
+    transform: scale(1);
+  }
+
+  .mobile-plans-carousel > article:nth-child(1),
+  .mobile-plans-carousel > article:nth-child(2),
+  .mobile-plans-carousel > article:nth-child(3) {
+    color: #f0f0f0;
+    background: #141414;
+    border-color: #3e3e3e;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.42);
+  }
+
+  .mobile-plan-card > span:first-child,
+  .mobile-plan-card::after {
+    display: none;
+  }
+
+  .mobile-plans-carousel > article::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    content: "";
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(237,195,29,0.92),
+      transparent
+    );
+    opacity: 0.65;
+  }
+
+  .mobile-plan-card > div:first-of-type {
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.8rem;
+    padding-bottom: 0;
+    text-align: center;
+    border-bottom: 0;
+    opacity: 0.92;
+  }
+
+  .mobile-plan-card .visual-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.45rem;
+    color: #eec82e;
+    background: #1d1d1d;
+    border-color: #ac8d0e;
+    box-shadow: none;
+  }
+
+  .mobile-plan-card > div:first-of-type p {
+    font-size: 0.72rem;
+    line-height: 1.05rem;
+    letter-spacing: 0.2em;
+    color: #eec82e;
+  }
+
+  .mobile-plan-main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 1.5rem 0 1.25rem;
+    text-align: center;
+  }
+
+  .mobile-plan-number {
+    font-size: clamp(4.25rem, 22vw, 5.6rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.075em;
+    color: #eec82e;
+  }
+
+  .mobile-plan-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mobile-plan-period {
+    margin-top: 0.45rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1rem;
+    letter-spacing: 0.14em;
+    color: #959595;
+    text-transform: uppercase;
+  }
+
+  .mobile-plan-main h3 {
+    margin-top: 1rem;
+    font-size: 1.45rem;
+    line-height: 1.7rem;
+  }
+
+  .mobile-plan-main p {
+    max-width: 17rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.4rem;
+    color: #c1c1c1;
+    opacity: 1;
+  }
+
+  .mobile-plan-features {
+    display: grid;
+    flex: none;
+    gap: 0.75rem;
+    padding: 1.1rem 0 0.25rem;
+    border-top: 1px solid #353535;
+  }
+
+  .mobile-plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    color: #e8e8e8;
+  }
+
+  .mobile-plan-features li > span {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 1.65rem;
+    height: 1.65rem;
+    border: 1px solid #b8960f;
+    border-radius: 999px;
+    color: #eec82e;
+    background: #1d1d1d;
+  }
+
+  .mobile-plan-features svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    stroke-width: 2.2;
+  }
+
+  .mobile-plan-desktop-copy {
+    display: none;
+  }
+
+  .mobile-plan-pagination,
+  .mobile-section-pagination {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    min-height: 1.75rem;
+    margin-top: 0.35rem;
+  }
+
+  .mobile-section-pagination {
+    --pagination-accent: #fcdf6b;
+    --pagination-muted: rgba(252,231,149,0.2);
+    --pagination-glow: rgba(248,211,61,0.34);
+  }
+
+  .mobile-section-pagination-rose {
+    --pagination-accent: #fbdc63;
+    --pagination-muted: rgba(252,229,133,0.2);
+    --pagination-glow: rgba(244,209,67,0.34);
+  }
+
+  .mobile-section-pagination-emerald {
+    --pagination-accent: #eec72b;
+    --pagination-muted: rgba(242,212,92,0.2);
+    --pagination-glow: rgba(221,180,18,0.34);
+  }
+
+  .mobile-plan-pagination button,
+  .mobile-section-pagination button {
+    position: relative;
+    width: 2.25rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    transition:
+      width 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 280ms ease;
+  }
+
+  .mobile-plan-pagination button::after,
+  .mobile-section-pagination button::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.7rem;
+    height: 0.7rem;
+    content: "";
+    border-radius: 999px;
+    background: rgba(253,225,115,0.2);
+    transform: translate(-50%, -50%);
+    transition:
+      width 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 280ms ease,
+      box-shadow 280ms ease;
+  }
+
+  .mobile-section-pagination button::after {
+    background: var(--pagination-muted);
+  }
+
+  .mobile-plan-pagination button.is-active,
+  .mobile-section-pagination button.is-active {
+    width: 3.25rem;
+  }
+
+  .mobile-plan-pagination button.is-active::after,
+  .mobile-section-pagination button.is-active::after {
+    width: 2.8rem;
+  }
+
+  .mobile-plan-pagination button.is-active::after {
+    background: #edc31d;
+    box-shadow: 0 0 18px rgba(237,195,29,0.34);
+  }
+
+  .mobile-section-pagination button.is-active::after {
+    background: var(--pagination-accent);
+    box-shadow: 0 0 18px var(--pagination-glow);
+  }
+
+  .mobile-demo-layout {
+    display: block;
+  }
+
+  .mobile-demo-intro > p:nth-of-type(2),
+  .mobile-demo-extras {
+    display: none;
+  }
+
+  .mobile-product-demo {
+    margin-top: 1rem;
+    border-radius: 1.35rem;
+  }
+
+  .mobile-product-demo > div:first-child {
+    padding: 0.7rem 1rem;
+  }
+
+  .mobile-demo-pages {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-demo-page {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    padding: 1rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .mobile-demo-idea > * + * {
+    margin-top: 0.7rem;
+  }
+
+  .mobile-demo-idea h3 {
+    margin-top: 0.25rem;
+    font-size: 1.2rem;
+  }
+
+  .mobile-demo-idea h3 + p {
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    line-height: 1.15rem;
+  }
+
+  .mobile-demo-idea .demo-wave-bar {
+    min-width: 1px;
+  }
+
+  .mobile-demo-idea > div:nth-last-child(2) {
+    padding: 0.75rem;
+  }
+
+  .mobile-demo-idea > div:last-child {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem;
+  }
+
+  .mobile-demo-idea > div:last-child > span {
+    padding-inline: 0.75rem;
+  }
+
+  .mobile-demo-proposals {
+    border-top: 0;
+    border-left: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .mobile-demo-proposals > p:nth-child(2),
+  .mobile-proposal-waveform {
+    display: none;
+  }
+
+  .mobile-demo-proposals > div {
+    margin-top: 0.7rem;
+  }
+
+  .mobile-demo-proposals article {
+    padding: 0.65rem;
+  }
+
+  .mobile-demo-proposals article + article {
+    margin-top: 0.5rem;
+  }
+
+  .mobile-demo-proposals article p:last-child {
+    margin-top: 0.25rem;
+  }
+
+  .mobile-global-layout {
+    display: block;
+  }
+
+  .mobile-global-route {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .mobile-global-route > p {
+    display: none;
+  }
+
+  .mobile-global-network {
+    display: none;
+  }
+
+  .mobile-global-cards {
+    margin-top: 0.75rem;
+  }
+
+  .mobile-global-cards > article {
+    min-height: 9.75rem;
+    padding: 1.15rem;
+  }
+
+  .mobile-global-cards .global-feature-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.25rem;
+  }
+
+  .mobile-global-cards .global-feature-copy {
+    padding-top: 0.7rem;
+  }
+
+  .mobile-global-cards .global-feature-copy p {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+  }
+
+  .mobile-faq-decoration {
+    display: none;
+  }
+
+  .mobile-faq-heading {
+    gap: 0;
+  }
+
+  [data-faq-carousel] {
+    margin-top: 1rem;
+  }
+
+  .faq-carousel-track > article {
+    min-height: 13.75rem;
+    padding: 1rem;
+    border-radius: 0;
+  }
+
+  .faq-carousel-track .faq-answer-copy {
+    padding-top: 0.85rem;
+  }
+
+  .faq-carousel-track .faq-answer-copy h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+  }
+
+  .faq-carousel-track .faq-answer-copy p {
+    margin-top: 0.65rem;
+    font-size: 0.86rem;
+    line-height: 1.35rem;
+  }
+
+  [data-faq-carousel] > div:last-child {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+  }
+
+  [data-faq-carousel] > div:last-child > div {
+    justify-content: flex-start;
+  }
+
+  [data-faq-carousel] > div:last-child > div:last-child {
+    gap: 0.5rem;
+  }
+
+  [data-faq-carousel] > div:last-child > div:last-child button[aria-label] {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .mobile-cta-content > div:first-child {
+    margin-bottom: 1.25rem;
+  }
+
+  .mobile-cta-content {
+    padding-top: 4.25rem;
+  }
+
+  .mobile-cta-content h2 {
+    margin-top: 1rem;
+    font-size: 2.15rem;
+    line-height: 1.05;
+  }
+
+  .mobile-cta-content h2 + p {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.45rem;
+  }
+
+  .mobile-cta-content > a {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 740px) {
+  .mobile-section-content {
+    padding-top: calc(4.25rem + 0.85rem);
+    padding-bottom: 0.85rem;
+  }
+
+  .mobile-hero-content {
+    padding-top: 4.75rem;
+    padding-bottom: 0.75rem;
+    transform: translateY(-1.8rem);
+  }
+
+  .mobile-process-carousel > article,
+  .mobile-community-carousel > article,
+  .mobile-plans-carousel > article {
+    min-height: 12.25rem;
+  }
+
+  .mobile-plans-carousel > article {
+    padding: 1rem;
+  }
+
+  .mobile-plan-card .visual-icon {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .mobile-plan-main {
+    padding: 0.65rem 0;
+  }
+
+  .mobile-plan-number {
+    font-size: 3.5rem;
+  }
+
+  .mobile-plan-main h3 {
+    margin-top: 0.45rem;
+    font-size: 1.15rem;
+    line-height: 1.3rem;
+  }
+
+  .mobile-plan-main p {
+    display: none;
+  }
+
+  .mobile-plan-features {
+    gap: 0.4rem;
+    padding-top: 0.65rem;
+  }
+
+  .mobile-plan-features li {
+    gap: 0.55rem;
+    font-size: 0.76rem;
+    line-height: 1rem;
+  }
+
+  .mobile-plan-features li > span {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .mobile-section-heading > p:last-child,
+  .mobile-global-intro > p:nth-of-type(2) {
+    display: none;
+  }
+
+  .mobile-demo-idea h3 + p,
+  .mobile-global-route {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  #planes .mobile-plans-content {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  #planes .mobile-plans-carousel {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  #planes .mobile-plan-card {
+    min-height: 18.5rem;
+    padding: 1.25rem;
+    color: #f0f0f0;
+    background: #141414;
+    border-color: #3e3e3e;
+    border-radius: 0;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.025),
+      0 22px 60px rgba(0,0,0,0.28);
+    backdrop-filter: none;
+  }
+
+  #planes .mobile-plan-card:hover {
+    border-color: #cca611;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 26px 70px rgba(0,0,0,0.36);
+  }
+
+  #planes .mobile-plan-card > span:first-child,
+  #planes .mobile-plan-card::after {
+    display: none;
+  }
+
+  #planes .mobile-plan-card::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    content: "";
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(237,195,29,0.92),
+      transparent
+    );
+  }
+
+  #planes .mobile-plan-card > div:first-of-type {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #353535;
+  }
+
+  #planes .mobile-plan-card .visual-icon {
+    width: 2.6rem;
+    height: 2.6rem;
+    color: #eec82e;
+    background: #1d1d1d;
+    border-color: #ac8d0e;
+    border-radius: 0.4rem;
+    box-shadow: none;
+  }
+
+  #planes .mobile-plan-card > div:first-of-type p {
+    margin: 0;
+    font-size: 0.68rem;
+    line-height: 1rem;
+    letter-spacing: 0.17em;
+    color: #eec82e;
+  }
+
+  #planes .mobile-plan-main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 1rem 0 0.85rem;
+    text-align: center;
+  }
+
+  #planes .mobile-plan-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #planes .mobile-plan-number {
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    color: #eec82e;
+  }
+
+  #planes .mobile-plan-period {
+    margin-top: 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 0.9rem;
+    letter-spacing: 0.13em;
+    color: #959595;
+    text-transform: uppercase;
+  }
+
+  #planes .mobile-plan-main h3 {
+    margin-top: 0.65rem;
+    font-size: 1.15rem;
+    line-height: 1.35rem;
+    color: #fdfdfd;
+  }
+
+  #planes .mobile-plan-main p {
+    max-width: 19rem;
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    line-height: 1.15rem;
+    color: #c1c1c1;
+  }
+
+  #planes .mobile-plan-features {
+    display: grid;
+    gap: 0.45rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #353535;
+  }
+
+  #planes .mobile-plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.05rem;
+    color: #e8e8e8;
+  }
+
+  #planes .mobile-plan-features li > span {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    color: #eec82e;
+    background: #1d1d1d;
+    border: 1px solid #b8960f;
+    border-radius: 999px;
+  }
+
+  #planes .mobile-plan-features svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    stroke-width: 2.2;
+  }
+
+  #planes .mobile-plan-desktop-copy,
+  #planes .mobile-plan-pagination {
+    display: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .reveal-on-scroll {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 32%;
+  }
+
+  .dynamic-card.reveal-on-scroll {
+    animation-name: card-reveal-up;
+  }
+
+  .reveal-delay-1 {
+    animation-range: entry 10% cover 37%;
+  }
+
+  .reveal-delay-2 {
+    animation-range: entry 15% cover 42%;
+  }
+
+  .reveal-on-scroll-left {
+    animation: reveal-left linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 34%;
+  }
+
+  .reveal-on-scroll-right {
+    animation: reveal-right linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 34%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-badge-enter,
+  .hero-title-enter,
+  .hero-body-enter,
+  .hero-actions-enter,
+  .hero-scroll-indicator,
+  .animated-gradient-text,
+  .marquee-track,
+  .reveal-on-scroll,
+  .reveal-on-scroll-left,
+  .reveal-on-scroll-right,
+  .section-title-reveal,
+  .waveform-bar,
+  .faq-wave-bar,
+  .demo-wave-bar,
+  .cta-icon-float {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .dynamic-card::after {
+    display: none;
+  }
+}
+
+/* FEATMUSIC_TEMA_CLARO_V1_INICIO */
+
+/*
+  Tema claro de FeatMusic.
+  Solo se aplica dentro de html:not(.dark) .featmusic-app-light para conservar oscura la
+  página pública y mantener la identidad musical de la marca.
+*/
+html:not(.dark) .featmusic-app-light {
+  --fm-app-bg: #ffffff;
+  --fm-card: #ffffff;
+  --fm-card-soft: rgba(0,0,0,0.025);
+  --fm-card-emerald: rgba(255,212,0,0.08);
+  --fm-text: #000000;
+  --fm-text-soft: rgba(0,0,0,0.68);
+  --fm-text-muted: rgba(0,0,0,0.48);
+  --fm-border: rgba(0,0,0,0.10);
+  --fm-emerald: #ffd400;
+  --fm-emerald-deep: #ffd400;
+  --fm-sky: #ffd400;
+  --fm-night: #000000;
+  --fm-success: #ffd400;
+  --fm-warning: #ffd400;
+  --fm-danger: #ffd400;
+
+  color-scheme: light;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255,212,0,0.09), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(255,212,0,0.07), transparent 24rem),
+    var(--fm-app-bg) !important;
+  color: var(--fm-text) !important;
+}
+
+/* Cabeceras y navegación: conservan el carácter oscuro de FeatMusic. */
+html:not(.dark) .featmusic-app-light > header,
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome {
+  color-scheme: dark;
+  background: rgba(24,24,24,0.97) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 28px rgba(23,23,23,0.16) !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="text-white"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="text-zinc-200"],
+html:not(.dark) .featmusic-app-light > header [class~="text-zinc-300"],
+html:not(.dark) .featmusic-app-light > header [class~="text-zinc-400"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-200"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-300"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-400"] {
+  color: #d4d4d4 !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="text-zinc-500"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-zinc-500"] {
+  color: #a1a1a1 !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-400"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-400"] {
+  color: #f2d45c !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="text-yellow-300"] {
+  color: #fbe487 !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="border-white/10"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="border-white/10"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="border-white/15"],
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="border-white/20"] {
+  border-color: rgba(255,255,255,0.14) !important;
+}
+
+/* Superficies principales y tarjetas. */
+html:not(.dark) .featmusic-app-light [class~="bg-black"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/20"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/25"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/30"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/35"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/40"],
+html:not(.dark) .featmusic-app-light [class~="bg-black/45"],
+html:not(.dark) .featmusic-app-light [class~="bg-zinc-950"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#0f0f0f]/95"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#0f0f0f]/98"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#0f0f0f]/90"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#111111]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#111111]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#131313]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#131313]/95"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#141414]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[#141414]/95"] {
+  background-color: rgba(255,255,255,0.96) !important;
+  box-shadow: 0 12px 32px rgba(23,23,23,0.07) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-[#0e0e0e]/92"] {
+  background-color: rgba(246,246,246,0.94) !important;
+  box-shadow: 0 8px 22px rgba(23,23,23,0.05) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-white/5"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.012]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.018]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.02]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.025]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.03]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.035]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.04]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.045]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.05]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.055]"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/[0.06]"] {
+  background-color: #fafafa !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-white/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-white/15"] {
+  background-color: #f2f2f2 !important;
+}
+
+/* Gradientes oscuros de cards convertidos en superficies claras con profundidad. */
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(155deg,rgba(221,180,18,0.16),rgba(19,19,19,0.96)_35%,rgba(7,7,7,0.98))]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.2)_45%,rgba(221,180,18,0.035))]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_48%,rgba(221,180,18,0.035))]"],
+html:not(.dark) .featmusic-app-light [class~="bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.22)_50%,rgba(221,180,18,0.045))]"] {
+  background: linear-gradient(145deg, #ffffff 0%, #fdfdfd 58%, #f9f9f9 100%) !important;
+  box-shadow: 0 18px 48px rgba(23,23,23,0.09) !important;
+}
+
+/* Bordes claros y separación visual. */
+html:not(.dark) .featmusic-app-light [class~="border-white/5"],
+html:not(.dark) .featmusic-app-light [class~="border-white/10"],
+html:not(.dark) .featmusic-app-light [class~="border-white/12"],
+html:not(.dark) .featmusic-app-light [class~="border-white/15"],
+html:not(.dark) .featmusic-app-light [class~="border-white/20"],
+html:not(.dark) .featmusic-app-light [class~="border-white/[0.05]"],
+html:not(.dark) .featmusic-app-light [class~="border-white/[0.06]"],
+html:not(.dark) .featmusic-app-light [class~="border-white/[0.07]"],
+html:not(.dark) .featmusic-app-light [class~="border-white/[0.08]"],
+html:not(.dark) .featmusic-app-light [class~="border-white/[0.09]"],
+html:not(.dark) .featmusic-app-light [class~="border-zinc-800"] {
+  border-color: var(--fm-border) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="divide-white/10"] > :not(:last-child),
+html:not(.dark) .featmusic-app-light [class~="divide-white/[0.06]"] > :not(:last-child),
+html:not(.dark) .featmusic-app-light [class~="divide-white/[0.07]"] > :not(:last-child) {
+  border-color: var(--fm-border) !important;
+}
+
+/* Jerarquía tipográfica de alto contraste. */
+html:not(.dark) .featmusic-app-light [class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="text-zinc-100"] {
+  color: var(--fm-text) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-zinc-200"],
+html:not(.dark) .featmusic-app-light [class~="text-zinc-300"],
+html:not(.dark) .featmusic-app-light [class~="text-zinc-300/80"] {
+  color: #3f3f3f !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-zinc-400"],
+html:not(.dark) .featmusic-app-light [class~="text-zinc-500"] {
+  color: var(--fm-text-soft) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-zinc-600"],
+html:not(.dark) .featmusic-app-light [class~="text-zinc-700"] {
+  color: var(--fm-text-muted) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100/70"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100/80"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100/90"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200/55"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200/85"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/70"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/80"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-400"] {
+  color: var(--fm-emerald-deep) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200/60"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/80"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-400"] {
+  color: #e4ba13 !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"] {
+  color: var(--fm-success) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-yellow-100"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300/70"] {
+  color: #d2a804 !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-yellow-200"],
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"] {
+  color: var(--fm-warning) !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="text-yellow-300"] {
+  color: #b49106 !important;
+}
+
+/* Botones sólidos, avatares y mensajes enviados mantienen texto blanco. */
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-600"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-400"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-400"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-400"][class~="text-white"],
+html:not(.dark) .featmusic-app-light [class~="from-yellow-700"],
+html:not(.dark) .featmusic-app-light [class~="to-yellow-600"] {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500"] [class~="text-yellow-100/70"] {
+  color: rgba(255,255,255,0.72) !important;
+}
+
+/* Campos y controles. */
+html:not(.dark) .featmusic-app-light input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html:not(.dark) .featmusic-app-light textarea,
+html:not(.dark) .featmusic-app-light select {
+  background-color: #ffffff;
+  border-color: var(--fm-border);
+  color: var(--fm-text);
+}
+
+html:not(.dark) .featmusic-app-light input::placeholder,
+html:not(.dark) .featmusic-app-light textarea::placeholder {
+  color: #a1a1a1 !important;
+}
+
+html:not(.dark) .featmusic-app-light select option {
+  background: #ffffff;
+  color: var(--fm-text);
+}
+
+html:not(.dark) .featmusic-app-light input[type="range"] {
+  accent-color: var(--fm-emerald);
+}
+
+html:not(.dark) .featmusic-app-light input[type="checkbox"],
+html:not(.dark) .featmusic-app-light input[type="radio"] {
+  accent-color: var(--fm-emerald);
+}
+
+/* Estados y acentos con fondos suaves. */
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/5"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/12"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/20"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.035]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.045]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.05]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.06]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.065]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.07]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.08]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.09]"] {
+  background-color: #f0f0f0 !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.06]"] {
+  background-color: #efefef !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.07]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.08]"] {
+  background-color: #f9f9f9 !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"] {
+  background-color: #f8f8f8 !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/10"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/15"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.04]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.05]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.055]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.06]"],
+html:not(.dark) .featmusic-app-light [class~="bg-yellow-500/[0.07]"] {
+  background-color: #f5f5f5 !important;
+}
+
+/* Hover más limpio sobre superficies claras. */
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/5"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/10"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.012]"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.018]"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.025]"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.035]"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:bg-white/[0.08]"]:hover {
+  background-color: #f9f9f9 !important;
+}
+
+html:not(.dark) .featmusic-app-light [class~="hover:text-white"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:text-zinc-200"]:hover,
+html:not(.dark) .featmusic-app-light [class~="hover:text-zinc-300"]:hover {
+  color: var(--fm-emerald-deep) !important;
+}
+
+html:not(.dark) .featmusic-app-light > header [class~="hover:text-white"]:hover,
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="hover:text-white"]:hover,
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome [class~="hover:text-zinc-200"]:hover {
+  color: #ffffff !important;
+}
+
+/* Modales claros conservando el velo oscuro de fondo. */
+html:not(.dark) .featmusic-app-light [role="dialog"] {
+  color-scheme: light;
+}
+
+html:not(.dark) .featmusic-app-light [role="dialog"]:not([class~="bg-transparent"]) {
+  border-color: var(--fm-border) !important;
+}
+
+/* Sombras y scrollbars suaves. */
+html:not(.dark) .featmusic-app-light [class~="shadow-2xl"]:not([role="dialog"]),
+html:not(.dark) .featmusic-app-light [class~="shadow-xl"]:not([role="dialog"]) {
+  --tw-shadow-color: rgba(23,23,23,0.1) !important;
+}
+
+html:not(.dark) .featmusic-app-light * {
+  scrollbar-color: #d4d4d4 transparent;
+}
+
+@media (max-width: 640px) {
+  html:not(.dark) .featmusic-app-light {
+    background:
+      radial-gradient(circle at 50% -5%, rgba(201,162,7,0.08), transparent 18rem),
+      var(--fm-app-bg) !important;
+  }
+}
+
+/* FEATMUSIC_TEMA_CLARO_V1_FIN */
+
+/* FEATMUSIC_TEMA_ESMERALDA_V1 */
+
+/* FEATMUSIC_INICIO_REELS_V2_START */
+@keyframes feat-reel-orbit {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  35% {
+    transform: translate3d(2.5rem, -1.25rem, 0) scale(1.12);
+  }
+  70% {
+    transform: translate3d(-1.5rem, 1.5rem, 0) scale(0.94);
+  }
+}
+
+@keyframes feat-reel-grid-drift {
+  to {
+    transform: translate3d(0, 2.75rem, 0);
+  }
+}
+
+@keyframes feat-reel-disc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes feat-reel-ring-breathe {
+  0%,
+  100% {
+    opacity: 0.32;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes feat-reel-wave-playing {
+  0%,
+  100% {
+    transform: scaleY(0.34);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes feat-reel-swipe {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(-0.15rem);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(0.35rem);
+  }
+}
+
+.feat-reel-card {
+  isolation: isolate;
+  --reel-cover: none;
+}
+
+.feat-reel-cover-bg,
+.feat-reel-shade,
+.feat-reel-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.feat-reel-cover-bg {
+  z-index: -5;
+  background-image: var(--reel-cover);
+  background-position: center;
+  background-size: cover;
+  opacity: 0.16;
+  filter: blur(28px) saturate(1.18) contrast(1.05);
+  transform: scale(1.18);
+  transition: opacity 650ms ease, transform 6s ease;
+}
+
+.feat-reel-card[data-playing="true"] .feat-reel-cover-bg {
+  opacity: 0.24;
+  transform: scale(1.24);
+}
+
+.feat-reel-shade {
+  z-index: -4;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(238,199,43,0.19), transparent 31%),
+    radial-gradient(circle at 16% 84%, rgba(201,162,7,0.16), transparent 34%),
+    linear-gradient(180deg, rgba(8,8,8,0.46), rgba(6,6,6,0.76) 64%, rgba(3,3,3,0.96));
+}
+
+.feat-reel-grid {
+  z-index: -3;
+  width: 110%;
+  height: calc(100% + 3rem);
+  left: -5%;
+  background-image:
+    linear-gradient(rgba(242,212,92,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242,212,92,0.035) 1px, transparent 1px);
+  background-size: 2.75rem 2.75rem;
+  opacity: 0.45;
+  mask-image: linear-gradient(to bottom, transparent, black 24%, black 72%, transparent);
+  animation: feat-reel-grid-drift 14s linear infinite;
+}
+
+.feat-reel-orb {
+  position: absolute;
+  z-index: -2;
+  display: block;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(42px);
+  opacity: 0.38;
+  will-change: transform;
+}
+
+.feat-reel-orb-one {
+  top: 18%;
+  left: 8%;
+  width: 9rem;
+  height: 9rem;
+  background: rgba(221,180,18,0.48);
+  animation: feat-reel-orbit 9s ease-in-out infinite;
+}
+
+.feat-reel-orb-two {
+  top: 34%;
+  right: 4%;
+  width: 11rem;
+  height: 11rem;
+  background: rgba(161,130,10,0.42);
+  animation: feat-reel-orbit 11s -3.5s ease-in-out infinite reverse;
+}
+
+.feat-reel-orb-three {
+  bottom: 12%;
+  left: 36%;
+  width: 8rem;
+  height: 8rem;
+  background: rgba(238,198,39,0.24);
+  animation: feat-reel-orbit 10s -5s ease-in-out infinite;
+}
+
+.feat-reel-card[data-playing="true"] .feat-reel-orb {
+  opacity: 0.68;
+  filter: blur(34px);
+  animation-duration: 5.4s;
+}
+
+.feat-reel-player {
+  display: flex;
+  width: min(100%, 25rem);
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feat-reel-disc {
+  position: relative;
+  display: grid;
+  width: clamp(9.25rem, 29vh, 14.75rem);
+  height: clamp(9.25rem, 29vh, 14.75rem);
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.feat-reel-disc:focus-visible {
+  outline: 2px solid rgba(242,212,92,0.9);
+  outline-offset: 0.45rem;
+}
+
+.feat-reel-disc::before,
+.feat-reel-disc::after {
+  position: absolute;
+  content: "";
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.feat-reel-disc::before {
+  inset: -0.6rem;
+  z-index: -1;
+  background: conic-gradient(
+    from 45deg,
+    transparent 0 12%,
+    rgba(238,199,43,0.88) 22%,
+    rgba(245,223,135,0.2) 34%,
+    transparent 48% 64%,
+    rgba(221,180,18,0.75) 76%,
+    transparent 90%
+  );
+  filter: blur(0.3px);
+  opacity: 0.48;
+}
+
+.feat-reel-disc::after {
+  inset: -1.65rem;
+  z-index: -2;
+  border: 1px solid rgba(242,212,92,0.18);
+  box-shadow:
+    0 0 2.5rem rgba(221,180,18,0.2),
+    inset 0 0 2rem rgba(221,180,18,0.08);
+  animation: feat-reel-ring-breathe 3.2s ease-in-out infinite;
+}
+
+.feat-reel-player[data-playing="true"] .feat-reel-disc::before {
+  opacity: 1;
+  animation: feat-reel-disc-spin 4.8s linear infinite;
+}
+
+.feat-reel-player[data-playing="true"] .feat-reel-disc::after {
+  border-color: rgba(242,212,92,0.42);
+  box-shadow:
+    0 0 3.6rem rgba(221,180,18,0.36),
+    inset 0 0 2.8rem rgba(221,180,18,0.12);
+  animation-duration: 1.55s;
+}
+
+.feat-reel-disc-glow {
+  position: absolute;
+  inset: 8%;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(238,199,43,0.3), transparent 68%);
+  filter: blur(1rem);
+  opacity: 0.65;
+  transition: opacity 300ms ease;
+}
+
+.feat-reel-player[data-playing="true"] .feat-reel-disc-glow {
+  opacity: 1;
+}
+
+.feat-reel-disc-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 38% 30%, rgba(242,212,92,0.28), transparent 38%),
+    linear-gradient(145deg, #313131, #0e0e0e 70%);
+  box-shadow:
+    inset 0 0 0 0.45rem rgba(0,0,0,0.18),
+    0 1.4rem 4rem rgba(0,0,0,0.48);
+}
+
+.feat-reel-disc-cover::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 42%, rgba(0,0,0,0.28));
+  pointer-events: none;
+}
+
+.feat-reel-disc-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(1.06) brightness(0.72);
+  transform: scale(1.03);
+  transition: transform 6s ease, filter 500ms ease;
+}
+
+.feat-reel-player[data-playing="true"] .feat-reel-disc-cover img {
+  filter: saturate(1.08) contrast(1.08) brightness(0.82);
+  transform: scale(1.12);
+}
+
+.feat-reel-disc-initials {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.4rem, 9vw, 4.5rem);
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  color: rgba(240,240,240,0.9);
+}
+
+.feat-reel-disc-control {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  width: 4.25rem;
+  height: 4.25rem;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 999px;
+  background: rgba(9,9,9,0.68);
+  box-shadow:
+    0 0 0 0.45rem rgba(255,212,0,0.11),
+    0 0 2.4rem rgba(221,180,18,0.38);
+  backdrop-filter: blur(14px);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.feat-reel-disc:active .feat-reel-disc-control {
+  transform: scale(0.92);
+}
+
+.feat-reel-player[data-playing="true"] .feat-reel-disc-control {
+  background: rgba(201,162,7,0.7);
+}
+
+.feat-reel-wave-shell {
+  position: relative;
+  width: 100%;
+  height: 3.25rem;
+  margin-top: 1.35rem;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 1rem;
+  background:
+    linear-gradient(90deg, rgba(221,180,18,0.12) var(--reel-progress), rgba(0,0,0,0.24) var(--reel-progress)),
+    rgba(0,0,0,0.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(16px);
+}
+
+.feat-reel-wave {
+  position: absolute;
+  inset: 0.65rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.feat-reel-wave span {
+  width: 100%;
+  height: var(--bar-height);
+  min-height: 0.2rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.22);
+  transform: scaleY(0.56);
+  transform-origin: center;
+  transition: background 180ms ease, opacity 180ms ease;
+}
+
+.feat-reel-wave span.is-progress {
+  background: linear-gradient(to top, #ddb412, #f5df87);
+  box-shadow: 0 0 0.5rem rgba(238,199,43,0.32);
+}
+
+.feat-reel-player[data-playing="true"] .feat-reel-wave span {
+  animation: feat-reel-wave-playing 880ms var(--bar-delay) ease-in-out infinite;
+}
+
+.feat-reel-seek {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.feat-reel-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid rgba(242,212,92,0.22);
+  border-radius: 999px;
+  color: rgba(240,240,240,0.92);
+  background: rgba(221,180,18,0.1);
+  font-size: 0.625rem;
+  font-weight: 900;
+  line-height: 1rem;
+  backdrop-filter: blur(12px);
+}
+
+.feat-reel-chip-muted {
+  border-color: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.52);
+  background: rgba(0,0,0,0.2);
+}
+
+.feat-reel-details[open] > summary {
+  border-color: rgba(242,212,92,0.36);
+  color: rgb(240 240 240);
+  background: rgba(221,180,18,0.14);
+}
+
+.feat-reel-proposal > div {
+  height: 100%;
+}
+
+.feat-reel-proposal > div > button,
+.feat-reel-proposal > div > a {
+  min-height: 100%;
+  border-radius: 0.75rem;
+}
+
+.feat-reel-swipe-arrow {
+  animation: feat-reel-swipe 1.45s ease-in-out infinite;
+}
+
+@media (max-height: 720px) {
+  .feat-reel-disc {
+    width: clamp(7.8rem, 24vh, 10.75rem);
+    height: clamp(7.8rem, 24vh, 10.75rem);
+  }
+
+  .feat-reel-disc-control {
+    width: 3.7rem;
+    height: 3.7rem;
+  }
+
+  .feat-reel-wave-shell {
+    height: 2.8rem;
+    margin-top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feat-reel-grid,
+  .feat-reel-orb,
+  .feat-reel-disc::before,
+  .feat-reel-disc::after,
+  .feat-reel-wave span,
+  .feat-reel-swipe-arrow {
+    animation: none !important;
+  }
+
+  .feat-reel-cover-bg,
+  .feat-reel-disc-cover img {
+    transition: none !important;
+  }
+}
+/* FEATMUSIC_INICIO_REELS_V2_END */
+
+/* FEATMUSIC_SOLID_BLACK_CHROME_V1_START */
+/*
+  Mantiene el banner y el menú móvil en negro puro incluso dentro del tema
+  claro. Esta regla se declara al final para prevalecer sobre las conversiones
+  globales de clases bg-black a superficies blancas.
+*/
+.featmusic-app-light .featmusic-solid-black-chrome {
+  color-scheme: dark;
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.featmusic-app-light .featmusic-solid-black-chrome.featmusic-dark-chrome {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.featmusic-app-light .featmusic-solid-black-chrome .featmusic-logout-plain {
+  color: #ffffff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.featmusic-app-light .featmusic-solid-black-chrome .featmusic-logout-plain:hover,
+.featmusic-app-light .featmusic-solid-black-chrome .featmusic-logout-plain:focus-visible {
+  color: #ffffff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+/* FEATMUSIC_SOLID_BLACK_CHROME_V1_END */
+
+/* FEATMUSIC_REEL_TABS_OVERLAY_V1_START */
+/*
+  Integra las pestañas del inicio directamente sobre el fondo del reel.
+  Estas reglas prevalecen sobre las conversiones del tema claro para que
+  la zona no vuelva a mostrarse blanca.
+*/
+.feat-reel-tabs,
+.featmusic-app-light .feat-reel-tabs {
+  color-scheme: dark;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.feat-reel-tab,
+.featmusic-app-light .feat-reel-tab {
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: rgba(255,255,255,0.66) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.72);
+}
+
+.feat-reel-tab:hover,
+.feat-reel-tab:focus-visible,
+.featmusic-app-light .feat-reel-tab:hover,
+.featmusic-app-light .feat-reel-tab:focus-visible {
+  color: rgba(255,255,255,0.9) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: none;
+}
+
+.feat-reel-tab[aria-selected="true"],
+.featmusic-app-light .feat-reel-tab[aria-selected="true"] {
+  color: #ffffff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  font-weight: 900 !important;
+}
+
+.feat-reel-position,
+.featmusic-app-light .feat-reel-position {
+  color: rgba(255,255,255,0.48) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-weight: 600;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.7);
+}
+/* FEATMUSIC_REEL_TABS_OVERLAY_V1_END */
+
+/* FEATMUSIC_REEL_FINAL_POLISH_V1_START */
+/*
+  Mantiene el título de cada idea en blanco puro y permite que el fondo del
+  reel continúe detrás del menú móvil. El contenido conserva un espacio
+  seguro calculado con la altura real del menú y su botón central elevado.
+*/
+.feat-reel-title,
+.featmusic-app-light .feat-reel-title {
+  color: #ffffff !important;
+}
+
+.feat-reel-content {
+  padding-bottom: calc(
+    var(
+        --featmusic-menu-movil-altura,
+        calc(4.75rem + env(safe-area-inset-bottom))
+      ) + 0.35rem
+  ) !important;
+}
+
+@media (min-width: 1024px) {
+  .feat-reel-content {
+    padding-bottom: 1.25rem !important;
+  }
+}
+/* FEATMUSIC_REEL_FINAL_POLISH_V1_END */
+
+/* FEATMUSIC_REEL_LINEAR_PLAYER_V2_START */
+/*
+  Reproductor del inicio con control por toque sobre el reel. Los tiempos
+  permanecen ocultos y solo aparecen como una burbuja translúcida mientras
+  el usuario desplaza manualmente la barra.
+*/
+.feat-reel-linear-player {
+  --reel-progress: 0%;
+  display: grid;
+  width: min(100%, 34rem);
+  grid-template-columns: 2.55rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  color: #ffffff;
+}
+
+.feat-reel-linear-toggle,
+.featmusic-app-light .feat-reel-linear-toggle {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  flex-shrink: 0;
+  border: 0 !important;
+  border-radius: 999px;
+  color: #ffffff !important;
+  background: rgba(201,162,7,0.82) !important;
+  box-shadow: 0 0 1.4rem rgba(221,180,18,0.28);
+  cursor: pointer;
+  outline: none;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.feat-reel-linear-toggle:hover,
+.feat-reel-linear-toggle:focus-visible,
+.featmusic-app-light .feat-reel-linear-toggle:hover,
+.featmusic-app-light .feat-reel-linear-toggle:focus-visible {
+  color: #ffffff !important;
+  background: rgba(221,180,18,0.96) !important;
+  box-shadow: 0 0 1.8rem rgba(238,199,43,0.38);
+}
+
+.feat-reel-linear-toggle:focus-visible {
+  outline: 2px solid rgba(245,223,135,0.92);
+  outline-offset: 0.22rem;
+}
+
+.feat-reel-linear-toggle:active {
+  transform: scale(0.92);
+}
+
+.feat-reel-linear-track-shell {
+  position: relative;
+  width: 100%;
+  height: 2.5rem;
+  min-width: 0;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.feat-reel-linear-track {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 0.18rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.24);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  transform: translateY(-50%);
+}
+
+.feat-reel-linear-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--reel-progress);
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ddb412, #f2d45c);
+  box-shadow: 0 0 0.7rem rgba(238,199,43,0.46);
+}
+
+.feat-reel-linear-thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--reel-progress);
+  width: 0.68rem;
+  height: 0.68rem;
+  border: 2px solid rgba(249,249,249,0.98);
+  border-radius: 999px;
+  background: #ddb412;
+  box-shadow:
+    0 0 0 0.18rem rgba(221,180,18,0.2),
+    0 0 1rem rgba(238,199,43,0.62);
+  transform: translate(-50%, -50%);
+  transition:
+    width 140ms ease,
+    height 140ms ease,
+    box-shadow 180ms ease;
+  pointer-events: none;
+}
+
+.feat-reel-linear-player[data-playing="true"] .feat-reel-linear-thumb {
+  box-shadow:
+    0 0 0 0.24rem rgba(221,180,18,0.24),
+    0 0 1.25rem rgba(242,212,92,0.72);
+}
+
+.feat-reel-linear-player[data-scrubbing="true"] .feat-reel-linear-thumb {
+  width: 0.86rem;
+  height: 0.86rem;
+}
+
+.feat-reel-scrub-time,
+.featmusic-app-light .feat-reel-scrub-time {
+  position: absolute;
+  bottom: calc(50% + 0.72rem);
+  left: clamp(2.25rem, var(--reel-progress), calc(100% - 2.25rem));
+  z-index: 3;
+  min-width: 4.5rem;
+  padding: 0.42rem 0.58rem;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 0.65rem;
+  color: rgba(255,255,255,0.96) !important;
+  background: rgba(0,0,0,0.62) !important;
+  box-shadow: 0 0.55rem 1.5rem rgba(0,0,0,0.34);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.64rem;
+  font-weight: 850;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 0.25rem) scale(0.96);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  pointer-events: none;
+}
+
+.feat-reel-linear-player[data-scrubbing="true"] .feat-reel-scrub-time {
+  opacity: 0.82;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.feat-reel-linear-seek {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+  touch-action: none;
+}
+
+.feat-reel-bottom-info {
+  margin-bottom: 0;
+}
+
+@media (max-width: 420px) {
+  .feat-reel-linear-player {
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+    gap: 0.48rem;
+  }
+
+  .feat-reel-linear-toggle {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+}
+/* FEATMUSIC_REEL_LINEAR_PLAYER_V2_END */
+
+/* FEATMUSIC_REEL_ARTIST_VISUAL_V1_START */
+/*
+  Recupera la foto central del artista como elemento visual independiente.
+  No contiene controles ni iconos: la reproducción se maneja únicamente desde
+  la barra lineal inferior.
+*/
+@keyframes feat-reel-artist-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes feat-reel-artist-orbit-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes feat-reel-artist-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes feat-reel-artist-float {
+  0%,
+  100% {
+    transform: translate3d(0, -0.15rem, 0);
+  }
+  50% {
+    transform: translate3d(0, 0.2rem, 0);
+  }
+}
+
+.feat-reel-audio-stage {
+  --reel-progress: 0%;
+  display: flex;
+  width: min(100%, 34rem);
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feat-reel-artist-visual {
+  position: relative;
+  display: grid;
+  width: clamp(8.75rem, 24vh, 13rem);
+  height: clamp(8.75rem, 24vh, 13rem);
+  margin-bottom: clamp(1.35rem, 3vh, 2rem);
+  place-items: center;
+  isolation: isolate;
+  animation: feat-reel-artist-float 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.feat-reel-artist-visual::before,
+.feat-reel-artist-visual::after {
+  position: absolute;
+  content: "";
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.feat-reel-artist-visual::before {
+  inset: -0.6rem;
+  z-index: -3;
+  background: conic-gradient(
+    from 24deg,
+    transparent 0 10%,
+    rgba(238,199,43,0.95) 17%,
+    rgba(245,223,135,0.18) 28%,
+    transparent 39% 57%,
+    rgba(221,180,18,0.78) 68%,
+    rgba(242,212,92,0.22) 77%,
+    transparent 88%
+  );
+  filter: drop-shadow(0 0 0.75rem rgba(221,180,18,0.35));
+  opacity: 0.62;
+  animation: feat-reel-artist-orbit 8s linear infinite;
+}
+
+.feat-reel-artist-visual::after {
+  inset: -1.55rem;
+  z-index: -4;
+  border: 1px solid rgba(242,212,92,0.2);
+  background: radial-gradient(
+    circle,
+    rgba(221,180,18,0.14),
+    transparent 64%
+  );
+  box-shadow:
+    0 0 2.8rem rgba(221,180,18,0.24),
+    inset 0 0 2.2rem rgba(238,199,43,0.08);
+  animation: feat-reel-artist-pulse 3.4s ease-in-out infinite;
+}
+
+.feat-reel-artist-ring {
+  position: absolute;
+  z-index: -2;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.feat-reel-artist-ring-one {
+  inset: -0.95rem;
+  border: 1px dashed rgba(245,223,135,0.3);
+  animation: feat-reel-artist-orbit-reverse 12s linear infinite;
+}
+
+.feat-reel-artist-ring-two {
+  inset: -2.05rem;
+  border: 1px solid rgba(221,180,18,0.12);
+  box-shadow: 0 0 1.8rem rgba(238,199,43,0.12);
+  animation: feat-reel-artist-pulse 4.8s -1.2s ease-in-out infinite;
+}
+
+.feat-reel-artist-photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgba(249,249,249,0.28);
+  border-radius: 999px;
+  background:
+    radial-gradient(
+      circle at 35% 26%,
+      rgba(242,212,92,0.3),
+      transparent 38%
+    ),
+    linear-gradient(145deg, #323232, #080808 72%);
+  box-shadow:
+    inset 0 0 0 0.42rem rgba(0,0,0,0.2),
+    0 1.35rem 4rem rgba(0,0,0,0.5),
+    0 0 2.2rem rgba(221,180,18,0.22);
+}
+
+.feat-reel-artist-photo::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.14),
+    transparent 40%,
+    rgba(0,0,0,0.3)
+  );
+  pointer-events: none;
+}
+
+.feat-reel-artist-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.07) brightness(0.78);
+  transform: scale(1.035);
+  transition:
+    transform 5s ease,
+    filter 450ms ease;
+}
+
+.feat-reel-artist-photo > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(249,249,249,0.94);
+  font-size: clamp(2.2rem, 8vw, 4.1rem);
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  text-shadow: 0 0 1.5rem rgba(221,180,18,0.5);
+}
+
+.feat-reel-artist-spark {
+  position: absolute;
+  z-index: 2;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 999px;
+  background: #f5df87;
+  box-shadow:
+    0 0 0 0.25rem rgba(221,180,18,0.12),
+    0 0 1rem rgba(242,212,92,0.95);
+  pointer-events: none;
+}
+
+.feat-reel-artist-spark-one {
+  top: 7%;
+  right: 4%;
+  animation: feat-reel-artist-pulse 2.2s ease-in-out infinite;
+}
+
+.feat-reel-artist-spark-two {
+  bottom: 11%;
+  left: 1%;
+  width: 0.34rem;
+  height: 0.34rem;
+  animation: feat-reel-artist-pulse 2.7s -0.8s ease-in-out infinite;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-visual::before {
+  opacity: 1;
+  animation-duration: 4.4s;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-visual::after {
+  border-color: rgba(242,212,92,0.48);
+  box-shadow:
+    0 0 3.8rem rgba(221,180,18,0.4),
+    inset 0 0 2.8rem rgba(238,199,43,0.13);
+  animation-duration: 1.6s;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-photo img {
+  filter: saturate(1.1) contrast(1.08) brightness(0.86);
+  transform: scale(1.115);
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-ring-one {
+  border-color: rgba(245,223,135,0.48);
+  animation-duration: 7s;
+}
+
+.feat-reel-audio-stage[data-playing="true"] .feat-reel-artist-spark {
+  opacity: 1;
+  animation-duration: 1.25s;
+}
+
+@media (max-height: 720px) {
+  .feat-reel-artist-visual {
+    width: clamp(6.8rem, 20vh, 9rem);
+    height: clamp(6.8rem, 20vh, 9rem);
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .feat-reel-artist-visual {
+    width: clamp(7.8rem, 22vh, 10.5rem);
+    height: clamp(7.8rem, 22vh, 10.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feat-reel-artist-visual,
+  .feat-reel-artist-visual::before,
+  .feat-reel-artist-visual::after,
+  .feat-reel-artist-ring,
+  .feat-reel-artist-spark {
+    animation: none !important;
+  }
+
+  .feat-reel-artist-photo img {
+    transition: none !important;
+  }
+}
+/* FEATMUSIC_REEL_ARTIST_VISUAL_V1_END */
+
+/* FEATMUSIC_REEL_PLAYER_ABOVE_MOBILE_MENU_V2_START */
+/*
+  En móvil, la línea de progreso toca exactamente el borde superior del menú
+  inferior. El botón visible se oculta porque reproducir y pausar se controla
+  tocando cualquier zona libre del reel.
+*/
+@media (max-width: 1023px) {
+  .feat-reel-content {
+    padding-bottom: calc(
+      var(
+          --featmusic-menu-movil-altura,
+          calc(4.25rem + env(safe-area-inset-bottom))
+        ) + 0.45rem
+    ) !important;
+  }
+
+  /* FEATMUSIC_REEL_BOTTOM_INFO_NEAR_PLAYER_V1_START */
+  .feat-reel-bottom-info {
+    position: relative;
+    z-index: 25;
+  }
+  /* FEATMUSIC_REEL_BOTTOM_INFO_NEAR_PLAYER_V1_END */
+
+  .feat-reel-linear-player {
+    position: absolute;
+    right: 0;
+    bottom: var(
+      --featmusic-menu-movil-altura,
+      calc(4.25rem + env(safe-area-inset-bottom))
+    );
+    left: 0;
+    z-index: 24;
+    display: block;
+    width: auto;
+    max-width: none;
+    height: 2rem;
+    padding: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.42),
+      rgba(0,0,0,0.08) 62%,
+      transparent
+    );
+  }
+
+  .feat-reel-linear-toggle {
+    display: none !important;
+  }
+
+  .feat-reel-linear-track-shell {
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+
+  .feat-reel-linear-track {
+    top: auto;
+    bottom: 0;
+    height: 0.2rem;
+    border-radius: 0;
+    transform: none;
+  }
+
+  .feat-reel-linear-thumb {
+    top: auto;
+    bottom: 0.1rem;
+    width: 0.56rem;
+    height: 0.56rem;
+    transform: translate(-50%, 50%);
+  }
+
+  .feat-reel-linear-player[data-scrubbing="true"] .feat-reel-linear-thumb {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  .feat-reel-scrub-time,
+  .featmusic-app-light .feat-reel-scrub-time {
+    bottom: 0.72rem;
+  }
+
+  .feat-reel-artist-visual {
+    margin-bottom: 0;
+  }
+}
+/* FEATMUSIC_REEL_PLAYER_ABOVE_MOBILE_MENU_V2_END */
+
+/* FEATMUSIC_FONDOS_MAYOR_CONTRASTE_V1_START */
+/*
+  Fondo exclusivo para Explorar, Perfil y Mensajes. Mantiene las tarjetas
+  blancas, pero aumenta el contraste con un gris neutro más profundo.
+*/
+.featmusic-app-light.featmusic-page-contrast {
+  --fm-app-bg: #dddddd;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(201,162,7,0.055), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(241,199,29,0.04), transparent 24rem),
+    var(--fm-app-bg) !important;
+}
+
+/* Asegura que el área completa conserve el nuevo fondo al desplazarse. */
+.featmusic-page-contrast {
+  background-color: #dddddd !important;
+}
+/* FEATMUSIC_FONDOS_MAYOR_CONTRASTE_V1_END */
+
+/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V2_START */
+/*
+  Identidad del perfil según el estado de la portada:
+  - Tema claro sin portada: negro sólido sobre fondo blanco.
+  - Con portada: blanco puro para conservar contraste sobre la imagen.
+  - Tema oscuro sin portada: blanco, como el resto de la interfaz oscura.
+*/
+.featmusic-app-light .featmusic-profile-cover {
+  border-color: transparent !important;
+}
+
+html:not(.dark)
+  .featmusic-app-light
+  .featmusic-no-cover-identity-text {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark)
+  .featmusic-app-light
+  .featmusic-profile-cover
+  .featmusic-cover-identity-text,
+html.dark
+  .featmusic-app-light
+  .featmusic-profile-cover
+  .featmusic-cover-identity-text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.72);
+}
+
+html.dark
+  .featmusic-app-light
+  .featmusic-no-cover-identity-text {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+/* FEATMUSIC_PORTADA_IDENTIDAD_BLANCA_SIN_BORDE_V2_END */
+
+
+/* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_START */
+/*
+  Portada en las tarjetas de Explorar. El tema claro cambia varias utilidades
+  de texto y fondo con !important; estas reglas preservan la identidad blanca
+  y los chips translúcidos únicamente cuando una tarjeta tiene portada.
+*/
+.featmusic-app-light .featmusic-explore-cover {
+  background-color: #000000 !important;
+}
+
+.featmusic-app-light
+  .featmusic-explore-cover
+  .featmusic-explore-cover-text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.72);
+}
+
+.featmusic-app-light
+  .featmusic-explore-cover
+  .featmusic-explore-cover-chip {
+  border-color: rgba(255,255,255,0.22) !important;
+  background-color: rgba(0,0,0,0.4) !important;
+  color: #ffffff !important;
+}
+/* FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1_END */
+
+/* FEATMUSIC_PORTADAS_IDEAS_MUSICALES_V1_START */
+/*
+  Las portadas de las ideas conservan el mismo tratamiento del perfil:
+  imagen visible, negro sólido a la izquierda y transparencia progresiva.
+  Estas reglas evitan que el tema claro cambie los textos blancos.
+*/
+.featmusic-idea-cover {
+  isolation: isolate;
+  background-color: #000000;
+}
+
+.featmusic-app-light .featmusic-idea-cover {
+  background-color: #000000 !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  :is(h1, h2, h3, h4, p, span, a, button) {
+  color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.76);
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  input[type="range"] {
+  accent-color: #eec72b;
+}
+
+/* En Inicio la portada de la idea reemplaza al fondo difuminado del artista. */
+.feat-reel-card[data-idea-cover="true"] .feat-reel-cover-bg {
+  background-position: center;
+  opacity: 0.7;
+  filter: saturate(1.08) contrast(1.05);
+  transform: scale(1.035);
+}
+
+.feat-reel-card[data-idea-cover="true"][data-playing="true"]
+  .feat-reel-cover-bg {
+  opacity: 0.78;
+  transform: scale(1.08);
+}
+
+.feat-reel-card[data-idea-cover="true"] .feat-reel-shade {
+  background:
+    linear-gradient(
+      90deg,
+      #000000 0%,
+      rgba(0,0,0,0.98) 16%,
+      rgba(0,0,0,0.78) 38%,
+      rgba(0,0,0,0.38) 64%,
+      rgba(0,0,0,0.08) 82%,
+      rgba(0,0,0,0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0.08) 0%,
+      rgba(0,0,0,0.22) 52%,
+      rgba(0,0,0,0.9) 100%
+    );
+}
+
+.feat-reel-card[data-idea-cover="true"] .feat-reel-grid {
+  opacity: 0.16;
+}
+
+
+/* FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1_START */
+/*
+  Cuando una idea tiene portada, el control de reproducción usa un círculo
+  blanco y un icono negro. Las ideas sin portada conservan el estilo verde.
+*/
+.featmusic-idea-cover .featmusic-audio-toggle,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-audio-toggle {
+  border-color: rgba(255,255,255,0.96) !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.3) !important;
+}
+
+.featmusic-idea-cover .featmusic-audio-toggle:hover,
+.featmusic-idea-cover .featmusic-audio-toggle:focus-visible,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-audio-toggle:hover,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-audio-toggle:focus-visible {
+  border-color: #ffffff !important;
+  background: #fafafa !important;
+  color: #000000 !important;
+  box-shadow:
+    0 6px 22px rgba(0,0,0,0.34),
+    0 0 0 3px rgba(255,255,255,0.2) !important;
+}
+
+/* Inicio / reels: solo cambia cuando la publicación tiene portada propia. */
+.feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle,
+.featmusic-app-light
+  .feat-reel-card[data-idea-cover="true"]
+  .feat-reel-linear-toggle {
+  border: 0 !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.34) !important;
+}
+
+.feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle:hover,
+.feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle:focus-visible,
+.featmusic-app-light
+  .feat-reel-card[data-idea-cover="true"]
+  .feat-reel-linear-toggle:hover,
+.featmusic-app-light
+  .feat-reel-card[data-idea-cover="true"]
+  .feat-reel-linear-toggle:focus-visible {
+  background: #fafafa !important;
+  color: #000000 !important;
+  box-shadow:
+    0 6px 24px rgba(0,0,0,0.38),
+    0 0 0 3px rgba(255,255,255,0.2) !important;
+}
+/* FEATMUSIC_PLAY_PAUSE_BLANCO_PORTADA_IDEA_V1_END */
+
+/* FEATMUSIC_ICONOS_NEGROS_PORTADA_IDEA_V2_START */
+/*
+  La regla general de textos blancos sobre portadas tenía más especificidad.
+  Estas reglas fuerzan negro permanente en play/pausa y Descripción.
+*/
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle:hover,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle:focus-visible {
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle
+  svg,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-audio-toggle
+  svg
+  path {
+  color: #050505 !important;
+  fill: #050505 !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle:hover,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle:focus-visible {
+  border-color: rgba(255,255,255,0.96) !important;
+  background: #ffffff !important;
+  color: #050505 !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.24) !important;
+}
+
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle
+  span,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle
+  svg,
+.featmusic-app-light
+  .featmusic-idea-cover
+  .featmusic-idea-cover-content
+  .featmusic-description-toggle
+  svg
+  path {
+  color: #050505 !important;
+  stroke: #050505 !important;
+  text-shadow: none !important;
+}
+/* FEATMUSIC_ICONOS_NEGROS_PORTADA_IDEA_V2_END */
+
+
+/* FEATMUSIC_PORTADAS_IDEAS_MUSICALES_V1_END */
+
+/* FEATMUSIC_COMPARTIR_PERFIL_REDESSOCIALES_V1_START */
+.featmusic-share-backdrop {
+  background: rgba(6,6,6,0.72) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: featmusicShareFade 180ms ease-out both;
+}
+
+.featmusic-share-sheet {
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  animation: featmusicShareUp 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.featmusic-app-light .featmusic-share-sheet {
+  background-color: #ffffff !important;
+}
+
+.featmusic-share-preview {
+  isolation: isolate;
+}
+
+.featmusic-share-network {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 0.9rem;
+  border: 1px solid #e7e7e7;
+  background: #ffffff;
+  padding: 0.7rem 0.2rem;
+  color: #535353;
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.featmusic-share-network > span {
+  display: flex;
+  width: 2.35rem;
+  height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  box-shadow: 0 7px 16px rgba(23,23,23,0.12);
+}
+
+.featmusic-share-network:hover,
+.featmusic-share-network:focus-visible {
+  transform: translateY(-2px);
+  border-color: #f5df87;
+  box-shadow: 0 10px 24px rgba(23,23,23,0.09);
+  outline: none;
+}
+
+.featmusic-share-toast {
+  animation: featmusicShareToast 180ms ease-out both;
+}
+
+@keyframes featmusicShareFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes featmusicShareUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes featmusicShareToast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featmusic-share-backdrop,
+  .featmusic-share-sheet,
+  .featmusic-share-toast {
+    animation: none !important;
+  }
+
+  .featmusic-share-network {
+    transition: none !important;
+  }
+}
+/* FEATMUSIC_COMPARTIR_PERFIL_REDESSOCIALES_V1_END */
+
+/* FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1_START */
+.featmusic-more-backdrop {
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  animation: featmusicMoreFade 180ms ease-out both;
+}
+
+.featmusic-more-drawer {
+  animation: featmusicMoreSlide 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.featmusic-more-dropdown {
+  animation: featmusicMoreDropdown 160ms ease-out both;
+}
+
+.featmusic-more-dropdown {
+  background: rgba(15,15,15,0.98) !important;
+  color: #ffffff !important;
+}
+
+.featmusic-app-light .featmusic-more-dropdown [class~="text-zinc-300"],
+.featmusic-app-light .featmusic-more-dropdown [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+.featmusic-app-light .featmusic-more-dropdown [class~="text-zinc-500"] {
+  color: #727272 !important;
+}
+
+.featmusic-secondary-page {
+  min-width: 0;
+  overflow-x: clip;
+  background: #dddddd !important;
+  color: #1f1f1f;
+}
+
+.featmusic-secondary-page a,
+.featmusic-secondary-page button,
+.featmusic-secondary-page input,
+.featmusic-secondary-page select,
+.featmusic-secondary-page textarea,
+.featmusic-secondary-page summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.featmusic-secondary-page details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.featmusic-legal-copy h1,
+.featmusic-legal-copy h2,
+.featmusic-legal-copy p,
+.featmusic-legal-copy li,
+.featmusic-legal-copy span {
+  text-shadow: none !important;
+}
+
+@keyframes featmusicMoreFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes featmusicMoreSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes featmusicMoreDropdown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featmusic-more-backdrop,
+  .featmusic-more-drawer,
+  .featmusic-more-dropdown {
+    animation: none !important;
+  }
+}
+/* FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1_END */
+
+/* FEATMUSIC_BANNER_NEGRO_PAGINAS_SECUNDARIAS_V2_START */
+/*
+  Las páginas de Planes, Ayuda, Reportes, Términos y Privacidad usan
+  .featmusic-secondary-page. El banner negro debe funcionar tanto dentro del
+  tema principal como dentro de esas páginas secundarias.
+*/
+.featmusic-solid-black-chrome,
+.featmusic-secondary-page .featmusic-solid-black-chrome,
+.featmusic-app-light .featmusic-solid-black-chrome {
+  color-scheme: dark;
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.featmusic-solid-black-chrome [class~="text-white"],
+.featmusic-secondary-page
+  .featmusic-solid-black-chrome
+  [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+.featmusic-solid-black-chrome [class~="text-yellow-400"],
+.featmusic-secondary-page
+  .featmusic-solid-black-chrome
+  [class~="text-yellow-400"] {
+  color: #eec72b !important;
+}
+
+.featmusic-secondary-back-link,
+.featmusic-secondary-page .featmusic-secondary-back-link,
+.featmusic-app-light .featmusic-secondary-back-link {
+  border: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.featmusic-secondary-back-link:hover,
+.featmusic-secondary-back-link:focus-visible,
+.featmusic-secondary-page .featmusic-secondary-back-link:hover,
+.featmusic-secondary-page .featmusic-secondary-back-link:focus-visible {
+  border-color: transparent !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+/* FEATMUSIC_BANNER_NEGRO_PAGINAS_SECUNDARIAS_V2_END */
+
+
+
+/* FEATMUSIC_MODO_OSCURO_MANUAL_V1_START */
+/*
+  El modo oscuro se activa desde el menú Más. La preferencia queda guardada
+  en localStorage y la clase .dark se aplica al elemento html antes de que la
+  interfaz se pinte, evitando el destello del tema claro.
+*/
+html.dark {
+  color-scheme: dark;
+  background: #000000;
+}
+
+html.dark body {
+  background: #000000;
+  color: #ffffff;
+}
+
+html.dark .featmusic-app-light,
+html.dark .featmusic-app-light.featmusic-page-contrast,
+html.dark .featmusic-page-contrast,
+html.dark .featmusic-secondary-page {
+  --fm-app-bg: #000000;
+  --fm-card: rgba(255,255,255,0.045);
+  --fm-card-soft: rgba(255,255,255,0.075);
+  --fm-card-emerald: rgba(255,212,0,0.08);
+  --fm-text: #ffffff;
+  --fm-text-soft: rgba(255,255,255,0.72);
+  --fm-text-muted: rgba(255,255,255,0.50);
+  --fm-border: rgba(255,255,255,0.12);
+  --fm-emerald: #ffd400;
+  --fm-emerald-deep: #ffd400;
+  color-scheme: dark;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255,212,0,0.11), transparent 26rem),
+    radial-gradient(circle at 94% 18%, rgba(255,212,0,0.055), transparent 24rem),
+    #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Superficies claras usadas por componentes agregados después del tema inicial. */
+html.dark [class~="bg-white"],
+html.dark [class~="bg-white/95"],
+html.dark [class~="bg-white/90"],
+html.dark [class~="bg-white/80"],
+html.dark [class~="bg-white/70"],
+html.dark [class~="bg-white/60"],
+html.dark [class~="bg-white/50"],
+html.dark [class~="bg-slate-50"],
+html.dark [class~="bg-slate-50/50"],
+html.dark [class~="bg-slate-100"],
+html.dark [class~="bg-[#f6f6f6]"] {
+  background-color: #131313 !important;
+  color: #f6f6f6;
+}
+
+html.dark [class~="bg-slate-200"],
+html.dark [class~="bg-[#dddddd]"] {
+  background-color: #191919 !important;
+}
+
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-50/50"],
+html.dark [class~="bg-yellow-50/60"],
+html.dark [class~="bg-yellow-50/70"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(221,180,18,0.12) !important;
+}
+
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(240,206,71,0.12) !important;
+}
+
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(246,203,30,0.12) !important;
+}
+
+html.dark [class~="bg-yellow-50"],
+html.dark [class~="bg-yellow-100"] {
+  background-color: rgba(241,199,29,0.12) !important;
+}
+
+/* Textos oscuros convertidos a una jerarquía legible sobre fondos oscuros. */
+html.dark [class~="text-[#1f1f1f]"],
+html.dark [class~="text-slate-950"],
+html.dark [class~="text-slate-900"],
+html.dark [class~="text-slate-800"],
+html.dark [class~="text-slate-700"],
+html.dark [class~="text-zinc-950"],
+html.dark [class~="text-zinc-900"],
+html.dark [class~="text-zinc-800"] {
+  color: #f6f6f6 !important;
+}
+
+html.dark [class~="text-slate-600"],
+html.dark [class~="text-slate-500"],
+html.dark [class~="text-zinc-700"],
+html.dark [class~="text-zinc-600"] {
+  color: #b1b1b1 !important;
+}
+
+html.dark [class~="text-slate-400"] {
+  color: #8e8e8e !important;
+}
+
+html.dark [class~="text-yellow-950"],
+html.dark [class~="text-yellow-900"],
+html.dark [class~="text-yellow-800"],
+html.dark [class~="text-yellow-700"],
+html.dark [class~="text-yellow-600"] {
+  color: #f2d45c !important;
+}
+
+html.dark [class~="text-yellow-900"],
+html.dark [class~="text-yellow-800"],
+html.dark [class~="text-yellow-700"],
+html.dark [class~="text-yellow-600"],
+html.dark [class~="text-yellow-500"] {
+  color: #fbe487 !important;
+}
+
+html.dark [class~="text-yellow-900"],
+html.dark [class~="text-yellow-800"],
+html.dark [class~="text-yellow-700"] {
+  color: #fcd84a !important;
+}
+
+html.dark [class~="text-yellow-700"] {
+  color: #fcdf6b !important;
+}
+
+/* Bordes, divisores, aros y sombras. */
+html.dark [class~="border-slate-100"],
+html.dark [class~="border-slate-200"],
+html.dark [class~="border-slate-300"],
+html.dark [class~="border-slate-300/70"] {
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(238,199,43,0.26) !important;
+}
+
+html.dark [class~="border-yellow-100"],
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(247,218,100,0.28) !important;
+}
+
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(251,210,46,0.28) !important;
+}
+
+html.dark [class~="border-yellow-200"],
+html.dark [class~="border-yellow-300"] {
+  border-color: rgba(248,211,61,0.28) !important;
+}
+
+html.dark [class~="divide-slate-200"] > :not(:last-child),
+html.dark [class~="divide-slate-300"] > :not(:last-child) {
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+html.dark [class~="ring-yellow-100"],
+html.dark [class~="focus:ring-yellow-100"]:focus,
+html.dark [class~="focus-within:ring-yellow-100"]:focus-within {
+  --tw-ring-color: rgba(238,199,43,0.26) !important;
+}
+
+/* Campos nativos y menús desplegables. */
+html.dark input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html.dark textarea,
+html.dark select {
+  color-scheme: dark;
+}
+
+html.dark .featmusic-app-light input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html.dark .featmusic-app-light textarea,
+html.dark .featmusic-app-light select,
+html.dark .featmusic-secondary-page input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html.dark .featmusic-secondary-page textarea,
+html.dark .featmusic-secondary-page select {
+  border-color: rgba(255,255,255,0.12);
+  background-color: #131313;
+  color: #f6f6f6;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #7e7e7e !important;
+}
+
+html.dark select option {
+  background: #131313;
+  color: #f6f6f6;
+}
+
+/* Estados interactivos que antes volvían a superficies claras. */
+html.dark [class~="hover:bg-slate-50"]:hover,
+html.dark [class~="hover:bg-slate-100"]:hover,
+html.dark [class~="hover:bg-yellow-50"]:hover,
+html.dark [class~="hover:bg-yellow-50/50"]:hover,
+html.dark [class~="hover:bg-yellow-50/60"]:hover,
+html.dark [class~="hover:bg-yellow-100"]:hover {
+  background-color: rgba(221,180,18,0.13) !important;
+}
+
+html.dark [class~="hover:bg-yellow-50"]:hover {
+  background-color: rgba(240,206,71,0.14) !important;
+}
+
+html.dark [class~="hover:bg-yellow-50"]:hover {
+  background-color: rgba(241,199,29,0.14) !important;
+}
+
+html.dark [class~="open:bg-white"][open],
+html.dark .group[open] [class~="group-open:bg-yellow-50"] {
+  background-color: #131313 !important;
+}
+
+html.dark [class~="open:border-yellow-200"][open],
+html.dark .group[open] [class~="group-open:border-yellow-200"] {
+  border-color: rgba(238,199,43,0.3) !important;
+}
+
+html.dark [class~="file:bg-yellow-100"]::file-selector-button {
+  background-color: rgba(221,180,18,0.15) !important;
+}
+
+html.dark [class~="file:text-yellow-700"]::file-selector-button {
+  color: #f2d45c !important;
+}
+
+html.dark [class~="hover:text-slate-900"]:hover,
+html.dark [class~="hover:text-slate-950"]:hover {
+  color: #ffffff !important;
+}
+
+html.dark [class~="hover:text-yellow-700"]:hover,
+html.dark [class~="hover:text-yellow-800"]:hover,
+html.dark .group:hover [class~="group-hover:text-yellow-700"] {
+  color: #f2d45c !important;
+}
+
+html.dark [class~="hover:text-yellow-700"]:hover {
+  color: #fbe487 !important;
+}
+
+html.dark [class~="disabled:bg-slate-50"]:disabled,
+html.dark [class~="disabled:bg-slate-100"]:disabled {
+  background-color: #191919 !important;
+}
+
+html.dark [class~="disabled:border-slate-200"]:disabled {
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+/* Elementos claros que no se expresan mediante utilidades de Tailwind. */
+html.dark .featmusic-share-sheet,
+html.dark .featmusic-share-network {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #131313 !important;
+  color: #d4d4d4 !important;
+}
+
+html.dark .featmusic-share-network:hover,
+html.dark .featmusic-share-network:focus-visible {
+  border-color: rgba(238,199,43,0.4) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.34) !important;
+}
+
+/* Los controles blancos sobre portadas siguen siendo blancos por contraste. */
+html.dark .featmusic-idea-cover .featmusic-audio-toggle,
+html.dark .featmusic-idea-cover .featmusic-description-toggle,
+html.dark .feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle {
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #050505 !important;
+}
+
+html.dark .featmusic-idea-cover .featmusic-audio-toggle :is(svg, path),
+html.dark .featmusic-idea-cover .featmusic-description-toggle :is(span, svg, path),
+html.dark .feat-reel-card[data-idea-cover="true"] .feat-reel-linear-toggle :is(svg, path) {
+  color: #050505 !important;
+  fill: currentColor;
+  stroke: currentColor;
+  text-shadow: none !important;
+}
+
+/* El banner, los menús y las portadas conservan negro puro y texto blanco. */
+html.dark .featmusic-solid-black-chrome,
+html.dark .featmusic-dark-chrome,
+html.dark .featmusic-more-dropdown,
+html.dark .featmusic-more-drawer,
+html.dark .featmusic-profile-cover,
+html.dark .featmusic-explore-cover,
+html.dark .featmusic-idea-cover {
+  color-scheme: dark;
+}
+
+html.dark * {
+  scrollbar-color: #3e3e3e transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.dark body,
+  html.dark .featmusic-app-light,
+  html.dark .featmusic-secondary-page {
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+}
+/* FEATMUSIC_MODO_OSCURO_MANUAL_V1_END */
+
+/* FEATMUSIC_PERFIL_CONTROLES_OSCUROS_EN_CLARO_V1_START */
+/*
+  En el perfil privado, estos controles deben conservar en tema claro
+  exactamente la lectura visual oscura: negro, blanco y amarillo.
+  Se usan clases propias para que las reglas globales del tema claro
+  no reinterpreten las utilidades de Tailwind.
+*/
+
+.featmusic-profile-dark-label,
+.featmusic-profile-dark-chip {
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  color: #ffffff !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.featmusic-profile-dark-chip {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.featmusic-profile-dark-controls {
+  background-color: #131313 !important;
+  border-top-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.featmusic-profile-dark-controls > :not(:last-child) {
+  border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.featmusic-profile-dark-control {
+  background-color: transparent !important;
+  color: #b1b1b1 !important;
+}
+
+.featmusic-profile-dark-control:hover {
+  background-color: rgba(255, 212, 0, 0.12) !important;
+  color: #fcd84a !important;
+}
+
+.featmusic-profile-dark-control:focus-visible {
+  --tw-ring-color: rgba(255, 212, 0, 0.35) !important;
+}
+
+/* El contador de notificaciones conserva contraste sobre la franja oscura. */
+.featmusic-profile-dark-control > span[class*="absolute"] {
+  border-color: #131313 !important;
+}
+/* FEATMUSIC_PERFIL_CONTROLES_OSCUROS_EN_CLARO_V1_END */
+
+/* FEATMUSIC_ETIQUETAS_PERFIL_OSCURAS_MODO_CLARO_V2_START */
+/*
+  Corrección de especificidad para el perfil privado.
+  Las reglas globales del tema claro reinterpretan utilidades bg-black/*
+  con !important, por eso aquí usamos un selector de igual/mayor prioridad
+  colocado al final del archivo.
+*/
+
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-label {
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Refuerzo para cualquier utilidad Tailwind que venga en esas etiquetas. */
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-label[class*="bg-"],
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip[class*="bg-"] {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-label[class*="border-"],
+html:not(.dark) .featmusic-app-light .featmusic-profile-dark-chip[class*="border-"] {
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+/* FEATMUSIC_ETIQUETAS_PERFIL_OSCURAS_MODO_CLARO_V2_END */
+
+/* FEATMUSIC_REDES_SOCIALES_OSCURAS_PERFIL_V1_START */
+/*
+  Botones de redes del perfil.
+  Deben conservar la misma apariencia en tema claro y oscuro:
+  negro semitransparente, borde blanco e icono blanco.
+*/
+
+.featmusic-profile-social-button {
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.50) !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Refuerzo contra las reglas globales del tema claro. */
+html:not(.dark) .featmusic-app-light .featmusic-profile-social-button,
+html.dark .featmusic-profile-social-button {
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  border-color: rgba(255, 255, 255, 0.50) !important;
+  color: #ffffff !important;
+}
+
+.group:hover .featmusic-profile-social-button {
+  background-color: rgba(0, 0, 0, 0.62) !important;
+  border-color: #ffd400 !important;
+  color: #ffd400 !important;
+}
+/* FEATMUSIC_REDES_SOCIALES_OSCURAS_PERFIL_V1_END */
+
+/* FEATMUSIC_EDITAR_PERFIL_MODO_CLARO_V3_START */
+/*
+  Editar perfil:
+  - Modo claro: ventana blanca, textos negros y controles claros.
+  - Acciones principales: amarillo FeatMusic con texto negro en claro y oscuro.
+  - El resto del modo oscuro conserva su diseño actual.
+*/
+html:not(.dark) .featmusic-edit-profile-dialog {
+  color-scheme: light !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-edit-profile-dialog * {
+  color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-edit-profile-dialog input:not([type="file"]),
+html:not(.dark) .featmusic-edit-profile-dialog textarea,
+html:not(.dark) .featmusic-edit-profile-dialog select {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
+  color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-edit-profile-dialog input::placeholder,
+html:not(.dark) .featmusic-edit-profile-dialog textarea::placeholder {
+  color: #737373 !important;
+}
+
+html:not(.dark) .featmusic-edit-profile-dialog [class~="border-white/10"] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+}
+
+.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_MODO_CLARO_V3_END */
+
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_V4_START */
+/* Quitar: amarillo sólido con texto negro en claro y oscuro. */
+.featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+}
+
+.featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+}
+
+/* Guardar cambios: mismo amarillo FeatMusic y texto negro en claro y oscuro. */
+.featmusic-edit-profile-dialog .featmusic-edit-profile-save {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+}
+
+.featmusic-edit-profile-dialog .featmusic-edit-profile-save:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_V4_END */
+
+/* FEATMUSIC_NOTIFICACIONES_CLARO_FORZADO_V2_START */
+/*
+  Centro de Notificaciones - modo claro real de FeatMusic.
+
+  El panel se renderiza mediante createPortal(document.body), por lo que no
+  hereda .featmusic-app-light. Estas reglas usan directamente html:not(.dark)
+  y tienen prioridad sobre variantes dark: que pueda activar el navegador por
+  la preferencia de color del sistema.
+*/
+
+html:not(.dark) .featmusic-notifications-panel {
+  color-scheme: light !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.10) !important;
+  color: #000000 !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Separadores y bordes */
+html:not(.dark) .featmusic-notifications-panel header,
+html:not(.dark) .featmusic-notifications-panel header + div {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="border-black/10"],
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="border-black/20"] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="divide-black/[0.06]"]
+  > :not(:last-child) {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Fondos claros que deben ganar incluso si el SO está en oscuro */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-white"] {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-black/15"] {
+  background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-black/[0.04]"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400"] {
+  background-color: #ffd400 !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400/15"] {
+  background-color: rgba(255, 212, 0, 0.15) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400/[0.10]"] {
+  background-color: rgba(255, 212, 0, 0.10) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400/10"] {
+  background-color: rgba(255, 212, 0, 0.10) !important;
+}
+
+/* Texto principal */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-black"] {
+  color: #000000 !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-800"] {
+  color: #27272a !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-700"] {
+  color: #3f3f46 !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-600"] {
+  color: #52525b !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-500"] {
+  color: #71717a !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-zinc-400"] {
+  color: #71717a !important;
+}
+
+/* Amarillos de énfasis: más oscuros cuando son texto sobre blanco */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-yellow-600"],
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="text-yellow-700"] {
+  color: #a67c00 !important;
+}
+
+/* Cuando el amarillo tiene fondo sólido, el contenido debe ser negro */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="bg-yellow-400"][class~="text-black"] {
+  color: #000000 !important;
+}
+
+/* Checkbox */
+html:not(.dark)
+  .featmusic-notifications-panel
+  input[type="checkbox"] {
+  color-scheme: light !important;
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+  accent-color: #ffd400 !important;
+}
+
+/* Filas sin leer */
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="bg-yellow-400/[0.10]"] {
+  background-color: rgba(255, 212, 0, 0.10) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="bg-yellow-400/[0.10]"]:hover {
+  background-color: rgba(255, 212, 0, 0.16) !important;
+}
+
+/* Hover de filas/botones normales */
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="hover:bg-black/[0.03]"]:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+html:not(.dark)
+  .featmusic-notifications-panel
+  button[class~="hover:bg-black/5"]:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Error inferior */
+html:not(.dark)
+  .featmusic-notifications-panel
+  [class~="border-yellow-400/30"] {
+  border-color: rgba(255, 212, 0, 0.35) !important;
+}
+
+/*
+  Modo oscuro:
+  no se redefine aquí. Cuando html.dark está activo, estas reglas dejan de
+  aplicar y el componente conserva las clases y reglas oscuras que ya tenía.
+*/
+/* FEATMUSIC_NOTIFICACIONES_CLARO_FORZADO_V2_END */
+
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V5_START */
+/*
+  Corrección final de botones de Editar perfil SOLO en modo claro.
+  Estas reglas tienen mayor especificidad que los conversores globales
+  de bg-black/45, text-zinc-200 y text-yellow-300.
+*/
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V5_END */
+
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V6_START */
+/*
+  Corrección definitiva SOLO para modo claro.
+  .featmusic-app-light y .featmusic-edit-profile-dialog están en el mismo
+  elemento, por eso el selector debe unir ambas clases sin espacio.
+*/
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-yellow-action:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-app-light.featmusic-edit-profile-dialog .featmusic-edit-profile-remove:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EDITAR_PERFIL_BOTONES_CLARO_V6_END */
+
+/* FEATMUSIC_TIEMPO_AUDIO_BLANCO_MENU_CLARO_SOLIDO_V1_START */
+/*
+  Enviadas y Recibidas: el contador de tiempo del audio permanece blanco
+  sólido en ambos temas y gana una sombra discreta para conservar contraste
+  sobre portadas e imágenes.
+*/
+.featmusic-sent-proposal-player .featmusic-audio-time,
+.featmusic-received-proposal-player .featmusic-audio-time {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85) !important;
+}
+
+/*
+  Barra inferior móvil SOLO en modo claro: mantiene el gris oscuro visual que
+  ya tenía, pero ahora es completamente sólido. Nada del contenido que se
+  desplaza por detrás puede transparentarse a través del menú.
+*/
+html:not(.dark) .featmusic-app-light .featmusic-mobile-bottom-nav {
+  background: #181818 !important;
+  background-color: #181818 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  isolation: isolate;
+}
+/* FEATMUSIC_TIEMPO_AUDIO_BLANCO_MENU_CLARO_SOLIDO_V1_END */
+
+/* FEATMUSIC_NOTIFICACIONES_COLOR_EXACTO_V3_START */
+/*
+  Ajuste definitivo del Centro de Notificaciones.
+
+  El modal se monta con createPortal(document.body), por eso estas reglas
+  apuntan directamente al panel que queda bajo body y no dependen de
+  .featmusic-app-light.
+*/
+
+/* Modo claro: panel blanco 100% sólido, sin efecto gris/transparente. */
+html:not(.dark) body > .featmusic-notifications-panel {
+  color-scheme: light !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Todo el texto informativo solicitado queda negro en modo claro. */
+html:not(.dark)
+  body > .featmusic-notifications-panel
+  .featmusic-notifications-copy {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* En modo oscuro, ese mismo texto queda blanco. */
+html.dark
+  body > .featmusic-notifications-panel
+  .featmusic-notifications-copy {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Nombre del usuario: amarillo FeatMusic en ambos modos. */
+body > .featmusic-notifications-panel
+  .featmusic-notifications-username {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+}
+
+/* FEATMUSIC_NOTIFICACIONES_COLOR_EXACTO_V3_END */
+
+/* FEATMUSIC_VISTAS_MODO_OSCURO_V1_START */
+/*
+  Ventana "Artistas que vieron tu publicación".
+  SOLO modo oscuro: todos los textos quedan blancos, excepto los dos acentos
+  amarillos y los botones Seguir/Siguiendo, que usan amarillo + negro.
+  El modo claro no se modifica.
+*/
+html.dark .featmusic-viewers-dialog,
+html.dark .featmusic-viewers-dialog * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html.dark .featmusic-viewers-dialog .featmusic-viewers-accent {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+}
+
+html.dark .featmusic-viewers-dialog .featmusic-viewers-follow-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_VISTAS_MODO_OSCURO_V1_END */
+
+/* FEATMUSIC_VISTAS_MODO_CLARO_BOTON_SEGUIR_V1_START */
+/*
+  Ventana "Artistas que vieron tu publicación".
+  SOLO modo claro: Seguir y Siguiendo usan el mismo botón amarillo con texto negro.
+  El modo oscuro conserva sus reglas existentes.
+*/
+html:not(.dark) .featmusic-viewers-dialog .featmusic-viewers-follow-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-viewers-dialog .featmusic-viewers-follow-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_VISTAS_MODO_CLARO_BOTON_SEGUIR_V1_END */
+
+/* FEATMUSIC_CHAT_MOVIL_VIEWPORT_TECLADO_V1_START */
+/*
+  El chat ocupa todo el alto visible por debajo del banner.
+  visualViewport actualiza la variable cuando aparece/desaparece el teclado,
+  por lo que el compositor permanece inmediatamente encima del teclado.
+*/
+@media (max-width: 1023.98px) {
+  .featmusic-chat-mobile-viewport {
+    height: calc(
+      var(--featmusic-chat-viewport-height, 100dvh) - 3.5rem
+    ) !important;
+    min-height: 0 !important;
+    overflow: hidden;
+  }
+
+  .featmusic-chat-mobile-viewport > section {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .featmusic-chat-mobile-viewport textarea {
+    scroll-margin-bottom: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .featmusic-chat-mobile-viewport {
+    min-height: calc(100dvh - 56px);
+    height: auto;
+    overflow: visible;
+  }
+}
+/* FEATMUSIC_CHAT_MOVIL_VIEWPORT_TECLADO_V1_END */
+
+/* FEATMUSIC_CHAT_COLORES_DETALLES_EXPLICITOS_V1_START */
+/*
+  Colores explícitos del chat.
+  Se usan selectores basados directamente en html.dark para evitar que
+  reglas globales o utilidades anteriores cambien los colores esperados.
+*/
+
+/* Cabecera de la conversación. */
+html:not(.dark) .featmusic-chat-artist-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-chat-artist-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Nombre del artista dentro de Detalles. */
+html:not(.dark) .featmusic-chat-details-artist-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-chat-details-artist-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Título "Colaboraciones". */
+html:not(.dark) .featmusic-chat-details-section-title {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html.dark .featmusic-chat-details-section-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* FEATMUSIC_CHAT_COLORES_DETALLES_EXPLICITOS_V1_END */
+
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_TEMA_DEFINITIVO_V3_START */
+/*
+  Reproductor usado SOLO dentro de Chat > Detalles.
+  Ya no depende de utilidades Tailwind !bg / !text en ChatClient.
+  Así no existe conflicto entre el modo claro y el modo oscuro.
+*/
+
+/* Mantener la apariencia clara actual. */
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player {
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-title,
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-time,
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-number,
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  p {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Modo oscuro: gris sólido y textos blancos. */
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player {
+  background: #303030 !important;
+  background-color: #303030 !important;
+  background-image: none !important;
+  border-color: #484848 !important;
+  color-scheme: dark;
+}
+
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-title,
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-time,
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-number,
+html.dark body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_TEMA_DEFINITIVO_V3_END */
+
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_CLARO_BLANCO_V4_START */
+/*
+  SOLO modo claro > Chat > Detalles.
+  Reproductor blanco, borde negro, Play/Pause negro y barra blanca.
+  El modo oscuro queda intacto.
+*/
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #000000 !important;
+  border-width: 1px !important;
+}
+
+/* Play / Pause: icono negro. */
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-toggle {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  .featmusic-audio-toggle
+  svg {
+  color: #000000 !important;
+  fill: currentColor !important;
+}
+
+/*
+  Barra blanca. Como el reproductor también es blanco, se conserva una
+  línea negra muy fina alrededor para que la barra siga siendo visible.
+*/
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"] {
+  background: transparent !important;
+  accent-color: #ffffff !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-webkit-slider-thumb {
+  background: #000000 !important;
+  border: 0 !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-moz-range-track {
+  height: 4px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-moz-range-progress {
+  height: 4px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+}
+
+html:not(.dark) body
+  .featmusic-chat-details-dialog
+  .featmusic-chat-details-player
+  input[type="range"]::-moz-range-thumb {
+  background: #000000 !important;
+  border: 0 !important;
+}
+/* FEATMUSIC_CHAT_DETALLES_PLAYER_CLARO_BLANCO_V4_END */
+
+/* FEATMUSIC_PUBLICAR_BOTONES_AMARILLOS_V1_START */
+.featmusic-publish-audio-input::file-selector-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border: 0 !important;
+}
+
+.featmusic-publish-audio-input::-webkit-file-upload-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  border: 0 !important;
+}
+
+.featmusic-publish-submit {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.featmusic-publish-submit:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-publish-kicker {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+}
+/* FEATMUSIC_PUBLICAR_BOTONES_AMARILLOS_V1_END */
+
+/* FEATMUSIC_EXPLORAR_CARGA_PRO_V2_START */
+/*
+  Animación de carga de Explorar:
+  tarjetas skeleton con shimmer y una transición suave hacia el contenido real.
+  El banner y el menú móvil permanecen fuera de este bloque y siempre visibles.
+*/
+.featmusic-explore-loading {
+  animation: featmusic-explore-loading-enter 220ms ease-out both;
+}
+
+.featmusic-explore-loading-badge {
+  border-color: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.045);
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+.featmusic-explore-loading-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(86%, 340px);
+  min-height: 132px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 18px;
+  background: #171717;
+  padding: 16px;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.26);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.featmusic-explore-loading-card--left {
+  z-index: 1;
+  transform: translate(-58%, -48%) rotate(-4deg) scale(0.93);
+  opacity: 0.44;
+  animation: featmusic-explore-card-left 3.8s ease-in-out infinite;
+}
+
+.featmusic-explore-loading-card--right {
+  z-index: 2;
+  transform: translate(-42%, -48%) rotate(4deg) scale(0.93);
+  opacity: 0.44;
+  animation: featmusic-explore-card-right 3.8s ease-in-out infinite;
+}
+
+.featmusic-explore-loading-card--front {
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  animation: featmusic-explore-card-front 3.2s ease-in-out infinite;
+}
+
+.featmusic-explore-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.featmusic-explore-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-130%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 212, 0, 0.04) 28%,
+    rgba(255, 212, 0, 0.30) 50%,
+    rgba(255, 212, 0, 0.04) 72%,
+    transparent 100%
+  );
+  animation: featmusic-explore-shimmer 1.35s ease-in-out infinite;
+}
+
+.featmusic-explore-loading-wave span {
+  display: block;
+  width: 3px;
+  border-radius: 999px;
+  background: #ffd400;
+  transform-origin: bottom;
+  animation: featmusic-explore-wave 900ms ease-in-out infinite alternate;
+}
+
+.featmusic-explore-loading-wave span:nth-child(1) {
+  height: 9px;
+  animation-delay: -0.6s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(2) {
+  height: 18px;
+  animation-delay: -0.45s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(3) {
+  height: 13px;
+  animation-delay: -0.3s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(4) {
+  height: 22px;
+  animation-delay: -0.15s;
+}
+
+.featmusic-explore-loading-wave span:nth-child(5) {
+  height: 11px;
+}
+
+.featmusic-explore-loading-subtitle {
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.featmusic-explore-loading-progress {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.featmusic-explore-loading-progress > span {
+  animation: featmusic-explore-progress 1.25s ease-in-out infinite;
+}
+
+.featmusic-explore-content {
+  animation: featmusic-explore-content-enter 260ms ease-out both;
+}
+
+html:not(.dark) .featmusic-explore-loading-badge {
+  border-color: rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.92);
+  color: #000000;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+html:not(.dark) .featmusic-explore-loading-card {
+  border-color: rgba(0, 0, 0, 0.11);
+  background: #ffffff;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.10);
+}
+
+html:not(.dark) .featmusic-explore-skeleton {
+  background: rgba(0, 0, 0, 0.085);
+}
+
+html:not(.dark) .featmusic-explore-loading-subtitle {
+  color: rgba(0, 0, 0, 0.52);
+}
+
+html:not(.dark) .featmusic-explore-loading-progress {
+  background: rgba(0, 0, 0, 0.10);
+}
+
+@keyframes featmusic-explore-loading-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes featmusic-explore-card-left {
+  0%, 100% {
+    transform: translate(-58%, -48%) rotate(-4deg) scale(0.93);
+  }
+  50% {
+    transform: translate(-60%, -51%) rotate(-5deg) scale(0.93);
+  }
+}
+
+@keyframes featmusic-explore-card-right {
+  0%, 100% {
+    transform: translate(-42%, -48%) rotate(4deg) scale(0.93);
+  }
+  50% {
+    transform: translate(-40%, -51%) rotate(5deg) scale(0.93);
+  }
+}
+
+@keyframes featmusic-explore-card-front {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -53%);
+  }
+}
+
+@keyframes featmusic-explore-shimmer {
+  0% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes featmusic-explore-wave {
+  from {
+    transform: scaleY(0.55);
+    opacity: 0.65;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes featmusic-explore-progress {
+  0% {
+    transform: translateX(-115%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(315%);
+  }
+}
+
+@keyframes featmusic-explore-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featmusic-explore-loading,
+  .featmusic-explore-loading-card,
+  .featmusic-explore-skeleton::after,
+  .featmusic-explore-loading-wave span,
+  .featmusic-explore-loading-progress > span,
+  .featmusic-explore-content {
+    animation: none !important;
+  }
+}
+/* FEATMUSIC_EXPLORAR_CARGA_PRO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_STATS_BORDE_TEMA_V1_START */
+/* Tarjeta Artistas / Ideas / Propuestas: borde exterior según el tema. */
+html:not(.dark) .featmusic-explore-stats {
+  border-color: #ffffff !important;
+}
+
+html.dark .featmusic-explore-stats {
+  border-color: #000000 !important;
+}
+
+/* El botón de perfil mantiene amarillo/negro en ambos modos. */
+.featmusic-explore-profile-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-top-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.featmusic-explore-profile-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-top-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EXPLORAR_STATS_BORDE_TEMA_V1_END */
+
+/* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_START */
+/*
+  SOLO modo claro: identidad visual de las tarjetas de artistas en Explorar.
+  El modo oscuro queda intacto.
+*/
+html:not(.dark) .featmusic-explore-card-artist-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+html:not(.dark) .featmusic-explore-card-username {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+html:not(.dark) .featmusic-explore-card-location {
+  color: #a3a3a3 !important;
+  -webkit-text-fill-color: #a3a3a3 !important;
+}
+
+html:not(.dark) .featmusic-explore-card-bio {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* FEATMUSIC_EXPLORAR_TARJETAS_MODO_CLARO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_ETIQUETAS_IGUAL_OSCURO_V2_START */
+/*
+  SOLO modo claro > Explorar.
+  Cada etiqueta copia el aspecto que ESA MISMA etiqueta tiene en modo oscuro.
+  No toma estilos del perfil y no modifica el modo oscuro.
+*/
+
+/* Rol SIN portada: equivale a border-yellow-400/20 bg-yellow-500/[0.09] text-yellow-200. */
+html:not(.dark)
+  .featmusic-explore-card-role-chip:not(.featmusic-explore-cover-chip) {
+  border-color: rgba(250, 204, 21, 0.20) !important;
+  background: rgba(234, 179, 8, 0.09) !important;
+  background-color: rgba(234, 179, 8, 0.09) !important;
+  color: #fef08a !important;
+  -webkit-text-fill-color: #fef08a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Géneros SIN portada: equivale a border-white/[0.08] bg-white/[0.035] text-zinc-400. */
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip):not(.featmusic-explore-card-empty-genre-chip) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  background-color: rgba(255, 255, 255, 0.035) !important;
+  color: #a1a1aa !important;
+  -webkit-text-fill-color: #a1a1aa !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* “Sin géneros” SIN portada: equivale a border-white/[0.08] bg-white/[0.025] text-zinc-600. */
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+  background-color: rgba(255, 255, 255, 0.025) !important;
+  color: #52525b !important;
+  -webkit-text-fill-color: #52525b !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Con portada: Rol y Géneros conservan exactamente el chip oscuro de Explorar. */
+html:not(.dark)
+  .featmusic-explore-card-chip.featmusic-explore-cover-chip {
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  background: rgba(0, 0, 0, 0.40) !important;
+  background-color: rgba(0, 0, 0, 0.40) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  backdrop-filter: blur(4px) !important;
+}
+/* FEATMUSIC_EXPLORAR_ETIQUETAS_IGUAL_OSCURO_V2_END */
+
+/* FEATMUSIC_EXPLORAR_SIN_PORTADA_SEGUIR_V3_START */
+/*
+  Ajustes definitivos de las tarjetas de artistas en Explorar.
+  - Modo claro, SIN portada: contenido legible sobre fondo blanco.
+  - Icono de ubicación blanco en modo claro, como se solicitó.
+  - Seguir/Siguiendo: amarillo sólido + negro en ambos temas.
+*/
+
+/* 1) Icono de ubicación blanco SOLO en modo claro. */
+html:not(.dark) .featmusic-explore-location-icon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* 2) Tarjetas SIN portada, SOLO modo claro. */
+html:not(.dark) .featmusic-explore-no-cover-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-explore-no-cover-bio {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+html:not(.dark)
+  .featmusic-explore-card-role-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 3) Seguir y Siguiendo: mismo diseño en claro y oscuro. */
+.featmusic-explore-follow-button {
+  background: #ffd400 !important;
+  background-color: #ffd400 !important;
+  border-color: #ffd400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+.featmusic-explore-follow-button:hover {
+  background: #f2c900 !important;
+  background-color: #f2c900 !important;
+  border-color: #f2c900 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_EXPLORAR_SIN_PORTADA_SEGUIR_V3_END */
+
+/* FEATMUSIC_EXPLORAR_AJUSTES_FINALES_TARJETAS_V4_START */
+/*
+  Ajustes solicitados para las tarjetas de artistas en Explorar.
+  Los tres primeros afectan SOLO el modo claro.
+*/
+
+/* 1) Géneros SIN portada: borde negro real, fondo transparente y texto negro. */
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 2) Ubicación SIN portada: icono negro. Las tarjetas con portada conservan blanco. */
+html:not(.dark)
+  .featmusic-explore-no-cover-location
+  .featmusic-explore-location-icon {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* 3) @usuario: amarillo limpio, sin sombra, SOLO en modo claro. */
+html:not(.dark) .featmusic-explore-card-username {
+  color: #ffd400 !important;
+  -webkit-text-fill-color: #ffd400 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+/* FEATMUSIC_EXPLORAR_AJUSTES_FINALES_TARJETAS_V4_END */
+
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_BLANCO_V5_START */
+/*
+  SOLO modo claro + tarjetas de Explorar SIN portada.
+  Géneros: fondo blanco sólido, borde negro y texto negro.
+  No modifica Rol, tarjetas con portada ni modo oscuro.
+*/
+html:not(.dark)
+  .featmusic-explore-card-genre-chip:not(.featmusic-explore-cover-chip),
+html:not(.dark)
+  .featmusic-explore-card-empty-genre-chip:not(.featmusic-explore-cover-chip) {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_BLANCO_V5_END */
+
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_DEFINITIVO_V6_START */
+/*
+  Arreglo definitivo.
+
+  La clase featmusic-explore-no-cover-genre-chip SOLO existe en los géneros
+  de tarjetas sin portada. Se usa un selector de alta especificidad para que
+  las antiguas conversiones globales del modo claro no puedan volver a borrar
+  visualmente el fondo ni el borde.
+*/
+html:not(.dark)
+  body
+  .featmusic-app-light
+  .featmusic-explore-card-chip.featmusic-explore-card-genre-chip.featmusic-explore-no-cover-genre-chip {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  border-style: solid !important;
+
+  /* Borde fino, con el mismo peso visual que la etiqueta de Rol. */
+  box-shadow: none !important;
+
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+
+  opacity: 1 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/*
+  Modo oscuro: recupera explícitamente el aspecto original del género.
+  Esto evita que la nueva clase cambie el diseño oscuro.
+*/
+html.dark
+  body
+  .featmusic-explore-card-chip.featmusic-explore-card-genre-chip.featmusic-explore-no-cover-genre-chip {
+  background: rgba(255, 255, 255, 0.035) !important;
+  background-color: rgba(255, 255, 255, 0.035) !important;
+  background-image: none !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+
+  box-shadow: none !important;
+
+  color: #a1a1aa !important;
+  -webkit-text-fill-color: #a1a1aa !important;
+}
+
+html.dark
+  body
+  .featmusic-explore-card-empty-genre-chip.featmusic-explore-no-cover-empty-genre-chip {
+  background: rgba(255, 255, 255, 0.025) !important;
+  background-color: rgba(255, 255, 255, 0.025) !important;
+  color: #52525b !important;
+  -webkit-text-fill-color: #52525b !important;
+}
+/* FEATMUSIC_EXPLORAR_GENEROS_SIN_PORTADA_DEFINITIVO_V6_END */
+
+/* FEATMUSIC_EXPLORAR_REPRODUCTOR_BUSQUEDA_BORDES_V1_START */
+/*
+  Ajustes localizados a la página Explorar.
+*/
+
+/* 1) Reproductor de las tarjetas: mismo Play/Pause en claro y oscuro. */
+.featmusic-explore-card-player .featmusic-audio-toggle,
+.featmusic-explore-card-player .featmusic-audio-toggle:hover,
+.featmusic-explore-card-player .featmusic-audio-toggle:focus-visible {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.featmusic-explore-card-player .featmusic-audio-toggle :is(svg, path) {
+  color: #000000 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* 2) SOLO oscuro: separadores internos de Artistas / Ideas / Propuestas negros. */
+html.dark .featmusic-explore-stats > :not(:last-child) {
+  border-color: #000000 !important;
+}
+
+/*
+  3) SOLO oscuro: el input de Buscar queda transparente.
+  Una regla global de campos oscuros lo pintaba #131313 y producía un
+  rectángulo gris dentro de la barra.
+*/
+html.dark .featmusic-explore-search-input {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+html.dark .featmusic-explore-search-input:-webkit-autofill,
+html.dark .featmusic-explore-search-input:-webkit-autofill:hover,
+html.dark .featmusic-explore-search-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+}
+/* FEATMUSIC_EXPLORAR_REPRODUCTOR_BUSQUEDA_BORDES_V1_END */
+
+/* FEATMUSIC_INICIO_ESTABLE_SIN_TITILEO_V1_START */
+/*
+  Entrada estable del feed Inicio. Se reserva la altura del menú antes de que
+  React la mida y se evita que el fondo completo del reel cambie de tamaño/
+  opacidad justo cuando el autoplay comienza.
+*/
+:root {
+  --featmusic-menu-movil-altura: calc(4.25rem + env(safe-area-inset-bottom));
+}
+
+/* El título de la idea debe ser blanco sólido en todos los temas. */
+html body .feat-reel-title,
+html body.featmusic-app-light .feat-reel-title,
+html:not(.dark) body .feat-reel-title,
+html.dark body .feat-reel-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/*
+  El estado de reproducción ya anima el reproductor. Mantener estable el fondo
+  evita el salto visual que ocurría ~180 ms después de abrir Inicio.
+*/
+.feat-reel-card:not([data-idea-cover="true"])[data-playing="true"]
+  .feat-reel-cover-bg {
+  opacity: 0.16 !important;
+  transform: scale(1.18) !important;
+}
+
+.feat-reel-card[data-idea-cover="true"][data-playing="true"]
+  .feat-reel-cover-bg {
+  opacity: 0.7 !important;
+  transform: scale(1.035) !important;
+}
+/* FEATMUSIC_INICIO_ESTABLE_SIN_TITILEO_V1_END */
+
+/* FEATMUSIC_INICIO_BANDERA_VISTAS_V1_START */
+/*
+  Ajustes exclusivos del feed tipo reels de Inicio.
+  En modo claro el contador se mantiene gris sobre la publicación;
+  el modo oscuro conserva su estilo original.
+*/
+html:not(.dark)
+  .featmusic-app-light
+  .featmusic-inicio-view-count {
+  color: #a1a1aa !important;
+  -webkit-text-fill-color: #a1a1aa !important;
+}
+/* FEATMUSIC_INICIO_BANDERA_VISTAS_V1_END */
+
+
+/* FEATMUSIC_MENU_WEB_HOVER_NEGRO_V1_START */
+/* Fuerza texto/icono negro sobre el amarillo del hover del menú superior. */
+html:not(.dark) .featmusic-app-light .featmusic-dark-chrome .featmusic-desktop-nav-item:hover,
+html:not(.dark) .featmusic-app-light > header .featmusic-desktop-nav-item:hover,
+html.dark .featmusic-desktop-nav-item:hover,
+.featmusic-solid-black-chrome .featmusic-desktop-nav-item:hover {
+  background: #FFD400 !important;
+  background-color: #FFD400 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+/* FEATMUSIC_MENU_WEB_HOVER_NEGRO_V1_END */
+
+/* FEATMUSIC_CONFIGURACION_POPUP_SOLIDO_V1_START */
+/*
+  Popup de Configuración (solo escritorio):
+  - tema claro: blanco sólido + texto negro
+  - tema oscuro: gris sólido + texto claro
+  - iconos: amarillo FeatMusic #FFD400 + negro en ambos temas
+*/
+.featmusic-more-dropdown {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #e5e5e5 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.featmusic-more-dropdown :is(
+  p,
+  a,
+  button,
+  span
+) {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+.featmusic-more-dropdown [class*="border-white"] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.featmusic-more-dropdown [class*="bg-white"] {
+  background-color: rgba(0, 0, 0, 0.045) !important;
+}
+
+.featmusic-more-dropdown .featmusic-config-popup-icon,
+html.dark .featmusic-more-dropdown .featmusic-config-popup-icon {
+  background: #FFD400 !important;
+  background-color: #FFD400 !important;
+  background-image: none !important;
+  border-color: #FFD400 !important;
+  color: #000000 !important;
+}
+
+.featmusic-more-dropdown .featmusic-config-popup-icon :is(svg, path, circle),
+html.dark .featmusic-more-dropdown .featmusic-config-popup-icon :is(svg, path, circle) {
+  color: #000000 !important;
+  stroke: currentColor;
+}
+
+html.dark .featmusic-more-dropdown {
+  background: #262626 !important;
+  background-color: #262626 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html.dark .featmusic-more-dropdown :is(
+  p,
+  a,
+  button,
+  span
+) {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+html.dark .featmusic-more-dropdown [class*="border-white"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark .featmusic-more-dropdown [class*="bg-white"] {
+  background-color: rgba(255, 255, 255, 0.055) !important;
+}
+
+/* Los iconos deben seguir negros aunque la regla oscura general haga blanco el texto. */
+html.dark .featmusic-more-dropdown .featmusic-config-popup-icon,
+html.dark .featmusic-more-dropdown .featmusic-config-popup-icon :is(svg, path, circle) {
+  color: #000000 !important;
+}
+/* FEATMUSIC_CONFIGURACION_POPUP_SOLIDO_V1_END */
+
+/* FEATMUSIC_CONFIGURACION_CLARO_LIMPIO_V2_START */
+/*
+  Limpieza visual del popup Configuración en escritorio, tema claro.
+  Se usan selectores específicos para ganar a reglas antiguas del tema claro.
+*/
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-icon,
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-icon {
+  background: #FFD400 !important;
+  background-color: #FFD400 !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-icon :is(svg, path, circle),
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-icon :is(svg, path, circle) {
+  color: #000000 !important;
+  stroke: currentColor !important;
+}
+
+/* Las filas de Planes, Ayuda y Reportar dejan de verse como tarjetas grises. */
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-option,
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-option,
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-option:hover,
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-option:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #000000 !important;
+}
+
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-option :is(span, svg, path, circle),
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-option :is(span, svg, path, circle) {
+  color: #000000 !important;
+}
+
+/* El control de tema se integra al fondo blanco del popup. */
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-theme-control,
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-theme-control {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+/* El círculo móvil del switch debe ser blanco puro. */
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-theme-thumb,
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-theme-thumb {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #ffffff !important;
+}
+
+/* Pie del popup: marca y enlaces legales negros en tema claro. */
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-footer,
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-footer {
+  border-color: rgba(0, 0, 0, 0.10) !important;
+}
+
+html:not(.dark) .featmusic-more-dropdown .featmusic-config-popup-footer :is(p, a, span),
+html:not(.dark) .featmusic-app-light .featmusic-more-dropdown .featmusic-config-popup-footer :is(p, a, span) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-decoration-color: #000000 !important;
+  text-shadow: none !important;
+}
+/* FEATMUSIC_CONFIGURACION_CLARO_LIMPIO_V2_END */
+
+/* FEATMUSIC_CONFIGURACION_BLANCO_SOLIDO_DEFINITIVO_V3_START */
+/*
+  Fondo definitivo del popup Configuración en escritorio.
+  Evita que las reglas globales que reinterpretan bg-black/bg-white lo vuelvan
+  semitransparente. Claro = blanco #FFFFFF puro. Oscuro = gris #262626 sólido.
+*/
+html:not(.dark) body .featmusic-app-light .featmusic-more-dropdown,
+html:not(.dark) body .featmusic-app-light .featmusic-more-dropdown[class] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html.dark body .featmusic-more-dropdown,
+html.dark body .featmusic-more-dropdown[class] {
+  background: #262626 !important;
+  background-color: #262626 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* FEATMUSIC_CONFIGURACION_BLANCO_SOLIDO_DEFINITIVO_V3_END */
+
+/* FEATMUSIC_CONFIGURACION_FONDO_DEFINITIVO_V4_START */
+/*
+  Configuración web - corrección final:
+  - Claro: popup #FFFFFF realmente sólido desde el primer frame (sin fade de opacidad).
+  - Oscuro: fondo general #262626 y filas internas sin fondos propios.
+  - Solo afecta el popup de escritorio; el drawer móvil queda intacto.
+*/
+
+@keyframes featmusicConfigDropdownSolid {
+  from {
+    transform: translate(-50%, -8px) scale(0.985);
+  }
+  to {
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+html:not(.dark) .featmusic-config-desktop-popup,
+html:not(.dark) body .featmusic-config-desktop-popup[class] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  --tw-bg-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  animation: featmusicConfigDropdownSolid 160ms ease-out both !important;
+}
+
+/* Mantener el popup oscuro como una sola superficie gris sólida. */
+html.dark .featmusic-config-desktop-popup,
+html.dark body .featmusic-config-desktop-popup[class] {
+  background: #262626 !important;
+  background-color: #262626 !important;
+  background-image: none !important;
+  --tw-bg-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/*
+  En oscuro, Modo oscuro / Planes Premium / Ayuda / Reportar no deben
+  dibujar tarjetas grises encima del fondo general del popup.
+*/
+html.dark .featmusic-config-desktop-popup .featmusic-config-theme-control,
+html.dark .featmusic-config-desktop-popup .featmusic-config-theme-control:hover,
+html.dark .featmusic-config-desktop-popup .featmusic-config-popup-option,
+html.dark .featmusic-config-desktop-popup .featmusic-config-popup-option:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html.dark .featmusic-config-desktop-popup .featmusic-config-theme-control,
+html.dark .featmusic-config-desktop-popup .featmusic-config-theme-control:hover {
+  border-color: transparent !important;
+}
+/* FEATMUSIC_CONFIGURACION_FONDO_DEFINITIVO_V4_END */
+
+/* FEATMUSIC_SWITCH_BLANCO_OSCURO_V1_START */
+/*
+  Popup Configuración en escritorio: solo en modo oscuro,
+  el círculo móvil del selector claro/oscuro debe ser blanco puro.
+*/
+html.dark .featmusic-config-desktop-popup .featmusic-config-theme-thumb,
+html.dark body .featmusic-config-desktop-popup .featmusic-config-theme-thumb {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #ffffff !important;
+  opacity: 1 !important;
+}
+/* FEATMUSIC_SWITCH_BLANCO_OSCURO_V1_END */
+
+
+/* FEATMUSIC_REGISTRO_FONDO_AMBIENTAL_V1_START */
+/*
+  Fondo ambiental para Completar perfil.
+  La interfaz queda sin tarjeta exterior: solo fondo negro profundo,
+  resplandor amarillo muy suave y una textura casi imperceptible.
+*/
+.featmusic-registro-ambiental {
+  background-color: #080808 !important;
+}
+
+.featmusic-registro-ambiental::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 50% 26%, rgba(255, 212, 0, 0.105) 0%, rgba(255, 212, 0, 0.038) 22%, transparent 48%),
+    radial-gradient(circle at 12% 80%, rgba(255, 255, 255, 0.035) 0%, transparent 34%),
+    radial-gradient(circle at 88% 72%, rgba(120, 120, 120, 0.045) 0%, transparent 32%);
+  filter: blur(10px);
+}
+
+.featmusic-registro-ambiental::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0 0.55px, transparent 0.7px),
+    radial-gradient(circle at 70% 65%, rgba(255,255,255,0.05) 0 0.45px, transparent 0.65px);
+  background-size: 7px 7px, 11px 11px;
+  mix-blend-mode: soft-light;
+}
+
+@media (max-width: 640px) {
+  .featmusic-registro-ambiental::before {
+    inset: -10%;
+    background:
+      radial-gradient(circle at 50% 22%, rgba(255, 212, 0, 0.09) 0%, rgba(255, 212, 0, 0.03) 20%, transparent 44%),
+      radial-gradient(circle at 15% 82%, rgba(255,255,255,0.025) 0%, transparent 30%);
+    filter: blur(8px);
+  }
+
+  .featmusic-registro-ambiental::after {
+    opacity: 0.14;
+  }
+}
+/* FEATMUSIC_REGISTRO_FONDO_AMBIENTAL_V1_END */
