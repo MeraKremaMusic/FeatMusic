@@ -26,6 +26,8 @@ type PerfilActualizado = {
   instagramUrl: string | null;
   distribuidoraPreferida: string | null;
   softwarePreferido: string | null;
+  perfilPrivado?: boolean;
+  enlacePerfilPrivado?: string | null;
 };
 
 type PerfilArtistaCardProps = PerfilActualizado & {
@@ -183,6 +185,8 @@ export default function PerfilArtistaCard({
   instagramUrl: instagramInicial,
   distribuidoraPreferida: distribuidoraInicial,
   softwarePreferido: softwareInicial,
+  perfilPrivado: perfilPrivadoInicial = false,
+  enlacePerfilPrivado: enlacePrivadoInicial = null,
   rol,
   tipoColaboracion,
   generos,
@@ -212,6 +216,8 @@ export default function PerfilArtistaCard({
     instagramUrl: instagramInicial,
     distribuidoraPreferida: distribuidoraInicial,
     softwarePreferido: softwareInicial,
+    perfilPrivado: perfilPrivadoInicial,
+    enlacePerfilPrivado: enlacePrivadoInicial,
   });
   const [modalAbierto, setModalAbierto] = useState(false);
   const [nombreArtistico, setNombreArtistico] = useState(nombreInicial);
@@ -234,6 +240,11 @@ export default function PerfilArtistaCard({
   const [otroSoftware, setOtroSoftware] = useState(
     softwareInicialNormalizado.otro,
   );
+  const [perfilPrivadoSeleccionado, setPerfilPrivadoSeleccionado] = useState(
+    Boolean(perfilPrivadoInicial),
+  );
+  const [copiandoEnlace, setCopiandoEnlace] = useState(false);
+  const [regenerandoEnlace, setRegenerandoEnlace] = useState(false);
   const [archivo, setArchivo] = useState<File | null>(null);
   const [vistaPrevia, setVistaPrevia] = useState<string | null>(fotoInicial);
   const [archivoPortada, setArchivoPortada] = useState<File | null>(null);
@@ -301,6 +312,7 @@ export default function PerfilArtistaCard({
     setOtraDistribuidora(distribuidora.otra);
     setSoftwareSeleccionado(software.seleccion);
     setOtroSoftware(software.otro);
+    setPerfilPrivadoSeleccionado(Boolean(perfil.perfilPrivado));
     setArchivo(null);
     setVistaPrevia(perfil.fotoPerfil);
     setArchivoPortada(null);
@@ -401,6 +413,63 @@ export default function PerfilArtistaCard({
     }
   }
 
+  async function copiarEnlacePrivado() {
+    const enlace = perfil.enlacePerfilPrivado?.trim();
+    if (!enlace || copiandoEnlace) return;
+
+    try {
+      setCopiandoEnlace(true);
+      await navigator.clipboard.writeText(enlace);
+      setError("");
+      setExito("Enlace privado copiado.");
+    } catch {
+      setExito("");
+      setError("No se pudo copiar el enlace. Selecciónalo y cópialo manualmente.");
+    } finally {
+      setCopiandoEnlace(false);
+    }
+  }
+
+  async function regenerarEnlacePrivado() {
+    if (regenerandoEnlace || guardando) return;
+
+    try {
+      setRegenerandoEnlace(true);
+      setError("");
+      setExito("");
+
+      const respuesta = await fetch("/api/perfil/enlace-privado", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+      });
+      const datos = (await respuesta.json()) as {
+        ok: boolean;
+        mensaje?: string;
+        enlacePerfilPrivado?: string;
+      };
+
+      if (!respuesta.ok || !datos.ok || !datos.enlacePerfilPrivado) {
+        throw new Error(datos.mensaje ?? "No se pudo generar un nuevo enlace.");
+      }
+
+      setPerfil((actual) => ({
+        ...actual,
+        enlacePerfilPrivado: datos.enlacePerfilPrivado ?? null,
+      }));
+      setExito("Nuevo enlace privado generado. El enlace anterior dejó de funcionar.");
+    } catch (err) {
+      setExito("");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "No se pudo generar un nuevo enlace privado.",
+      );
+    } finally {
+      setRegenerandoEnlace(false);
+    }
+  }
+
   async function guardarPerfil(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (guardando) return;
@@ -477,6 +546,7 @@ export default function PerfilArtistaCard({
     formData.set("instagramUrl", instagramLimpio);
     formData.set("distribuidoraPreferida", distribuidoraLimpia);
     formData.set("softwarePreferido", softwareLimpio);
+    formData.set("perfilPrivado", perfilPrivadoSeleccionado ? "true" : "false");
 
     if (archivo) {
       formData.set("fotoPerfil", archivo);
@@ -519,6 +589,7 @@ export default function PerfilArtistaCard({
       setSpotifyUrl(data.usuario.spotifyUrl ?? "");
       setYoutubeUrl(data.usuario.youtubeUrl ?? "");
       setInstagramUrl(data.usuario.instagramUrl ?? "");
+      setPerfilPrivadoSeleccionado(Boolean(data.usuario.perfilPrivado));
 
       const distribuidoraActualizada = obtenerSeleccionDistribuidora(
         data.usuario.distribuidoraPreferida,
@@ -1091,6 +1162,103 @@ export default function PerfilArtistaCard({
                     />
                   </label>
                 )}
+              </div>
+
+              <div className="border-t border-white/10 pt-5">
+                <div className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-black/30 p-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-zinc-200">
+                      Perfil privado
+                    </p>
+                    <p className="mt-1 text-[10px] leading-4 text-zinc-500 sm:text-[11px]">
+                      Tu información básica seguirá visible, pero tus ideas solo podrán verlas quienes tengan tu enlace privado.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={perfilPrivadoSeleccionado}
+                    aria-label="Activar o desactivar perfil privado"
+                    disabled={guardando}
+                    onClick={() => {
+                      setPerfilPrivadoSeleccionado((valor) => !valor);
+                      setError("");
+                      setExito("");
+                    }}
+                    className={`relative mt-0.5 h-7 w-12 shrink-0 rounded-full border transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                      perfilPrivadoSeleccionado
+                        ? "border-yellow-400 bg-yellow-400"
+                        : "border-white/15 bg-zinc-700"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition ${
+                        perfilPrivadoSeleccionado ? "left-[25px]" : "left-1"
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                <div className="mt-3 rounded-2xl border border-yellow-400/20 bg-yellow-400/[0.06] p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.12em] text-yellow-300">
+                        Enlace privado único
+                      </p>
+                      <p className="mt-1 text-[10px] leading-4 text-zinc-500">
+                        Este enlace se mantiene igual al cambiar entre perfil público y privado.
+                      </p>
+                    </div>
+                    <span className={`shrink-0 rounded-full px-2 py-1 text-[9px] font-black ${
+                      perfilPrivadoSeleccionado
+                        ? "bg-yellow-400 text-black"
+                        : "bg-white/10 text-zinc-300"
+                    }`}>
+                      {perfilPrivadoSeleccionado ? "Privado" : "Público"}
+                    </span>
+                  </div>
+
+                  {perfil.enlacePerfilPrivado ? (
+                    <>
+                      <div className="mt-3 flex gap-2">
+                        <input
+                          readOnly
+                          value={perfil.enlacePerfilPrivado}
+                          onFocus={(event) => event.currentTarget.select()}
+                          className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/40 px-3 py-2.5 text-[10px] text-zinc-300 outline-none"
+                        />
+                        <button
+                          type="button"
+                          disabled={guardando || copiandoEnlace || regenerandoEnlace}
+                          onClick={copiarEnlacePrivado}
+                          className="featmusic-edit-profile-yellow-action shrink-0 rounded-xl bg-yellow-400 px-3 py-2.5 text-[10px] font-black text-black transition hover:bg-yellow-300 disabled:opacity-60"
+                        >
+                          {copiandoEnlace ? "Copiando..." : "Copiar enlace"}
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        disabled={guardando || regenerandoEnlace || copiandoEnlace}
+                        onClick={regenerarEnlacePrivado}
+                        className="mt-3 w-full rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-[10px] font-black text-zinc-200 transition hover:border-yellow-400/40 hover:bg-yellow-400/[0.08] hover:text-yellow-200 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {regenerandoEnlace
+                          ? "Generando nuevo enlace..."
+                          : "Generar nuevo enlace privado"}
+                      </button>
+
+                      <p className="mt-2 text-[10px] leading-4 text-zinc-500">
+                        Si generas uno nuevo, el enlace anterior deja de funcionar inmediatamente. Cuando el perfil es público, ambos accesos muestran lo mismo; cuando es privado, solo este enlace permite ver las ideas.
+                      </p>
+                    </>
+                  ) : (
+                    <p className="mt-3 text-[10px] leading-4 text-zinc-500">
+                      Guarda los cambios una vez para preparar tu enlace privado.
+                    </p>
+                  )}
+                </div>
               </div>
 
               {error && (

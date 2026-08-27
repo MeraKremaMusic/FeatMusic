@@ -23,6 +23,10 @@ model Usuario {
   instagramUrl             String?                  @map("instagram_url") @db.VarChar(500)
   distribuidoraPreferida   String?                  @map("distribuidora_preferida") @db.VarChar(120)
   softwarePreferido        String?                  @map("software_preferido") @db.VarChar(120)
+  // FEATMUSIC_PERFIL_PRIVADO_PASO1_V1
+  // FEATMUSIC_PERFIL_PRIVADO_ENLACE_UNICO_V1
+  perfilPrivado            Boolean                  @default(false) @map("perfil_privado")
+  versionEnlacePrivado     Int                      @default(1) @map("version_enlace_privado")
   correo                   String                   @unique
   passwordHash             String                   @map("password_hash")
   pais                     String?

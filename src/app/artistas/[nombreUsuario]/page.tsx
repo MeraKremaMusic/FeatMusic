@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { normalizarPlan, obtenerLimitesPlan } from "@/lib/planes";
+import {
+  crearEnlaceAccesoPerfilPrivado,
+  verificarAccesoPerfilPrivado,
+} from "@/lib/perfil-privado";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 import ContadorVistasIdea from "../../components/ContadorVistasIdea";
@@ -126,6 +130,9 @@ function resolverCodigoPais(nombrePais: string) {
 type PerfilPublicoPageProps = {
   params: Promise<{
     nombreUsuario: string;
+  }>;
+  searchParams?: Promise<{
+    acceso?: string | string[];
   }>;
 };
 
@@ -399,6 +406,7 @@ export async function generateMetadata({
       ciudad: true,
       pais: true,
       generos: true,
+      perfilPrivado: true,
     },
   });
 
@@ -421,9 +429,11 @@ export async function generateMetadata({
   const rutaPublica = `/artistas/${encodeURIComponent(usuarioVisible)}`;
   const urlPublica = `${FEATMUSIC_URL_PUBLICA}${rutaPublica}`;
   const imagenSocial = artista.portadaPerfil || artista.fotoPerfil || undefined;
-  const descripcionBase =
-    artista.biografia?.trim() ||
-    `Escucha las ideas musicales de ${nombreArtistico} y propón una colaboración en FeatMusic.`;
+  const descripcionBase = artista.perfilPrivado
+    ? artista.biografia?.trim() ||
+      `Perfil musical de ${nombreArtistico} en FeatMusic.`
+    : artista.biografia?.trim() ||
+      `Escucha las ideas musicales de ${nombreArtistico} y propón una colaboración en FeatMusic.`;
   const contexto = [
     generos.length > 0 ? generos.join(" · ") : "",
     ubicacion,
@@ -463,7 +473,7 @@ export async function generateMetadata({
       description: descripcion,
       images: imagenSocial ? [imagenSocial] : undefined,
     },
-    robots: esRutaPerfilPropio
+    robots: esRutaPerfilPropio || artista.perfilPrivado
       ? {
           index: false,
           follow: false,
@@ -474,9 +484,15 @@ export async function generateMetadata({
 
 export default async function PerfilPublicoPage({
   params,
+  searchParams,
 }: PerfilPublicoPageProps) {
   const sesion = await obtenerSesion();
   const { nombreUsuario: parametro } = await params;
+  const parametrosBusqueda = searchParams ? await searchParams : {};
+  const accesoRecibido = parametrosBusqueda.acceso;
+  const tokenAcceso = Array.isArray(accesoRecibido)
+    ? accesoRecibido[0]
+    : accesoRecibido;
 
   let nombreUsuario = parametro;
   try {
@@ -512,6 +528,8 @@ export default async function PerfilPublicoPage({
     select: {
       id: true,
       perfilCompleto: true,
+      perfilPrivado: true,
+      versionEnlacePrivado: true,
       plan: true,
       nombre: true,
       nombreArtistico: true,
@@ -605,6 +623,24 @@ export default async function PerfilPublicoPage({
   }
 
   const esPerfilPropio = sesion?.usuarioId === artista.id;
+  const accesoPorEnlace =
+    artista.perfilPrivado &&
+    verificarAccesoPerfilPrivado({
+      usuarioId: artista.id,
+      version: artista.versionEnlacePrivado,
+      token: tokenAcceso,
+    });
+  const puedeVerIdeas =
+    esPerfilPropio || !artista.perfilPrivado || accesoPorEnlace;
+  const enlacePerfilPrivadoPropio = esPerfilPropio
+    ? crearEnlaceAccesoPerfilPrivado({
+        origen: FEATMUSIC_URL_PUBLICA,
+        nombreUsuario:
+          artista.nombreUsuario?.trim() || `artista-${artista.id}`,
+        usuarioId: artista.id,
+        version: artista.versionEnlacePrivado,
+      })
+    : null;
   const planArtista = normalizarPlan(artista.plan);
   const limitesPlan = obtenerLimitesPlan(planArtista);
   const portadaPerfilVisible = artista.portadaPerfil
@@ -774,7 +810,31 @@ export default async function PerfilPublicoPage({
 
   const tarjetasIdeasActivas = (
     <>
-      {artista.ideas.length === 0 ? (
+      {!puedeVerIdeas ? (
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-12 text-center">
+          <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-yellow-400 bg-yellow-400 text-black">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.9}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="5" y="10" width="14" height="10" rx="2" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+          </span>
+          <p className="mt-3 text-sm font-black text-slate-800">
+            Este perfil es privado
+          </p>
+          <p className="mx-auto mt-1.5 max-w-md text-[10px] leading-4 text-slate-500 sm:text-[11px]">
+            Solo las personas que tengan acceso mediante el enlace privado pueden ver las ideas de este artista.
+          </p>
+        </div>
+      ) : artista.ideas.length === 0 ? (
         esPerfilPropio ? (
           <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center shadow-sm">
             <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-[#FFD400] bg-[#FFD400] text-black">
@@ -1258,6 +1318,8 @@ export default async function PerfilPublicoPage({
                   instagramUrl={artista.instagramUrl}
                   distribuidoraPreferida={artista.distribuidoraPreferida}
                   softwarePreferido={artista.softwarePreferido}
+                  perfilPrivado={artista.perfilPrivado}
+                  enlacePerfilPrivado={enlacePerfilPrivadoPropio}
                   rol={formatearRol(artista.rolPrincipal)}
                   tipoColaboracion=""
                   generos={generos}
@@ -1307,7 +1369,7 @@ export default async function PerfilPublicoPage({
                   </div>
                 
                   <span className="rounded-full border !border-yellow-400 !bg-yellow-400 px-2.5 py-0.5 text-[10px] font-bold !text-black sm:px-3 sm:py-1 sm:text-xs">
-                    {artista.ideas.length}
+                    {puedeVerIdeas ? artista.ideas.length : "Privado"}
                   </span>
                 </div>
                 {tarjetasIdeasActivas}

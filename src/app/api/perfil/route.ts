@@ -13,6 +13,9 @@ import {
   nombreUsuarioEsValido,
   normalizarNombreUsuario,
 } from "@/lib/nombreUsuario";
+import {
+  crearEnlaceAccesoPerfilPrivado,
+} from "@/lib/perfil-privado";
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
@@ -65,6 +68,7 @@ const perfilSchema = z.object({
 });
 
 const selectPerfilActualizado = {
+  id: true,
   nombreArtistico: true,
   nombreUsuario: true,
   biografia: true,
@@ -75,6 +79,8 @@ const selectPerfilActualizado = {
   instagramUrl: true,
   distribuidoraPreferida: true,
   softwarePreferido: true,
+  perfilPrivado: true,
+  versionEnlacePrivado: true,
 } as const;
 
 function respuestaError(mensaje: string, status: number) {
@@ -93,6 +99,7 @@ export async function PATCH(request: Request) {
     const nombreUsuarioSolicitado = normalizarNombreUsuario(
       formData.get("nombreUsuario"),
     );
+    const perfilPrivadoSolicitado = formData.get("perfilPrivado") === "true";
 
     const resultado = perfilSchema.safeParse({
       nombreArtistico: formData.get("nombreArtistico"),
@@ -113,7 +120,11 @@ export async function PATCH(request: Request) {
 
     const usuarioActual = await prisma.usuario.findUnique({
       where: { id: sesion.usuarioId },
-      select: { nombreUsuario: true },
+      select: {
+        nombreUsuario: true,
+        perfilPrivado: true,
+        versionEnlacePrivado: true,
+      },
     });
 
     if (!usuarioActual) {
@@ -224,6 +235,7 @@ export async function PATCH(request: Request) {
       instagramUrl: resultado.data.instagramUrl || null,
       distribuidoraPreferida: resultado.data.distribuidoraPreferida || null,
       softwarePreferido: resultado.data.softwarePreferido || null,
+      perfilPrivado: perfilPrivadoSolicitado,
       ...(fotoPerfil !== undefined ? { fotoPerfil } : {}),
       ...(portadaPerfil !== undefined ? { portadaPerfil } : {}),
     };
@@ -283,10 +295,39 @@ export async function PATCH(request: Request) {
       }
     }
 
+    const usuarioVisible =
+      usuarioActualizado.nombreUsuario?.trim() ||
+      `artista-${usuarioActualizado.id}`;
+    const origenPublico = (
+      process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      new URL(request.url).origin
+    ).replace(/\/+$/, "");
+    const enlacePerfilPrivado = crearEnlaceAccesoPerfilPrivado({
+      origen: origenPublico,
+      nombreUsuario: usuarioVisible,
+      usuarioId: usuarioActualizado.id,
+      version: usuarioActualizado.versionEnlacePrivado,
+    });
     return NextResponse.json({
       ok: true,
-      mensaje: "Perfil actualizado correctamente.",
-      usuario: usuarioActualizado,
+      mensaje: perfilPrivadoSolicitado
+        ? "Perfil actualizado. Tu perfil ahora es privado."
+        : "Perfil actualizado correctamente.",
+      usuario: {
+        nombreArtistico: usuarioActualizado.nombreArtistico,
+        nombreUsuario: usuarioActualizado.nombreUsuario,
+        biografia: usuarioActualizado.biografia,
+        fotoPerfil: usuarioActualizado.fotoPerfil,
+        portadaPerfil: usuarioActualizado.portadaPerfil,
+        spotifyUrl: usuarioActualizado.spotifyUrl,
+        youtubeUrl: usuarioActualizado.youtubeUrl,
+        instagramUrl: usuarioActualizado.instagramUrl,
+        distribuidoraPreferida: usuarioActualizado.distribuidoraPreferida,
+        softwarePreferido: usuarioActualizado.softwarePreferido,
+        perfilPrivado: usuarioActualizado.perfilPrivado,
+        enlacePerfilPrivado,
+      },
     });
   } catch (error) {
     if (
