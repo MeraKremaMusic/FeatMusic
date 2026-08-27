@@ -58,7 +58,6 @@ const planes: Plan[] = [
     beneficios: [
       "Hasta 3 ideas activas",
       "3 propuestas por cada idea",
-      "Sin comisión por colaborar",
     ],
   },
   {
@@ -266,9 +265,6 @@ export default async function PlanesPage() {
                       <p className="text-[10px] font-black uppercase tracking-[0.18em] text-yellow-300">
                         {plan.nombre}
                       </p>
-                      <p className="mt-1 text-xs font-semibold text-white/55">
-                        {plan.espacios}
-                      </p>
                     </div>
                   </div>
 
@@ -289,15 +285,6 @@ export default async function PlanesPage() {
                       ≈ {plan.precioUsdAprox}
                     </p>
                   )}
-
-                  <div className="relative mt-5">
-                    <h2 className="text-xl font-black text-white">
-                      {plan.espacios}
-                    </h2>
-                    <p className="mt-3 min-h-[84px] text-sm leading-6 text-yellow-50/65">
-                      {plan.descripcion}
-                    </p>
-                  </div>
 
                   <div className="relative mt-6 border-t border-white/10 pt-5">
                     <ul className="space-y-3">

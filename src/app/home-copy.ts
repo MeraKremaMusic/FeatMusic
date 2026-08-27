@@ -231,7 +231,6 @@ export const homeCopy = {
           features: [
             "Hasta 3 ideas activas",
             "3 propuestas por cada idea",
-            "Sin comisión por colaborar",
           ],
         },
         {
@@ -249,11 +248,13 @@ export const homeCopy = {
           label: "Plan Pro",
           title: "20 espacios",
           body:
-            "Amplía tu catálogo, destaca tu perfil y participa incluso cuando una idea ya alcanzó su límite normal.",
+            "Publica hasta 20 ideas activas y recibe un máximo de 20 propuestas diferentes en cada una.",
           features: [
             "Hasta 20 ideas activas",
+            "Hasta 20 propuestas por idea",
+            "Envía propuestas incluso con cupos completos",
+            "Insignia Pro dorada",
             "Perfil destacado como artista",
-            "Propuestas extra aunque se alcance el límite",
           ],
         },
       ],
@@ -555,7 +556,6 @@ export const homeCopy = {
           features: [
             "Up to 3 active ideas",
             "3 proposals for each idea",
-            "No collaboration commission",
           ],
         },
         {
@@ -573,11 +573,13 @@ export const homeCopy = {
           label: "Pro plan",
           title: "20 spaces",
           body:
-            "Expand your catalog, highlight your profile and participate even when an idea has reached its normal limit.",
+            "Publish up to 20 active ideas and receive a maximum of 20 different proposals on each one.",
           features: [
             "Up to 20 active ideas",
+            "Up to 20 proposals per idea",
+            "Send proposals even when slots are full",
+            "Gold Pro badge",
             "Highlighted artist profile",
-            "Extra proposals beyond the normal limit",
           ],
         },
       ],
@@ -879,7 +881,6 @@ export const homeCopy = {
           features: [
             "Até 3 ideias ativas",
             "3 propostas por ideia",
-            "Sem comissão nas colaborações",
           ],
         },
         {
@@ -897,11 +898,13 @@ export const homeCopy = {
           label: "Plano Pro",
           title: "20 espaços",
           body:
-            "Amplie seu catálogo, destaque seu perfil e participe mesmo quando uma ideia atingir o limite normal.",
+            "Publique até 20 ideias ativas e receba no máximo 20 propostas diferentes em cada uma.",
           features: [
             "Até 20 ideias ativas",
+            "Até 20 propostas por ideia",
+            "Envie propostas mesmo quando as vagas estiverem completas",
+            "Insígnia Pro dourada",
             "Perfil de artista em destaque",
-            "Propostas extras além do limite normal",
           ],
         },
       ],

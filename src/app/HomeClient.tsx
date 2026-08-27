@@ -1463,8 +1463,6 @@ export default function Home() {
                       {planUsdApprox[index]}
                     </span>
                   )}
-                  <h3>{card.title}</h3>
-                  <p>{card.body}</p>
                 </div>
                 <ul className="mobile-plan-features hidden">
                   {card.features.map((feature) => (
@@ -1492,10 +1490,6 @@ export default function Home() {
                       </p>
                     )}
                   </div>
-                  <h3 className="text-2xl font-semibold">{card.title}</h3>
-                  <p className="mt-3 leading-7 text-yellow-50/65">
-                    {card.body}
-                  </p>
                 </div>
                 <span
                   aria-hidden="true"
