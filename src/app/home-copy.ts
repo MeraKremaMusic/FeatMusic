@@ -219,7 +219,9 @@ export const homeCopy = {
     plans: {
       eyebrow: "Planes claros",
       title: "Elige el espacio que necesita tu música.",
-      billingPeriod: "USD al mes",
+      billingPeriod: "COP al mes",
+      priceNote:
+        "Los pagos se procesan en pesos colombianos (COP). La equivalencia en USD es aproximada.",
       cards: [
         {
           label: "Plan gratuito",
@@ -240,7 +242,7 @@ export const homeCopy = {
           features: [
             "Hasta 10 ideas activas",
             "Hasta 10 propuestas por idea",
-            "Sin comisión por colaborar",
+            "Insignia Creator plateada",
           ],
         },
         {
@@ -296,7 +298,7 @@ export const homeCopy = {
         {
           question: "¿Qué cambia con la suscripción?",
           answer:
-            "Creator cuesta $5 USD al mes e incluye 10 espacios y hasta 10 propuestas por idea. Pro cuesta $10 USD al mes e incluye 20 espacios, perfil destacado y propuestas extra incluso cuando una idea alcanzó su límite normal.",
+            "Creator cuesta $9.900 COP al mes (≈ US$3,20) e incluye 10 espacios, hasta 10 propuestas por idea e insignia plateada. Pro cuesta $19.990 COP al mes (≈ US$6,40) e incluye 20 espacios, perfil destacado y propuestas extra incluso cuando una idea alcanzó su límite normal.",
         },
         {
           question: "¿Puedo buscar artistas de otra ciudad o país?",
@@ -541,7 +543,9 @@ export const homeCopy = {
     plans: {
       eyebrow: "Clear plans",
       title: "Choose the space your music needs.",
-      billingPeriod: "USD per month",
+      billingPeriod: "COP per month",
+      priceNote:
+        "Payments are processed in Colombian pesos (COP). The USD equivalent is approximate.",
       cards: [
         {
           label: "Free plan",
@@ -562,7 +566,7 @@ export const homeCopy = {
           features: [
             "Up to 10 active ideas",
             "Up to 10 proposals per idea",
-            "No collaboration commission",
+            "Silver Creator badge",
           ],
         },
         {
@@ -618,7 +622,7 @@ export const homeCopy = {
         {
           question: "What changes with a subscription?",
           answer:
-            "Creator costs $5 USD per month and includes 10 spaces with up to 10 proposals per idea. Pro costs $10 USD per month and includes 20 spaces, a highlighted profile and extra proposals even when an idea has reached its normal limit.",
+            "Creator costs COP $9,900 per month (about US$3.20) and includes 10 spaces, up to 10 proposals per idea and a silver badge. Pro costs COP $19,990 per month (about US$6.40) and includes 20 spaces, a highlighted profile and extra proposals even when an idea has reached its normal limit.",
         },
         {
           question: "Can I find artists in another city or country?",
@@ -863,7 +867,9 @@ export const homeCopy = {
     plans: {
       eyebrow: "Planos claros",
       title: "Escolha o espaço que sua música precisa.",
-      billingPeriod: "USD por mês",
+      billingPeriod: "COP por mês",
+      priceNote:
+        "Os pagamentos são processados em pesos colombianos (COP). O valor equivalente em USD é aproximado.",
       cards: [
         {
           label: "Plano grátis",
@@ -884,7 +890,7 @@ export const homeCopy = {
           features: [
             "Até 10 ideias ativas",
             "Até 10 propostas por ideia",
-            "Sem comissão nas colaborações",
+            "Insígnia Creator prateada",
           ],
         },
         {
@@ -940,7 +946,7 @@ export const homeCopy = {
         {
           question: "O que muda com a assinatura?",
           answer:
-            "O Creator custa US$ 5 por mês e inclui 10 espaços e até 10 propostas por ideia. O Pro custa US$ 10 por mês e inclui 20 espaços, perfil em destaque e propostas extras mesmo quando uma ideia atinge o limite normal.",
+            "O Creator custa COP $9.900 por mês (aprox. US$3,20) e inclui 10 espaços, até 10 propostas por ideia e insígnia prateada. O Pro custa COP $19.990 por mês (aprox. US$6,40) e inclui 20 espaços, perfil em destaque e propostas extras mesmo quando uma ideia atinge o limite normal.",
         },
         {
           question: "Posso buscar artistas de outra cidade ou país?",

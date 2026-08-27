@@ -193,7 +193,8 @@ const connectionIcons: GraphicIconName[] = [
 ];
 const communityIcons: GraphicIconName[] = ["microphone", "disc", "pen"];
 const planIcons: GraphicIconName[] = ["gift", "crown", "spark"];
-const planHighlights = ["$0", "$5", "$10"] as const;
+const planHighlights = ["$0", "$9.900", "$19.990"] as const;
+const planUsdApprox = ["", "≈ US$3,20", "≈ US$6,40"] as const;
 const demoWaveform = [
   18, 32, 44, 24, 52, 68, 38, 74, 48, 30, 58, 82, 46, 66, 34, 24, 54, 72,
   40, 62, 86, 48, 32, 58, 76, 42, 68, 36, 22, 52, 70, 44, 60, 28, 46, 20,
@@ -1457,6 +1458,11 @@ export default function Home() {
                       {copy.plans.billingPeriod}
                     </span>
                   </div>
+                  {planUsdApprox[index] && (
+                    <span className="mt-1 block text-[10px] font-semibold text-yellow-50/55">
+                      {planUsdApprox[index]}
+                    </span>
+                  )}
                   <h3>{card.title}</h3>
                   <p>{card.body}</p>
                 </div>
@@ -1471,6 +1477,21 @@ export default function Home() {
                   ))}
                 </ul>
                 <div className="mobile-plan-desktop-copy relative mt-auto pt-7">
+                  <div className="mb-4">
+                    <div className="flex items-end gap-2">
+                      <span className="text-3xl font-black tracking-tight text-white">
+                        {planHighlights[index]}
+                      </span>
+                      <span className="pb-1 text-[9px] font-bold uppercase tracking-[0.12em] text-yellow-50/45">
+                        {copy.plans.billingPeriod}
+                      </span>
+                    </div>
+                    {planUsdApprox[index] && (
+                      <p className="mt-1 text-[10px] font-semibold text-yellow-50/50">
+                        {planUsdApprox[index]}
+                      </p>
+                    )}
+                  </div>
                   <h3 className="text-2xl font-semibold">{card.title}</h3>
                   <p className="mt-3 leading-7 text-yellow-50/65">
                     {card.body}
@@ -1485,6 +1506,9 @@ export default function Home() {
               </article>
             ))}
           </div>
+          <p className="mt-5 text-center text-[10px] leading-4 text-yellow-50/45">
+            {copy.plans.priceNote}
+          </p>
           <div
             className="mobile-plan-pagination hidden"
             aria-label={copy.plans.eyebrow}

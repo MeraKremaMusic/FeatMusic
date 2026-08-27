@@ -39,6 +39,7 @@ type Plan = {
   codigo: "GRATUITO" | PlanPagoFeatMusic;
   nombre: string;
   precio: string;
+  precioUsdAprox?: string;
   espacios: string;
   descripcion: string;
   beneficios: string[];
@@ -65,6 +66,7 @@ const planes: Plan[] = [
     codigo: "CREATOR",
     nombre: "Plan Creator",
     precio: formatearPrecioCop(PLANES_FEATMUSIC.CREATOR.precioCop),
+    precioUsdAprox: "US$3,20",
     espacios: "10 espacios",
     descripcion:
       "Publica hasta 10 ideas y recibe un máximo de 10 propuestas diferentes en cada una.",
@@ -72,7 +74,6 @@ const planes: Plan[] = [
       "Hasta 10 ideas activas",
       "Hasta 10 propuestas por idea",
       "Insignia Creator plateada",
-      "Sin comisión por colaborar",
     ],
     destacado: true,
   },
@@ -81,6 +82,7 @@ const planes: Plan[] = [
     codigo: "PRO",
     nombre: "Plan Pro",
     precio: formatearPrecioCop(PLANES_FEATMUSIC.PRO.precioCop),
+    precioUsdAprox: "US$6,40",
     espacios: "20 espacios",
     descripcion:
       "Publica hasta 20 ideas activas y recibe un máximo de 20 propuestas diferentes en cada una.",
@@ -223,6 +225,10 @@ export default async function PlanesPage() {
             período pagado activo. Si solicitas un cambio, se programará para
             tu siguiente renovación y conservarás el plan actual hasta ese día.
           </div>
+          <p className="mx-auto mt-3 max-w-3xl text-center text-[10px] leading-4 text-yellow-50/45">
+            Los pagos se procesan en pesos colombianos (COP). La equivalencia
+            en USD es aproximada.
+          </p>
 
           <div className="mt-9 grid gap-5 md:grid-cols-3 lg:mt-12">
             {planes.map((plan) => {
@@ -277,6 +283,12 @@ export default async function PlanesPage() {
                       al mes
                     </span>
                   </div>
+
+                  {plan.precioUsdAprox && (
+                    <p className="relative mt-2 text-[11px] font-semibold text-yellow-100/55">
+                      ≈ {plan.precioUsdAprox}
+                    </p>
+                  )}
 
                   <div className="relative mt-5">
                     <h2 className="text-xl font-black text-white">
