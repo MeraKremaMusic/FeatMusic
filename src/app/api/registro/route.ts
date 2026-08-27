@@ -7,6 +7,7 @@ import {
   segundosHastaReenvio,
 } from "@/lib/codigos";
 import { enviarCodigoPorCorreo } from "@/lib/email";
+import { VERSION_LEGAL_ACTUAL } from "@/lib/legal";
 import { prisma } from "@/lib/prisma";
 import { redirigir } from "@/lib/redirect";
 
@@ -18,6 +19,7 @@ const registroSchema = z
     password: z.string().min(8).max(128),
     repetirPassword: z.string().min(8).max(128),
     aceptaTerminos: z.literal("on"),
+    confirmaMayoriaEdad: z.literal("on"),
   })
   .refine((datos) => datos.password === datos.repetirPassword, {
     message: "Las contraseñas no coinciden.",
@@ -37,6 +39,7 @@ export async function POST(request: Request) {
       password: formData.get("password"),
       repetirPassword: formData.get("repetirPassword"),
       aceptaTerminos: formData.get("aceptaTerminos"),
+      confirmaMayoriaEdad: formData.get("confirmaMayoriaEdad"),
     });
 
     if (!resultado.success) {
@@ -85,6 +88,8 @@ export async function POST(request: Request) {
       bcrypt.hash(codigo, 10),
     ]);
 
+    const aceptacionLegalEn = new Date();
+
     await prisma.registroPendiente.upsert({
       where: {
         correo: resultado.data.correo,
@@ -95,7 +100,9 @@ export async function POST(request: Request) {
         rolPrincipal: ROL_PENDIENTE,
         codigoHash,
         codigoExpiraEn: fechaExpiracionCodigo(),
-        aceptoTerminosEn: new Date(),
+        aceptoTerminosEn: aceptacionLegalEn,
+        versionLegalAceptada: VERSION_LEGAL_ACTUAL,
+        confirmoMayoriaEdadEn: aceptacionLegalEn,
       },
       update: {
         passwordHash,
@@ -104,7 +111,9 @@ export async function POST(request: Request) {
         codigoExpiraEn: fechaExpiracionCodigo(),
         intentosCodigo: 0,
         ultimoEnvioEn: new Date(),
-        aceptoTerminosEn: new Date(),
+        aceptoTerminosEn: aceptacionLegalEn,
+        versionLegalAceptada: VERSION_LEGAL_ACTUAL,
+        confirmoMayoriaEdadEn: aceptacionLegalEn,
       },
     });
 

@@ -49,6 +49,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (
+      !pendiente.versionLegalAceptada ||
+      !pendiente.confirmoMayoriaEdadEn
+    ) {
+      return redirigir("/registro?error=datos-invalidos");
+    }
+
     if (pendiente.intentosCodigo >= MAXIMO_INTENTOS_CODIGO) {
       return redirigir(
         rutaVerificacion(resultado.data.correo, "demasiados-intentos"),
@@ -89,6 +96,8 @@ export async function POST(request: Request) {
           correoVerificado: true,
           perfilCompleto: false,
           aceptoTerminosEn: pendiente.aceptoTerminosEn,
+          versionLegalAceptada: pendiente.versionLegalAceptada,
+          confirmoMayoriaEdadEn: pendiente.confirmoMayoriaEdadEn,
         },
         select: { id: true, correo: true },
       });

@@ -28,6 +28,7 @@ export default function RegistroInicialPorPasos() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const repetirPasswordRef = useRef<HTMLInputElement>(null);
   const terminosRef = useRef<HTMLInputElement>(null);
+  const mayoriaEdadRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     window.requestAnimationFrame(() => {
@@ -52,14 +53,27 @@ export default function RegistroInicialPorPasos() {
     const passwordInput = passwordRef.current;
     const repetirInput = repetirPasswordRef.current;
     const terminosInput = terminosRef.current;
+    const mayoriaEdadInput = mayoriaEdadRef.current;
 
-    if (!passwordInput || !repetirInput || !terminosInput) return false;
+    if (
+      !passwordInput ||
+      !repetirInput ||
+      !terminosInput ||
+      !mayoriaEdadInput
+    ) {
+      return false;
+    }
 
     repetirInput.setCustomValidity(
       password === repetirPassword ? "" : "Las contraseñas no coinciden.",
     );
 
-    for (const control of [passwordInput, repetirInput, terminosInput]) {
+    for (const control of [
+      passwordInput,
+      repetirInput,
+      mayoriaEdadInput,
+      terminosInput,
+    ]) {
       if (!control.checkValidity()) {
         control.reportValidity();
         return false;
@@ -235,6 +249,19 @@ export default function RegistroInicialPorPasos() {
 
             <label className="flex items-start gap-2.5 text-[11px] leading-relaxed text-zinc-400 sm:text-xs">
               <input
+                ref={mayoriaEdadRef}
+                required
+                type="checkbox"
+                name="confirmaMayoriaEdad"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[#FFD400]"
+              />
+              <span>
+                Confirmo que tengo <strong className="font-semibold text-zinc-200">18 años o más</strong>.
+              </span>
+            </label>
+
+            <label className="flex items-start gap-2.5 text-[11px] leading-relaxed text-zinc-400 sm:text-xs">
+              <input
                 ref={terminosRef}
                 required
                 type="checkbox"
@@ -248,7 +275,7 @@ export default function RegistroInicialPorPasos() {
                   target="_blank"
                   className="font-medium text-[#FFD400] hover:brightness-110"
                 >
-                  términos de uso
+                  Términos y condiciones
                 </Link>{" "}
                 y la{" "}
                 <Link
