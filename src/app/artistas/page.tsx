@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
 
+// FEATMUSIC_PERFIL_PRIVADO_EXPLORAR_INICIO_V1
 // FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
 import ArtistasClient, {
   type ArtistaExplorar,
@@ -166,6 +167,7 @@ export default async function ArtistasPage() {
           pais: true,
           rolPrincipal: true,
           generos: true,
+          perfilPrivado: true,
           creadoEn: true,
           seguidores: {
             where: {
@@ -236,15 +238,18 @@ export default async function ArtistasPage() {
         codigoPais: resolverCodigoPais(usuario.pais!),
         rol: usuario.rolPrincipal,
         generos: obtenerGeneros(usuario.generos),
+        perfilPrivado: usuario.perfilPrivado,
         ideasActivas: usuario._count.ideas,
-        ideasRecientes: usuario.ideas.map((idea) => {
-          const { _count, ...datosIdea } = idea;
+        ideasRecientes: usuario.perfilPrivado
+          ? []
+          : usuario.ideas.map((idea) => {
+              const { _count, ...datosIdea } = idea;
 
-          return {
-            ...datosIdea,
-            vistasUnicas: _count.vistas,
-          };
-        }),
+              return {
+                ...datosIdea,
+                vistasUnicas: _count.vistas,
+              };
+            }),
         creadoEn: usuario.creadoEn.toISOString(),
       }))
       .sort((a, b) => {

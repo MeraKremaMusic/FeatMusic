@@ -16,6 +16,7 @@ import { obtenerPaises } from "@/lib/ubicaciones";
 
 import FeedInicio from "./FeedInicio";
 
+// FEATMUSIC_PERFIL_PRIVADO_EXPLORAR_INICIO_V1
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -106,7 +107,10 @@ export default async function InicioPage() {
         estado: "ACTIVA",
         expiraEn: { gt: ahora },
         usuarioId: { not: sesion.usuarioId },
-        usuario: { perfilCompleto: true },
+        usuario: {
+          perfilCompleto: true,
+          perfilPrivado: false,
+        },
       },
       orderBy: { creadoEn: "desc" },
       take: 80,

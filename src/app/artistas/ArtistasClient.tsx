@@ -1,5 +1,6 @@
 "use client";
 
+// FEATMUSIC_PERFIL_PRIVADO_EXPLORAR_INICIO_V1
 // FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
 // FEATMUSIC_QUITAR_PORTADA_IDEAS_EXPLORAR_V1
 // FEATMUSIC_MENU_MAS_PAGINAS_NUEVAS_V1
@@ -31,6 +32,7 @@ export type ArtistaExplorar = {
   codigoPais: string;
   rol: string;
   generos: string[];
+  perfilPrivado: boolean;
   ideasActivas: number;
   ideasRecientes: Array<{
     id: number;
@@ -697,7 +699,13 @@ function TarjetaArtista({
       </div>
 
       <div className="relative flex flex-1 flex-col border-t border-slate-200 bg-white">
-        {artista.ideasRecientes.length > 0 ? (
+        {artista.perfilPrivado ? (
+          <div className="flex flex-1 items-center justify-center px-4 py-8">
+            <p className="text-center text-[10px] leading-5 text-zinc-600">
+              Este perfil es privado
+            </p>
+          </div>
+        ) : artista.ideasRecientes.length > 0 ? (
           <div className="flex-1 divide-y divide-slate-200 px-3.5 sm:px-4">
             {artista.ideasRecientes.map((idea, indice) => {
               const descripcion = idea.descripcion?.trim() ?? "";
