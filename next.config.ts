@@ -48,6 +48,20 @@ const nextConfig: NextConfig = {
   // Oculta el encabezado X-Powered-By de Next.js.
   poweredByHeader: false,
 
+  // FEATMUSIC_REDIRECT_WWW_CANONICAL_V1
+  // Unifica la autoridad SEO en https://featmusic.pro.
+  // Next.js usa una redirección permanente 308, apropiada para canonicalización.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.featmusic.pro" }],
+        destination: "https://featmusic.pro/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
