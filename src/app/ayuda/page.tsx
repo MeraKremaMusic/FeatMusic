@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import EncabezadoSecundario from "@/app/components/EncabezadoSecundario";
+import { crearMetadataPagina } from "@/lib/seo";
 
 // FEATMUSIC_CENTRO_AYUDA_COMPLETO_V2
 
-export const metadata: Metadata = {
-  title: "Ayuda y soporte | FeatMusic",
-  description:
-    "Aprende a completar tu perfil, publicar ideas, enviar propuestas, usar los mensajes y proteger tu cuenta en FeatMusic.",
-};
+// FEATMUSIC_SEO_TECNICO_V1
+export const metadata = crearMetadataPagina({
+  title: "Ayuda para artistas y colaboraciones musicales | FeatMusic",
+  description: "Encuentra respuestas para completar tu perfil, publicar ideas, enviar propuestas, usar mensajes, gestionar planes y proteger tu cuenta en FeatMusic.",
+  path: "/ayuda",
+});
 
 type Categoria = {
   id: string;

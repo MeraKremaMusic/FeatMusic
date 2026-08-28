@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { obtenerSesion } from "@/lib/session";
+import { crearMetadataPagina } from "@/lib/seo";
 
 // FEATMUSIC_PERFIL_PRIVADO_EXPLORAR_INICIO_V1
 // FEATMUSIC_PORTADAS_TARJETAS_EXPLORAR_V1
@@ -8,6 +9,14 @@ import ArtistasClient, {
   type EstadisticasExplorar,
   type OpcionesFiltros,
 } from "./ArtistasClient";
+// FEATMUSIC_SEO_TECNICO_V1
+export const metadata = crearMetadataPagina({
+  title: "Artistas, cantantes, beatmakers y compositores | FeatMusic",
+  description:
+    "Descubre artistas, cantantes, beatmakers, compositores y productores en FeatMusic. Explora perfiles e ideas y encuentra tu próxima colaboración musical.",
+  path: "/artistas",
+});
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 

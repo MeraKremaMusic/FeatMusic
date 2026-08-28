@@ -21,6 +21,27 @@ const productionOnlyHeaders = [
     value: "max-age=31536000; includeSubDomains",
   },
 ];
+// FEATMUSIC_SEO_TECNICO_V1
+const seoNoIndexHeaders = [
+  { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+];
+
+const seoNoIndexSources = [
+  "/api/:path*",
+  "/admin/:path*",
+  "/inicio/:path*",
+  "/mensajes/:path*",
+  "/mi-cuenta/:path*",
+  "/panel/:path*",
+  "/completar-perfil/:path*",
+  "/suscripcion/:path*",
+  "/reportar-usuario/:path*",
+  "/restablecer-contrasena/:path*",
+  "/verificar-correo/:path*",
+  "/registro/:path*",
+  "/iniciar-sesion",
+  "/artistas/mi-perfil",
+];
 
 const nextConfig: NextConfig = {
   // FEATMUSIC_SECURITY_HEADERS_V1
@@ -38,6 +59,10 @@ const nextConfig: NextConfig = {
             : []),
         ],
       },
+      ...seoNoIndexSources.map((source) => ({
+        source,
+        headers: seoNoIndexHeaders,
+      })),
     ];
   },
 

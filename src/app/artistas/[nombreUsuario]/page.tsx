@@ -475,12 +475,24 @@ export async function generateMetadata({
       description: descripcion,
       images: imagenSocial ? [imagenSocial] : undefined,
     },
-    robots: esRutaPerfilPropio || artista.perfilPrivado
-      ? {
-          index: false,
-          follow: false,
-        }
-      : undefined,
+    robots:
+      esRutaPerfilPropio || artista.perfilPrivado
+        ? {
+            index: false,
+            follow: false,
+            noarchive: true,
+          }
+        : {
+            index: true,
+            follow: true,
+            googleBot: {
+              index: true,
+              follow: true,
+              "max-video-preview": -1,
+              "max-image-preview": "large",
+              "max-snippet": -1,
+            },
+          },
   };
 }
 
@@ -783,6 +795,76 @@ export default async function PerfilPublicoPage({
     } => Boolean(preferencia.valor),
   );
 
+  // FEATMUSIC_SEO_TECNICO_V1
+  const urlPerfilPublico = `${FEATMUSIC_URL_PUBLICA}/artistas/${encodeURIComponent(usuarioVisible)}`;
+  const datosEstructuradosPerfil =
+    !esPerfilPropio && !artista.perfilPrivado
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "ProfilePage",
+              "@id": `${urlPerfilPublico}#profilepage`,
+              url: urlPerfilPublico,
+              name: `${nombreArtistico} (@${usuarioVisible}) | FeatMusic`,
+              dateCreated: artista.creadoEn.toISOString(),
+              dateModified: artista.actualizadoEn.toISOString(),
+              isPartOf: {
+                "@type": "WebSite",
+                "@id": `${FEATMUSIC_URL_PUBLICA}/#website`,
+              },
+              mainEntity: {
+                "@id": `${urlPerfilPublico}#artist`,
+              },
+            },
+            {
+              "@type": "Person",
+              "@id": `${urlPerfilPublico}#artist`,
+              name: nombreArtistico,
+              alternateName: `@${usuarioVisible}`,
+              url: urlPerfilPublico,
+              image: artista.fotoPerfil || undefined,
+              description: artista.biografia?.trim() || undefined,
+              jobTitle: formatearRol(artista.rolPrincipal),
+              sameAs: redes.length > 0 ? redes.map((red) => red.url) : undefined,
+              knowsAbout: generos.length > 0 ? generos : undefined,
+              address:
+                artista.ciudad || artista.pais
+                  ? {
+                      "@type": "PostalAddress",
+                      addressLocality: artista.ciudad || undefined,
+                      addressCountry: artista.pais || undefined,
+                    }
+                  : undefined,
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${urlPerfilPublico}#breadcrumb`,
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "FeatMusic",
+                  item: FEATMUSIC_URL_PUBLICA,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Artistas",
+                  item: `${FEATMUSIC_URL_PUBLICA}/artistas`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: nombreArtistico,
+                  item: urlPerfilPublico,
+                },
+              ],
+            },
+          ],
+        }
+      : null;
+
   // FEATMUSIC_ARTISTAS_PRO_SUGERIDOS_RANDOM_V1
   // Beneficio PRO: en cada carga seleccionamos hasta 10 artistas Pro al azar.
   const artistasProDisponibles = await prisma.usuario.findMany({
@@ -1042,7 +1124,19 @@ export default async function PerfilPublicoPage({
   );
 
   return (
-    <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#f4f6fa] pb-20 text-[#172033] lg:pb-0">
+    <>
+      {datosEstructuradosPerfil && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(datosEstructuradosPerfil).replace(
+              /</g,
+              "\\u003c",
+            ),
+          }}
+        />
+      )}
+      <main className="featmusic-app-light featmusic-page-contrast min-h-screen w-full max-w-full overflow-x-clip bg-[#f4f6fa] pb-20 text-[#172033] lg:pb-0">
       <header className="featmusic-solid-black-chrome sticky top-0 z-50">
         <div className="relative mx-auto flex h-12 max-w-[1460px] items-center justify-between px-4">
           <div className="flex min-w-0 items-center gap-0.5">
@@ -1390,6 +1484,7 @@ export default async function PerfilPublicoPage({
       </div>
 
       {sesion && <MenuMovilPanel />}
-    </main>
+      </main>
+    </>
   );
 }

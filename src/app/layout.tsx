@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionRouteGuard from "./SessionRouteGuard";
+import {
+  FEATMUSIC_DESCRIPCION_GLOBAL,
+  FEATMUSIC_IMAGEN_SOCIAL,
+  FEATMUSIC_URL_PUBLICA,
+} from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,10 +18,48 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// FEATMUSIC_SEO_TECNICO_V1
 export const metadata: Metadata = {
-  title: "FeatMusic | Publica ideas y crea colaboraciones",
-  description:
-    "Publica ideas musicales, descubre cantantes, beatmakers y compositores de cualquier ciudad y crea una red de colaboradores alrededor del mundo.",
+  metadataBase: new URL(FEATMUSIC_URL_PUBLICA),
+  title: "FeatMusic | Colaboraciones musicales entre artistas",
+  description: FEATMUSIC_DESCRIPCION_GLOBAL,
+  applicationName: "FeatMusic",
+  creator: "FeatMusic",
+  publisher: "FeatMusic",
+  category: "music",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    siteName: "FeatMusic",
+    title: "FeatMusic | Colaboraciones musicales entre artistas",
+    description: FEATMUSIC_DESCRIPCION_GLOBAL,
+    images: [
+      {
+        url: FEATMUSIC_IMAGEN_SOCIAL,
+        width: 1200,
+        height: 300,
+        alt: "FeatMusic — colaboraciones musicales entre artistas",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FeatMusic | Colaboraciones musicales entre artistas",
+    description: FEATMUSIC_DESCRIPCION_GLOBAL,
+    images: [FEATMUSIC_IMAGEN_SOCIAL],
+  },
+  // Las páginas internas quedan fuera de Google por defecto.
+  // Solo las páginas públicas de SEO habilitan indexación explícitamente.
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+  },
 };
 
 const scriptTemaInicial = `

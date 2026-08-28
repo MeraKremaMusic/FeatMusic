@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import EncabezadoSecundario from "@/app/components/EncabezadoSecundario";
+import { crearMetadataPagina } from "@/lib/seo";
 import {
   CORREO_LEGAL_FEATMUSIC,
   EDAD_MINIMA_FEATMUSIC,
@@ -10,11 +11,12 @@ import {
   VERSION_LEGAL_ACTUAL,
 } from "@/lib/legal";
 
-export const metadata: Metadata = {
+// FEATMUSIC_SEO_TECNICO_V1
+export const metadata = crearMetadataPagina({
   title: "Política de privacidad | FeatMusic",
-  description:
-    "Política de privacidad y tratamiento de datos personales vigente de FeatMusic.",
-};
+  description: "Consulta la política de privacidad y tratamiento de datos personales vigente de FeatMusic.",
+  path: "/privacidad",
+});
 
 const secciones = [
   {

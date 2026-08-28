@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import EncabezadoSecundario from "@/app/components/EncabezadoSecundario";
+import { crearMetadataPagina } from "@/lib/seo";
 import {
   BotonCambiarPlanMercadoPago,
   BotonCancelarSuscripcionMercadoPago,
@@ -25,11 +26,12 @@ import {
 // FEATMUSIC_PAGINA_PLANES_PREMIUM_COMPLETA_V2
 // FEATMUSIC_MERCADOPAGO_SUSCRIPCIONES_V1
 
-export const metadata: Metadata = {
-  title: "Planes Premium | FeatMusic",
-  description:
-    "Compara los planes Gratuito, Creator y Pro de FeatMusic para publicar más ideas y recibir más propuestas.",
-};
+// FEATMUSIC_SEO_TECNICO_V1
+export const metadata = crearMetadataPagina({
+  title: "Planes para artistas: Gratuito, Creator y Pro | FeatMusic",
+  description: "Compara los planes Gratuito, Creator y Pro de FeatMusic para publicar más ideas, recibir más propuestas y ampliar tus posibilidades de colaboración musical.",
+  path: "/planes",
+});
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
