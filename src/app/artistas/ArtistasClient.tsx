@@ -1,3 +1,4 @@
+// FEATMUSIC_LOGO_OFICIAL_V1
 "use client";
 
 // FEATMUSIC_PERFIL_PRIVADO_EXPLORAR_INICIO_V1
@@ -7,6 +8,7 @@
 // FEATMUSIC_DESCRIPCION_EXPLORAR_ESTILO_ACTIVAS_V1
 // FEATMUSIC_DESCRIPCION_EXPLORAR_AJUSTE_POSICION_OSCURO_V2
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -934,9 +936,17 @@ export default function ArtistasClient({
             <MenuMasMovil sesionActiva={sesionActiva} />
             <Link
               href={sesionActiva ? "/artistas/mi-perfil" : "/"}
-              className="text-lg font-black tracking-tight"
+              className="inline-flex shrink-0 items-center"
+              aria-label="FeatMusic"
             >
-              Feat<span className="text-[#FFD400]">Music</span>
+              <Image
+                src="/logobanner.png"
+                alt="FeatMusic"
+                width={144}
+                height={36}
+                className="h-7 w-auto"
+                priority
+              />
             </Link>
           </div>
 

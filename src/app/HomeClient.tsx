@@ -1,5 +1,7 @@
+// FEATMUSIC_LOGO_OFICIAL_V1
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { preload } from "react-dom";
@@ -765,9 +767,17 @@ export default function Home() {
           <Link
             href="/"
             onClick={refreshFromLogo}
-            className="text-xl font-bold tracking-tight sm:text-[1.35rem]"
+            className="inline-flex shrink-0 items-center"
+            aria-label="FeatMusic"
           >
-            Feat<span className="text-[#FFD400]">Music</span>
+            <Image
+              src="/logobanner.png"
+              alt="FeatMusic"
+              width={160}
+              height={40}
+              className="h-7 w-auto sm:h-8"
+              priority
+            />
           </Link>
 
           <nav

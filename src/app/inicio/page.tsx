@@ -1,3 +1,5 @@
+// FEATMUSIC_LOGO_OFICIAL_V1
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -248,8 +250,19 @@ export default async function InicioPage() {
         <div className="relative mx-auto flex h-12 max-w-[1280px] items-center justify-between px-4">
           <div className="flex min-w-0 items-center gap-0.5">
             <MenuMasMovil sesionActiva />
-            <Link href="/inicio" className="text-lg font-black tracking-tight">
-              Feat<span className="text-[#FFD400]">Music</span>
+            <Link
+              href="/inicio"
+              className="inline-flex shrink-0 items-center"
+              aria-label="FeatMusic"
+            >
+              <Image
+                src="/logobanner.png"
+                alt="FeatMusic"
+                width={144}
+                height={36}
+                className="h-7 w-auto"
+                priority
+              />
             </Link>
           </div>
 

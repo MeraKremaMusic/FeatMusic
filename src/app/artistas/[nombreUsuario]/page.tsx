@@ -1,4 +1,6 @@
+// FEATMUSIC_LOGO_OFICIAL_V1
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { normalizarPlan, obtenerLimitesPlan } from "@/lib/planes";
@@ -1047,9 +1049,17 @@ export default async function PerfilPublicoPage({
             <MenuMasMovil sesionActiva={Boolean(sesion)} />
             <Link
               href={sesion ? "/artistas/mi-perfil" : "/"}
-              className="text-lg font-black tracking-tight"
+              className="inline-flex shrink-0 items-center"
+              aria-label="FeatMusic"
             >
-              Feat<span className="text-[#FFD400]">Music</span>
+              <Image
+                src="/logobanner.png"
+                alt="FeatMusic"
+                width={144}
+                height={36}
+                className="h-7 w-auto"
+                priority
+              />
             </Link>
           </div>
 
